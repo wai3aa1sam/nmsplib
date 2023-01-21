@@ -1,0 +1,9 @@
+
+
+/build
+/external/vcpkg
+
+LocalTemp/
+
+*.bak
+*.lnk
