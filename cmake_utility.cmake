@@ -4,7 +4,7 @@
 # https://www.scivision.dev/cmake-git-submodule/
 
 function(my_print_var variable)
-message(STATUS "${variable}: ${${variable}}")
+message(STATUS "${variable}")
 endfunction()
 
 function(my_source_group src_path src_files)
