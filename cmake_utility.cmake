@@ -86,13 +86,13 @@ add_subdirectory(${dir})
 
 endfunction(my_add_git_submodule)
 
-function(my_link_sub_module target_name sub_module_name sub_module_section sub_module_section_name proj_root)
+function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)
 
-set(sub_module_section_dir external/${sub_module_name}/src/${sub_module_section})
+set(sub_module_section_dir external/${sub_module_project_name}/src/${sub_module_section})
 set(sub_module_section_path ${proj_root}/${sub_module_section_dir})
 
 target_include_directories(${target_name} PUBLIC ${sub_module_section_path}/src)
 target_link_directories(${target_name} PUBLIC ${sub_module_section_path}/src)
-target_link_libraries(${target_name} PUBLIC ${sub_module_section_name})
+target_link_libraries(${target_name} PUBLIC ${sub_module_namespace}_${sub_module_section})
 
 endfunction()
