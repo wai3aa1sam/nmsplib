@@ -1,6 +1,4 @@
-#include <nmsp_core_test-pch.h>
-
-#include <nmsp_core.h>
+#include <NMSP_base_test-pch.h>
 
 #if NMSP_OS_WINDOWS
 
@@ -18,6 +16,7 @@
 
 #endif // NMSP_OS_WINDOWS
 
+
 int main(int argc, char* argv[])
 {
 	#if NMSP_OS_WINDOWS
@@ -34,7 +33,7 @@ int main(int argc, char* argv[])
 
 	int exitCode = 0;
 	{
-		nmsp::log("Hello World!");
+		std::cout << "Hello World!\n";
 	}
 
 	#if NMSP_OS_WINDOWS
@@ -46,6 +45,6 @@ int main(int argc, char* argv[])
 		_CrtMemDumpStatistics(&diff);
 	}
 	#endif // NMSP_OS_WINDOWS
-
+	
 	return exitCode;
 }

@@ -2,4 +2,4 @@
 
 #include <nmsp_base.h>
 
-#include "nmsp_core-config.h"
+#include <nmsp_base_test-config.h>
