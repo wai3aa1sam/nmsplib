@@ -20,11 +20,9 @@ find_package(fmt CONFIG REQUIRED)
 # --- git_submodule ---
 #my_add_git_submodule(external/)
 
-# --- base ---
-add_subdirectory(src/base)
-add_subdirectory(src/base/test)
-
 # --- core ---
+add_subdirectory(src/core/base)
+
 add_subdirectory(src/core)
 add_subdirectory(src/core/test)
 

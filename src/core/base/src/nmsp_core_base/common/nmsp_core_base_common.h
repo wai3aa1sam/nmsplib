@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nmsp_base-config.h"
+#include "nmsp_core_base-config.h"
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS 1

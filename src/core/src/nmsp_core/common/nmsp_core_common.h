@@ -1,5 +1,5 @@
 #pragma once
 
-#include <nmsp_base.h>
+#include <nmsp_core_base.h>
 
 #include "nmsp_core-config.h"
