@@ -9,7 +9,7 @@ set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace
 target_link_libraries(${sub_project_name} 
     PUBLIC  ${project_namespace}_core_base
             ${project_namespace}_stl
-            )
+    )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 

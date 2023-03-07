@@ -12,7 +12,7 @@ target_link_libraries(${sub_project_name}
             ${project_namespace}_log
             ${project_namespace}_profiler
             ${project_namespace}_math
-            )
+    )
 
 #function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)
 #my_link_sub_module(${sub_project_name} testlib testlib core ${project_root})
