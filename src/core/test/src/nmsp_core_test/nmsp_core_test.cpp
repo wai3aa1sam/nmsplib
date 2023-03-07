@@ -34,7 +34,9 @@ int main(int argc, char* argv[])
 
 	int exitCode = 0;
 	{
-		nmsp::log("Hello World!");
+		nmsp::log("Hello World123!");
+		nmsp::Vector_T		vector;
+		nmsp::math::Math	math;
 	}
 
 	#if NMSP_OS_WINDOWS

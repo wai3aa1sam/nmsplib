@@ -22,6 +22,10 @@ find_package(fmt CONFIG REQUIRED)
 
 # --- core ---
 add_subdirectory(src/core/base)
+add_subdirectory(src/core/stl)
+add_subdirectory(src/core/log)
+add_subdirectory(src/core/profiler)
+add_subdirectory(src/core/math)
 
 add_subdirectory(src/core)
 add_subdirectory(src/core/test)
