@@ -1,8 +1,8 @@
 #pragma once
 
 /*
-reference:
-https://github.com/SimpleTalkCpp/SimpleGameEngine
+references:
+- sge_detect_compiler_gcc.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
 */
 
 #if ! (NMSP_COMPILER_CLANG | NMSP_COMPILER_GCC)

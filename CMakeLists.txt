@@ -1,3 +1,5 @@
+# references
+# - https://github.com/SimpleTalkCpp/SimpleGameEngine
 cmake_minimum_required(VERSION 3.18)
 
 set(CMAKE_TOOLCHAIN_FILE "./external/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
@@ -23,9 +25,14 @@ find_package(fmt CONFIG REQUIRED)
 # --- core ---
 add_subdirectory(src/core/base)
 add_subdirectory(src/core/stl)
+add_subdirectory(src/core/math)
 add_subdirectory(src/core/log)
 add_subdirectory(src/core/profiler)
-add_subdirectory(src/core/math)
+#add_subdirectory(src/core/file_io)
+#add_subdirectory(src/core/reflection)
+#add_subdirectory(src/core/serializer)
+#add_subdirectory(src/core/multi_threading)
+#add_subdirectory(src/core/audio)
 
 add_subdirectory(src/core)
 add_subdirectory(src/core/test)
