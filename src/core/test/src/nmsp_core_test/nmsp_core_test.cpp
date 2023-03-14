@@ -1,22 +1,36 @@
 #include <nmsp_core_test-pch.h>
 
-#include <nmsp_core.h>
+#if NMSP_TEST_ALL_MODULE
+	#include <nmsp_core.h>
+#endif // NMSP_TEST_ALL_MODULE
 
 #if NMSP_OS_WINDOWS
 
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
+	
+	#ifdef _DEBUG
+	#define DBG_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
+	// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+	// allocations to be of _CLIENT_BLOCK type
 
-#ifdef _DEBUG
-#define DBG_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
-// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
-// allocations to be of _CLIENT_BLOCK type
 #else
-#define DBG_NEW new
+	#define DBG_NEW new
 #endif
 
 #endif // NMSP_OS_WINDOWS
+
+void run_temp_test()
+{
+	#if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
+
+	NMSP_RUN_TEST(test_Vector);
+	NMSP_RUN_TEST(test_String);
+
+	#endif // NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
+
+}
 
 int main(int argc, char* argv[])
 {
@@ -34,9 +48,14 @@ int main(int argc, char* argv[])
 
 	int exitCode = 0;
 	{
-		nmsp::log("Hello World123!");
-		nmsp::Vector_T		vector;
-		nmsp::math::Math	math;
+		#if 1
+
+		run_temp_test();
+
+		#else
+
+		#endif // 1
+
 	}
 
 	#if NMSP_OS_WINDOWS
