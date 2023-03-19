@@ -88,8 +88,9 @@ references:
 	#else
 		#define NMSP_IS_ASAN_ENABLE 0
 	#endif
+#else
+	#define NMSP_IS_ASAN_ENABLE 0
 #endif
-
 
 #if defined(__x86_64__) || defined(__x86_64) || defined(__amd64) || defined(__amd64__)
 	#define NMSP_CPU_X86_64      1

@@ -79,7 +79,7 @@
 #endif
 
 #if 0
-#pragma mark --- nmsp_core_base_common-Incl
+#pragma mark --- nmsp_core_base-common-Incl
 #endif // 0
 #if 1
 
