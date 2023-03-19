@@ -15,9 +15,9 @@
 #if NMSP_OS_WINDOWS
 	#ifdef NMSP_DYNAMIC_LINK
 		#ifdef NMSP_BUILD_DLL
-			#define NMSP_API __declspec(dllexport)
+			#define NMSP_API NMSP_DLL_EXPORT
 		#else
-			#define NMSP_API __declspec(dllimport)
+			#define NMSP_API NMSP_DLL_IMPORT
 		#endif // NMSP_BUILD_DLL
 	#else
 		#define NMSP_API

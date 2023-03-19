@@ -81,6 +81,15 @@ references:
 //#define NMSP_THREAD_LOCAL	__thread
 #define NMSP_THREAD_LOCAL thread_local //C++11
 
+// sanitizer support
+#if defined(__has_feature)
+	#if __has_feature(address_sanitizer)
+		#define NMSP_IS_ASAN_ENABLE 1
+	#else
+		#define NMSP_IS_ASAN_ENABLE 0
+	#endif
+#endif
+
 
 #if defined(__x86_64__) || defined(__x86_64) || defined(__amd64) || defined(__amd64__)
 	#define NMSP_CPU_X86_64      1

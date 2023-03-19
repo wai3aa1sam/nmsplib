@@ -4,7 +4,7 @@
 
 namespace nmsp {
 
-class Test_Vector : public UnitTestBase
+class Test_Vector : public UnitTest_Base
 {
 public:
 	void test()
@@ -28,7 +28,6 @@ void test_Vector()
 {
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
-
 }
 
 #endif // NMSP_TEST_MODULE_STL

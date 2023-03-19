@@ -79,7 +79,7 @@
 #endif
 
 #if 0
-#pragma mark --- nmspCommon-Incl
+#pragma mark --- nmsp_core_base_common-Incl
 #endif // 0
 #if 1
 
@@ -88,18 +88,17 @@
 #include "nmspTypeTrait_Common.h"
 #include "nmspClass_Common.h"
 #include "nmspEnum_Common.h"
-#include "nmspUnitTest_Common.h"
 
 #endif
 
-#define _NMSP_LOG(...) do{ _log(__VA_ARGS__); } while(false)
+#define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
 
 namespace nmsp {
 
 template<class... ARGS> inline
 void _log(const char* format, ARGS&&... args)
 {
-	std::cout << fmtAs<std::string>(format, forward<ARGS>(args)...);
+	std::cout << fmtAs<std::string>(format, forward<ARGS>(args)...) << "\n";
 }
 
 }

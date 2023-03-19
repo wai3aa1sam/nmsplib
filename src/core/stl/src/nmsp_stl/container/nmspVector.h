@@ -20,7 +20,7 @@
 	namespace nmsp {
 
 	template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator> using Vector_Impl	= Vector_Nmsp<T, N, ALLOCATOR>;
-	template<class T, class ALLOCATOR = DefaultAllocator>				using IVector_Impl	= Vector_Nmsp<T, ALLOCATOR>;
+	template<class T, class ALLOCATOR = DefaultAllocator>				using IVector_Impl	= Vector_Nmsp<T, 0, ALLOCATOR>;
 
 	}
 

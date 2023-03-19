@@ -9,13 +9,19 @@ namespace nmsp {
 #endif // 0
 #if 1
 
+template<class T, size_t N, class ALLOCATOR = DefaultAllocator>
 class VectorBase_Nmsp
 {
 public:
-
+	VectorBase_Nmsp()
+	{
+	}
 private:
 
 };
+
+
+template<class T, size_t N, class ALLOCATOR = DefaultAllocator> using Vector_Nmsp = VectorBase_Nmsp<T, N, ALLOCATOR>;
 
 #endif
 

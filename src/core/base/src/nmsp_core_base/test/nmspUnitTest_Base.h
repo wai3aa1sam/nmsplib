@@ -1,7 +1,6 @@
 #pragma once
 
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
-#include "nmspClass_Common.h"
 
 /*
 references:
@@ -24,11 +23,11 @@ namespace nmsp {
 bool testCheck_Impl(const SrcLoc& loc, bool verbose, bool success, const char* msg);
 
 #if 0
-#pragma mark --- UnitTestBase-Impl
+#pragma mark --- UnitTest_Base-Impl
 #endif // 0
 #if 1
 
-class UnitTestBase : public NonCopyable
+class UnitTest_Base : public NonCopyable
 {
 public:
 

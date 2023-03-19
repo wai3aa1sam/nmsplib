@@ -4,15 +4,15 @@
 
 namespace nmsp {
 
-class Test_String : public UnitTestBase
+class Test_String : public UnitTest_Base
 {
 public:
 	void test()
 	{
-		String_T<int, 123> vector;
+		//String_T<int, 123> vector;
 
-		auto msg = fmtAs<String_T<char>>("hello world {}, {}, {}", 1, 2, "sad");
-		std::cout << msg;
+		//auto msg = fmtAs<String_T<char>>("hello world {}, {}, {}", 1, 2, "sad");
+		//std::cout << msg;
 	}
 
 

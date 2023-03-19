@@ -17,6 +17,9 @@ set(project_root ${CMAKE_CURRENT_SOURCE_DIR})
 
 project(${project_name})
 
+#option (ENABLE_SANITIZER "enable sanitizer" false)
+set     (ENABLE_SANITIZER true)
+
 find_package(fmt CONFIG REQUIRED)
 
 # --- git_submodule ---
@@ -33,8 +36,9 @@ add_subdirectory(src/core/profiler)
 #add_subdirectory(src/core/serializer)
 #add_subdirectory(src/core/multi_threading)
 #add_subdirectory(src/core/audio)
-
 add_subdirectory(src/core)
-add_subdirectory(src/core/test)
+
+add_subdirectory(src/test/base)
+add_subdirectory(src/test/core)
 
 set_property (DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_namespace}_core_test)

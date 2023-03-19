@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nmsp_test_base.h>
+
 #if NMSP_TEST_ALL_MODULE
 #include <nmsp_core.h>
 #endif
@@ -8,8 +10,7 @@
 #include <nmsp_stl.h>
 #endif // NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
-
-#include <nmsp_core_test-config.h>
+#include "nmsp_core_test-config.h"
 
 #define NMSP_RUN_TEST(fn) \
 	std::cout << "\n======" #fn "==================\n" ;\
