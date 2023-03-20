@@ -28,6 +28,13 @@ void test_Vector()
 {
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
+
+	using Type = int;
+	VectorAllocator_T<Type, 4> allocator;
+	auto* p = allocator.alloc(40);
+	allocator.free(p, 40);
+	_NMSP_LOG("allocator.s_kLocalSize: {}, allocator.s_kAlign: {}", allocator.s_kLocalSize, allocator.s_kAlign);
+
 }
 
 #endif // NMSP_TEST_MODULE_STL

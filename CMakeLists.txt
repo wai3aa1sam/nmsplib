@@ -18,7 +18,7 @@ set(project_root ${CMAKE_CURRENT_SOURCE_DIR})
 project(${project_name})
 
 #option (ENABLE_SANITIZER "enable sanitizer" false)
-set     (ENABLE_SANITIZER true)
+set     (ENABLE_SANITIZER false)
 
 find_package(fmt CONFIG REQUIRED)
 

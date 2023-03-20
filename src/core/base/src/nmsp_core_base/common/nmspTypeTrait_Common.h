@@ -62,6 +62,11 @@ template<class BASE, class DERIVED> inline constexpr bool IsBaseOf	= IsBaseOfT<B
 template<class T> using					IsFunction_T	= std::is_function<T>;
 template<class T> inline constexpr bool	IsFunction		= IsFunction_T<T>::value;
 
+template<class T> using					IsUnsigned_T    = std::is_unsigned<T>;
+template<class T> inline constexpr bool	IsUnsigned      = IsUnsigned_T<T>::value;
+
+
+
 #endif
 
 #if 0
