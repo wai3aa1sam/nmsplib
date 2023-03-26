@@ -9,10 +9,14 @@ set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace
 target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 
 # should only link during testing other library or development
-# if(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER)
-#     target_link_libraries(${PROJECT_NAME}       PUBLIC Tracy::TracyClient)
-#     target_compile_definitions(${PROJECT_NAME}  PUBLIC TRACY_ENABLE)
-# endif()
+if(${${project_namespace_marco}_ENABLE_INTERNAL_PROFILER})
+    message("--- ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER")
+    target_link_libraries(${sub_project_name}       PUBLIC Tracy::TracyClient)
+    target_compile_definitions(${sub_project_name}  
+        PUBLIC  TRACY_ENABLE 
+                ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER=1
+        )
+endif()
 
 #function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)
 #my_link_sub_module(${sub_project_name} testlib testlib core ${project_root})

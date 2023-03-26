@@ -18,16 +18,19 @@ set(project_namespace_marco NMSP)
 
 project(${project_name})
 
-#option (${project_namespace_marco}_ENABLE_SANITIZER "enable sanitizer" false)
-#option (${project_namespace_marco}_ENABLE_INTERNAL_PROFILER "enable internal profiler" false)
+my_set_opt(${project_namespace_marco}_ENABLE_PROFILER           0)
+my_set_opt(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER  1)
+my_set_opt(${project_namespace_marco}_ENABLE_SANITIZER          0)
 
-set(${project_namespace_marco}_ENABLE_SANITIZER true)
-#set(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER "enable internal profiler" true)
+my_only_one_opt_could_on_3( ${project_namespace_marco}_ENABLE_PROFILER
+                            ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER
+                            ${project_namespace_marco}_ENABLE_SANITIZER
+                        )
 
 find_package(fmt        CONFIG REQUIRED)
 #find_package(benchmark  CONFIG REQUIRED)
-# find_package(Threads           REQUIRED)
-# find_package(Tracy      CONFIG REQUIRED)
+find_package(Threads           REQUIRED)
+find_package(Tracy      CONFIG REQUIRED)
 find_package(EABase     CONFIG REQUIRED)
 find_package(EASTL      CONFIG REQUIRED)
 
@@ -49,5 +52,7 @@ add_subdirectory(src/core)
 
 add_subdirectory(src/test/base)
 add_subdirectory(src/test/core)
+
+message("--- end for add_subdirectory ---")
 
 set_property (DIRECTORY PROPERTY VS_STARTUP_PROJECT ${project_namespace}_core_test)

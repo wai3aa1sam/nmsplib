@@ -88,6 +88,8 @@ struct Test_Vector_Func
 	template<class T, class VECTOR>
 	static void _on_test_all(VECTOR& vector)
 	{
+		_NMSP_PROFILE_SCOPED();
+
 		auto& v_ = vector;
 		for (size_t i = 0; i < N_S; i++)
 		{
@@ -111,6 +113,8 @@ struct Test_Vector_Func
 	template<class T, class VECTOR>
 	static void _on_temp_test0(VECTOR& vector)
 	{
+		_NMSP_PROFILE_SECTION("_on_temp_test0");
+
 		static constexpr size_t factor = 100;
 		auto& v_ = vector;
 		for (size_t i = 0; i < 10 * factor; i++)
@@ -297,6 +301,8 @@ private:
 
 void test_Vector()
 {
+	_NMSP_PROFILE_SECTION("test_Vector");
+
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
 
@@ -306,6 +312,8 @@ void test_Vector()
 	//allocator.free(p, 40);
 	//_NMSP_LOG("allocator.s_kLocalSize: {}, allocator.s_kAlign: {}", allocator.s_kLocalSize, allocator.s_kAlign);
 
+
+	_NMSP_PROFILE_FRAME();
 }
 
 #endif // NMSP_TEST_MODULE_STL

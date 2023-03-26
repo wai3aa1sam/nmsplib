@@ -21,7 +21,7 @@
 	#error "build stl should be specified"
 #endif
 
-#define NMSP_ENABLE_IVECTOR 0
+#define NMSP_ENABLE_IVECTOR 1
 #define NMSP_ENABLE_ISTRING 1
 
 #endif
