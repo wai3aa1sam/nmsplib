@@ -5,7 +5,7 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- PrimitiveDataType-Impl
+#pragma mark --- PrimitiveDataType-Impl ---
 #endif // 0
 #if 1
 

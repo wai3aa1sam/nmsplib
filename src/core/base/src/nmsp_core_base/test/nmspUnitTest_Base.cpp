@@ -13,13 +13,13 @@ bool testCheck_Impl(const SrcLoc& loc, bool verbose, bool success, const char* m
 	std::cout << str;
 	if (!success)
 	{
-		assert(false);
+		//NMSP_ASSERT(false);
 	}
 	return success;
 }
 
 #if 0
-#pragma mark --- UnitTest_Base-Impl
+#pragma mark --- UnitTest_Base-Impl ---
 #endif // 0
 #if 1
 

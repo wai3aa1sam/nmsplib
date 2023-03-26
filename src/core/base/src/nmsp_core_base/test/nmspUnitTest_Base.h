@@ -15,15 +15,15 @@ references:
 	}while(false)
 //----
 
-#define NMSP_TEST_CHECK(a)			nmsp::testCheck_Impl(NMSP_LOC, true,  bool(a), #a)
-#define NMSP_TEST_CHECK_SLIENT(a)	nmsp::testCheck_Impl(NMSP_LOC, false, bool(a), #a)
+#define NMSP_TEST_CHECK(a)			nmsp::testCheck_Impl(NMSP_SRCLOC, true,  bool(a), #a)
+#define NMSP_TEST_CHECK_SLIENT(a)	nmsp::testCheck_Impl(NMSP_SRCLOC, false, bool(a), #a)
 
 namespace nmsp {
 
 bool testCheck_Impl(const SrcLoc& loc, bool verbose, bool success, const char* msg);
 
 #if 0
-#pragma mark --- UnitTest_Base-Impl
+#pragma mark --- UnitTest_Base-Impl ---
 #endif // 0
 #if 1
 

@@ -5,11 +5,11 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- StringBase_Nmsp-Decl
+#pragma mark --- StringBase_Nmsp-Decl ---
 #endif // 0
 #if 1
 
-template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator>
+template<class T, size_t N = 0, class ALLOC = MallocAllocator>
 class StringBase_Nmsp
 {
 public:
@@ -18,7 +18,7 @@ private:
 
 };
 
-template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator> using String_Nmsp = StringBase_Nmsp<T, N, ALLOCATOR>;
+template<class T, size_t N = 0, class ALLOC = MallocAllocator> using String_Nmsp = StringBase_Nmsp<T, N, ALLOC>;
 
 #endif
 

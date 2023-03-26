@@ -5,12 +5,12 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- String_Std-Decl
+#pragma mark --- String_Std-Decl ---
 #endif // 0
 #if 1
 
-template<class T, class ALLOCATOR = DefaultAllocator>
-class String_Std : public std::basic_string<T /*, ALLOCATOR*/>
+template<class T, class ALLOC = MallocAllocator>
+class String_Std : public std::basic_string<T /*, ALLOC*/>
 {
 public:
 

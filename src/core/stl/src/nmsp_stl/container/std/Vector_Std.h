@@ -5,12 +5,12 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- Vector_Std-Decl
+#pragma mark --- Vector_Std-Decl ---
 #endif // 0
 #if 1
 
-template<class T, class ALLOCATOR = DefaultAllocator>
-class Vector_Std : public std::vector<T /*, ALLOCATOR*/>
+template<class T, class ALLOC = MallocAllocator>
+class Vector_Std : public std::vector<T /*, ALLOC*/>
 {
 public:
 	Vector_Std()

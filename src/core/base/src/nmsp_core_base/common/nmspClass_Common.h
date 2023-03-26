@@ -5,12 +5,12 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- nmspClass-Impl
+#pragma mark --- nmspClass-Impl ---
 #endif // 0
 #if 1
 
 #if 0
-#pragma mark --- NonCopyable-Impl
+#pragma mark --- NonCopyable-Impl ---
 #endif // 0
 #if 1
 
@@ -25,7 +25,7 @@ public:
 #endif
 
 #if 0
-#pragma mark --- SrcLoc-Impl
+#pragma mark --- SrcLoc-Impl ---
 #endif // 0
 #if 1
 

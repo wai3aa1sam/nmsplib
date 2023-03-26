@@ -104,3 +104,6 @@ references:
 	#define NMSP_OS_WinCE     1
 	#define NMSP_OS_WINDOWS	1
 #endif
+
+// function
+#define NMSP_DEBUG_BREAK(...)		__debugbreak()

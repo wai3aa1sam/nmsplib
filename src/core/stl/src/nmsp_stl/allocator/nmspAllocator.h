@@ -1,3 +1,7 @@
 #pragma once
 
-#include "nmspDefaultAllocator.h"
+#include "nmspAllocator_Common.h"
+
+#include "nmspMallocAllocator.h"
+
+#include "nmspAlloctorType.h"

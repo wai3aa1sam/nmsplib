@@ -65,7 +65,7 @@ function(my_add_executable target_name src_path)
   my_set_target_warning_level(${target_name})	
   my_set_target_unity_build_mode(${target_name})
 
-  if(ENABLE_SANITIZER)
+  if(${project_namespace_marco}_ENABLE_SANITIZER)
     my_enable_sanitizer(${target_name})
   endif()
   
@@ -108,16 +108,32 @@ function(my_enable_sanitizer target_name)
   if(MSVC)
     #set_property(TARGET ${target_name}     PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     target_compile_options(${target_name}  
-      PRIVATE "$<$<CONFIG:DEBUG>:/MTd>"
-              "$<$<CONFIG:DEBUG>:/fsanitize=address>"
+      PRIVATE "$<$<CONFIG:DEBUG>:/fsanitize=address>"
               "$<$<CONFIG:DEBUG>:/fsanitize=fuzzer>"
-              "$<$<CONFIG:DEBUG>:/Zi>")
-    target_link_options(${target_name}     
-      PRIVATE "$<$<CONFIG:DEBUG>:/MTd>"
-              "$<$<CONFIG:DEBUG>:/fsanitize=address>"
-              "$<$<CONFIG:DEBUG>:/fsanitize=fuzzer>"
-              "$<$<CONFIG:DEBUG>:/Zi>")
+              "$<$<CONFIG:DEBUG>:/Zi>"
+    )
 
+              
+    target_link_options(${target_name}     
+      PRIVATE "$<$<CONFIG:DEBUG>:/fsanitize=address>"
+              "$<$<CONFIG:DEBUG>:/fsanitize=fuzzer>"
+              "$<$<CONFIG:DEBUG>:/Zi>"
+    )
+
+
+    set(asan_dst_path     "$<TARGET_FILE:${target_name}>/../")
+    set(asan_asan_dbg_dll "$(MsvcAnalysisToolsPath)/clang_rt.asan_dbg_dynamic-x86_64.dll")
+    set(asan_asan_dll     "$(MsvcAnalysisToolsPath)/clang_rt.asan_dynamic-x86_64.dll")
+
+    # don;t add VERBATIM, it will make \" to \" msvc instead of just "
+    add_custom_command(
+      TARGET ${target_name} 
+      POST_BUILD
+      COMMAND "$<$<CONFIG:Debug>:${CMAKE_COMMAND}>" -E copy \"${asan_asan_dbg_dll}\"  \"${asan_dst_path}\"
+      COMMAND "$<$<CONFIG:Debug>:${CMAKE_COMMAND}>" -E copy \"${asan_asan_dll}\"      \"${asan_dst_path}\"
+    )
+
+    # "$<$<CONFIG:DEBUG>:/MTd>"
     #target_compile_options(${target_name}  PRIVATE "$<$<CONFIG:RELEASE>:/MD>")
   endif()
 endfunction()

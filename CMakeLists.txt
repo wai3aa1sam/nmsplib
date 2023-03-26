@@ -14,13 +14,22 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(project_name nmsplib)
 set(project_namespace nmsp)
 set(project_root ${CMAKE_CURRENT_SOURCE_DIR})
+set(project_namespace_marco NMSP)
 
 project(${project_name})
 
-#option (ENABLE_SANITIZER "enable sanitizer" false)
-set     (ENABLE_SANITIZER false)
+#option (${project_namespace_marco}_ENABLE_SANITIZER "enable sanitizer" false)
+#option (${project_namespace_marco}_ENABLE_INTERNAL_PROFILER "enable internal profiler" false)
 
-find_package(fmt CONFIG REQUIRED)
+set(${project_namespace_marco}_ENABLE_SANITIZER true)
+#set(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER "enable internal profiler" true)
+
+find_package(fmt        CONFIG REQUIRED)
+#find_package(benchmark  CONFIG REQUIRED)
+# find_package(Threads           REQUIRED)
+# find_package(Tracy      CONFIG REQUIRED)
+find_package(EABase     CONFIG REQUIRED)
+find_package(EASTL      CONFIG REQUIRED)
 
 # --- git_submodule ---
 #my_add_git_submodule(external/)

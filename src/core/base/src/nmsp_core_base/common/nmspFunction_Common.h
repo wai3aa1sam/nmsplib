@@ -5,7 +5,7 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- nmspCast-Impl
+#pragma mark --- nmspCast-Impl ---
 #endif // 0
 #if 1
 
@@ -25,7 +25,7 @@ template<class T> T& constCast(const T& v) { return const_cast<T&>(v); }
 #endif
 
 #if 0
-#pragma mark --- nmspFormatter-Impl
+#pragma mark --- nmspFormatter-Impl ---
 #endif // 0
 #if 1
 

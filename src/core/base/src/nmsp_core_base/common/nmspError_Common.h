@@ -9,7 +9,7 @@ namespace nmsp {
 
 
 #if 0
-#pragma mark --- ErrorBase-Impl
+#pragma mark --- ErrorBase-Impl ---
 #endif // 0
 #if 1
 
@@ -26,7 +26,7 @@ private:
 
 
 #if 0
-#pragma mark --- Error-Decl
+#pragma mark --- Error-Decl ---
 #endif // 0
 #if 1
 

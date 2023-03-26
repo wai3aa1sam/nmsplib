@@ -3,7 +3,7 @@
 #include "nmsp_core_base/common/nmsp_core_base_common.h"
 
 #if 0
-#pragma mark --- nmsp_core_base-test-Incl
+#pragma mark --- nmsp_core_base-test-Incl ---
 #endif // 0
 #if 1
 

@@ -6,7 +6,7 @@ references:
 */
 
 #if 0
-#pragma mark --- util_marco-Impl
+#pragma mark --- util_marco-Impl ---
 #endif // 0
 #if 1
 
@@ -25,12 +25,15 @@ references:
 #define NMSP_NOEXCEPT_IF(...)		noexcept(__VA_ARGS__)
 
 #if NMSP_ENABLE_ASSERT
-	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { assert(x); __debugbreak(); } } while(false)
-	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { assert(x); __debugbreak(); }	} while(false)
+	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
+	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
 #else
 	#define NMSP_CORE_ASSERT(x, ...)
 	#define NMSP_ASSERT(x, ...)	
 #endif // NMSP_ENABLE_ASSERT
+
+#define NMSP_ALIGN_OF(x) alignof(x)
+#define NMSP_ALIGN_AS(x) alignas(x)
 
 #if NMSP_DEBUG
 #define NMSP_SRCLOC	SrcLoc(__FILE__, __LINE__, NMSP_FUNC_NAME_SZ)

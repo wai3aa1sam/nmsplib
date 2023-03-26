@@ -10,14 +10,14 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 
 #if 0
-#pragma mark --- XXXX-Decl
+#pragma mark --- XXXX-Decl ---
 #endif // 0
 #if 1
 
 #endif
 
 #if 0
-#pragma mark --- XXXX-Impl
+#pragma mark --- XXXX-Impl ---
 #endif // 0
 #if 1
 
@@ -25,7 +25,7 @@
 #endif
 
 #if 0
-#pragma mark --- nmspCommon-Incl
+#pragma mark --- nmspCommon-Incl ---
 #endif // 0
 #if 1
 
@@ -42,6 +42,10 @@
 	#include <netdb.h>
 	#include <netinet/in.h> // struct sockaddr_in
 #endif
+
+#if NMSP_IS_ASAN_ENABLE
+	#define _DISABLE_VECTOR_ANNOTATION
+#endif // NMSP_IS_ASAN_ENABLE
 
 #include <cassert>
 #include <exception>
@@ -79,7 +83,7 @@
 #endif
 
 #if 0
-#pragma mark --- nmsp_core_base-common-Incl
+#pragma mark --- nmsp_core_base-common-Incl ---
 #endif // 0
 #if 1
 

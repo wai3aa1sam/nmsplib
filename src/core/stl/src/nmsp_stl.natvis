@@ -11,19 +11,20 @@ references:
 
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-	<Type Name="nmsp::Vector_Nmsp&lt;*&gt;">
+	<Type Name="nmsp::VectorBase_Nmsp&lt;*&gt;">
 		<DisplayString Condition="_end == _begin">		[{_end - _begin}] {{}}</DisplayString>
 		<DisplayString Condition="_end - _begin == 1">	[{_end - _begin}] {{ {*_begin} }}</DisplayString>
 		<DisplayString Condition="_end - _begin == 2">	[{_end - _begin}] {{ {*_begin}, {*(_begin+1)} }}</DisplayString>
 		<Expand>
 			<Item Name="[size]">_end - _begin</Item>
-			<Item Name="[capacity]">_pair._first - _begin</Item>
+			<Item Name="[capacity]">_pair.mFirst - _begin</Item>
 			<ArrayItems>
 				<Size>_end - _begin</Size>
 				<ValuePointer>_begin</ValuePointer>
 			</ArrayItems>
 		</Expand>
 	</Type>
-	
+
+
 </AutoVisualizer>
 

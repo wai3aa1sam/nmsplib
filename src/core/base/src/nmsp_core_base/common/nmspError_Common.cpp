@@ -5,7 +5,7 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- ErrorBase-Impl
+#pragma mark --- ErrorBase-Impl ---
 #endif // 0
 #if 1
 
@@ -20,7 +20,7 @@ ErrorBase::ErrorBase(const SrcLoc & srcLoc)
 #endif
 
 #if 0
-#pragma mark --- Error-Impl
+#pragma mark --- Error-Impl ---
 #endif // 0
 #if 1
 

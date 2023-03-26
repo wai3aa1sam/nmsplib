@@ -4,7 +4,7 @@
 
 namespace nmsp {
 
-static constexpr size_t s_kDefaultAlign = 8;
+static constexpr size_t s_kDefaultAlign = NMSP_ALIGN_OF(std::max_align_t);
 
 template<class T>
 static constexpr T _alignTo(T n, T a) 
@@ -14,6 +14,36 @@ static constexpr T _alignTo(T n, T a)
 	return r ? (n + a - r) : n;
 }
 
-template<class T1, class T2> using CompressedPair = std::pair<T1, T2>;
+#if 0
+#pragma mark --- Allocator_Base-Decl ---
+#endif // 0
+#if 1
+
+template<class ALLOC>
+class Allocator_Base : public ALLOC
+{
+public:
+	using This = Allocator_Base<ALLOC>;
+public:
+	using SizeType = size_t;
+
+public:
+	Allocator_Base()	= default;
+	~Allocator_Base()	= default;
+
+	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);
+	void* alloc_all(SizeType n);
+
+	void free(void* p, SizeType n);
+	void free_all();
+
+	bool is_owning(void* p, SizeType n);
+
+	bool operator==(const Allocator_Base& rhs);
+	bool operator!=(const Allocator_Base& rhs);
+private:
+};
+
+#endif
 
 }

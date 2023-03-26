@@ -8,9 +8,8 @@
 
 	namespace nmsp {
 
-	template<class T, class ALLOCATOR> using IVector_Impl = Vector_Std<T, ALLOCATOR>;
-	template<class T, size_t N = 0, bool ENABLE_FALLBACK_ALLOC = true, class FALLBACK_ALLOCATOR = DefaultAllocator>
-	using Vector_Impl = Vector_Std<T, ALLOCATOR>;
+	template<class T, class ALLOC> using IVector_Impl		= Vector_Std<T, ALLOC>;
+	template<class T, size_t N = 0, class FALLBACK_ALLOC	= MallocAllocator>	using Vector_Impl = Vector_Std<T, ALLOC>;
 
 	}
 
@@ -20,9 +19,13 @@
 
 	namespace nmsp {
 	
-	template<class T, class ALLOCATOR> using IVector_Impl = IVector_Nmsp<T, ALLOCATOR>;
-	template<class T, size_t N = 0, bool ENABLE_FALLBACK_ALLOC = true, class FALLBACK_ALLOCATOR = DefaultAllocator>	
-	using Vector_Impl = Vector_Nmsp<T, N, ENABLE_FALLBACK_ALLOC, FALLBACK_ALLOCATOR>;
+	#if NMSP_ENABLE_IVECTOR
+		template<class T, class ALLOC> using IVector_Impl = IVector_Nmsp<T, ALLOC>;
+	#else
+		template<class T, class ALLOC> using IVector_Impl = Vector_Nmsp<T, 0, ALLOC>;
+	#endif // NMSP_ENABLE_IVECTOR
+
+	template<class T, size_t N = 0, class FALLBACK_ALLOC	= MallocAllocator>	using Vector_Impl = Vector_Nmsp<T, N, FALLBACK_ALLOC>;
 
 	}
 
@@ -32,8 +35,7 @@
 
 namespace nmsp {
 
-template<class T, class ALLOCATOR = DefaultAllocator> using IVector_T = IVector_Impl<T, ALLOCATOR>;
-template<class T, size_t N = 0, bool ENABLE_FALLBACK_ALLOC = true, class FALLBACK_ALLOCATOR = DefaultAllocator> 
-using Vector_T = Vector_Impl<T, N, ENABLE_FALLBACK_ALLOC, FALLBACK_ALLOCATOR>;
+template<class T, class ALLOC = MallocAllocator> using IVector_T	= IVector_Impl<T, ALLOC>;
+template<class T, size_t N = 0, class FALLBACK_ALLOC				= MallocAllocator> using Vector_T = Vector_Impl<T, N, FALLBACK_ALLOC>;
 
 }

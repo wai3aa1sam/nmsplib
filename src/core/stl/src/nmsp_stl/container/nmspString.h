@@ -8,8 +8,8 @@
 
 	namespace nmsp {
 
-	template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator> using String_Impl	= String_Std<T, ALLOCATOR>;
-	template<class T, class ALLOCATOR = DefaultAllocator>				using IString_Impl	= String_Std<T, ALLOCATOR>;
+	template<class T, size_t N = 0, class ALLOC = MallocAllocator>	using String_Impl	= String_Std<T, ALLOC>;
+	template<class T, class ALLOC = MallocAllocator>				using IString_Impl	= String_Std<T, ALLOC>;
 
 	}
 
@@ -19,8 +19,8 @@
 
 	namespace nmsp {
 
-	template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator> using String_Impl	= String_Nmsp<T, N, ALLOCATOR>;
-	template<class T, class ALLOCATOR = DefaultAllocator>				using IString_Impl	= String_Nmsp<T, 0, ALLOCATOR>;
+	template<class T, size_t N = 0, class ALLOC = MallocAllocator>	using String_Impl	= String_Nmsp<T, N, ALLOC>;
+	template<class T, class ALLOC = MallocAllocator>				using IString_Impl	= String_Nmsp<T, 0, ALLOC>;
 
 	}
 
@@ -31,7 +31,7 @@
 
 namespace nmsp {
 
-template<class T, size_t N = 0, class ALLOCATOR = DefaultAllocator> using String_T	= String_Impl<T, N, ALLOCATOR>;
-template<class T, class ALLOCATOR = DefaultAllocator>				using IString_T = IString_Impl<T, ALLOCATOR>;
+template<class T, size_t N = 0, class ALLOC = MallocAllocator>	using String_T	= String_Impl<T, N, ALLOC>;
+template<class T, class ALLOC = MallocAllocator>				using IString_T = IString_Impl<T, ALLOC>;
 
 }

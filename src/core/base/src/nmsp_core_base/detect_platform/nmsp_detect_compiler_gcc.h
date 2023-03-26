@@ -190,3 +190,6 @@ references:
 	#define NMSP_OS_MINGW			1
 #endif
 
+// function
+#include <signal.h>
+#define NMSP_DEBUG_BREAK(...)		raise(SIGTRAP)
