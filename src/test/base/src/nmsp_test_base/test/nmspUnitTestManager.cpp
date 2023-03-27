@@ -33,9 +33,9 @@ void UnitTestManager::registerUnitTest(UnitTest* ut)
 	NMSP_ASSERT(false, "no use now");
 }
 
-void UnitTestManager::benchmark(int argc, char* argv[])
+void UnitTestManager::benchmark(int* argc, char* argv[])
 {
-	benchmark::Initialize(&argc, argv);
+	benchmark::Initialize(argc, argv);
 	benchmark::RunSpecifiedBenchmarks();
 	benchmark::Shutdown();
 }

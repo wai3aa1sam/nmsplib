@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	}
 	#if NMSP_ENABLE_BENCHMARK
 	{
-		UnitTestManager::instance()->benchmark(argc, argv);
+		UnitTestManager::instance()->benchmark(&argc, argv);
 	}
 	#endif // 0
 	

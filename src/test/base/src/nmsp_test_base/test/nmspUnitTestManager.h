@@ -23,7 +23,7 @@ public:
 	~UnitTestManager()	= default;
 
 	void registerUnitTest(UnitTest* ut);
-	void benchmark(int argc, char* argv[]);
+	void benchmark(int* argc, char* argv[]);
 
 private:
 	static UnitTestManager* s_instance;
