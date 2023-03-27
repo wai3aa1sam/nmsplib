@@ -99,6 +99,10 @@
 
 namespace nmsp {
 
+inline void _log()
+{
+}
+
 template<class... ARGS> inline
 void _log(const char* format, ARGS&&... args)
 {

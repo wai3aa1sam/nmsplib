@@ -25,8 +25,8 @@ references:
 #define NMSP_NOEXCEPT_IF(...)		noexcept(__VA_ARGS__)
 
 #if NMSP_ENABLE_ASSERT
-	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
-	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
+	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
+	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
 #else
 	#define NMSP_CORE_ASSERT(x, ...)
 	#define NMSP_ASSERT(x, ...)	

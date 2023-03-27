@@ -14,24 +14,38 @@ void run_temp_test()
 	#endif // NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 }
 
+void run_all_test()
+{
+
+}
+
 #if !NMSP_ENABLE_FUZZ_TESTING
 
 int main(int argc, char* argv[])
 {
 	using namespace nmsp;
-	MemoryLeakReportScope reportScope;
 
 	int exitCode = 0;
-	{ 
-		#if 1
+	UnitTestManager unitTestManager;
+	unitTestManager.create();
 
-		run_temp_test();
-
-		#else
-
-		#endif // 1
+	{
+		MemoryLeakReportScope reportScope;
+		_NMSP_PROFILE_FRAME();
+		{
+			#if 1
+			run_temp_test();
+			#else
+			run_all_test();
+			#endif // 1
+		}
 	}
-
+	#if NMSP_ENABLE_BENCHMARK
+	{
+		UnitTestManager::instance()->benchmark(argc, argv);
+	}
+	#endif // 0
+	
 	return exitCode;
 }
 

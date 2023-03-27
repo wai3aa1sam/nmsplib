@@ -297,7 +297,62 @@ private:
 
 };
 
+class Test_Vector2 : public UnitTest
+{
+public:
+	virtual void onSetup() override
+	{
+
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
+		//_NMSP_LOG("YEAH");
+	}
+};
+
+class Test_Vector3 : public UnitTest
+{
+public:
+	Test_Vector3()
+	{
+		_NMSP_LOG("Test_Vector3::Test_Vector3()");
+	}
+	~Test_Vector3()
+	{
+		_NMSP_LOG("Test_Vector3::~Test_Vector3()");
+	}
+
+	virtual void onSetup() override
+	{
+		_NMSP_LOG("setup()");
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
+
+	}
+};
+NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector2);
+NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector3);
+
+void test()
+{
 }
+NMSP_REGISTER_UNIT_TEST(test);
+
+}
+
 
 void test_Vector()
 {
@@ -306,15 +361,9 @@ void test_Vector()
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
 
-	//using Type = int;
-	//VectorAllocator_T<Type, 4> allocator;
-	//auto* p = allocator.alloc(40);
-	//allocator.free(p, 40);
-	//_NMSP_LOG("allocator.s_kLocalSize: {}, allocator.s_kAlign: {}", allocator.s_kLocalSize, allocator.s_kAlign);
-
-
-	_NMSP_PROFILE_FRAME();
 }
 
 #endif // NMSP_TEST_MODULE_STL
+
+
 

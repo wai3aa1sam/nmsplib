@@ -28,7 +28,7 @@ my_only_one_opt_could_on_3( ${project_namespace_marco}_ENABLE_PROFILER
                         )
 
 find_package(fmt        CONFIG REQUIRED)
-#find_package(benchmark  CONFIG REQUIRED)
+find_package(benchmark  CONFIG REQUIRED)
 find_package(Threads           REQUIRED)
 find_package(Tracy      CONFIG REQUIRED)
 find_package(EABase     CONFIG REQUIRED)
