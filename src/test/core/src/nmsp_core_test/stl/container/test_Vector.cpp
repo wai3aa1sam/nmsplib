@@ -297,6 +297,96 @@ private:
 
 };
 
+template<class T>
+static void test()
+{
+	
+}
+
+void test2()
+{
+	test<int>();
+}
+
+template<class T, class T2>
+static void test3(benchmark::State& state)
+{
+	for (auto s : state)
+	{
+
+	}
+}
+
+template<class T, class T2>
+static void test4()
+{
+
+}
+
+NMSP_REGISTER_UNIT_TEST(test, <UnitTest_Base>);
+NMSP_REGISTER_UNIT_TEST(test4, <int, float>);
+NMSP_REGISTER_UNIT_TEST(test2);
+
+class Test_Vector3 : public UnitTest
+{
+public:
+	Test_Vector3()
+	{
+		_NMSP_LOG("Test_Vector3::Test_Vector3()");
+	}
+	~Test_Vector3()
+	{
+		_NMSP_LOG("Test_Vector3::~Test_Vector3()");
+	}
+
+	virtual void onSetup() override
+	{
+		_NMSP_LOG("setup()");
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
+
+	}
+};
+
+template<class T1, class T2>
+class Test_Vector4 : public UnitTest
+{
+public:
+	Test_Vector4()
+	{
+		_NMSP_LOG("Test_Vector4::Test_Vector4()");
+	}
+	~Test_Vector4()
+	{
+		_NMSP_LOG("Test_Vector4::~Test_Vector4()");
+	}
+
+	virtual void onSetup() override
+	{
+		_NMSP_LOG("setup()");
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
+
+	}
+};
+
+NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector3);
+NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector4, <int, float>);
+
 }
 
 
