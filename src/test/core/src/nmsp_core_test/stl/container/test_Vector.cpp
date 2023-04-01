@@ -2,43 +2,6 @@
 
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
-#if 0
-#pragma mark --- EASTL-Impl ---
-#endif // 0
-#if 1
-
-#include <EASTL/vector.h>
-#include <EASTL/fixed_vector.h>
-
-template<class T, size_t N, bool bEnableOverflow = true>
-struct EASTL_Vector
-{
-	using Type = eastl::fixed_vector<T, N, bEnableOverflow>;
-};
-
-template<class T>
-struct EASTL_Vector<T, 0, true>
-{
-	using Type = eastl::vector<T>;
-};
-
-//==== EASTL ====
-
-#if !EASTL_DLL // If building a regular library and not building EASTL as a DLL...
-// It is expected that the application define the following
-// versions of operator new for the application. Either that or the
-// user needs to override the implementation of the allocator class.
-inline void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line) { return malloc(size); }
-inline void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line) {
-	#if NMSP_OS_WINDOWS
-	return _aligned_malloc(size, alignment);
-	#else
-	return std::aligned_alloc(alignment, size);
-	#endif
-}
-#endif
-
-#endif // 1
 
 struct Test_Vector_Func
 {
@@ -139,7 +102,6 @@ struct Test_Vector_Func
 	}
 };
 
-
 namespace nmsp {
 
 
@@ -200,7 +162,7 @@ struct Test_Vector_Helper
 			}
 		}
 		{
-			#if 1
+			#if 0
 			size_t i = 0;
 			for (auto& rit : src.revEach())
 			{
@@ -220,7 +182,7 @@ struct Test_Vector_Helper
 
 };
 
-class Test_Vector : public UnitTest_Base
+class Test_Vector : public UnitTest
 {
 	template <class U> using Compare_STD					= Test_Vector_Helper<U, Vector_T<U, 0>, std::vector<U>>;
 	//template <class U, size_t N> using Compare_EASTL_T		= Test_Vector_Helper<U, Vector_T<U, N>, eastl::vector<U>>;
@@ -236,8 +198,20 @@ public:
 		//NMSP_TEST_CASE(Compare_EASTL<TestMovableType>, test());
 		//NMSP_TEST_CASE(Compare_EASTL_N<TestMovableType>, test());
 		#else
-		temp_test<TestMovableType<>>();
+		//temp_test<TestMovableType<>>();
 		//temp_test<int>();
+
+		Vector_T<int>		vec = { {1, 2, 3} };
+		Vector_T<int>		vec2 = vec;
+
+		for (auto& v : vec2)
+		{
+			_NMSP_LOG("{}", v);
+		}
+
+		String_T<char> str;
+		str.append("asdasdas");
+		_NMSP_LOG("{}", str.data());
 
 		#endif // 0
 	}
@@ -290,105 +264,28 @@ public:
 		bool isSuccess = Test_Vector_Helper<T, TestType, TestRefType>::test_correctness(v0, v1);
 		_NMSP_LOG("{}: {}\n", "temp_test", (isSuccess) ? "[ OK ]" : "[ FAIL ]");
 		#endif // 0
+	}
+
+	virtual void onSetup() override
+	{
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
 
 	}
 
 private:
 
 };
-
-template<class T>
-static void test()
-{
-	
-}
-
-void test2()
-{
-	test<int>();
-}
-
-template<class T, class T2>
-static void test3(benchmark::State& state)
-{
-	for (auto s : state)
-	{
-
-	}
-}
-
-template<class T, class T2>
-static void test4()
-{
+//NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
 
 }
-
-NMSP_REGISTER_UNIT_TEST(test, <UnitTest_Base>);
-NMSP_REGISTER_UNIT_TEST(test4, <int, float>);
-NMSP_REGISTER_UNIT_TEST(test2);
-
-class Test_Vector3 : public UnitTest
-{
-public:
-	Test_Vector3()
-	{
-		_NMSP_LOG("Test_Vector3::Test_Vector3()");
-	}
-	~Test_Vector3()
-	{
-		_NMSP_LOG("Test_Vector3::~Test_Vector3()");
-	}
-
-	virtual void onSetup() override
-	{
-		_NMSP_LOG("setup()");
-	}
-
-	virtual void onTest() override
-	{
-
-	}
-
-	virtual void onBenchmark() override
-	{
-
-	}
-};
-
-template<class T1, class T2>
-class Test_Vector4 : public UnitTest
-{
-public:
-	Test_Vector4()
-	{
-		_NMSP_LOG("Test_Vector4::Test_Vector4()");
-	}
-	~Test_Vector4()
-	{
-		_NMSP_LOG("Test_Vector4::~Test_Vector4()");
-	}
-
-	virtual void onSetup() override
-	{
-		_NMSP_LOG("setup()");
-	}
-
-	virtual void onTest() override
-	{
-
-	}
-
-	virtual void onBenchmark() override
-	{
-
-	}
-};
-
-NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector3);
-NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector4, <int, float>);
-
-}
-
 
 void test_Vector()
 {

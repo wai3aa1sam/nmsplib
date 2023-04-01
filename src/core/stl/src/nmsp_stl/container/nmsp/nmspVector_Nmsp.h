@@ -12,7 +12,7 @@ references
 namespace nmsp {
 
 #if !NMSP_ENABLE_IVECTOR
-	template<typename T, size_t LOCAL_COUNT, class FALLBACK_ALLOC = MallocAllocator >
+	template<typename T, size_t LOCAL_COUNT, class FALLBACK_ALLOC = DefaultAllocator >
 	using VectorAllocator_T = class LocalAllocator_T<LOCAL_COUNT * sizeof(T), NMSP_ALIGN_OF(T), 0, FALLBACK_ALLOC>;
 #endif // 0
 
@@ -22,7 +22,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T, class ALLOC = MallocAllocator>
+template<class T, class ALLOC = DefaultAllocator>
 class VectorBase_Nmsp
 {
 public:
@@ -73,7 +73,7 @@ private:
 #endif // 0
 #if 1
 
-template<class T, class ALLOC = MallocAllocator>
+template<class T, class ALLOC = DefaultAllocator>
 class IVector_Nmsp : public VectorBase_Nmsp<T, ALLOC>
 {
 public:
@@ -260,7 +260,7 @@ protected:
 #endif // 0
 #if 1
 
-template<class T, size_t N = 0, class FALLBACK_ALLOC = MallocAllocator>
+template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>
 class Vector_Nmsp : 
 	#if NMSP_ENABLE_IVECTOR
 		public IVector_Nmsp<T, FALLBACK_ALLOC>, protected LocalBuffer_T<N * sizeof(T), NMSP_ALIGN_OF(T)>

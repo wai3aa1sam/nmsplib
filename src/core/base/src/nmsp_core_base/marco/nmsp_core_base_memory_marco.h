@@ -1,6 +1,5 @@
 #pragma once
 
-
 #if NMSP_ENABLE_INTERNAL_PROFILER
 	#define TRACY_ENABLE 1
 
@@ -36,7 +35,6 @@
 
 #endif // NMSP_ENABLE_INTERNAL_PROFILER
 
-
 #if 0
 #pragma mark --- memory_marco-Impl ---
 #endif // 0
@@ -46,24 +44,24 @@
 	//#define NMSP_ALLOC(ptr, size, ...)	::new char[](size)
 	//#define NMSP_FREE(ptr, size)		::delete[] ptr
 
-//inline void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
-//{ 
-//	return malloc(size);
-//}
-//
-//inline void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
-//{
-//	#if NMSP_OS_WINDOWS
-//	return _aligned_malloc(size, alignment);
-//	#else
-//	return std::aligned_alloc(alignment, size);
-//	#endif
-//}
+	//inline void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
+	//{ 
+	//	return malloc(size);
+	//}
+	//
+	//inline void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
+	//{
+	//	#if NMSP_OS_WINDOWS
+	//	return _aligned_malloc(size, alignment);
+	//	#else
+	//	return std::aligned_alloc(alignment, size);
+	//	#endif
+	//}
 
-//void operator delete[](void* ptr) noexcept
-//{
-//	free(ptr);
-//}
+	//void operator delete[](void* ptr) noexcept
+	//{
+	//	free(ptr);
+	//}
 
 #endif // !1
 

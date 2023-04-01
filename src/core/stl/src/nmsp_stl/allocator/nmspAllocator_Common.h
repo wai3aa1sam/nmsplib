@@ -34,7 +34,7 @@ public:
 	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);
 	void* alloc_all(SizeType n);
 
-	void free(void* p, SizeType n);
+	void free(void* p, SizeType n = 0);
 	void free_all();
 
 	bool is_owning(void* p, SizeType n);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "nmspAllocator_Common.h"
-#include "nmspMallocAllocator.h"
 #include "../extra/nmspCompressedPair.h"
 
 namespace nmsp {
@@ -95,7 +94,7 @@ public:
 #endif // 0
 #if 0
 
-template<size_t LOCAL_SIZE, size_t ALIGN = s_kDefaultAlign, bool ENABLE_FALLBACK_ALLOC = true, class FALLBACK_ALLOC = MallocAllocator>
+template<size_t LOCAL_SIZE, size_t ALIGN = s_kDefaultAlign, bool ENABLE_FALLBACK_ALLOC = true, class FALLBACK_ALLOC = DefaultAllocator>
 class LocalBuffer_T
 {
 public:

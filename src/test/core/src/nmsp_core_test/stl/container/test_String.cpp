@@ -5,7 +5,8 @@
 
 namespace nmsp {
 
-class Test_String : public UnitTest_Base
+//template<class STR>
+class Test_String : public UnitTest
 {
 public:
 	void test()
@@ -16,10 +17,24 @@ public:
 		//std::cout << msg;
 	}
 
+	virtual void onSetup() override
+	{
+	}
+
+	virtual void onTest() override
+	{
+
+	}
+
+	virtual void onBenchmark() override
+	{
+
+	}
 	
 private:
 
 };
+//NMSP_REGISTER_UNIT_TEST_CLASS(Test_String, /*String_T*/);
 
 }
 

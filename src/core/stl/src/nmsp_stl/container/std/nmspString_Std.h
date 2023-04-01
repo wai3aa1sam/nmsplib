@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T, class ALLOC = MallocAllocator>
+template<class T, class ALLOC = DefaultAllocator>
 class String_Std : public std::basic_string<T /*, ALLOC*/>
 {
 public:

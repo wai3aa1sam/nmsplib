@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T, class ALLOC = MallocAllocator>
+template<class T, class ALLOC = DefaultAllocator>
 class Vector_Std : public std::vector<T /*, ALLOC*/>
 {
 public:
