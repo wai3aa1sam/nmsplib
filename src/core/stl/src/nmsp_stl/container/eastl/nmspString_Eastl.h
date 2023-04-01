@@ -18,10 +18,10 @@ struct EASTL_String
 	using Type = eastl::fixed_string<T, N, bEnableOverflow, OverflowAllocator>;
 };
 
-template<class T, class OverflowAllocator>
-struct EASTL_String<T, 0, true, OverflowAllocator>
+template<class T, class Allocator>
+struct EASTL_String<T, 0, true, Allocator>
 {
-	using Type = eastl::basic_string<T, OverflowAllocator>;
+	using Type = eastl::basic_string<T, Allocator>;
 };
 
 template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>

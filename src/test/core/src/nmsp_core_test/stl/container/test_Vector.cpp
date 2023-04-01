@@ -2,7 +2,6 @@
 
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
-
 struct Test_Vector_Func
 {
 	constexpr static size_t N = 16 * 10;
@@ -104,7 +103,6 @@ struct Test_Vector_Func
 
 namespace nmsp {
 
-
 template<class T, class TEST_VECTOR, class TEST_REF_VECTOR>
 struct Test_Vector_Helper
 {
@@ -184,7 +182,7 @@ struct Test_Vector_Helper
 
 class Test_Vector : public UnitTest
 {
-	template <class U> using Compare_STD					= Test_Vector_Helper<U, Vector_T<U, 0>, std::vector<U>>;
+	template <class U> using Compare_STD = Test_Vector_Helper<U, Vector_T<U, 0>, std::vector<U>>;
 	//template <class U, size_t N> using Compare_EASTL_T		= Test_Vector_Helper<U, Vector_T<U, N>, eastl::vector<U>>;
 	//template <class U, size_t N> using Compare_EASTL_N_T	= Test_Vector_Helper<U, Vector_T<U, N>, eastl::fixed_vector<U, N>>;
 
@@ -213,15 +211,17 @@ public:
 		str.append("asdasdas");
 		_NMSP_LOG("{}", str.data());
 
+
+
 		#endif // 0
 	}
 
 	template<class T, class VECTOR>
 	static void _on_temp_test(VECTOR& v_)
 	{
-		constexpr static size_t N		=  16 * 1000000;
-		constexpr static size_t RATIO	=  100000;
-		constexpr static size_t N_S		=  N / RATIO;
+		constexpr static size_t N = 16 * 1000000;
+		constexpr static size_t RATIO = 100000;
+		constexpr static size_t N_S = N / RATIO;
 		for (size_t i = 0; i < N_S; i++)
 		{
 			auto value = T(i);
@@ -244,8 +244,8 @@ public:
 	static void temp_test()
 	{
 		constexpr size_t LOCAL = 0;
-		using TestType		= nmsp::Vector_T<T, LOCAL>;
-		using TestRefType	= EASTL_Vector<T, LOCAL>::Type;
+		using TestType = nmsp::Vector_T<T, LOCAL>;
+		using TestRefType = EASTL_Vector<T, LOCAL>::Type;
 		//using TestRefType = std::vector<T>;
 
 		TestType v0;
@@ -259,7 +259,7 @@ public:
 		Test_Vector_Func::_on_temp_test0<T>(v1);
 		#endif // 0
 
-		
+
 		#if 1
 		bool isSuccess = Test_Vector_Helper<T, TestType, TestRefType>::test_correctness(v0, v1);
 		_NMSP_LOG("{}: {}\n", "temp_test", (isSuccess) ? "[ OK ]" : "[ FAIL ]");
@@ -277,15 +277,16 @@ public:
 
 	virtual void onBenchmark() override
 	{
-
+		
 	}
 
 private:
 
 };
-//NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
+NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
 
 }
+
 
 void test_Vector()
 {

@@ -26,12 +26,12 @@ public:
 
 	static constexpr SizeType s_kLocalSize			= LOCAL_SIZE;
 	static constexpr SizeType s_kAlign				= ALIGN;
-	static constexpr bool	  s_enableFallbackAlloc = Base::s_enableFallbackAlloc;
+	//static constexpr bool	  s_enableFallbackAlloc = Base::s_enableFallbackAlloc;
 
 	//static_assert(Base::s_kPrimaryAlign == Base::s_kFallBackAlign);
 
 public:
-	LocalAllocator_T()	= default;
+	LocalAllocator_T(const char* name = "LocalAllocator_T") {};
 	~LocalAllocator_T() = default;
 
 	void*	alloc(SizeType n)			{ return Base::alloc(n); }

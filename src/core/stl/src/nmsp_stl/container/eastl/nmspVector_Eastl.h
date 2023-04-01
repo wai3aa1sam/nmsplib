@@ -18,10 +18,10 @@ struct EASTL_Vector
 	using Type = eastl::fixed_vector<T, N, bEnableOverflow, OverflowAllocator>;
 };
 
-template<class T, class OverflowAllocator>
-struct EASTL_Vector<T, 0, true, OverflowAllocator>
+template<class T, class Allocator>
+struct EASTL_Vector<T, 0, true, Allocator>
 {
-	using Type = eastl::vector<T, OverflowAllocator>;
+	using Type = eastl::vector<T, Allocator>;
 };
 
 template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>
