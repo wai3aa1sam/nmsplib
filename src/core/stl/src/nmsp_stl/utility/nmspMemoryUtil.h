@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/nmsp_stl_common.h"
+#include "../container/nmspIterator.h"
 
 namespace nmsp {
 

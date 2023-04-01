@@ -4,5 +4,15 @@
 
 #include "nmsp_stl/allocator/nmspAllocator.h"
 
-#include "nmsp_stl/container/nmspVector.h"
-#include "nmsp_stl/container/nmspString.h"
+#include "nmsp_stl/container/nmspContainer.h"
+
+#include "nmsp_stl/extra/nmspPair.h"
+#include "nmsp_stl/extra/nmspCompressedPair.h"
+#include "nmsp_stl/extra/nmspOptional.h"
+#include "nmsp_stl/extra/nmspFunction.h"
+
+#include "nmsp_stl/pointer/nmspPointer.h"
+
+#include "nmsp_stl/view/nmspView.h"
+
+#include "nmsp_stl/atomic/nmspAtomic.h"

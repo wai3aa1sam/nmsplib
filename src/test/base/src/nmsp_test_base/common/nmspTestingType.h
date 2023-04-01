@@ -150,7 +150,8 @@ struct TestMovableType
 class TestType
 {
 public:
-	TestType() = default;
+	TestType()  { std::cout << "default ctr" << "\n"; }
+	~TestType() { std::cout << "default dtr" << "\n"; }
 
 	TestType(const TestType& v)
 	{
@@ -169,7 +170,6 @@ public:
 		std::cout << "move op=" << "\n";
 	}
 };
-
 
 #endif // 0
 

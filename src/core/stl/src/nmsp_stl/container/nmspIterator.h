@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nmspContainer_Common.h"
+#include "../common/nmsp_stl_common.h"
 
 #if NMSP_BUILD_STL_STD
 

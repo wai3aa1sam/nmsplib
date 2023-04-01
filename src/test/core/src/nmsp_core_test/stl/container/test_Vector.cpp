@@ -2,6 +2,26 @@
 
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
+#include <nmsp_stl/utility/nmspFunctional.h>
+
+//template <> 
+//struct ::eastl::equal_to<nmsp::TestType>
+//{ bool operator()(const nmsp::TestType& a, const nmsp::TestType& b) const { return &a == &b; } };
+//
+//
+//template <> 
+//struct ::eastl::hash<nmsp::TestType>
+//{ size_t operator()(nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
+
+template <> 
+struct ::nmsp::EqualTo<nmsp::TestType>
+{ bool operator()(const nmsp::TestType& a, const nmsp::TestType& b) const { return &a == &b; } };
+
+template <> 
+struct ::nmsp::Hash<nmsp::TestType>
+{ size_t operator()(nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
+
+
 struct Test_Vector_Func
 {
 	constexpr static size_t N = 16 * 10;
@@ -102,6 +122,7 @@ struct Test_Vector_Func
 };
 
 namespace nmsp {
+
 
 template<class T, class TEST_VECTOR, class TEST_REF_VECTOR>
 struct Test_Vector_Helper
@@ -211,10 +232,30 @@ public:
 		str.append("asdasdas");
 		_NMSP_LOG("{}", str.data());
 
+		{ Set_T<int> a; a.emplace(1); }
+		{ Map_T<int, float> a; a.emplace(1, 5.0f); }
+
+		{ VectorMap_T<int, int> a; a.insert({1, 1}); }
+		//{ Map_T<int, int> a; a.emplace(Pair<int, int>{1, 1}); }
+		{ UnorderedMap_T<int, const char*> a; a.insert(makePair(1, "1")); }
+		{ int i = 0; const char* ch = "1"; UnorderedMap_T< const char*, int> a; a.insert(makePair(ch, i)); }
+		{ auto tt = TestType(); UnorderedMap_T<TestType, const char*> a; a.emplace(move(tt), "1"); }
+		{ auto tt = TestType(); UnorderedMap_T<TestType, const char*> a; a.emplace(move(tt), "1"); }
+		{ auto tt = TestType(); UnorderedMap_T<TestType, const char*> a; a.emplace(move(tt), "1"); }
+
+		{ auto tt = TestType(); StringMap_T<TestType> a; a.insert("123", move(tt)); }
+		//{ auto tt = TestType(); StringMap_T<TestType> a; a.emplace("123", move(tt)); }
+		//{ auto tt = TestType(); eastl::string_map<TestType> a; a.insert("123", move(tt)); }
+		//_NMSP_LOG("n: {}", sizeof(StringA_T<0, DefaultAllocator>));
+		{ StringA_T<12> tmp; tmp.append("!23"); }
+		{ TempStringA_T<> tmp; tmp.append("!23"); }
+		
+		{ Opt<int> a; a.has_value(); }
 
 
 		#endif // 0
 	}
+
 
 	template<class T, class VECTOR>
 	static void _on_temp_test(VECTOR& v_)

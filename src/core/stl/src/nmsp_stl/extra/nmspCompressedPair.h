@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../common/nmsp_stl_common.h"
 #include "EASTL/bonus/compressed_pair.h"
 
@@ -31,8 +32,6 @@ public:
 
 #else
 
-//template<class T1, class T2> ea
-
 template<class T1, class T2>
 class CompressedPair : public eastl::compressed_pair<T1, T2>
 {
@@ -42,7 +41,6 @@ public:
 		: Base(forward<ARGS>(args)...)
 	{}
 
-	CompressedPair() = default;
 	~CompressedPair() = default;
 };
 

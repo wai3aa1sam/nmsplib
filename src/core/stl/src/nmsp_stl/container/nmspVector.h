@@ -4,7 +4,7 @@
 
 #if NMSP_BUILD_STL_STD_CONTAINER
 
-	#include "std/Vector_Std.h"
+	#include "std/nmspVector_Std.h"
 
 	namespace nmsp {
 
