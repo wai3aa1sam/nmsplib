@@ -61,11 +61,11 @@ template<class T> inline constexpr bool IsTrivial   = IsTrivialT<T>::value;
 template<class BASE, class DERIVED> using				  IsBaseOfT = typename std::is_base_of<BASE, DERIVED>;
 template<class BASE, class DERIVED> inline constexpr bool IsBaseOf  = IsBaseOfT<BASE, DERIVED>::value;
 
-template<class T> using					IsFunction_T    = std::is_function<T>;
-template<class T> inline constexpr bool	IsFunction      = IsFunction_T<T>::value;
+template<class T> using					IsFunctionT    = std::is_function<T>;
+template<class T> inline constexpr bool	IsFunction      = IsFunctionT<T>::value;
 
-template<class T> using					IsUnsigned_T    = std::is_unsigned<T>;
-template<class T> inline constexpr bool	IsUnsigned      = IsUnsigned_T<T>::value;
+template<class T> using					IsUnsignedT    = std::is_unsigned<T>;
+template<class T> inline constexpr bool	IsUnsigned      = IsUnsignedT<T>::value;
 
 
 
@@ -81,7 +81,7 @@ template<class... ARGS> using VoidType = void;
 using TrueType = std::true_type;
 using FalseType = std::false_type;
 
-template<class T, T VALUE> using					IntConstant_T   = typename std::integral_constant<T, VALUE>;
+template<class T, T VALUE> using					IntConstantT   = typename std::integral_constant<T, VALUE>;
 template<class T, T VALUE> inline constexpr bool	IntConstant     = std::integral_constant<T, VALUE>::value;
 
 
@@ -89,22 +89,22 @@ template<class T, T VALUE> inline constexpr bool	IntConstant     = std::integral
 
 
 template<class T>
-NMSP_NODISCARD constexpr T&& forward(RemoveRef<T>& arg_) noexcept
+NMSP_NODISCARD constexpr T&& forward(RemoveRef<T>& arg) noexcept
 { // forward an lvalue as either an lvalue or an rvalue
-    return static_cast<T&&>(arg_);
+    return static_cast<T&&>(arg);
 }
 
 template<class T>
-NMSP_NODISCARD constexpr T&& forward(RemoveRef<T>&& arg_) noexcept
+NMSP_NODISCARD constexpr T&& forward(RemoveRef<T>&& arg) noexcept
 { // forward an rvalue as an rvalue
     static_assert(!IsLVRef<T>, "bad forward call");
-    return static_cast<T&&>(arg_);
+    return static_cast<T&&>(arg);
 }
 
 template<class T>
-NMSP_NODISCARD constexpr RemoveRef<T>&& move(T&& arg_) noexcept
+NMSP_NODISCARD constexpr RemoveRef<T>&& move(T&& arg) noexcept
 { // forward _Arg as movable
-    return static_cast<RemoveRef<T>&&>(arg_);
+    return static_cast<RemoveRef<T>&&>(arg);
 }
 
 

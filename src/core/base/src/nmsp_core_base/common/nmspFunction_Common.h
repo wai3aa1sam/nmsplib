@@ -1,5 +1,7 @@
 #pragma once
 
+#include "nmspTypeTrait_Common.h"
+
 #include "fmt/format.h"
 
 namespace nmsp {
@@ -23,6 +25,8 @@ template<class T> T* constCast(const T* v) { return const_cast<T*>(v); }
 template<class T> T& constCast(const T& v) { return const_cast<T&>(v); }
 
 #endif
+
+template<class T> inline void swap(T& a, T& b) { T tmp = move(a); a = move(b); b = move(tmp); }
 
 #if 0
 #pragma mark --- nmspFormatter-Impl ---

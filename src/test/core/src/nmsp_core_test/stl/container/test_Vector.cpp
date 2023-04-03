@@ -250,7 +250,10 @@ public:
 		{ StringA_T<12> tmp; tmp.append("!23"); }
 		{ TempStringA_T<> tmp; tmp.append("!23"); }
 		
-		{ Opt<int> a; a.has_value(); }
+		{ Opt_T<int> a; a.has_value(); }
+
+		//{ Span_T<int> sv; Vector_T<int, 10> vect{sv};  }
+		{ StrViewA_T sv; StringA_T<> strs{sv};  }
 
 
 		#endif // 0
