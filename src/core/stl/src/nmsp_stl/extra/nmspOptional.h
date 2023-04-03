@@ -6,6 +6,6 @@
 
 namespace nmsp {
 
-template<class T> using Opt_T = ::eastl::optional<T>;
+template<class T> using Opt_T = eastl::optional<T>;
 
 }

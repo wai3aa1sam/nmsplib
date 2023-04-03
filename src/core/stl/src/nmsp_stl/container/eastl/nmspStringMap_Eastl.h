@@ -12,7 +12,7 @@ namespace nmsp {
 #if 1
 
 template<class VALUE, class PRED = StrLess<const char*>, class ALLOC = DefaultAllocator>
-class StringMap_Eastl : public ::eastl::string_map<VALUE, PRED, ALLOC>
+class StringMap_Eastl : public eastl::string_map<VALUE, PRED, ALLOC>
 {
 public:
 	StringMap_Eastl() = default;
@@ -27,7 +27,7 @@ private:
 
 #else
 
-template<class VALUE, class PRED = StrLess<const char*>, class ALLOC = DefaultAllocator> using StringMap_Eastl = ::eastl::string_map<VALUE, PRED, ALLOC>;
+template<class VALUE, class PRED = StrLess<const char*>, class ALLOC = DefaultAllocator> using StringMap_Eastl = eastl::string_map<VALUE, PRED, ALLOC>;
 
 #endif
 

@@ -46,6 +46,22 @@ public:
 
 #endif
 
+#if 0
+#pragma mark --- RefCount_Base-Impl ---
+#endif // 0
+#if 1
+
+class RefCount_Base : public NonCopyable
+{
+public:
+	std::atomic_int	_refCount = 0;
+public:
+	RefCount_Base()		= default;
+	~RefCount_Base()	= default;
+};
+
+#endif
+
 
 #endif
 

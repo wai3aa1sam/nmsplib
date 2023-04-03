@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class CHAR> using StrView_Eastl = ::eastl::basic_string_view<CHAR>;
+template<class CHAR> using StrView_Eastl = eastl::basic_string_view<CHAR>;
 
 #endif
 

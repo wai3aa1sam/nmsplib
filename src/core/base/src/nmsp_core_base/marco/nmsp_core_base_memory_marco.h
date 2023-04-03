@@ -63,6 +63,9 @@
 	//	free(ptr);
 	//}
 
+	template<class T> inline T*		nmsp_new()			noexcept { return new p; }
+	template<class T> inline void	nmsp_delete(T* p)	noexcept { delete p; }
+
 #endif // !1
 
 #endif

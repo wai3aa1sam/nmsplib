@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Span_Eastl = ::eastl::span<T>;
+template<class T> using Span_Eastl = eastl::span<T>;
 
 #endif
 

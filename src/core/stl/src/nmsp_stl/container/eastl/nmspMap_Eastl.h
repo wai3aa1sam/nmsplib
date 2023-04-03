@@ -12,7 +12,7 @@ namespace nmsp {
 #if 0
 
 template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>
-class Map_Eastl : public ::eastl::map<KEY, VALUE, PRED, ALLOC>
+class Map_Eastl : public eastl::map<KEY, VALUE, PRED, ALLOC>
 {
 public:
 	Map_Eastl() = default;
@@ -24,7 +24,7 @@ private:
 
 #else
 
-template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator> using Map_Eastl = ::eastl::map<KEY, VALUE, PRED, ALLOC>;
+template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator> using Map_Eastl = eastl::map<KEY, VALUE, PRED, ALLOC>;
 
 #endif
 

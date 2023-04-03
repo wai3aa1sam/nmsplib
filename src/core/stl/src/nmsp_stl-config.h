@@ -51,5 +51,11 @@
 	#error "build stl should be specified"
 #endif
 
+#ifdef NMSP_BUILD_STL_CUSTOM_S_PTR
+	#define NMSP_STL_INTRUSIVE_S_PTR 0
+#else
+	#define NMSP_STL_INTRUSIVE_S_PTR 1
+#endif // NMSP_BUILD_STL_CUSTOM_S_PTR
+
 
 #endif

@@ -5,12 +5,12 @@
 #include <nmsp_stl/utility/nmspFunctional.h>
 
 //template <> 
-//struct ::eastl::equal_to<nmsp::TestType>
+//struct eastl::equal_to<nmsp::TestType>
 //{ bool operator()(const nmsp::TestType& a, const nmsp::TestType& b) const { return &a == &b; } };
 //
 //
 //template <> 
-//struct ::eastl::hash<nmsp::TestType>
+//struct eastl::hash<nmsp::TestType>
 //{ size_t operator()(nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
 
 template <> 
@@ -254,6 +254,9 @@ public:
 
 		//{ Span_T<int> sv; Vector_T<int, 10> vect{sv};  }
 		{ StrViewA_T sv; StringA_T<> strs{sv};  }
+
+		{ UPtr_T<int> up; up.reset(new int); }
+		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(new TestRef); }
 
 
 		#endif // 0

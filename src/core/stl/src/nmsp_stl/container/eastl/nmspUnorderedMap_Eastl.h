@@ -12,7 +12,7 @@ namespace nmsp {
 #if 0
 
 template<class KEY, class VALUE, class HASH = Hash<KEY>, class PRED = EqualTo<KEY>, class ALLOC = DefaultAllocator>
-class UnorderedMap_Eastl : public ::eastl::unordered_map<KEY, VALUE, HASH, PRED, ALLOC>
+class UnorderedMap_Eastl : public eastl::unordered_map<KEY, VALUE, HASH, PRED, ALLOC>
 {
 public:
 	UnorderedMap_Eastl() = default;
@@ -25,7 +25,7 @@ private:
 #else
 
 template<class KEY, class VALUE, class HASH = Hash<KEY>, class PRED = EqualTo<KEY>, class ALLOC = DefaultAllocator> 
-using UnorderedMap_Eastl = ::eastl::unordered_map<KEY, VALUE, HASH, PRED, ALLOC>;
+using UnorderedMap_Eastl = eastl::unordered_map<KEY, VALUE, HASH, PRED, ALLOC>;
 
 #endif
 

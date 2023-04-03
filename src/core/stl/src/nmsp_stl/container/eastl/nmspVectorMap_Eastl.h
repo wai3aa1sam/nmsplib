@@ -12,7 +12,7 @@ namespace nmsp {
 #if 0
 
 template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>
-class VectorMap_Eastl : public ::eastl::vector_map<KEY, VALUE, PRED, ALLOC>
+class VectorMap_Eastl : public eastl::vector_map<KEY, VALUE, PRED, ALLOC>
 {
 public:
 	VectorMap_Eastl() = default;
@@ -24,7 +24,7 @@ private:
 
 #else
 
-template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator> using VectorMap_Eastl = ::eastl::vector_map<KEY, VALUE, PRED, ALLOC>;
+template<class KEY, class VALUE, class PRED = Less<KEY>, class ALLOC = DefaultAllocator> using VectorMap_Eastl = eastl::vector_map<KEY, VALUE, PRED, ALLOC>;
 
 #endif
 
