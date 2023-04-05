@@ -258,6 +258,25 @@ public:
 		{ UPtr_T<int> up; up.reset(new int); }
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(new TestRef); }
 
+		{ sleep_ms(10); auto n = logicalThreadCount(); NMSP_UNUSED(n); }
+		{
+			MutexProtected_T<Vector_T<int>> a;
+			auto data = a.scopedULock();
+		}
+
+		{
+			SMutexProtected_T<Vector_T<int>> a;
+			auto data = a.scopedSLock();
+		}
+
+		{
+			CondVarProtected_T<Vector_T<int>> s;
+			auto data = s.scopedULock();
+		}
+		{
+			SMtxCondVarProtected_T<Vector_T<int>> s;
+			auto data = s.scopedSLock();
+		}
 
 		#endif // 0
 	}
@@ -334,15 +353,16 @@ NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
 
 }
 
-
 void test_Vector()
 {
 	_NMSP_PROFILE_SECTION("test_Vector");
 
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
+	
 
 }
+
 
 #endif // NMSP_TEST_MODULE_STL
 

@@ -10,16 +10,10 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 
 #if 0
-#pragma mark --- XXXX-Decl ---
+#pragma mark --- XXXX-Decl/Impl ---
 #endif // 0
 #if 1
 
-#endif
-
-#if 0
-#pragma mark --- XXXX-Impl ---
-#endif // 0
-#if 1
 
 
 #endif
@@ -97,6 +91,10 @@
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
 
+#if 0
+#pragma mark --- nmspInternalLog-Impl ---
+#endif // 0
+#if 1
 namespace nmsp {
 
 inline void _log()
@@ -110,3 +108,17 @@ void _log(const char* format, ARGS&&... args)
 }
 
 }
+#endif
+
+
+#if 0
+#pragma mark --- nmspStaticVariables-Impl ---
+#endif // 0
+#if 1
+namespace nmsp {
+
+static constexpr size_t s_kCahchLineSize = std::hardware_destructive_interference_size;
+
+}
+#endif
+
