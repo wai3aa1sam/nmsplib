@@ -2,37 +2,44 @@
 
 #include "nmsp_stl/common/nmsp_stl_common.h"
 
+#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
+
 #if NMSP_BUILD_STL_STD_CONTAINER
 
-#include "nmsp/nmspStringView_Std.h"
+	#include "std/nmspStringView_Std.h"
 
-namespace nmsp {
+	namespace nmsp {
 
 
-}
+	}
 
 #elif NMSP_BUILD_STL_NMSP_CONTAINER
 
-#include "nmsp/nmspStringView_Nmsp.h"
+	#include "nmsp/nmspStringView_Nmsp.h"
 
-namespace nmsp {
+	namespace nmsp {
 
-}
+	}
 
 
 #elif NMSP_BUILD_STL_EASTL_CONTAINER
 
-#include "eastl/nmspStringView_Eastl.h"
+	#include "eastl/nmspStringView_Eastl.h"
 
-namespace nmsp {
+	namespace nmsp {
 
-template<class T> using StrView_Impl = StrView_Eastl<T>;
+	template<class T> using StrView_Impl = StrView_Eastl<T>;
 
-}
+	}
 
 #else
-#error "unsupported stl build"
+	#error "unsupported stl build container"
 #endif // 0
+
+#endif
 
 namespace nmsp {
 

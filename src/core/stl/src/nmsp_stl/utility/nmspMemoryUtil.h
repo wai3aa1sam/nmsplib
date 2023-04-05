@@ -3,6 +3,17 @@
 #include "../common/nmsp_stl_common.h"
 #include "../container/nmspIterator.h"
 
+#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
+
+#if NMSP_BUILD_STL_STD_CONTAINER
+
+
+
+#elif NMSP_BUILD_STL_NMSP_CONTAINER
+
 namespace nmsp {
 
 #if 0
@@ -209,6 +220,20 @@ void assign(ITER dstBeg, const T& val, size_t count)
 	for (; dstBeg != end; ++dstBeg)
 		*dstBeg = val;
 }
+
+}
+
+#elif NMSP_BUILD_STL_EASTL_CONTAINER
+
+
+#else
+	#error "nmspAlgorithm.h should have backend switch"
+#endif // NMSP_BUILD_STL_EASTL_CONTAINER
+
+#endif
+
+namespace nmsp {
+
 
 void memory_copy()
 {

@@ -2,38 +2,45 @@
 
 #include "nmsp_stl/common/nmsp_stl_common.h"
 
+#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
+
 #if NMSP_BUILD_STL_STD_CONTAINER
 
-#include "nmsp/nmspSPtr_Std.h"
+	#include "nmsp/nmspSPtr_Std.h"
 
-namespace nmsp {
+	namespace nmsp {
 
 
-}
+	}
 
 #elif NMSP_BUILD_STL_NMSP_CONTAINER || NMSP_STL_INTRUSIVE_S_PTR
 
-#include "nmsp/nmspSPtr_Nmsp.h"
+	#include "nmsp/nmspSPtr_Nmsp.h"
 
-namespace nmsp {
+	namespace nmsp {
 
-template<class T> using SPtr_Impl = SPtr_Nmsp<T>;
+	template<class T> using SPtr_Impl = SPtr_Nmsp<T>;
 
-}
+	}
 
 #elif NMSP_BUILD_STL_EASTL_CONTAINER
 
-#include "eastl/nmspSPtr_Eastl.h"
+	#include "eastl/nmspSPtr_Eastl.h"
 
-namespace nmsp {
+	namespace nmsp {
 
-template<class T> using SPtr_Impl = SPtr_Eastl<T>;
+	template<class T> using SPtr_Impl = SPtr_Eastl<T>;
 
-}
+	}
 
 #else
-#error "unsupported stl build"
+	#error "unsupported stl build container"
 #endif // 0
+
+#endif
 
 namespace nmsp {
 

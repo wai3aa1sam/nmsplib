@@ -19,7 +19,7 @@
 	}
 
 #else
-	#error "unsupported stl build"
+	#error "unsupported stl build container"
 #endif // 0
 
 namespace nmsp {

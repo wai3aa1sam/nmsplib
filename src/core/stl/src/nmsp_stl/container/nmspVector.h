@@ -2,6 +2,11 @@
 
 #include "nmspContainer_Common.h"
 
+#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
+
 #if NMSP_BUILD_STL_STD_CONTAINER
 
 	#include "std/nmspVector_Std.h"
@@ -42,8 +47,10 @@
 	}
 
 #else
-	#error "unsupported stl build"
+	#error "unsupported stl build container"
 #endif // 0
+
+#endif
 
 namespace nmsp {
 
