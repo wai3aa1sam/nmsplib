@@ -15,6 +15,10 @@ namespace nmsp {
 #endif // 0
 #if 1
 
+template<class T>
+class TypeDisplayer;
+// eg. TypeDisplayer<decltype(data->data)> x; (void)x;
+
 #if 0
 #pragma mark --- nmspTypeTrait_Util-Impl ---
 #endif // 0
@@ -62,12 +66,16 @@ template<class BASE, class DERIVED> using				  IsBaseOfT = typename std::is_base
 template<class BASE, class DERIVED> inline constexpr bool IsBaseOf  = IsBaseOfT<BASE, DERIVED>::value;
 
 template<class T> using					IsFunctionT    = std::is_function<T>;
-template<class T> inline constexpr bool	IsFunction      = IsFunctionT<T>::value;
+template<class T> inline constexpr bool	IsFunction     = IsFunctionT<T>::value;
 
-template<class T> using					IsUnsignedT    = std::is_unsigned<T>;
-template<class T> inline constexpr bool	IsUnsigned      = IsUnsignedT<T>::value;
+template<class T> using					IsUIntT        = std::is_unsigned<T>;
+template<class T> inline constexpr bool	IsUInt         = IsUIntT<T>::value;
 
+template<class T> using					IsIntT         = std::is_integral<T>;
+template<class T> inline constexpr bool	IsInt          = IsIntT<T>::value;
 
+template<class T> using					IsFloatT       = std::is_floating_point<T>;
+template<class T> inline constexpr bool	IsFloat        = IsFloatT<T>::value;
 
 #endif
 

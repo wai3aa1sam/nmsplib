@@ -16,3 +16,6 @@
 #include "nmsp_stl/view/nmspView.h"
 
 #include "nmsp_stl/atomic/nmspAtomic.h"
+
+#include "nmsp_stl/string/nmspUtfUtil.h"
+#include "nmsp_stl/string/nmspStrUtil.h"

@@ -14,17 +14,16 @@
 	namespace nmsp {
 
 	using Thread_Impl	= Thread_Std;
-	using ThreadA_Impl	= ThreadA_Std;
 
 	}
 
 #elif NMSP_BUILD_STL_NMSP_THREAD
 
-	#include "nmsp/nmspThread_Nmsp.h"
+	#include "nmsp/nmspNativeThread_Nmsp.h"
 
 	namespace nmsp {
 
-	using Thread_Impl = Thread_Nmsp;
+	using NativeThread_Impl = NativeThread_Nmsp;
 
 	}
 
@@ -46,26 +45,13 @@
 
 namespace nmsp {
 
-using BasicThread = Thread_Impl;
 
 #if 0
-#pragma mark --- Thread-Decl ---
+#pragma mark --- NativeThread-Decl ---
 #endif // 0
 #if 1
 
-class Thread : public BasicThread
-{
-public:
-	using Base = BasicThread;
-	using This = Thread;
-public:
-	using Base::CreateDesc;
-
-public:
-
-private:
-
-};
+using NativeThread = NativeThread_Impl;
 
 #endif
 

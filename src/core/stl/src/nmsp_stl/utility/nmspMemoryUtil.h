@@ -232,17 +232,36 @@ void assign(ITER dstBeg, const T& val, size_t count)
 
 #endif
 
+
 namespace nmsp {
 
+#if 0
+#pragma mark --- MemoryUtil-Decl ---
+#endif // 0
+#if 1
 
-void memory_copy()
+void memory_copy();
+void memory_set();
+
+
+#endif
+
+#if 0
+#pragma mark --- MemoryUtil-Impl ---
+#endif // 0
+#if 1
+
+inline void memory_copy()
 {
 
 }
 
-void memory_set()
+inline void memory_set()
 {
 
 }
 
+#endif
+
 }
+

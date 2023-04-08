@@ -5,8 +5,9 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 #include "nmspClass_Common.h"
 
-namespace nmsp {
+#define NMSP_ERROR(...) nmsp::Error(NMSP_SRCLOC, nmsp::fmtAs_T<nmsp::TempStringA_T<>>(__VA_ARGS__).c_str())
 
+namespace nmsp {
 
 #if 0
 #pragma mark --- ErrorBase-Impl ---
@@ -43,5 +44,14 @@ private:
 };
 
 #endif
+
+template<class... ARGS>
+inline void throwIf(bool cond, ARGS&&... args)
+{
+	if (cond)
+	{
+		throw NMSP_ERROR(forward<ARGS>(args)...);
+	}
+}
 
 }

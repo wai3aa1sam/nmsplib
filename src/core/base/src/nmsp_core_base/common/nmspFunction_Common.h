@@ -28,27 +28,5 @@ template<class T> T& constCast(const T& v) { return const_cast<T&>(v); }
 
 template<class T> inline void swap(T& a, T& b) { T tmp = move(a); a = move(b); b = move(tmp); }
 
-#if 0
-#pragma mark --- nmspFormatter-Impl ---
-#endif // 0
-#if 1
-
-template<class STR, class... ARGS> inline
-void fmtTo(STR& outStr, ARGS&&... args)
-{
-	fmt::format_to(std::back_inserter(outStr), std::forward<ARGS>(args)...);
-}
-
-template<class STR, class... ARGS> inline
-STR fmtAs(ARGS&&... args)
-{
-	STR out;
-	fmtTo(out, std::forward<ARGS>(args)...);
-	return out;
-}
-
-#endif
-
-
 
 }

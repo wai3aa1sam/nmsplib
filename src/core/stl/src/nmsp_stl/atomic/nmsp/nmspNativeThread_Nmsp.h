@@ -9,11 +9,11 @@
 
 #if NMSP_OS_WINDOWS
 
-	#include "win32/nmspThread_Win32.h"
+	#include "win32/nmspNativeThread_Win32.h"
 
 	namespace nmsp {
 
-	using Thread_Nmsp_Impl	= Thread_Win32;
+	using NativeThread_Nmsp_Impl	= NativeThread_Win32;
 
 	}
 
@@ -25,6 +25,6 @@
 
 namespace nmsp {
 
-using Thread_Nmsp = Thread_Nmsp_Impl;
+using NativeThread_Nmsp = NativeThread_Nmsp_Impl;
 
 }

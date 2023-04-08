@@ -30,6 +30,7 @@ references:
 
 #define NMSP_UNUSED(x)	(void)x
 
+#define NMSP_CONSTEXPR				constexpr
 #define NMSP_NOEXCEPT				noexcept
 #define NMSP_NOEXCEPT_IF(...)		noexcept(__VA_ARGS__)
 

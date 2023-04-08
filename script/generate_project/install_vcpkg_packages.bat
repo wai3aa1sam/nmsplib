@@ -22,6 +22,7 @@ vcpkg install fmt:x64-windows --recurse
 vcpkg install benchmark:x64-windows --recurse
 vcpkg install tracy:x64-windows --recurse
 vcpkg install eastl:x64-windows --recurse
+vcpkg install concurrentqueue:x64-windows --recurse 
 
 POPD
 

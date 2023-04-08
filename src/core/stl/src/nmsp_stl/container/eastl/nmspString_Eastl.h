@@ -31,6 +31,8 @@ class String_Eastl : public EASTL_String<T, N, !IsSame<FALLBACK_ALLOC, NoFallbac
 public:
 	using Base = typename EASTL_String<T, N, !IsSame<FALLBACK_ALLOC, NoFallbackAllocator_Policy>, FALLBACK_ALLOC>::Type;
 
+public:
+	using ValueType = T;
 	using ViewType	= StrView_T<T>;
 	using Allocator = FALLBACK_ALLOC;
 
@@ -38,8 +40,20 @@ public:
 	String_Eastl() = default;
 	~String_Eastl() = default;
 
+	String_Eastl(ViewType view);
 	explicit String_Eastl(ViewType sv, const Allocator& allocator = DefaultAllocator{});
 
+	template<class STR> void operator= (STR&& rhs);
+	template<class STR> void operator+=(const STR& rhs);
+
+	template<size_t N_, class ALLOC = Allocator> void operator= (const String_Eastl<T, N_, ALLOC>& rhs);
+	template<size_t N_, class ALLOC = Allocator> void operator+=(const String_Eastl<T, N_, ALLOC>& rhs);
+
+	void operator= (ViewType view);
+	void operator+=(ViewType view);
+
+	operator ViewType() const NMSP_NOEXCEPT;
+	
 private:
 
 };
@@ -55,11 +69,64 @@ private:
 #if 1
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
+String_Eastl<T, N, FALLBACK_ALLOC>::String_Eastl(ViewType view)
+	: Base(view.data(), view.size())
+{
+
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
 String_Eastl<T, N, FALLBACK_ALLOC>::String_Eastl(ViewType sv, const Allocator& allocator)
 	: Base(sv, allocator)
 {}
 
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<class STR> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator= (STR&& rhs)
+{
+	Base::operator=(nmsp::forward<STR>(rhs));
+}
 
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<class STR> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator+=(const STR& rhs)
+{
+	Base::operator+=(rhs);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<size_t N_, class ALLOC> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator=(const String_Eastl<T, N_, ALLOC>& rhs)
+{
+	this->clear();
+	this->append(rhs.begin(), rhs.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<size_t N_, class ALLOC> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator+=(const String_Eastl<T, N_, ALLOC>& rhs)
+{
+	this->append(rhs.begin(), rhs.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator= (ViewType view)
+{
+	this->clear();
+	this->append(view.begin(), view.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void String_Eastl<T, N, FALLBACK_ALLOC>::operator+=(ViewType view)
+{
+	this->append(view.begin(), view.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+String_Eastl<T, N, FALLBACK_ALLOC>::operator ViewType() const NMSP_NOEXCEPT
+{
+	return ViewType{ data(), size() };
+}
 
 #endif
 

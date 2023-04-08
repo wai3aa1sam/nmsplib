@@ -38,5 +38,6 @@ NMSP_NODISCARD inline size_t logicalThreadCount()
 	return std::thread::hardware_concurrency();
 }
 
-}
 #endif
+
+}

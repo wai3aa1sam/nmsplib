@@ -87,6 +87,10 @@
 #include "nmspClass_Common.h"
 #include "nmspEnum_Common.h"
 
+#include "nmspError_Common.h"
+
+#include "../fmt/nmspFmt.h"
+
 #endif
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
@@ -97,6 +101,12 @@
 #if 1
 namespace nmsp {
 
+#if NMSP_OS_WINDOWS
+	using OSRet = HRESULT;
+#else
+
+#endif
+
 inline void _log()
 {
 }
@@ -104,7 +114,7 @@ inline void _log()
 template<class... ARGS> inline
 void _log(const char* format, ARGS&&... args)
 {
-	std::cout << fmtAs<std::string>(format, forward<ARGS>(args)...) << "\n";
+	std::cout << fmtAs_T<std::string>(format, nmsp::forward<ARGS>(args)...) << "\n";
 }
 
 }

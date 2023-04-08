@@ -6,7 +6,7 @@
 #include "nmsp_stl/atomic/nmspCondVar.h"
 #include "nmsp_stl/atomic/nmspMutexProtected.h"
 
-#include "nmsp_stl/atomic/nmspThread.h"
+#include "nmsp_stl/atomic/nmspNativeThread.h"
 
 #include "nmsp_stl/atomic/nmspAtomicQueue.h"
 

@@ -35,7 +35,7 @@ public:
 	using ValueType = typename Base::value_type;
 	using Allocator = FALLBACK_ALLOC;
 
-	using ViewType	= Span_T<T>;
+	using ViewType = Span_T<T>;
 
 public:
 	Vector_Eastl() = default;
@@ -43,6 +43,8 @@ public:
 
 	Vector_Eastl(std::initializer_list<ValueType> ilist, const Allocator& allocator = Allocator{});
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
+
+	bool is_empty() const NMSP_NOEXCEPT;
 
 private:
 
@@ -67,6 +69,11 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(std::initializer_list<ValueType
 //	: Base(view, allocator)
 //{}
 
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+bool Vector_Eastl<T, N, FALLBACK_ALLOC>::is_empty() const NMSP_NOEXCEPT
+{
+	return size() == 0;
+}
 
 #endif
 

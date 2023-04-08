@@ -3,6 +3,7 @@
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
 #include <nmsp_stl/utility/nmspFunctional.h>
+#include <nmsp_stl/string/nmspStrUtil.h>
 
 //template <> 
 //struct eastl::equal_to<nmsp::TestType>
@@ -228,7 +229,7 @@ public:
 			_NMSP_LOG("{}", v);
 		}
 
-		String_T<char> str;
+		StringT str;
 		str.append("asdasdas");
 		_NMSP_LOG("{}", str.data());
 
@@ -253,7 +254,7 @@ public:
 		{ Opt_T<int> a; a.has_value(); }
 
 		//{ Span_T<int> sv; Vector_T<int, 10> vect{sv};  }
-		{ StrViewA_T sv; StringA_T<> strs{sv};  }
+		{ StrViewA_T sv; StringA_T<> strs = sv;  }
 
 		{ UPtr_T<int> up; up.reset(new int); }
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(new TestRef); }
@@ -276,6 +277,28 @@ public:
 		{
 			SMtxCondVarProtected_T<Vector_T<int>> s;
 			auto data = s.scopedSLock();
+		}
+
+		{
+			class NT : public NativeThread
+			{
+			public:
+				virtual ~NT() { join(); }
+				virtual void* onRoutine() override
+				{
+					auto v = StrUtil::toTempStr((double)20.0f);
+					auto vw = StrUtil::toTempStrW((double)20.0f);
+
+					_NMSP_LOG("thread name: {}", v.data());
+
+					return nullptr;
+				}
+			};
+			NT nt;
+			auto cd = NT::makeCD();
+			//cd.name = "Render Thread";
+			cd.affinityIdx = 10;
+			nt.create(cd);
 		}
 
 		#endif // 0
@@ -359,7 +382,7 @@ void test_Vector()
 
 	using namespace nmsp;
 	NMSP_TEST_CASE(Test_Vector, test());
-	
+
 
 }
 
