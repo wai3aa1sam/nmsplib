@@ -1,5 +1,10 @@
 #pragma once
 
+#include <stdint.h>
+#include <cstddef>
+#include "nmsp_core_base_util_marco.h"
+
+
 #if NMSP_ENABLE_INTERNAL_PROFILER
 	#define TRACY_ENABLE 1
 
@@ -62,9 +67,27 @@
 	//{
 	//	free(ptr);
 	//}
+	static constexpr size_t s_kDefaultAlign = NMSP_ALIGN_OF(std::max_align_t);
 
-	template<class T> inline T*		nmsp_new()			noexcept { return new p; }
-	template<class T> inline void	nmsp_delete(T* p)	noexcept { delete p; }
+	struct NmspTrait
+	{
+		//static constexpr 
+	};
+
+	inline void* nmsp_alloc(size_t n, size_t align = s_kDefaultAlign, size_t offset = 0)			noexcept 
+	{ 
+		return new uint8_t[n]; 
+	}
+	inline void	 nmsp_free(void* p, size_t n = 0)	noexcept 
+	{ 
+		delete[] p;
+	}
+
+	template<class T> inline T*		nmsp_new()			noexcept { return nmsp_alloc(sizeof(T), NMSP_ALIGN_OF(T)); }
+	template<class T> inline void	nmsp_delete(T* p)	noexcept { nmsp_free(p); }
+
+	
+
 
 #endif // !1
 

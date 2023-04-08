@@ -2,6 +2,10 @@
 
 #include "nmsp_stl/atomic/nmspAtomic_Common.h"
 
+#include "container/nmspAtmQueue.h"
+#include "container/nmspAtmStealQueue.h"
+#include "container/nmspAtmPriorityQueue.h"
+
 namespace nmsp {
 
 #if 0

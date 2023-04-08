@@ -5,7 +5,6 @@
 
 namespace nmsp {
 
-static constexpr size_t s_kDefaultAlign = NMSP_ALIGN_OF(std::max_align_t);
 
 template<class T>
 static constexpr T _alignTo(T n, T a) 

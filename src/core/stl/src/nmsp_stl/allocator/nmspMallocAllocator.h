@@ -26,7 +26,7 @@ public:
 		return new u8[new_n];
 	}
 
-	void free(void* p, size_t n)
+	void free(void* p, size_t n = 0)
 	{
 		delete[] p;
 	}

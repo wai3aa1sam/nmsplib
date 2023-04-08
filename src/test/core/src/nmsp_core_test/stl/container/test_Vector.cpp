@@ -301,6 +301,25 @@ public:
 			nt.create(cd);
 		}
 
+		{
+			AtmQueue_T<int> q;
+			q.push(10);
+
+			enum class Prior
+			{
+				max = 0,
+				high, mid, low,
+				count = 4
+			};
+
+			AtmPrioityQueue_T<int, enumInt(Prior::count), Prior> apq;
+			apq.push(10);
+
+			int a;
+			apq.try_pop(a);
+			_NMSP_LOG("a: {}", a);
+		}
+
 		#endif // 0
 	}
 
