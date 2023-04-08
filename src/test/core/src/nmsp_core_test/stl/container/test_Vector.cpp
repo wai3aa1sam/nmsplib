@@ -325,6 +325,8 @@ public:
 			p = (int*)NMSP_ALLOC(p, 5);
 			NMSP_FREE(p);
 			p = nullptr;
+			p = new int;
+			delete p;
 		}
 
 		#endif // 0

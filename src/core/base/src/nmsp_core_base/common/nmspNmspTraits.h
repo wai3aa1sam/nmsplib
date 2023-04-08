@@ -8,6 +8,15 @@
 
 namespace nmsp {
 
+
+template<class T>
+static constexpr T _alignTo(T n, T a) 
+{
+	static_assert(IsUInt<T>, "");
+	T r = n % a;
+	return r ? (n + a - r) : n;
+}
+
 #if 0
 #pragma mark --- nmspNmspTrait-Impl ---
 #endif // 0
@@ -35,8 +44,9 @@ using NmspTraits = NmspDefaultTraits_T;
 
 inline void* nmsp_alloc(size_t size, size_t align = NmspTraits::s_kDefaultAlign, size_t offset = 0)			noexcept 
 {
-	auto* p = new uint8_t[size];
-	_NMSP_PROFILE_ALLOC(p, size);
+	auto alignSize	= _alignTo(size, align);
+	auto* p			= std::malloc(alignSize);
+	_NMSP_PROFILE_ALLOC(p, alignSize);
 	return p; 
 }
 
@@ -61,18 +71,19 @@ template<class T> inline void	nmsp_delete(T* p)	noexcept { nmsp_free(p); }
 
 }
 
+#if NMSP_OVERRIDE_NEW_OP
 
-//inline void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
-//{ 
-//	auto* p = NMSP_ALLOC(p, size);
-//	return p;
-//}
-//
-//inline void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line) 
-//{
-//	auto* p = NMSP_ALLOC(p, size, alignment, alignmentOffset);
-//	return p;
-//}
-//
-//void* operator new[](size_t size);
-//void operator delete[](void* ptr, std::size_t size) noexcept;
+void*	operator new  (size_t size);
+void*	operator new[](size_t size);
+void*	operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void*	operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+
+void	operator delete  (void* ptr)					noexcept;
+void	operator delete  (void* ptr, std::size_t size)	noexcept;
+void	operator delete[](void* ptr)					noexcept;
+void	operator delete[](void* ptr, std::size_t size)	noexcept;
+
+
+#endif // NMSP_OVERRIDE_NEW
+
+
