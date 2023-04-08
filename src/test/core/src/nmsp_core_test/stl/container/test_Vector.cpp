@@ -256,8 +256,8 @@ public:
 		//{ Span_T<int> sv; Vector_T<int, 10> vect{sv};  }
 		{ StrViewA_T sv; StringA_T<> strs = sv;  }
 
-		{ UPtr_T<int> up; up.reset(new int); }
-		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(new TestRef); }
+		{ UPtr_T<int> up; up.reset(nmsp_new<int>()); }
+		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
 
 		{ sleep_ms(10); auto n = logicalThreadCount(); NMSP_UNUSED(n); }
 		{
@@ -318,6 +318,13 @@ public:
 			int a;
 			apq.try_pop(a);
 			_NMSP_LOG("a: {}", a);
+		}
+
+		{
+			int* p;
+			p = (int*)NMSP_ALLOC(p, 5);
+			NMSP_FREE(p);
+			p = nullptr;
 		}
 
 		#endif // 0

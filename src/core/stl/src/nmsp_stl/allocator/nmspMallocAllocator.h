@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<size_t ALIGN = s_kDefaultAlign>
+template<size_t ALIGN = NmspTraits::s_kDefaultAlign>
 class MallocAllocator_T : public Allocator_Base<MallocAllocator_T<ALIGN> >
 {
 public:
@@ -23,12 +23,13 @@ public:
 	void* alloc(SizeType n, SizeType align = s_kAlign, SizeType offset = 0)
 	{
 		intptr_t new_n = _alignTo(n, s_kAlign);
-		return new u8[new_n];
+		auto* p = NMSP_ALLOC(p, new_n, align, offset);
+		return p;
 	}
 
 	void free(void* p, size_t n = 0)
 	{
-		delete[] p;
+		NMSP_FREE(p, n);
 	}
 
 	//void freeAll() { _offset = _storage; }

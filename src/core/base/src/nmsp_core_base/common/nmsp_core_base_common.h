@@ -81,6 +81,8 @@
 #endif // 0
 #if 1
 
+#include "nmspNmspTraits.h"
+
 #include "nmspDataType_Common.h"
 #include "nmspFunction_Common.h"
 #include "nmspTypeTrait_Common.h"
@@ -91,24 +93,27 @@
 
 #include "../fmt/nmspFmt.h"
 
+
 #endif
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
+
+namespace nmsp {
+
+#if NMSP_OS_WINDOWS
+using OSRet = HRESULT;
+#else
+
+#endif
 
 #if 0
 #pragma mark --- nmspInternalLog-Impl ---
 #endif // 0
 #if 1
-namespace nmsp {
-
-#if NMSP_OS_WINDOWS
-	using OSRet = HRESULT;
-#else
-
-#endif
 
 inline void _log()
 {
+
 }
 
 template<class... ARGS> inline
@@ -117,18 +122,6 @@ void _log(const char* format, ARGS&&... args)
 	std::cout << fmtAs_T<std::string>(format, nmsp::forward<ARGS>(args)...) << "\n";
 }
 
-}
 #endif
 
-
-#if 0
-#pragma mark --- nmspStaticVariables-Impl ---
-#endif // 0
-#if 1
-namespace nmsp {
-
-static constexpr size_t s_kCahchLineSize = std::hardware_destructive_interference_size;
-
 }
-#endif
-

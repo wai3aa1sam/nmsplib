@@ -12,7 +12,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<size_t LOCAL_SIZE = 0, size_t ALIGN = s_kDefaultAlign, size_t OFFSET = 0, class FALLBACK_ALLOC = MallocAllocator_T<ALIGN> >
+template<size_t LOCAL_SIZE = 0, size_t ALIGN = NmspTraits::s_kDefaultAlign, size_t OFFSET = 0, class FALLBACK_ALLOC = MallocAllocator_T<ALIGN> >
 class LocalAllocator_T : public FallbackAllocator_T<LocalBuffer_T<LOCAL_SIZE, ALIGN>, FALLBACK_ALLOC >
 {
 public:

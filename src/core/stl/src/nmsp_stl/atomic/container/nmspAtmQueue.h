@@ -38,6 +38,7 @@
 
 namespace nmsp {
 
+template<size_t N, class ALLOC> struct AtmQueueTraits;
 template<class T, size_t N, class ALLOC, class TRAITS> class AtmQueue_Mc;
 
 template<class T, size_t N = 256, class ALLOC = DefaultAllocator, class TRAITS = AtmQueueTraits<N, ALLOC> >
