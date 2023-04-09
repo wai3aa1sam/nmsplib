@@ -25,10 +25,9 @@ static constexpr T _alignTo(T n, T a)
 
 struct NmspDefaultTraits_T
 {
-	static constexpr size_t s_kCahchLineSize	= std::hardware_destructive_interference_size;
-	static constexpr size_t s_kDefaultAlign		= NMSP_ALIGN_OF(std::max_align_t);
-
-
+	static constexpr size_t s_kCahchLineSize		= std::hardware_destructive_interference_size;
+	static constexpr size_t s_kDefaultAlign			= NMSP_ALIGN_OF(std::max_align_t);
+	static constexpr size_t s_kThresholdToCallDMA	= 128;
 };
 
 #if !NMSP_CUSTOM_TRAITS
@@ -61,8 +60,9 @@ inline void	 nmsp_free(void* p, size_t size = 0)	noexcept
 
 #endif // !1
 
-#define NMSP_ALLOC(ptr, size, ...)	::nmsp::nmsp_alloc(size, __VA_ARGS__)
-#define NMSP_FREE(ptr, ...)			::nmsp::nmsp_free(ptr, __VA_ARGS__)
+#define NMSP_ALLOC(ptr, size, ...)		do{ ptr = ::nmsp::sCast<decltype(ptr)>(::nmsp::nmsp_alloc(size, __VA_ARGS__) );													} while(false)
+#define NMSP_ALLOC_T(ptr, count, ...)	do{ ptr = ::nmsp::sCast<decltype(ptr)>(::nmsp::nmsp_alloc(sizeof( ::nmsp::RemovePtr<decltype(ptr)> ) * count, __VA_ARGS__) );	} while(false)
+#define NMSP_FREE(ptr, ...)				do{ ::nmsp::nmsp_free(ptr, __VA_ARGS__) ; } while(false)
 
 template<class T> inline T*		nmsp_new()			noexcept { return static_cast<T*>(nmsp_alloc(sizeof(T), NMSP_ALIGN_OF(T))); }
 template<class T> inline void	nmsp_delete(T* p)	noexcept { nmsp_free(p); }

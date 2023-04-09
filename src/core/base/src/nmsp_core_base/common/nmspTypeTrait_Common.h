@@ -43,6 +43,10 @@ template<class T> using Decay  = typename DecayT<T>::type;
 template<class T> using RemoveRefT  = typename std::remove_reference<T>;
 template<class T> using RemoveRef   = typename RemoveRefT<T>::type;
 
+template<class T> using RemovePtrT  = typename std::remove_pointer<T>;
+template<class T> using RemovePtr   = typename RemovePtrT<T>::type;
+
+
 #endif
 
 #if 0

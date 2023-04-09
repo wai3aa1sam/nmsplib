@@ -15,7 +15,9 @@ namespace nmsp {
 
 NativeThread_Win32::~NativeThread_Win32()
 {
+	#if NMSP_DEBUG
 	NMSP_ASSERT(_isJoined,	"must call join() on derived class, also should be awaked");
+	#endif // NMSP_DEBUG
 	NMSP_ASSERT(!_hnd,		"must call join() on derived class, also should be awaked");
 }
 
@@ -49,7 +51,9 @@ void		NativeThread_Win32::join				()
 {
 	if (_hnd)
 	{
+		#if NMSP_DEBUG
 		_isJoined = true;
+		#endif // NMSP_DEBUG
 		::WaitForSingleObject(_hnd, INFINITE);
 		_hnd = 0;
 	}

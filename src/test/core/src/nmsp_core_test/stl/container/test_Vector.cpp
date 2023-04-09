@@ -321,8 +321,7 @@ public:
 		}
 
 		{
-			int* p;
-			p = (int*)NMSP_ALLOC(p, 5);
+			int* p; NMSP_ALLOC(p, 5);
 			NMSP_FREE(p);
 			p = nullptr;
 			p = new int;
@@ -330,10 +329,36 @@ public:
 		}
 
 		{
-			std::string a;
-			std::string_view fmt = "Hello World {}";
-			fmt::vformat_to(std::back_inserter(a), fmt, fmt::make_format_args(123));
-			std::cout << a << "\n";
+			//std::string a;
+			//std::string_view fmt = "Hello World {}";
+			//fmt::vformat_to(std::back_inserter(a), fmt, fmt::make_format_args(123));
+			//std::cout << a << "\n";
+		}
+
+		{
+			constexpr int n = 2;
+			using Type = int;
+			Type buf[n];
+			Type buf2[n];
+			Type buf3[n];
+			Type buf4[n];
+
+			const Type* a = new Type;
+			Type* b = new Type;
+			*b = move(*a);
+
+			Type* p	 = buf;	 NMSP_UNUSED(p);
+			Type* p2 = buf2; NMSP_UNUSED(p2);
+			Type* p3 = buf3; NMSP_UNUSED(p3);
+			Type* p4 = buf4; NMSP_UNUSED(p4);
+
+			memory_set(p, n, 1);
+			//memset(p, 1, n * sizeof(Type));
+
+			memory_copy(p2, p, n);
+			memory_move(p3, p, n);
+
+			Type* p3123 = p; NMSP_UNUSED(p3123);
 		}
 
 		#endif // 0
@@ -409,7 +434,30 @@ private:
 };
 NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
 
+
+void test_memory_copy()
+{
+	using Type = size_t;
+	int n = 100;
+	Type* p;	NMSP_ALLOC_T(p,	 n);
+	Type* p1;	NMSP_ALLOC_T(p1, n);
+	memory_copy(p, p1, n);
 }
+NMSP_REGISTER_UNIT_TEST(test_memory_copy);
+
+void test_memcpy()
+{
+	using Type = size_t;
+	int n = 100;
+	Type* p;	NMSP_ALLOC_T(p,	 n);
+	Type* p1;	NMSP_ALLOC_T(p1, n);
+	memcpy(p, p1, n * sizeof(Type));
+}
+NMSP_REGISTER_UNIT_TEST(test_memcpy);
+
+
+}
+
 
 void test_Vector()
 {

@@ -113,7 +113,9 @@ const char* AllocatorBase_Eastl<ALLOC_NMSP>::get_name() const
 template<class ALLOC_NMSP> inline
 void        AllocatorBase_Eastl<ALLOC_NMSP>::set_name(const char* pName)
 {
+    #if EASTL_NAME_ENABLED
     mpName = pName;
+    #endif
 }
 
 template<class ALLOC_NMSP> inline

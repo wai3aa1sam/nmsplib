@@ -48,7 +48,7 @@ public:
 	using CreateDesc		= NativeThread_CreateDesc;
 public:
 	Thread_Base();
-	~Thread_Base()	= default;
+	~Thread_Base();
 
 	/*void create(const CreateDesc& cd);
 	void destroy();*/
@@ -102,6 +102,15 @@ Thread_Base::Thread_Base()
 	_isJoined  = true;
 	#endif // NMSP_DEBUG
 }
+
+inline
+Thread_Base::~Thread_Base()
+{
+	#if NMSP_DEBUG
+	NMSP_ASSERT(_isJoined,	"must call join() on derived class, also should be awaked");
+	#endif // NMSP_DEBUG
+}
+
 
 inline 
 int			Thread_Base::localId	() const

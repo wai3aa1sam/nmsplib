@@ -240,8 +240,14 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-void memory_copy();
-void memory_set();
+template<typename T>
+void memory_copy(T* dst, const T* src, size_t n);
+
+template<typename T> inline
+void memory_move(T* dst, const T* src, size_t n);
+
+template<typename T> inline
+void memory_set(T* dst, size_t n, int val = 0);
 
 
 #endif
@@ -251,15 +257,120 @@ void memory_set();
 #endif // 0
 #if 1
 
-inline void memory_copy()
+template<typename T> inline
+void memory_copy(T* dst, const T* src, size_t n)
 {
+	if (n < 0)
+		return;
 
+	if constexpr(IsTrivial<T>)
+	{
+		size_t bytes = sizeof(T) * n;
+		if (bytes > NmspTraits::s_kThresholdToCallDMA)
+		{
+			::memcpy(dst, src, bytes);
+			return;
+		}
+	}
+
+	auto* end = src + n;
+	for (; src != end; ++dst, ++src)
+		*dst = *src;
 }
 
-inline void memory_set()
+template<typename T> inline // const T* will trigger copy intead of move
+void memory_move(T* dst, /*const*/ T* src, size_t n)
 {
+	if (n < 0)
+		return;
 
+	if constexpr (IsTrivial<T>)
+	{
+		size_t bytes = sizeof(T) * n;
+		if (bytes > NmspTraits::s_kThresholdToCallDMA)
+		{
+			::memmove(dst, src, bytes);
+			return;
+		}
+	}
+
+	auto* end = src + n;
+	for (; src != end; ++dst, ++src)
+		*dst = move(*src);
 }
+
+#if 0
+#pragma mark --- MemoryUtil::memory_set()-Impl ---
+#endif // 0
+#if 1
+
+template<class UINT, class ENABLE = void>
+struct MemSetHelper;
+
+
+template<class UINT>
+struct MemSetHelper<UINT, void /*EnableIf< sizeof(UINT) >= sizeof(u64) >*/ >
+{
+	template<class T>
+	static void small_memset_impl(T* dst, size_t n, int val)
+	{
+		auto v	  = sCast<UINT>(val);
+		auto* beg = reinCast<UINT*>(dst);
+		auto* end = reinCast<UINT*>(dst + n);
+		for (; beg != end; ++beg)
+			*beg = v;
+	}
+};
+
+//template<class UINT>
+//struct MemSetHelper < UINT, EnableIf< sizeof(UINT) <= sizeof(u32) > >
+//{
+//	template<class T>
+//	static void small_memset_impl(T* dst, size_t n, int val)
+//	{
+//		auto bytes	= sizeof(T) * n;
+//		auto v		= sCast<UINT>(val);
+//		auto end	= bytes / sizeof(UINT);
+//		for (u32 i = 0; i < n; i++)
+//		{
+//
+//		}
+//		auto* beg = reinCast<UINT>(beg);
+//		auto* end = reinCast<UINT>(dst + n);
+//		for (; beg != end; ++beg)
+//			*beg = v;
+//	}
+//};
+
+template<typename T> inline
+void memory_set(T* dst, size_t n, int val)
+{
+	if (n < 0)
+		return;
+	
+	static_assert(IsTrivial<T>, "memory_set() must be Trivial Type");
+
+	size_t bytes = sizeof(T) * n;
+	if (bytes > NmspTraits::s_kThresholdToCallDMA)
+	{
+		::memset(dst, val, bytes);
+		return;
+	}
+
+	auto v	  = sCast<u8>(val);
+	auto* beg = reinCast<u8*>(dst);
+	auto* end = reinCast<u8*>(dst + n);
+	for (; beg != end; ++beg)
+		*beg = v;
+
+	/*if		(bytes % 8 == 0) { return MemSetHelper<u64>::small_memset_impl(dst, n, val); }
+	else if (bytes % 4 == 0) { return MemSetHelper<u32>::small_memset_impl(dst, n, val); }
+	else if (bytes % 2 == 0) { return MemSetHelper<u16>::small_memset_impl(dst, n, val); }
+	else					 { return MemSetHelper<u8 >::small_memset_impl(dst, n, val); }*/
+}
+
+#endif // 0
+
 
 #endif
 

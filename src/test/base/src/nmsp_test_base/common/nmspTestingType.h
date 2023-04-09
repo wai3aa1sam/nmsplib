@@ -17,7 +17,9 @@ struct TestMovableType
 
 	constexpr static SizeType s_kMaxByteSize = MAX_BYTE;
 
-	#define _INTERNAL_NEW_BYTES NMSP_ALLOC(nullptr, s_kMaxByteSize)
+	#define _INTERNAL_NEW_BYTES(ptr)				NMSP_ALLOC(ptr, s_kMaxByteSize)
+	#define _INTERNAL_SIZE_TYPE_NEW_BYTES(ptr, i)	NMSP_ALLOC_T(ptr, SizeType); new(ptr) SizeType(i)
+
 	//#define _INTERNAL_NEW_BYTES nullptr
 
 	TestMovableType(SizeType i)
@@ -25,7 +27,8 @@ struct TestMovableType
 		String tmp_str(std::to_string(i));
 		Map tmp_map;
 		tmp_map[0] = std::to_string(i);
-		SPtr<SizeType> tmp_sptr(NMSP_ALLOC(nullptr, SizeType(i)));
+		SizeType* sp; _INTERNAL_SIZE_TYPE_NEW_BYTES(sp, i);
+		SPtr<SizeType> tmp_sptr(sp);
 
 		index	= i;
 		pBytes	= _INTERNAL_NEW_BYTES;
@@ -39,19 +42,21 @@ struct TestMovableType
 		String tmp_str("0");
 		Map tmp_map;
 		tmp_map[0] = "";
-		SPtr<SizeType> tmp_sptr(NMSP_ALLOC(nullptr, SizeType(0)));
+		SizeType* sp; _INTERNAL_SIZE_TYPE_NEW_BYTES(sp, 0);
+		SPtr<SizeType> tmp_sptr(sp);
 		*tmp_sptr = 1000;
 
 		index	= 0;
-		pBytes	= _INTERNAL_NEW_BYTES;
+		_INTERNAL_NEW_BYTES(pBytes);
 		str		= tmp_str;
 		map		= tmp_map;
 		sptr	= tmp_sptr;
 	}
 
 	TestMovableType(const TestMovableType& rhs)
-		: index(rhs.index), pBytes(_INTERNAL_NEW_BYTES), str(rhs.str), map(rhs.map), sptr(rhs.sptr) 
+		: index(rhs.index), str(rhs.str), map(rhs.map), sptr(rhs.sptr) 
 	{
+		_INTERNAL_NEW_BYTES(pBytes);
 		if (pBytes)
 			memcpy(pBytes, rhs.pBytes, s_kMaxByteSize);
 	}
@@ -65,14 +70,14 @@ struct TestMovableType
 	~TestMovableType()
 	{
 		if (pBytes)
-			::delete[] pBytes;
+			NMSP_FREE(pBytes);
 	}
 
 	void operator=(const TestMovableType& rhs)
 	{
 		if (pBytes)
-			::delete[] pBytes;
-		pBytes	= _INTERNAL_NEW_BYTES;
+			NMSP_FREE(pBytes);
+		_INTERNAL_NEW_BYTES(pBytes);
 		index	= rhs.index;
 		str		= rhs.str;
 		map		= rhs.map;
@@ -86,7 +91,7 @@ struct TestMovableType
 	{
 		if (pBytes)
 		{
-			delete[] pBytes;
+			NMSP_FREE(pBytes);
 		}
 		index	= rhs.index;
 		pBytes	= rhs.pBytes;
@@ -138,6 +143,7 @@ struct TestMovableType
 	SPtr<SizeType> sptr;
 
 	#undef _INTERNAL_NEW_BYTES
+	#undef _INTERNAL_SIZE_TYPE_NEW_BYTES
 };
 
 #endif
