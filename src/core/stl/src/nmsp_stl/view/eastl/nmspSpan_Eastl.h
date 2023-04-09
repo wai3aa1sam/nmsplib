@@ -17,6 +17,13 @@ public:
 
 public:
 	using IndexType = typename Base::index_type;
+
+public:
+	using Base::data;
+	using Base::size;
+	using Base::begin;
+	using Base::end;
+
 public:
 
 	/*template<class... ARGS>

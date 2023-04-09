@@ -13,11 +13,7 @@ namespace nmsp {
 #if 1
 
 template<class T, class ENABLE = void>
-struct FormatTrait
-{
-	FormatTrait() { static_assert(false, "FormatTrait cannot deduce type"); }
-	static constexpr const char* s_formatStr = nullptr;
-};
+struct FormatTrait;
 
 template<class T>
 struct FormatTrait<T, EnableIf< IsUInt<T> && sizeof(T)		<= sizeof(u32) > >
@@ -62,17 +58,62 @@ struct FormatTrait<T, EnableIf< IsFloat<T> && !(sizeof(T)	<= sizeof(f32)) > >
 #endif // 0
 #if 1
 
-template<class STR, class... ARGS> inline
-void fmtTo(STR& outStr, ARGS&&... args)
+#if NMSP_CPLUSPLUS_17 || NMSP_CPLUSPLUS_20
+
+inline
+std::string_view makeStdStrView(const char* cs)
 {
-	fmt::format_to(std::back_inserter(outStr), std::forward<ARGS>(args)...);
+	return { cs, ::strlen(cs) };
+}
+
+inline
+std::wstring_view makeStdStrView(const wchar_t* cs)
+{
+	return { cs, ::wcslen(cs) };
+}
+
+#else
+
+inline
+const char* makeStdStrView(const char* cs)
+{
+	return cs;
+}
+
+inline
+const wchar_t* makeStdStrView(const wchar_t* cs)
+{
+	return cs;
+}
+
+#endif // NMSP_CPLUSPLUS_20
+
+
+template<class STR, class... ARGS> inline
+void fmtTo(STR& outStr, const char* fmt, ARGS&&... args)
+{
+	fmt::vformat_to(std::back_inserter(outStr), makeStdStrView(fmt), fmt::make_format_args(std::forward<ARGS>(args)...) );
 }
 
 template<class STR, class... ARGS> inline
-STR fmtAs_T(ARGS&&... args)
+STR fmtAs_T(const char* fmt, ARGS&&... args)
 {
 	STR out;
-	fmtTo(out, std::forward<ARGS>(args)...);
+	fmtTo(out, fmt, std::forward<ARGS>(args)...);
+	return out;
+}
+
+template<class STR, class... ARGS> inline
+void fmtTo(STR& outStr, const wchar_t* fmt, ARGS&&... args)
+{
+	fmt::vformat_to(std::back_inserter(outStr), makeStdStrView(fmt), fmt::make_format_args(std::forward<ARGS>(args)...));
+}
+
+template<class STR, class... ARGS> inline
+STR fmtAs_T(const wchar_t* fmt, ARGS&&... args)
+{
+	STR out;
+	fmtTo(out, fmt, std::forward<ARGS>(args)...);
 	return out;
 }
 

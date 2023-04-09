@@ -40,6 +40,8 @@ public:
 	bool	isUsingLocalBuf(void* p)	{ return first().isUsingLocalBuffer(p); }
 
 private:
+	using Base::first;
+	using Base::second;
 	//void* _pOverflowData = nullptr;
 };
 

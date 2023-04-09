@@ -5,7 +5,8 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 #include "nmspClass_Common.h"
 
-#define NMSP_ERROR(...) nmsp::Error(NMSP_SRCLOC, nmsp::fmtAs_T<nmsp::TempStringA_T<>>(__VA_ARGS__).c_str())
+#define NMSP_ERROR(...) nmsp::Error(NMSP_SRCLOC, nmsp::fmtAs_T<nmsp::TempStringA_T<> >(__VA_ARGS__).c_str())
+#define NMSP_THROW(...) throw NMSP_ERROR(__VA_ARGS__)
 
 namespace nmsp {
 
@@ -50,7 +51,7 @@ inline void throwIf(bool cond, ARGS&&... args)
 {
 	if (cond)
 	{
-		throw NMSP_ERROR(forward<ARGS>(args)...);
+		//throw NMSP_ERROR(forward<ARGS>(args)...);
 	}
 }
 

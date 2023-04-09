@@ -98,6 +98,7 @@
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
 
+
 namespace nmsp {
 
 #if NMSP_OS_WINDOWS

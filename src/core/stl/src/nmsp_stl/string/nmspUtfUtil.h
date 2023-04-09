@@ -97,14 +97,14 @@ uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
 	}
 
 	if ((v & 0xE0) == 0xC0) {
-		if( src+2 > end ) throw NMSP_ERROR("");
+		if( src+2 > end ) NMSP_THROW("");
 		o += (static_cast<uint8_t>(*src) & 0x1FU) << 6; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU);      src++;
 		return o;
 	}
 
 	if ((v & 0xF0) == 0xE0) {
-		if( src+3 > end ) throw NMSP_ERROR("");
+		if( src+3 > end ) NMSP_THROW("");
 		o += (static_cast<uint8_t>(*src) & 0x0FU) << 12; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 6;  src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU);       src++;
@@ -112,7 +112,7 @@ uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
 	}
 
 	if ((v & 0xF8) == 0xF0) {
-		if( src+4 > end ) throw NMSP_ERROR("");
+		if( src+4 > end ) NMSP_THROW("");
 		o += (static_cast<uint8_t>(*src) & 0x07U) << 18; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 12; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 6;  src++;
@@ -121,7 +121,7 @@ uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
 	}
 
 	if ((v & 0xFC) == 0xF8) {
-		if( src+5 > end ) throw NMSP_ERROR("");
+		if( src+5 > end ) NMSP_THROW("");
 		o += (static_cast<uint8_t>(*src) & 0x03U) << 24; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 18; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 12; src++;
@@ -130,7 +130,7 @@ uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
 	}
 
 	if ((v & 0xFE) == 0xFC) {
-		if( src+6 > end ) throw NMSP_ERROR("");
+		if( src+6 > end ) NMSP_THROW("");
 		o += (static_cast<uint8_t>(*src) & 0x01U) << 30; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 24; src++;
 		o += (static_cast<uint8_t>(*src) & 0x3FU) << 18; src++;
@@ -152,7 +152,7 @@ uint32_t UtfUtil::_decodeUtf(const char16_t*& src, const char16_t* end) {
 	auto v = static_cast<uint16_t>(*src);
 
 	if (v >= 0xD800 && v < 0xDBFF) {
-		if( src+2 > end ) throw NMSP_ERROR("");
+		if( src+2 > end ) NMSP_THROW("");
 		uint32_t a = static_cast<uint16_t>(*src); src++;
 		uint32_t b = static_cast<uint16_t>(*src); src++;
 		return ((a - 0xD800) << 10) | (b - 0xDC00);

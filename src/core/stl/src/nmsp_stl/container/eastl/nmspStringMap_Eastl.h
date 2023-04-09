@@ -19,7 +19,7 @@ public:
 	~StringMap_Eastl() = default;
 
 	template <class... Args>
-	void emplace(Args&&... args) { static_assert(false, "shd not be called"); } // 
+	void emplace(Args&&... args) { NMSP_ASSERT(false, "shd not be called"); } // 
 
 private:
 

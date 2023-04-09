@@ -302,7 +302,7 @@ public:
 		}
 
 		{
-			AtmQueue_T<int> q;
+			AtmQueue_T<i64> q;
 			q.push(10);
 
 			enum class Prior
@@ -327,6 +327,13 @@ public:
 			p = nullptr;
 			p = new int;
 			delete p;
+		}
+
+		{
+			std::string a;
+			std::string_view fmt = "Hello World {}";
+			fmt::vformat_to(std::back_inserter(a), fmt, fmt::make_format_args(123));
+			std::cout << a << "\n";
 		}
 
 		#endif // 0

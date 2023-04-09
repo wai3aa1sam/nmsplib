@@ -35,6 +35,7 @@ public:
 template<class T1, class T2>
 class CompressedPair : public eastl::compressed_pair<T1, T2>
 {
+	using Base = eastl::compressed_pair<T1, T2>;
 public:
 	template<class... ARGS>
 	CompressedPair(ARGS&&... args)

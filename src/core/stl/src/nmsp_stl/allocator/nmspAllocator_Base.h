@@ -81,7 +81,7 @@ bool	AllocatorBase_Nmsp<ALLOC>::is_owning(void* p, SizeType n)
 template<class ALLOC> inline
 bool	AllocatorBase_Nmsp<ALLOC>::operator==(const AllocatorBase_Nmsp& rhs)
 {
-	return static_cast<ALLOC&>(*this) == static_cast<ALLOC&>(rhs)
+	return static_cast<ALLOC&>(*this) == static_cast<ALLOC&>(rhs);
 }
 
 template<class ALLOC> inline

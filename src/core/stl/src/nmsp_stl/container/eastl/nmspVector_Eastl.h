@@ -38,6 +38,12 @@ public:
 	using ViewType = Span_T<T>;
 
 public:
+	using Base::data;
+	using Base::size;
+	using Base::begin;
+	using Base::end;
+
+public:
 	Vector_Eastl() = default;
 	~Vector_Eastl() = default;
 

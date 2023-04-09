@@ -37,6 +37,12 @@ public:
 	using Allocator = FALLBACK_ALLOC;
 
 public:
+	using Base::data;
+	using Base::size;
+	using Base::begin;
+	using Base::end;
+
+public:
 	String_Eastl() = default;
 	~String_Eastl() = default;
 
