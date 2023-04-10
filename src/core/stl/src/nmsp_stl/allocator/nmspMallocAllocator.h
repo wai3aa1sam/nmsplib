@@ -23,8 +23,7 @@ public:
 	void* alloc(SizeType n, SizeType align = s_kAlign, SizeType offset = 0)
 	{
 		intptr_t new_n = _alignTo(n, s_kAlign);
-		void* p;
-		NMSP_ALLOC(p, new_n, align, offset);
+		void* p = NMSP_ALLOC(p, new_n, align, offset);
 		return p;
 	}
 

@@ -4,6 +4,8 @@
 
 #include "nmsp_stl-config.h"
 
+#include "nmspNmspStlTraits.h"
+
 #if 0
 
 	#if !EASTL_DLL // If building a regular library and not building EASTL as a DLL...

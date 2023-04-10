@@ -25,16 +25,16 @@
 
 #else
 
-	#define _NMSP_PROFILE_SCOPED()						
-	#define _NMSP_PROFILE_FRAME()					
-	#define _NMSP_PROFILE_SECTION(name)			
-	#define _NMSP_PROFILE_TAG(str)				
-	#define _NMSP_PROFILE_LOG(text)				
-	#define _NMSP_PROFILE_VALUE(text, value)		
+	#define _NMSP_PROFILE_SCOPED()					do{ ; } while(false)
+	#define _NMSP_PROFILE_FRAME()					do{ ; } while(false)
+	#define _NMSP_PROFILE_SECTION(name)				do{ ; } while(false)
+	#define _NMSP_PROFILE_TAG(str)					do{ ; } while(false)
+	#define _NMSP_PROFILE_LOG(text)					do{ ; } while(false)
+	#define _NMSP_PROFILE_VALUE(text, value)		do{ ; } while(false)
 
-	#define _NMSP_PROFILE_ALLOC(p, size)			
-	#define _NMSP_PROFILE_FREE(p, size)			
+	#define _NMSP_PROFILE_ALLOC(p, size)			do{ ; } while(false)
+	#define _NMSP_PROFILE_FREE(p, size)				do{ ; } while(false)
 
-	#define _NMSP_PROFILE_SET_THREAD_NAME(name)
+	#define _NMSP_PROFILE_SET_THREAD_NAME(name)		do{ ; } while(false)
 
 #endif // NMSP_ENABLE_INTERNAL_PROFILER

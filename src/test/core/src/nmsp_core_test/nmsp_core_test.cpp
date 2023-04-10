@@ -6,17 +6,23 @@
 
 void run_temp_test()
 {
+	NMSP_RUN_TEST(test_Log);
+}
+
+void run_all_test()
+{
 	#if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
 	NMSP_RUN_TEST(test_Vector);
 	NMSP_RUN_TEST(test_String);
 
 	#endif // NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
-}
 
-void run_all_test()
-{
+	#if NMSP_TEST_MODULE_LOG || NMSP_TEST_ALL_MODULE
 
+	NMSP_RUN_TEST(test_Log);
+
+	#endif // NMSP_TEST_MODULE_LOG || NMSP_TEST_ALL_MODULE
 }
 
 #if !NMSP_ENABLE_FUZZ_TESTING

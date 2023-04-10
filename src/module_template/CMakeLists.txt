@@ -1,15 +1,13 @@
-set(sub_project_name ${project_namespace}_log)
+set(sub_project_name ${project_namespace}_module_template)
 message("==== ${sub_project_name} ====")
 project(${sub_project_name})
 
 include(${project_root}/cmake_utility.cmake)
 
-my_add_library(${sub_project_name} ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace}/core)
+my_add_executable(${sub_project_name} ${CMAKE_CURRENT_SOURCE_DIR})
+set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace}/module_template)
 target_link_libraries(${sub_project_name} 
     PUBLIC  ${project_namespace}_core_base
-            ${project_namespace}_stl
-    PRIVATE spdlog::spdlog spdlog::spdlog_header_only        
     )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)

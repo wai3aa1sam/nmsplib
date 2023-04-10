@@ -3,6 +3,7 @@
 #include "nmsp_stl/atomic/nmspAtomic_Common.h"
 
 #include <thread>
+#include <mutex>
 
 #if 0
 #pragma mark --- stl_sync_backend_switch-Impl ---
@@ -24,7 +25,9 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-size_t logicalThreadCount();
+
+class CallOnce;
+
 
 #endif
 
@@ -33,10 +36,34 @@ size_t logicalThreadCount();
 #endif // 0
 #if 1
 
-NMSP_NODISCARD inline size_t logicalThreadCount()
+
+#if 0
+#pragma mark --- CallOnce-Impl ---
+#endif // 0
+#if 1
+
+class CallOnce
 {
-	return std::thread::hardware_concurrency();
-}
+public:
+	CallOnce() = default;
+
+	template<class CALLABLE, class... ARGS>
+	CallOnce(CALLABLE&& f, ARGS&&... args)
+	{
+		callOnce(f, std::forward<ARGS>(args)...);
+	}
+
+	template<class CALLABLE, class... ARGS>
+	void callOnce(CALLABLE&& f, ARGS&&... args)
+	{
+		std::call_once(_flag, f, std::forward<ARGS>(args)...);
+	}
+
+private:
+	std::once_flag _flag;
+};
+
+#endif
 
 #endif
 

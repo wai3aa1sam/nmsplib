@@ -46,4 +46,13 @@ namespace nmsp {
 
 template<class T> using SPtr_T = SPtr_Impl<T>;
 
+template<class T> using SharedPtr_T = std::shared_ptr<T>;
+template<class T, class... ARGS>
+SharedPtr_T<T> makeShared(ARGS... args)
+{
+	T* p = NMSP_ALLOC(p, _alignTo(sizeof(T), NMSP_ALIGN_OF(T)));
+	new (p) T(nmsp::forward<ARGS>(args)...);
+	return SharedPtr_T<T>{p};
+}
+
 }

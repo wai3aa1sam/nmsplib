@@ -9,7 +9,7 @@ set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace
 target_link_libraries(${sub_project_name} 
     PUBLIC  ${project_namespace}_test_base
             ${project_namespace}_stl
-            #${project_namespace}_log
+            ${project_namespace}_log
             #${project_namespace}_profiler
             #${project_namespace}_math
             #${project_namespace}_core
@@ -19,4 +19,5 @@ target_link_libraries(${sub_project_name}
 target_compile_definitions(${sub_project_name} 
     PRIVATE NMSP_TEST_ALL_MODULE=0
             NMSP_TEST_MODULE_STL=1
+            NMSP_TEST_MODULE_LOG=1
     )

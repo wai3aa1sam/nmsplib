@@ -16,7 +16,7 @@
 
 namespace nmsp {
 
-template<class T> using Atomic_T	= std::atomic<T>;
+template<class T> using Atm_T		= std::atomic<T>;
 template<class T> using Future_T	= std::future<T>;
 template<class T> using Promise_T	= std::promise<T>;
 

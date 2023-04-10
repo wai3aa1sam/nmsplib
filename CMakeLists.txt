@@ -34,6 +34,7 @@ find_package(Tracy                      CONFIG REQUIRED)
 find_package(EABase                     CONFIG REQUIRED)
 find_package(EASTL                      CONFIG REQUIRED)
 find_package(unofficial-concurrentqueue CONFIG REQUIRED)
+find_package(spdlog                     CONFIG REQUIRED)
 
 # --- git_submodule ---
 #my_add_git_submodule(external/)
@@ -55,6 +56,7 @@ add_subdirectory(src/core)
 
 add_subdirectory(src/test/base)
 add_subdirectory(src/test/core)
+#add_subdirectory(src/test/test_proj)
 
 message("--- end for add_subdirectory ---")
 

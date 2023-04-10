@@ -259,7 +259,7 @@ public:
 		{ UPtr_T<int> up; up.reset(nmsp_new<int>()); }
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
 
-		{ sleep_ms(10); auto n = logicalThreadCount(); NMSP_UNUSED(n); }
+		{ sleep_ms(10); auto n = NmspStlTraits::logicalThreadCount(); NMSP_UNUSED(n); }
 		{
 			MutexProtected_T<Vector_T<int>> a;
 			auto data = a.scopedULock();
@@ -321,7 +321,7 @@ public:
 		}
 
 		{
-			int* p; NMSP_ALLOC(p, 5);
+			int* p = NMSP_NEW(p);
 			NMSP_FREE(p);
 			p = nullptr;
 			p = new int;
@@ -435,26 +435,25 @@ private:
 NMSP_REGISTER_UNIT_TEST_CLASS(Test_Vector);
 
 
-void test_memory_copy()
-{
-	using Type = size_t;
-	int n = 100;
-	Type* p;	NMSP_ALLOC_T(p,	 n);
-	Type* p1;	NMSP_ALLOC_T(p1, n);
-	memory_copy(p, p1, n);
-}
-NMSP_REGISTER_UNIT_TEST(test_memory_copy);
-
-void test_memcpy()
-{
-	using Type = size_t;
-	int n = 100;
-	Type* p;	NMSP_ALLOC_T(p,	 n);
-	Type* p1;	NMSP_ALLOC_T(p1, n);
-	memcpy(p, p1, n * sizeof(Type));
-}
-NMSP_REGISTER_UNIT_TEST(test_memcpy);
-
+//void test_memory_copy()
+//{
+//	using Type = size_t;
+//	int n = 100;
+//	Type* p;	NMSP_ALLOC_T(p,	 n);
+//	Type* p1;	NMSP_ALLOC_T(p1, n);
+//	memory_copy(p, p1, n);
+//}
+//NMSP_REGISTER_UNIT_TEST(test_memory_copy);
+//
+//void test_memcpy()
+//{
+//	using Type = size_t;
+//	int n = 100;
+//	Type* p;	NMSP_ALLOC_T(p,	 n);
+//	Type* p1;	NMSP_ALLOC_T(p1, n);
+//	memcpy(p, p1, n * sizeof(Type));
+//}
+//NMSP_REGISTER_UNIT_TEST(test_memcpy);
 
 }
 

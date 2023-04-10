@@ -1,24 +1,23 @@
 #pragma once
 
+#ifndef _CRT_SECURE_NO_WARNINGS
+	#define _CRT_SECURE_NO_WARNINGS 1
+#endif
+
+#include "nmsp_core_base/detect_platform/nmsp_detect_platform.h"
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 
 #include "nmsp_core_base/marco/nmsp_core_base_internal_marco.h"
+
+#include "nmspDataType_Common.h"
+#include "nmspFunction_Common.h"
 
 #include <new>
 
 namespace nmsp {
 
-
-template<class T>
-static constexpr T _alignTo(T n, T a) 
-{
-	static_assert(IsUInt<T>, "");
-	T r = n % a;
-	return r ? (n + a - r) : n;
-}
-
 #if 0
-#pragma mark --- nmspNmspTrait-Impl ---
+#pragma mark --- nmspNmspTraits-Impl ---
 #endif // 0
 #if 1
 
@@ -39,51 +38,8 @@ using NmspTraits = NmspDefaultTraits_T;
 
 #endif // 
 
-#if !NMSP_CUSTOM_ALLOC
-
-inline void* nmsp_alloc(size_t size, size_t align = NmspTraits::s_kDefaultAlign, size_t offset = 0)			noexcept 
-{
-	auto alignSize	= _alignTo(size, align);
-	auto* p			= std::malloc(alignSize);
-	_NMSP_PROFILE_ALLOC(p, alignSize);
-	return p; 
-}
-
-inline void	 nmsp_free(void* p, size_t size = 0)	noexcept 
-{ 
-	_NMSP_PROFILE_FREE(p, size)	
-	delete[] p;
-}
-
-#else
-
-
-#endif // !1
-
-#define NMSP_ALLOC(ptr, size, ...)		do{ ptr = ::nmsp::sCast<decltype(ptr)>(::nmsp::nmsp_alloc(size, __VA_ARGS__) );													} while(false)
-#define NMSP_ALLOC_T(ptr, count, ...)	do{ ptr = ::nmsp::sCast<decltype(ptr)>(::nmsp::nmsp_alloc(sizeof( ::nmsp::RemovePtr<decltype(ptr)> ) * count, __VA_ARGS__) );	} while(false)
-#define NMSP_FREE(ptr, ...)				do{ ::nmsp::nmsp_free(ptr, __VA_ARGS__) ; } while(false)
-
-template<class T> inline T*		nmsp_new()			noexcept { return static_cast<T*>(nmsp_alloc(sizeof(T), NMSP_ALIGN_OF(T))); }
-template<class T> inline void	nmsp_delete(T* p)	noexcept { nmsp_free(p); }
 
 #endif
 
 }
-
-#if NMSP_OVERRIDE_NEW_OP
-
-void*	operator new  (size_t size);
-void*	operator new[](size_t size);
-void*	operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
-void*	operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
-
-void	operator delete  (void* ptr)					noexcept;
-void	operator delete  (void* ptr, std::size_t size)	noexcept;
-void	operator delete[](void* ptr)					noexcept;
-void	operator delete[](void* ptr, std::size_t size)	noexcept;
-
-
-#endif // NMSP_OVERRIDE_NEW
-
 
