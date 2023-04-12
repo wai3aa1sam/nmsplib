@@ -13,3 +13,8 @@
 
 #endif
 
+#define NMSP_RUN_TEST(fn) \
+	std::cout << "\n======" #fn "==================\n" ;\
+	void fn(); \
+	fn(); \
+//-----------

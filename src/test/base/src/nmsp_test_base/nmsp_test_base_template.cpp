@@ -1,6 +1,6 @@
-#include "nmsp_core_test/common/nmsp_core_test_common.h"
+#include "nmsp_test_base/common/nmsp_test_base_common.h"
 
-#if 1 || NMSP_TEST_MODULE_TEMPLATE || NMSP_TEST_ALL_MODULE
+#if NMSP_TEST_MODULE_TEMPLATE || NMSP_TEST_ALL_MODULE
 
 namespace nmsp {
 

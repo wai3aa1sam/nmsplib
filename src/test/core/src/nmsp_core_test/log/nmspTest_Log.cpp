@@ -2,6 +2,8 @@
 
 #if NMSP_TEST_MODULE_LOG || NMSP_TEST_ALL_MODULE
 
+#include <nmsp_log.h>
+
 namespace nmsp {
 
 class Test_Log : public UnitTest

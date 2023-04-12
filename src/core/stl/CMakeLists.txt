@@ -10,6 +10,10 @@ target_link_libraries(${sub_project_name}
     PUBLIC  ${project_namespace}_core_base
             EASTL
     )
+target_link_libraries(${sub_project_name} 
+    PRIVATE EASTL
+            unofficial::concurrentqueue::concurrentqueue
+    )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 

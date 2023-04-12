@@ -2,6 +2,8 @@
 
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
+#include <nmsp_stl.h>
+
 #include <nmsp_stl/utility/nmspFunctional.h>
 #include <nmsp_stl/string/nmspStrUtil.h>
 

@@ -3,6 +3,8 @@
 
 #if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
 
+#include <nmsp_stl.h>
+
 namespace nmsp {
 
 //template<class STR>

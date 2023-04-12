@@ -6,14 +6,14 @@ include(${project_root}/cmake_utility.cmake)
 
 my_add_library(${sub_project_name} ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace}/core)
-target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
+target_link_libraries(${sub_project_name} PRIVATE fmt::fmt)
 
 # should only link during testing other library or development
 if(${${project_namespace_marco}_ENABLE_INTERNAL_PROFILER})
     message("--- ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER")
-    target_link_libraries(${sub_project_name}       PUBLIC Tracy::TracyClient)
+    target_link_libraries(${sub_project_name}       PRIVATE Tracy::TracyClient)
     target_compile_definitions(${sub_project_name}  
-        PUBLIC  TRACY_ENABLE 
+        PRIVATE  TRACY_ENABLE 
                 ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER=1
         )
 endif()

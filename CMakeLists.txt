@@ -35,6 +35,7 @@ find_package(EABase                     CONFIG REQUIRED)
 find_package(EASTL                      CONFIG REQUIRED)
 find_package(unofficial-concurrentqueue CONFIG REQUIRED)
 find_package(spdlog                     CONFIG REQUIRED)
+find_package(glm                        CONFIG REQUIRED)
 
 # --- git_submodule ---
 #my_add_git_submodule(external/)

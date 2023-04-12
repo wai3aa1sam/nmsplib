@@ -2,6 +2,8 @@
 
 #if NMSP_TEST_MODULE_PROFILER || NMSP_TEST_ALL_MODULE
 
+#include <nmsp_profiler.h>
+
 namespace nmsp {
 
 class Test_Profiler : public UnitTest

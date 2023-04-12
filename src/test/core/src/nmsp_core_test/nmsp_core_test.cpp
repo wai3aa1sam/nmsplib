@@ -7,9 +7,11 @@
 void run_temp_test()
 {
 	//NMSP_RUN_TEST(test_Log);
-	NMSP_RUN_TEST(test_Profiler);
+	//NMSP_RUN_TEST(test_Profiler);
+	NMSP_RUN_TEST(test_Math);
 }
 
+// TODO: add a test manager class, then no need add to here
 void run_all_test()
 {
 	#if NMSP_TEST_MODULE_STL || NMSP_TEST_ALL_MODULE
@@ -25,12 +27,18 @@ void run_all_test()
 
 	#endif // NMSP_TEST_MODULE_LOG || NMSP_TEST_ALL_MODULE
 
-
 	#if NMSP_TEST_MODULE_PROFILER || NMSP_TEST_ALL_MODULE
 
 	NMSP_RUN_TEST(test_Profiler);
 
 	#endif // NMSP_TEST_MODULE_PROFILER || NMSP_TEST_ALL_MODULE
+
+
+	#if NMSP_TEST_MODULE_MATH || NMSP_TEST_ALL_MODULE
+
+	NMSP_RUN_TEST(test_Math);
+
+	#endif // NMSP_TEST_MODULE_MATH || NMSP_TEST_ALL_MODULE
 }
 
 #if !NMSP_ENABLE_FUZZ_TESTING

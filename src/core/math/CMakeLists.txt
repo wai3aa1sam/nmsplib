@@ -10,6 +10,9 @@ target_link_libraries(${sub_project_name}
     PUBLIC  ${project_namespace}_core_base
             #${project_namespace}_log
     )
+target_link_libraries(${sub_project_name} 
+    PRIVATE glm::glm
+    )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 
