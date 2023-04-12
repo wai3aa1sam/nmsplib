@@ -39,7 +39,7 @@ void NativeThread_Win32::create(const CreateDesc& cd)
 
 	OSRet ret;
 	ret = ::SetThreadDescription(_hnd, nameW.c_str());
-	_NMSP_PROFILE_SET_THREAD_NAME(_name);
+	_NMSP_PROFILE_SET_THREAD_NAME(_name.c_str());
 
 	setAffinity(cd.affinityIdx);
 

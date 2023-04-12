@@ -6,7 +6,8 @@
 
 void run_temp_test()
 {
-	NMSP_RUN_TEST(test_Log);
+	//NMSP_RUN_TEST(test_Log);
+	NMSP_RUN_TEST(test_Profiler);
 }
 
 void run_all_test()
@@ -23,6 +24,13 @@ void run_all_test()
 	NMSP_RUN_TEST(test_Log);
 
 	#endif // NMSP_TEST_MODULE_LOG || NMSP_TEST_ALL_MODULE
+
+
+	#if NMSP_TEST_MODULE_PROFILER || NMSP_TEST_ALL_MODULE
+
+	NMSP_RUN_TEST(test_Profiler);
+
+	#endif // NMSP_TEST_MODULE_PROFILER || NMSP_TEST_ALL_MODULE
 }
 
 #if !NMSP_ENABLE_FUZZ_TESTING

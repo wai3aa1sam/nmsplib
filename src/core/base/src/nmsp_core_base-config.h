@@ -26,6 +26,6 @@
 #endif // 
 
 #ifndef NMSP_OVERRIDE_NEW_OP
-	#define NMSP_OVERRIDE_NEW_OP			1
+	#define NMSP_OVERRIDE_NEW_OP			0
 #endif // 
 

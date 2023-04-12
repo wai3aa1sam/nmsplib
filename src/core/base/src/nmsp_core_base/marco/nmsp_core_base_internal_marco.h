@@ -5,7 +5,7 @@
 #include "nmsp_core_base_util_marco.h"
 
 #if NMSP_ENABLE_INTERNAL_PROFILER
-	#define TRACY_ENABLE 1
+	//#define TRACY_ENABLE 1	// set in cli
 
 	#include <tracy/Tracy.hpp>
 	#include <tracy/TracyC.h>
