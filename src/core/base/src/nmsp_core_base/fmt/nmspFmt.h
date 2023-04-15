@@ -14,7 +14,7 @@
 			nmsp::onFormat(ctx, v); \
 			return ctx.out(); \
 		} \
-	}; \
+	} \
 //------
 
 #define NMSP_FORMATTER(CLASS) NMSP_FORMATTER_T(NMSP_EMPTY, CLASS)

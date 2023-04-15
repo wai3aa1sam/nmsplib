@@ -5,6 +5,8 @@
 #include "nmsp_math/nmspMath.h"
 #include "nmsp_math/primitive/nmspTuple3.h"
 
+#include "nmsp_math/primitive/nmspVec2.h"
+
 #if NMSP_MATH_BACKEND_GLM
 
 namespace nmsp {
@@ -34,9 +36,6 @@ public:
 	}
 };
 
-template<class T> class Vec2_T;
-template<class T> class Vec4_T;
-
 template<class T, class DATA = Vec3_Basic_Data_Glm<T> >
 struct Vec3_Basic_Glm : public DATA
 {
@@ -45,7 +44,6 @@ public:
 	using Vec3		= Vec3_Basic_Glm;
 	using Tuple3	= Tuple3_T<T>;
 	using Vec2		= Vec2_T<T>;
-	using Vec4		= Vec4_T<T>;
 
 	template<class T2, class DATA2> using Vec3_T = Vec3_Basic_Glm<T2, DATA2>;
 
@@ -82,31 +80,30 @@ public:
 	template<class T2, class DATA2> Vec3(const Vec3_T<T2, DATA2>& rhs);
 
 	void	set				(T x_, T y_, T z_);
-	void	set				(const Tuple3& r);
-	void	set				(Vec2 v2, T z_);
+	void	set				(const Tuple3& rhs);
+	void	set				(const Vec2& rhs, T z_);
 	void	setAll			(T val);
 
 	bool	equals	(const Vec3& rhs, T epsilon = Math::epsilon<T>()) const;
 	bool	equals0	(const Vec3& rhs, T epsilon = Math::epsilon<T>()) const;
 
-	NMSP_NODISCARD T		dot				(const Vec3& rhs)											const;
-	NMSP_NODISCARD Vec3		cross			(const Vec3& rhs)											const;
-	NMSP_NODISCARD Vec3		reflect			(const Vec3& normal)										const;
-	NMSP_NODISCARD Vec3		orthogonal		()															const;
+	NMSP_NODISCARD T		dot				(const Vec3& rhs)									const;
+	NMSP_NODISCARD Vec3		cross			(const Vec3& rhs)									const;
+	NMSP_NODISCARD Vec3		reflect			(const Vec3& normal)								const;
+	NMSP_NODISCARD Vec3		orthogonal		()													const;
 
-	NMSP_NODISCARD T		distance		(const Vec3& rhs)											const;
-	NMSP_NODISCARD T		sqrDistance		(const Vec3& rhs)											const;
-	NMSP_NODISCARD T		magnitude		()															const;
-	NMSP_NODISCARD T		sqrMagnitude	()															const;
-	NMSP_NODISCARD T		normalize		()															const;
+	NMSP_NODISCARD T		distance		(const Vec3& rhs)									const;
+	NMSP_NODISCARD T		sqrDistance		(const Vec3& rhs)									const;
+	NMSP_NODISCARD T		magnitude		()													const;
+	NMSP_NODISCARD T		sqrMagnitude	()													const;
+	NMSP_NODISCARD T		normalize		()													const;
 
-	NMSP_NODISCARD Vec3		lerp			(const Vec3& b, T t)									const;
-	NMSP_NODISCARD Vec3		slerp			(const Vec3& b, T t)									const;
+	NMSP_NODISCARD Vec3		lerp			(const Vec3& b, T t)								const;
+	NMSP_NODISCARD Vec3		slerp			(const Vec3& b, T t)								const;
 	NMSP_NODISCARD Vec3		rotateTo		(const Vec3& target, T maxRadDelta, T maxMagDelta)	const;
 
 	NMSP_NODISCARD Tuple3	toTuple3()	const;
 	NMSP_NODISCARD Vec2		toVec2()	const;
-	NMSP_NODISCARD Vec4		toVec4()	const;
 
 	T	operator[](SizeType i) const;
 	T&	operator[](SizeType i);
@@ -216,7 +213,7 @@ template<class T, class DATA>
 template<class T2, class DATA2> inline
 typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_cast(const Vec3_T<T2, DATA2>& rhs)
 {
-	return Vec3{ T2(rhs.x), T2(rhs.y), T2(rhs.z) };
+	return Vec3{ T(rhs.x), T(rhs.y), T(rhs.z) };
 }
 
 template<class T, class DATA> inline
@@ -226,15 +223,15 @@ Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(T x_, T y_, T z_)
 }
 
 template<class T, class DATA> inline
-Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(const Tuple3& r)
+Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(const Tuple3& rhs)
 {
-	set(r);
+	set(rhs);
 }
 
 template<class T, class DATA> inline
-Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(const Vec2& r, T z_)
+Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(const Vec2& rhs, T z_)
 {
-	set(r, z_);
+	set(rhs, z_);
 }
 
 template<class T, class DATA> 
@@ -253,19 +250,19 @@ void Vec3_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_)
 }
 
 template<class T, class DATA> inline
-void Vec3_Basic_Glm<T, DATA>::set				(const Tuple3& r)
+void Vec3_Basic_Glm<T, DATA>::set				(const Tuple3& rhs)
 {
-	this->x = r.x;
-	this->y = r.y;
-	this->z = r.z;
+	this->x = rhs.x;
+	this->y = rhs.y;
+	this->z = rhs.z;
 }
 
 template<class T, class DATA> inline
-void Vec3_Basic_Glm<T, DATA>::set				(Vec2 v2, T z)
+void Vec3_Basic_Glm<T, DATA>::set				(const Vec2& rhs, T z_)
 {
-	this->x = r.x;
-	this->y = r.y;
-	this->z = z;
+	this->x = rhs.x;
+	this->y = rhs.y;
+	this->z = z_;
 }
 
 template<class T, class DATA> inline
@@ -379,20 +376,16 @@ typename Vec3_Basic_Glm<T, DATA>::Vec2		Vec3_Basic_Glm<T, DATA>::toVec2()	const
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec4		Vec3_Basic_Glm<T, DATA>::toVec4()	const
-{
-	return Vec4{ x, y, z, T(0) };
-}
-
-template<class T, class DATA> inline
 T	Vec3_Basic_Glm<T, DATA>::operator[](SizeType i) const
 {
+	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec3_Basic_Glm<T, DATA>::operator[]");
 	return *(sCast<T*>(this) + i);
 }
 
 template<class T, class DATA> inline
 T&	Vec3_Basic_Glm<T, DATA>::operator[](SizeType i)
 {
+	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec3_Basic_Glm<T, DATA>::operator[]");
 	return *(sCast<T*>(this) + i);
 }
 

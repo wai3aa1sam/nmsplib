@@ -44,6 +44,12 @@ private:
 
 };
 
+template<class T>
+void onFormat(fmt::format_context& ctx, const Tuple3_T<T>& v)
+{
+	formatTo(ctx, "({}, {}, {})", v.x, v.y, v.z);
+}
+NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple3_T<T> );
 
 #endif
 
@@ -85,21 +91,19 @@ void Tuple3_T<T>::setAll(T val)
 	this->z = val;
 }
 
-
-
 template<class T> inline
 T	Tuple3_T<T>::operator[](SizeType i) const
 {
+	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Tuple3_T<T>::operator[]");
 	return data[i];
 }
 
 template<class T> inline
 T&	Tuple3_T<T>::operator[](SizeType i)
 {
+	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Tuple3_T<T>::operator[]");
 	return data[i];
 }
-
-
 
 
 #endif

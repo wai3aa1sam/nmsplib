@@ -2,11 +2,6 @@
 
 #include "nmsp_math/common/nmsp_math_common.h"
 
-#include "nmsp_math/primitive/nmspTuple3.h"
-
-//#include "nmsp_math/primitive/nmspVec2.h"
-
-
 #if NMSP_MATH_BACKEND_GLM
 
 #include "nmsp_math/primitive/basic/glm/nmspVec3_Basic_Glm.h"

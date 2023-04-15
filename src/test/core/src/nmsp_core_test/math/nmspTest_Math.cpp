@@ -34,6 +34,12 @@ public:
 			Vec3_Basic_Data_Glm<float> x;
 			x.data;
 
+			auto f3 = Vec3f_T::s_cast(d3);
+			//auto f2 = f3.toVec2();
+
+			//_NMSP_DUMP_VAR(f2);
+			_NMSP_DUMP_VAR(f3);
+
 			NMSP_TEST_CHECK(a.dot(a) == glm::dot(g, g));
 
 			#else
@@ -52,6 +58,20 @@ public:
 			b.x += 1;
 			b.x += 1;*/
 
+		}
+		{
+			Vec2f_T f4;
+			Vec2f_T f4_2{ 1.0, 2.0 };
+			Vec2f_T f4_3{ Tuple2f_T {1.0, 2.0} };
+			_NMSP_DUMP_VAR(f4_2);
+		}
+
+		{
+			Vec4d_T d4_2{ 1.0, 2.0, 3.0, 4.0 };
+			Vec4f_T f4_3{ Tuple4f_T {1.0, 2.0, 3.0, 4.0} };
+			Vec4f_T f4 = Vec4f_T::s_cast(d4_2);
+
+			_NMSP_DUMP_VAR(d4_2);
 		}
 
 		//a.data
