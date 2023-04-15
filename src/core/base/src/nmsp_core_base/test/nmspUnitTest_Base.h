@@ -9,7 +9,7 @@ references:
 
 #define	NMSP_TEST_CASE(TestClass, TestFunc) \
 	do{ \
-		nmsp::_log("\n[--TEST_CASE--] " #TestClass "." #TestFunc "\n"); \
+		::nmsp::_log("\n[--TEST_CASE--] " #TestClass "." #TestFunc "\n"); \
 		TestClass testObj; \
 		testObj.TestFunc; \
 	}while(false)

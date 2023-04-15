@@ -17,12 +17,12 @@
 //{ size_t operator()(nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
 
 template <> 
-struct ::nmsp::EqualTo<nmsp::TestType>
-{ bool operator()(const nmsp::TestType& a, const nmsp::TestType& b) const { return &a == &b; } };
+struct ::nmsp::EqualTo<::nmsp::TestType>
+{ bool operator()(const ::nmsp::TestType& a, const ::nmsp::TestType& b) const { return &a == &b; } };
 
 template <> 
-struct ::nmsp::Hash<nmsp::TestType>
-{ size_t operator()(nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
+struct ::nmsp::Hash<::nmsp::TestType>
+{ size_t operator()(::nmsp::TestType val) const { return reinterpret_cast<intptr_t>(&val); } };
 
 
 struct Test_Vector_Func
