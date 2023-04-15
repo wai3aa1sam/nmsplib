@@ -19,13 +19,14 @@ public:
 			Vec3f_T			a{1.1f, 1.2f, 1.3f};
 			Glm_Vec3_T<f32> g{1.1f, 1.2f, 1.3f};
 
-			_NMSP_LOG("sizeof {}", sizeof(Vec3f_T));
+			_NMSP_DUMP_VAR(sizeof(Vec3f_T));
 			_NMSP_LOG("sizeof {}", sizeof(Glm_Vec3_T<f32>));
 			auto j = a.sqrMagnitude(); NMSP_UNUSED(j);
 			
 			Vec3d_T			d3{1.1, 1.2, 1.3};
 			auto crs = d3.cross(d3); NMSP_UNUSED(crs);
 
+			_NMSP_LOG("Vec3: {}", d3);
 
 			#if 1
 			auto ret = a.dot(a);

@@ -4,8 +4,15 @@
 
 #include "fmt/format.h"
 
-
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
+
+#define _NMSP_DUMP_VAR_1(v0)				do{ _NMSP_LOG("DUMP_VAR: {}=[{}]",								#v0, (v0)); } while(false)
+#define _NMSP_DUMP_VAR_2(v0, v1)			do{ _NMSP_LOG("DUMP_VAR: {}=[{}], {}=[{}]",						#v0, (v0), #v1, (v1)); } while(false)
+#define _NMSP_DUMP_VAR_3(v0, v1, v2)		do{ _NMSP_LOG("DUMP_VAR: {}=[{}], {}=[{}], {}=[{}]",			#v0, (v0), #v1, (v1), #v2, (v2)); } while(false)
+#define _NMSP_DUMP_VAR_4(v0, v1, v2, v3)	do{ _NMSP_LOG("DUMP_VAR: {}=[{}], {}=[{}], {}=[{}], {}=[{}]",	#v0, (v0), #v1, (v1), #v2, (v2), #v3, (v3)); } while(false)
+
+#define _NMSP_DUMP_VAR_SELECT(COUNT) _NMSP_DUMP_VAR_##COUNT
+#define _NMSP_DUMP_VAR(...) NMSP_IDENTITY(NMSP_CALL(_NMSP_DUMP_VAR_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__) (__VA_ARGS__)))
 
 namespace nmsp {
 

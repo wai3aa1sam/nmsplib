@@ -10,4 +10,6 @@
 #include "nmsp_core_base/test/nmspMemoryLeakReport.h"
 #include "nmsp_core_base/test/nmspUnitTest_Base.h"
 
+#include "nmsp_core_base/fmt/nmspFmt.h"
+
 #endif

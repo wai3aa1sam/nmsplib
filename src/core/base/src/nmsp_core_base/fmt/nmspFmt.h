@@ -5,7 +5,36 @@
 #include "nmsp_core_base/common/nmspDataType_Common.h"
 #include "nmsp_core_base/common/nmspTypeTrait_Common.h"
 
+
+#define NMSP_FORMATTER_T(TEMPLATE_ARGS, CLASS) \
+	template<TEMPLATE_ARGS> \
+	struct fmt::formatter<nmsp::CLASS> { \
+		auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); } \
+		auto format(const nmsp::CLASS& v, fmt::format_context& ctx) { \
+			nmsp::onFormat(ctx, v); \
+			return ctx.out(); \
+		} \
+	}; \
+//------
+
+#define NMSP_FORMATTER(CLASS) NMSP_FORMATTER_T(NMSP_EMPTY, CLASS)
+
 namespace nmsp {
+
+template<class T>
+void onFormat(fmt::format_context& ctx, const T& v);
+
+template<class... ARGS> inline
+void formatTo(fmt::format_context& ctx, const char* fmt, ARGS&&... args)
+{
+	fmt::format_to(ctx.out(), fmt, forward<ARGS>(args)...);
+}
+
+template<class... ARGS> inline
+void formatTo(fmt::format_context& ctx, const wchar_t* fmt, ARGS&&... args)
+{
+	fmt::format_to(ctx.out(), fmt, forward<ARGS>(args)...);
+}
 
 #if 0
 #pragma mark --- FormatTrait-Impl ---
@@ -118,6 +147,9 @@ STR fmtAs_T(const wchar_t* fmt, ARGS&&... args)
 }
 
 #endif
+
+
+
 
 
 
