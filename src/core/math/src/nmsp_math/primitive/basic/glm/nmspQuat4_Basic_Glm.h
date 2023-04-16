@@ -15,13 +15,13 @@ namespace nmsp {
 
 template<class T> using Glm_Vec4_T = glm::vec<4, T, glm::lowp>;
 
-template<class T>
+template<class T> 
 struct Vec4_Basic_Data_Glm : public Glm_Vec4_T<T>
 {
 public:
-	using Base = Glm_Vec4_T<T>;
-	using SizeType = size_t;
-	using IndexType = i32;
+	using Base		= Glm_Vec4_T<T>;
+	using SizeType	= size_t;
+	using IndexType	= i32;
 
 public:
 	Vec4_Basic_Data_Glm()
@@ -39,15 +39,15 @@ template<class T, class DATA = Vec4_Basic_Data_Glm<T> >
 struct Vec4_Basic_Glm : public DATA
 {
 public:
-	using Base = DATA;
-	using Vec4 = Vec4_Basic_Glm;
-	using Tuple4 = Tuple4_T<T>;
-	using Vec2 = Vec2_T<T>;
-	using Vec3 = Vec3_T<T>;
+	using Base		= DATA;
+	using Vec4		= Vec4_Basic_Glm;
+	using Tuple4	= Tuple4_T<T>;
+	using Vec2		= Vec2_T<T>;
+	using Vec3		= Vec3_T<T>;
 
 	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
 
-	using SizeType = typename Base::SizeType;
+	using SizeType	= typename Base::SizeType;
 	using IndexType = typename Base::IndexType;
 
 public:
@@ -61,16 +61,16 @@ public:
 	static constexpr size_t s_kElementCount = 4;
 
 public:
-	static Vec4 s_zero();
-	static Vec4 s_one();
-	static Vec4 s_forward();
-	static Vec4 s_up();
-	static Vec4 s_right();
-	static Vec4 s_back();
-	static Vec4 s_down();
-	static Vec4 s_left();
-	static Vec4 s_inf();
-	static Vec4 s_negInf();
+	static Vec4 s_zero		();
+	static Vec4 s_one		();
+	static Vec4 s_forward	();
+	static Vec4 s_up		();
+	static Vec4 s_right		();
+	static Vec4 s_back		();
+	static Vec4 s_down		();
+	static Vec4 s_left		();
+	static Vec4 s_inf		();
+	static Vec4 s_negInf	();
 
 	template<class T2, class DATA2> static Vec4 s_cast(const Vec4_T<T2, DATA2>& rhs);
 
@@ -82,36 +82,36 @@ public:
 	Vec4(const Vec2& r, T z_, T w_);
 	template<class T2, class DATA2> Vec4(const Vec4_T<T2, DATA2>& rhs);
 
-	void	set(T x_, T y_, T z_, T w_);
-	void	set(const Tuple4& rhs);
-	void	set(const Vec3& rhs, T w_);
-	void	set(const Vec2& rhs, T z_, T w_);
-	void	setAll(T val);
+	void	set				(T x_, T y_, T z_, T w_);
+	void	set				(const Tuple4& rhs);
+	void	set				(const Vec3& rhs, T w_);
+	void	set				(const Vec2& rhs, T z_, T w_);
+	void	setAll			(T val);
 
-	bool	equals(const Vec4& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0(const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals	(const Vec4& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
 
-	NMSP_NODISCARD T		dot(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		cross(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		reflect(const Vec4& normal)								const;
-	NMSP_NODISCARD Vec4		orthogonal()													const;
+	NMSP_NODISCARD T		dot				(const Vec4& rhs)									const;
+	NMSP_NODISCARD Vec4		cross			(const Vec4& rhs)									const;
+	NMSP_NODISCARD Vec4		reflect			(const Vec4& normal)								const;
+	NMSP_NODISCARD Vec4		orthogonal		()													const;
 
-	NMSP_NODISCARD T		distance(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		sqrDistance(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		magnitude()													const;
-	NMSP_NODISCARD T		sqrMagnitude()													const;
-	NMSP_NODISCARD T		normalize()													const;
+	NMSP_NODISCARD T		distance		(const Vec4& rhs)									const;
+	NMSP_NODISCARD T		sqrDistance		(const Vec4& rhs)									const;
+	NMSP_NODISCARD T		magnitude		()													const;
+	NMSP_NODISCARD T		sqrMagnitude	()													const;
+	NMSP_NODISCARD T		normalize		()													const;
 
-	NMSP_NODISCARD Vec4		lerp(const Vec4& b, T t)								const;
-	NMSP_NODISCARD Vec4		slerp(const Vec4& b, T t)								const;
-	NMSP_NODISCARD Vec4		rotateTo(const Vec4& target, T maxRadDelta, T maxMagDelta)	const;
+	NMSP_NODISCARD Vec4		lerp			(const Vec4& b, T t)								const;
+	NMSP_NODISCARD Vec4		slerp			(const Vec4& b, T t)								const;
+	NMSP_NODISCARD Vec4		rotateTo		(const Vec4& target, T maxRadDelta, T maxMagDelta)	const;
 
 	NMSP_NODISCARD Tuple4	toTuple4()	const;
 	NMSP_NODISCARD Vec2		toVec2()	const;
 	NMSP_NODISCARD Vec3		toVec3()	const;
 
 	T	operator[](IndexType i) const;
-	T& operator[](IndexType i);
+	T&	operator[](IndexType i);
 
 	Vec4 operator-() const;
 
@@ -154,71 +154,71 @@ private:
 #if 1
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_zero()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_zero		()
 {
-	return Vec4{ T(0), T(0), T(0), T(0) };
+	return Vec4{ T(0), T(0), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_one()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_one		()
 {
-	return Vec4{ T(1), T(1), T(1), T(0) };
+	return Vec4{ T(1), T(1), T(1), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_forward()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_forward	()
 {
-	return Vec4{ T(0), T(0), T(1), T(0) };
+	return Vec4{ T(0), T(0), T(1), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_up()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_up		()
 {
-	return Vec4{ T(0), T(1), T(0), T(0) };
+	return Vec4{ T(0), T(1), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_right()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_right	()
 {
-	return Vec4{ T(1), T(0), T(0), T(0) };
+	return Vec4{ T(1), T(0), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_back()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_back		()
 {
-	return Vec4{ T(0), T(0), -T(1), T(0) };
+	return Vec4{ T(0), T(0), -T(1), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_down()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_down		()
 {
-	return Vec4{ T(0), -T(1), T(0), T(0) };
+	return Vec4{ T(0), -T(1), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_left()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_left		()
 {
-	return Vec4{ -T(1), T(0), T(0), T(0) };
+	return Vec4{ -T(1), T(0), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_inf()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_inf		()
 {
 	auto f = Math::inf<T>();
-	return Vec4{ f, f, f, f };
+	return Vec4{ f, f, f, f};
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_negInf()
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_negInf	()
 {
 	return -s_inf();
 }
 
-template<class T, class DATA>
+template<class T, class DATA> 
 template<class T2, class DATA2> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_cast(const Vec4_T<T2, DATA2>& rhs)
 {
-	return Vec4{ T(rhs.x), T(rhs.y), T(rhs.z), T(rhs.w) };
+	return Vec4{ T(rhs.x), T(rhs.y), T(rhs.z), T(rhs.w)};
 }
 
 template<class T, class DATA> inline
@@ -245,7 +245,7 @@ Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec2& rhs, T z_, T w_)
 	set(rhs, w_, z_);
 }
 
-template<class T, class DATA>
+template<class T, class DATA> 
 template<class T2, class DATA2>  inline
 Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec4_T<T2, DATA2>& rhs)
 {
@@ -253,7 +253,7 @@ Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec4_T<T2, DATA2>& rhs)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set(T x_, T y_, T z_, T w_)
+void Vec4_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_, T w_)
 {
 	this->x = x_;
 	this->y = y_;
@@ -262,7 +262,7 @@ void Vec4_Basic_Glm<T, DATA>::set(T x_, T y_, T z_, T w_)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set(const Tuple4& rhs)
+void Vec4_Basic_Glm<T, DATA>::set				(const Tuple4& rhs)
 {
 	this->x = rhs.x;
 	this->y = rhs.y;
@@ -271,7 +271,7 @@ void Vec4_Basic_Glm<T, DATA>::set(const Tuple4& rhs)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set(const Vec3& rhs, T w_)
+void Vec4_Basic_Glm<T, DATA>::set				(const Vec3& rhs, T w_)
 {
 	this->x = rhs.x;
 	this->y = rhs.y;
@@ -280,7 +280,7 @@ void Vec4_Basic_Glm<T, DATA>::set(const Vec3& rhs, T w_)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set(const Vec2& rhs, T z_, T w_)
+void Vec4_Basic_Glm<T, DATA>::set				(const Vec2& rhs, T z_, T w_)
 {
 	this->x = rhs.x;
 	this->y = rhs.y;
@@ -289,7 +289,7 @@ void Vec4_Basic_Glm<T, DATA>::set(const Vec2& rhs, T z_, T w_)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::setAll(T val)
+void Vec4_Basic_Glm<T, DATA>::setAll			(T val)
 {
 	this->x = val;
 	this->y = val;
@@ -297,7 +297,7 @@ void Vec4_Basic_Glm<T, DATA>::setAll(T val)
 }
 
 template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::equals(const Vec4& rhs, const T& epsilon) const
+bool Vec4_Basic_Glm<T, DATA>::equals	(const Vec4& rhs, const T& epsilon) const
 {
 	return Math::equals(x, rhs.x, epsilon)
 		&& Math::equals(y, rhs.y, epsilon)
@@ -306,7 +306,7 @@ bool Vec4_Basic_Glm<T, DATA>::equals(const Vec4& rhs, const T& epsilon) const
 }
 
 template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::equals0(const T& epsilon) const
+bool Vec4_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
 {
 	return Math::equals0(x, epsilon)
 		&& Math::equals0(y, epsilon)
@@ -315,32 +315,32 @@ bool Vec4_Basic_Glm<T, DATA>::equals0(const T& epsilon) const
 }
 
 template<class T, class DATA> inline
-T										Vec4_Basic_Glm<T, DATA>::dot(const Vec4& rhs)		const
+T										Vec4_Basic_Glm<T, DATA>::dot		(const Vec4& rhs)		const
 {
 	return glm::dot(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::cross(const Vec4& rhs)		const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::cross		(const Vec4& rhs)		const
 {
 	return glm::cross(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::reflect(const Vec4& normal)	const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::reflect	(const Vec4& normal)	const
 {
 	return glm::reflect(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(normal));
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::orthogonal()						const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::orthogonal	()						const
 {
 	NMSP_ASSERT(false, "not yet supported");
 	return {};
 }
 
 template<class T, class DATA> inline
-T										Vec4_Basic_Glm<T, DATA>::distance(const Vec4& rhs)		const
+T										Vec4_Basic_Glm<T, DATA>::distance	(const Vec4& rhs)		const
 {
 	return glm::distance(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
 }
@@ -352,37 +352,37 @@ T										Vec4_Basic_Glm<T, DATA>::sqrDistance(const Vec4& rhs)		const
 }
 
 template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::magnitude()	const
+T Vec4_Basic_Glm<T, DATA>::magnitude	()	const
 {
 	return glm::length(sCast<Glm_Vec4>(*this));
 }
 
 template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::sqrMagnitude()	const
+T Vec4_Basic_Glm<T, DATA>::sqrMagnitude	()	const
 {
 	return glm::length2(sCast<Glm_Vec4>(*this));
 }
 
 template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::normalize()	const
+T Vec4_Basic_Glm<T, DATA>::normalize		()	const
 {
 	return glm::normalize(sCast<Glm_Vec4>(*this));
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::lerp(const Vec4& b, T t)									const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::lerp			(const Vec4& b, T t)									const
 {
 	return glm::lerp(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(b), t);
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::slerp(const Vec4& b, T t)									const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::slerp			(const Vec4& b, T t)									const
 {
 	return glm::slerp(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(b), t);
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::rotateTo(const Vec4& target, T maxRadDelta, T maxMagDelta)	const
+typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::rotateTo		(const Vec4& target, T maxRadDelta, T maxMagDelta)	const
 {
 	NMSP_ASSERT(false, "not yet supported");
 	return {};
@@ -414,7 +414,7 @@ T	Vec4_Basic_Glm<T, DATA>::operator[](IndexType i) const
 }
 
 template<class T, class DATA> inline
-T& Vec4_Basic_Glm<T, DATA>::operator[](IndexType i)
+T&	Vec4_Basic_Glm<T, DATA>::operator[](IndexType i)
 {
 	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec4_Basic_Glm<T, DATA>::operator[]");
 	return Base::operator[](i);
@@ -542,5 +542,23 @@ Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Glm_Vec4& rhs) // for glm only
 }
 
 #endif
+
+namespace Math {
+
+template<class T, class EP = T> 
+NMSP_INLINE bool equals (const Vec4_Basic_Glm<T>& a, const Vec4_Basic_Glm<T>& b, const EP& ep = epsilon<T>()) 
+{ 
+	return a.equals(b, ep)
 }
+
+template<class T, class EP = T> 
+NMSP_INLINE bool equals0(const Vec4_Basic_Glm<T>& a,             const EP& ep = epsilon<T>())
+{ 
+	return a.equals0(ep); 
+}
+
+}
+
+}
+
 #endif // NMSP_MATH_BACKEND_GLM

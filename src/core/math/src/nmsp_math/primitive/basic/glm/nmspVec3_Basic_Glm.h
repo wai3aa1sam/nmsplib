@@ -23,6 +23,7 @@ struct Vec3_Basic_Data_Glm : public Glm_Vec3_T<T>
 public:
 	using Base		= Glm_Vec3_T<T>;
 	using SizeType	= size_t;
+	using IndexType = i32;
 
 public:
 	Vec3_Basic_Data_Glm()
@@ -47,7 +48,8 @@ public:
 
 	template<class T2, class DATA2> using Vec3_T = Vec3_Basic_Glm<T2, DATA2>;
 
-	using SizeType = typename Base::SizeType;
+	using SizeType	= typename Base::SizeType;
+	using IndexType = typename Base::IndexType;
 
 public:
 	using Base::x;
@@ -84,8 +86,8 @@ public:
 	void	set				(const Vec2& rhs, T z_);
 	void	setAll			(T val);
 
-	bool	equals	(const Vec3& rhs, T epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(const Vec3& rhs, T epsilon = Math::epsilon<T>()) const;
+	bool	equals	(const Vec3& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
 
 	NMSP_NODISCARD T		dot				(const Vec3& rhs)									const;
 	NMSP_NODISCARD Vec3		cross			(const Vec3& rhs)									const;
@@ -105,8 +107,8 @@ public:
 	NMSP_NODISCARD Tuple3	toTuple3()	const;
 	NMSP_NODISCARD Vec2		toVec2()	const;
 
-	T	operator[](SizeType i) const;
-	T&	operator[](SizeType i);
+	T	operator[](IndexType i) const;
+	T&	operator[](IndexType i);
 
 	Vec3 operator-() const;
 
@@ -274,7 +276,7 @@ void Vec3_Basic_Glm<T, DATA>::setAll			(T val)
 }
 
 template<class T, class DATA> inline
-bool Vec3_Basic_Glm<T, DATA>::equals	(const Vec3& rhs, T epsilon) const
+bool Vec3_Basic_Glm<T, DATA>::equals	(const Vec3& rhs, const T& epsilon) const
 {
 	return Math::equals(x, rhs.x, epsilon)
 		&& Math::equals(y, rhs.y, epsilon)
@@ -282,11 +284,11 @@ bool Vec3_Basic_Glm<T, DATA>::equals	(const Vec3& rhs, T epsilon) const
 }
 
 template<class T, class DATA> inline
-bool Vec3_Basic_Glm<T, DATA>::equals0	(const Vec3& rhs, T epsilon) const
+bool Vec3_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
 {
-	return Math::equals0(x, rhs.x, epsilon)
-		&& Math::equals0(y, rhs.y, epsilon)
-		&& Math::equals0(z, rhs.z, epsilon);
+	return Math::equals0(x, epsilon)
+		&& Math::equals0(y, epsilon)
+		&& Math::equals0(z, epsilon);
 }
 
 template<class T, class DATA> inline
@@ -376,17 +378,17 @@ typename Vec3_Basic_Glm<T, DATA>::Vec2		Vec3_Basic_Glm<T, DATA>::toVec2()	const
 }
 
 template<class T, class DATA> inline
-T	Vec3_Basic_Glm<T, DATA>::operator[](SizeType i) const
+T	Vec3_Basic_Glm<T, DATA>::operator[](IndexType i) const
 {
 	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec3_Basic_Glm<T, DATA>::operator[]");
-	return *(sCast<T*>(this) + i);
+	return Base::operator[](i);
 }
 
 template<class T, class DATA> inline
-T&	Vec3_Basic_Glm<T, DATA>::operator[](SizeType i)
+T&	Vec3_Basic_Glm<T, DATA>::operator[](IndexType i)
 {
 	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec3_Basic_Glm<T, DATA>::operator[]");
-	return *(sCast<T*>(this) + i);
+	return Base::operator[](i);
 }
 
 template<class T, class DATA> inline

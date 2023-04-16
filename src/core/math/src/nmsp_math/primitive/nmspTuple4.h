@@ -19,7 +19,7 @@ template<class T>
 struct Tuple4_T
 {
 public:
-	using SizeType = size_t;
+	using SizeType = int;
 
 public:
 	static constexpr size_t s_kElementCount = 4;

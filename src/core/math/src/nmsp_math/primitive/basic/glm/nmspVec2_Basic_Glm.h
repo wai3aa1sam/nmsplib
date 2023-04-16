@@ -21,6 +21,7 @@ struct Vec2_Basic_Data_Glm : public Glm_Vec2_T<T>
 public:
 	using Base		= Glm_Vec2_T<T>;
 	using SizeType	= size_t;
+	using IndexType	= i32;
 
 public:
 	Vec2_Basic_Data_Glm()
@@ -44,7 +45,8 @@ public:
 
 	template<class T2, class DATA2> using Vec2_T = Vec2_Basic_Glm<T2, DATA2>;
 
-	using SizeType = typename Base::SizeType;
+	using SizeType	= typename Base::SizeType;
+	using IndexType = typename Base::IndexType;
 
 public:
 	using Base::x;
@@ -76,8 +78,8 @@ public:
 	void	set				(const Tuple2& rhs);
 	void	setAll			(T val);
 
-	bool	equals	(const Vec2& rhs, T epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(const Vec2& rhs, T epsilon = Math::epsilon<T>()) const;
+	bool	equals	(const Vec2& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
 
 	NMSP_NODISCARD T		dot				(const Vec2& rhs)									const;
 	NMSP_NODISCARD Vec2		cross			(const Vec2& rhs)									const;
@@ -94,8 +96,8 @@ public:
 	NMSP_NODISCARD Vec2		slerp			(const Vec2& b, T t)								const;
 	NMSP_NODISCARD Vec2		rotateTo		(const Vec2& target, T maxRadDelta, T maxMagDelta)	const;
 
-	T	operator[](SizeType i) const;
-	T&	operator[](SizeType i);
+	T	operator[](IndexType i) const;
+	T&	operator[](IndexType i);
 
 	Vec2 operator-() const;
 
@@ -234,17 +236,17 @@ void Vec2_Basic_Glm<T, DATA>::setAll			(T val)
 }
 
 template<class T, class DATA> inline
-bool Vec2_Basic_Glm<T, DATA>::equals	(const Vec2& rhs, T epsilon) const
+bool Vec2_Basic_Glm<T, DATA>::equals	(const Vec2& rhs, const T& epsilon) const
 {
 	return Math::equals(x, rhs.x, epsilon)
 		&& Math::equals(y, rhs.y, epsilon);
 }
 
 template<class T, class DATA> inline
-bool Vec2_Basic_Glm<T, DATA>::equals0	(const Vec2& rhs, T epsilon) const
+bool Vec2_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
 {
-	return Math::equals0(x, rhs.x, epsilon)
-		&& Math::equals0(y, rhs.y, epsilon);
+	return Math::equals0(x, epsilon)
+		&& Math::equals0(y, epsilon);
 }
 
 template<class T, class DATA> inline
@@ -322,17 +324,17 @@ typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::rotateTo		(const
 }
 
 template<class T, class DATA> inline
-T	Vec2_Basic_Glm<T, DATA>::operator[](SizeType i) const
+T	Vec2_Basic_Glm<T, DATA>::operator[](IndexType i) const
 {
 	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec2_Basic_Glm<T, DATA>::operator[]");
-	return *(sCast<T*>(this) + i);
+	return Base::operator[](i);
 }
 
 template<class T, class DATA> inline
-T&	Vec2_Basic_Glm<T, DATA>::operator[](SizeType i)
+T&	Vec2_Basic_Glm<T, DATA>::operator[](IndexType i)
 {
 	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec2_Basic_Glm<T, DATA>::operator[]");
-	return *(sCast<T*>(this) + i);
+	return Base::operator[](i);
 }
 
 template<class T, class DATA> inline

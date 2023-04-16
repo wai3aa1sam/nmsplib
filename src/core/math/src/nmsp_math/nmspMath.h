@@ -185,11 +185,52 @@ NMSP_INLINE double atan(double rad) { return ::atan (rad); }
 
 template<class T> T abs(const T& v) { return v < 0 ? -v : v; }
 
-template<class T> constexpr T epsilon();
-template<>	constexpr int	epsilon<int >() { return 0; }
-template<>	constexpr f32	epsilon<f32 >() { return FLT_EPSILON; }
-template<>	constexpr f64	epsilon<f64 >() { return DBL_EPSILON; }
-template<>	constexpr f128	epsilon<f128>() { return LDBL_EPSILON; }
+#if 0
+#pragma mark --- Epsilon-Impl ---
+#endif // 0
+#if 1
+
+template<class T> struct Epsilon;
+template<>
+struct Epsilon<i32>
+{
+	using ValueType = i32;
+	static constexpr ValueType s_kValue = 0;
+					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+};
+
+template<>
+struct Epsilon<f32>
+{
+	using ValueType = f32;
+	static constexpr ValueType s_kValue = FLT_EPSILON;
+					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+};
+
+template<>
+struct Epsilon<f64>
+{
+	using ValueType = f64;
+	static constexpr ValueType s_kValue = DBL_EPSILON;
+					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+};
+
+template<>
+struct Epsilon<f128>
+{
+	using ValueType = f128;
+	static constexpr ValueType s_kValue = LDBL_EPSILON;
+					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+};
+
+template<class T> constexpr const T& epsilon() { return Epsilon<T>::s_kValue; }
+
+#endif // 0
+
 
 template<class T, class EP = T> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<T>()) { return abs(a-b) <= ep; }
 template<class T, class EP = T> NMSP_INLINE bool equals0(const T& a,             const EP& ep = epsilon<T>()) { return abs( a ) <= ep; }

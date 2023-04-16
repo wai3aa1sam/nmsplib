@@ -74,6 +74,21 @@ public:
 			_NMSP_DUMP_VAR(d4_2);
 		}
 
+		{
+			Glm_Vec4_SIMD_T<f32> gv4;
+			gv4[0];
+
+			Vec4f_T v4t;
+			v4t[0];
+			auto v4t2 = v4t;
+			NMSP_TEST_CHECK(v4t2 == v4t);
+			NMSP_TEST_CHECK(Math::equals(v4t2, v4t));
+
+			
+			//auto s = Math::epsilon<float>()();
+			//_NMSP_DUMP_VAR(Math::Epsilon<float>()());
+		}
+
 		//a.data
 		//b = a + Vec3f{};
 		nmsp::Tuple3_T<float> aa;

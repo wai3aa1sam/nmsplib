@@ -21,11 +21,39 @@ using Vec4d_T = Vec4_T<f64>;
 using Vec4i_T = Vec4_T<i32>;
 using Vec4u_T = Vec4_T<u32>;
 
+
+#if 0
+#pragma mark --- Vec4_T_AddOns-Impl ---
+#endif // 0
+#if 1
 template<class T>
 void onFormat(fmt::format_context& ctx, const Vec4_T<T>& v)
 {
 	formatTo(ctx, "({}, {}, {}, {})", v.x, v.y, v.z, v.w);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec4_T<T> );
+
+
+
+
+
+
+namespace Math {
+
+template<class T, class EP = T> NMSP_INLINE 
+bool equals (const Vec4_T<T>& a, const Vec4_T<T>& b, const EP& ep = epsilon<T>()) 
+{ 
+	return a.equals(b, ep);
+}
+
+template<class T, class EP = T> 
+NMSP_INLINE bool equals0(const Vec4_T<T>& a,		 const EP& ep = epsilon<T>())
+{ 
+	return a.equals0(ep); 
+}
+
+}
+#endif
+
 
 }

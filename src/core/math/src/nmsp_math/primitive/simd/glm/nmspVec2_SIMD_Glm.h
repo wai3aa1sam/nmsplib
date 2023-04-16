@@ -25,6 +25,7 @@ struct Vec2_SIMD_Data_Glm : public Glm_Vec2_SIMD_T<T>
 public:
 	using Base		= Glm_Vec2_SIMD_T<T>;
 	using SizeType	= size_t;
+	using IndexType	= i32;
 
 public:
 	Vec2_SIMD_Data_Glm()

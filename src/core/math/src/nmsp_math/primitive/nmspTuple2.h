@@ -18,7 +18,7 @@ template<class T>
 struct Tuple2_T
 {
 public:
-	using SizeType = size_t;
+	using SizeType = i32;
 
 public:
 	static constexpr size_t s_kElementCount = 2;
