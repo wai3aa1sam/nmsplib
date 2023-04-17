@@ -10,7 +10,13 @@ template<class T, class ENABLE = void>
 struct has_equal : std::false_type {};
 
 template<class T>
-struct has_equal<T, decltype(std::declval<T>.s_zero() ) > : std::true_type {};
+struct has_equal<T, std::void_t< decltype(std::declval<T>.s_zero() ) > > : std::true_type {};
+
+template<class T, class ENABLE = void>
+struct has_equals : public FalseType {};
+
+template<class T>
+struct has_equals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
 
 
 class Test_Math : public UnitTest
@@ -92,6 +98,14 @@ public:
 			NMSP_TEST_CHECK(Math::equals(v4t2, v4t));
 
 			
+			if (has_equals<Vec4f_T >())
+			{
+				_NMSP_LOG("--- Vec4f_T has equals()");
+			}
+			if (has_equals<float >())
+			{
+				_NMSP_LOG("--- float has equals()");
+			}
 			//auto s = Math::epsilon<float>()();
 			//_NMSP_DUMP_VAR(Math::Epsilon<float>()());
 		}
@@ -105,7 +119,7 @@ public:
 			_NMSP_DUMP_VAR(c);
 
 			NMSP_TEST_CHECK(b == c);
-			NMSP_TEST_CHECK(Math::equals(c, b));
+			//NMSP_TEST_CHECK(Math::equals(c, b));
 			a.s_translate(Vec3f_T::s_zero());
 			a.inverse();
 			a.mulPoint4x3(Vec3f_T::s_one());

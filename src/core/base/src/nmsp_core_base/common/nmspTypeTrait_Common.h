@@ -72,6 +72,9 @@ template<class BASE, class DERIVED> inline constexpr bool IsBaseOf  = IsBaseOfT<
 template<class T> using					IsFunctionT    = std::is_function<T>;
 template<class T> inline constexpr bool	IsFunction     = IsFunctionT<T>::value;
 
+template<class T> using					IsMemPtrT    = std::is_member_pointer<T>;
+template<class T> inline constexpr bool	IsMemPtr     = IsMemPtrT<T>::value;
+
 template<class T> using					IsUIntT        = std::is_unsigned<T>;
 template<class T> inline constexpr bool	IsUInt         = IsUIntT<T>::value;
 

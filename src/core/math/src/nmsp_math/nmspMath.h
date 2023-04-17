@@ -231,9 +231,45 @@ template<class T> constexpr const T& epsilon() { return Epsilon<T>::s_kValue; }
 
 #endif // 0
 
+#if 0
+#pragma mark --- Epsilon-Impl ---
+#endif // 0
+#if 1
 
-template<class T, class EP = T> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<T>()) { return abs(a-b) <= ep; }
-template<class T, class EP = T> NMSP_INLINE bool equals0(const T& a,             const EP& ep = epsilon<T>()) { return abs( a ) <= ep; }
+template<class T, class ENABLE = void>
+struct EqualsHelper
+{
+	template<class T, class EP = T> NMSP_INLINE static bool equals_Impl (const T& a, const T& b, const EP& ep = epsilon<T>()) { return abs(a-b) <= ep; }
+	template<class T, class EP = T> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<T>()) { return abs( a ) <= ep; }
+};
+
+template<class T, class ENABLE = void>
+struct hasMathEquals : public FalseType {};
+
+template<class T>
+struct hasMathEquals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
+
+template<class T, class ENABLE = void>
+struct has_equals : public FalseType {};
+
+template<class T>
+struct has_equals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
+
+template<class T> inline constexpr bool	Ishas_equals  = IsMemPtr<decltype(&T::equals)>;
+
+
+template<class T>
+struct EqualsHelper<T, EnableIf<Ishas_equals<T>  > >
+{
+	template<class T, class EP = T> NMSP_INLINE static bool equals_Impl (const T& a, const T& b, const EP& ep = epsilon<T>()) { return a.equals (b, ep); }
+	template<class T, class EP = T> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<T>()) { return a.equals0(ep); }
+};
+
+template<class T, class EP = T> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<T>()) { return EqualsHelper<T>::equals_Impl (a, b, ep); }
+template<class T, class EP = T> NMSP_INLINE bool equals0(const T& a,             const EP& ep = epsilon<T>()) { return EqualsHelper<T>::equals0_Impl(a,	ep); }
+
+#endif // 1
+
 
 //-------------- Lerp ----------------
 //! linear interpolation out = a+w*(b-a)

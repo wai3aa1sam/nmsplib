@@ -287,26 +287,71 @@ void Quat4_Basic_Glm<T, DATA>::setEulerZ(T rad)
 
 }
 
+template<class T, class DATA> inline
+void Quat4_Basic_Glm<T, DATA>::setEulerDegX(T deg)
+{
 
-void setEulerDegX(T deg);
-void setEulerDegY(T deg);
-void setEulerDegZ(T deg);
-
-Vec3 euler () const;
-T	 eulerX() const;
-T	 eulerY() const;
-T	 eulerZ() const;
-
-Quat4 conjugate	() const;
-Quat4 inverse	() const;
-Quat4 normalize	() const;
-
-T dot(const Quat4& r) const;
+}
 
 template<class T, class DATA> inline
-typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const Quat4& r)		const
+void Quat4_Basic_Glm<T, DATA>::setEulerDegY(T deg)
 {
-	
+
+}
+
+template<class T, class DATA> inline
+void Quat4_Basic_Glm<T, DATA>::setEulerDegZ(T deg)
+{
+
+}
+
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Vec3	Quat4_Basic_Glm<T, DATA>::euler() const
+{
+
+}
+
+template<class T, class DATA> inline
+T Quat4_Basic_Glm<T, DATA>::eulerX() const
+{
+
+}
+
+template<class T, class DATA> inline
+T Quat4_Basic_Glm<T, DATA>::eulerY() const
+{
+
+}
+
+template<class T, class DATA> inline
+T Quat4_Basic_Glm<T, DATA>::eulerZ() const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::conjugate	() const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::inverse	() const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::normalize	() const
+{
+
+}
+
+template<class T, class DATA> inline
+T	Quat4_Basic_Glm<T, DATA>::dot(const Quat4& r) const
+{
+
 }
 
 template<class T, class DATA> inline
@@ -319,6 +364,48 @@ template<class T, class DATA> inline
 bool Quat4_Basic_Glm<T, DATA>::operator!=(const Quat4& rhs) const
 {
 	return !operator==();
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator-() const
+{
+	return Quat4{ -x, -y, -z, -w };
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const Quat4& r) const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Vec3		Quat4_Basic_Glm<T, DATA>::operator*(const Vec3& v)  const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator+(const Quat4& r) const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator-(const Quat4& r) const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const T&    v) const
+{
+
+}
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator/(const T&    v) const
+{
+
 }
 
 template<class T, class DATA> inline

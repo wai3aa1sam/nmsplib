@@ -47,8 +47,9 @@ public:
 
 	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
 
-	using SizeType	= typename Base::SizeType;
-	using IndexType = typename Base::IndexType;
+	using ElementType	= T;
+	using SizeType		= typename Base::SizeType;
+	using IndexType		= typename Base::IndexType;
 
 public:
 	using Base::x;
