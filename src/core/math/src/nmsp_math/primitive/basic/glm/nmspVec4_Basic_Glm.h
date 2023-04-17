@@ -47,7 +47,7 @@ public:
 
 	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
 
-	using SizeType = typename Base::SizeType;
+	using SizeType	= typename Base::SizeType;
 	using IndexType = typename Base::IndexType;
 
 public:
@@ -80,7 +80,7 @@ public:
 	Vec4(const Tuple4& r);
 	Vec4(const Vec3& r, T w_);
 	Vec4(const Vec2& r, T z_, T w_);
-	template<class T2, class DATA2> Vec4(const Vec4_T<T2, DATA2>& rhs);
+	template<class T2, class DATA2> explicit Vec4(const Vec4_T<T2, DATA2>& rhs);
 
 	void	set(T x_, T y_, T z_, T w_);
 	void	set(const Tuple4& rhs);
@@ -91,19 +91,19 @@ public:
 	bool	equals(const Vec4& rhs, const T& epsilon = Math::epsilon<T>()) const;
 	bool	equals0(const T& epsilon = Math::epsilon<T>()) const;
 
-	NMSP_NODISCARD T		dot(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		cross(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		reflect(const Vec4& normal)								const;
-	NMSP_NODISCARD Vec4		orthogonal()													const;
+	NMSP_NODISCARD T		dot			(const Vec4& rhs)		const;
+	NMSP_NODISCARD Vec4		cross		(const Vec4& rhs)		const;
+	NMSP_NODISCARD Vec4		reflect		(const Vec4& normal)	const;
+	NMSP_NODISCARD Vec4		orthogonal	()						const;
 
-	NMSP_NODISCARD T		distance(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		sqrDistance(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		magnitude()													const;
-	NMSP_NODISCARD T		sqrMagnitude()													const;
-	NMSP_NODISCARD T		normalize()													const;
+	NMSP_NODISCARD T		distance	(const Vec4& rhs)	const;
+	NMSP_NODISCARD T		sqrDistance	(const Vec4& rhs)	const;
+	NMSP_NODISCARD T		magnitude	()					const;
+	NMSP_NODISCARD T		sqrMagnitude()					const;
+	NMSP_NODISCARD T		normalize	()					const;
 
-	NMSP_NODISCARD Vec4		lerp(const Vec4& b, T t)								const;
-	NMSP_NODISCARD Vec4		slerp(const Vec4& b, T t)								const;
+	NMSP_NODISCARD Vec4		lerp	(const Vec4& b, T t)								const;
+	NMSP_NODISCARD Vec4		slerp	(const Vec4& b, T t)								const;
 	NMSP_NODISCARD Vec4		rotateTo(const Vec4& target, T maxRadDelta, T maxMagDelta)	const;
 
 	NMSP_NODISCARD Tuple4	toTuple4()	const;
@@ -138,12 +138,10 @@ public:
 	bool operator==(const Vec4& rhs) const;
 	bool operator!=(const Vec4& rhs) const;
 
-private:
+
+public:
 	using Glm_Vec4 = typename DATA::Base;
 	Vec4(const Glm_Vec4& rhs); // for glm only
-
-	/*operator Glm_Vec4<T>() const	{ return Glm_Vec4<T>{x, y, z}; }
-	operator Glm_Vec4<T>()			{ return Glm_Vec4<T>{x, y, z}; }*/
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -335,7 +333,7 @@ typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::reflect(const Ve
 template<class T, class DATA> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::orthogonal()						const
 {
-	NMSP_ASSERT(false, "not yet supported");
+	_notYetSupported()
 	return {};
 }
 
@@ -384,7 +382,7 @@ typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::slerp(const Vec4
 template<class T, class DATA> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::rotateTo(const Vec4& target, T maxRadDelta, T maxMagDelta)	const
 {
-	NMSP_ASSERT(false, "not yet supported");
+	_notYetSupported()
 	return {};
 }
 
@@ -403,7 +401,7 @@ typename Vec4_Basic_Glm<T, DATA>::Vec2		Vec4_Basic_Glm<T, DATA>::toVec2()	const
 template<class T, class DATA> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec3		Vec4_Basic_Glm<T, DATA>::toVec3()	const
 {
-	return Vec3{ x, y, z, T(0) };
+	return Vec3{ x, y, z };
 }
 
 template<class T, class DATA> inline

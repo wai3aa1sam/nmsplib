@@ -1,31 +1,59 @@
 #pragma once
 
 #include "nmsp_math/common/nmsp_math_common.h"
-#include "basic/nmspVec3_Basic.h"
-#include "simd/nmspVec3_SIMD.h"
+#include "basic/nmspMat4_Basic.h"
+#include "simd/nmspMat4_SIMD.h"
 
 namespace nmsp {
 
 #if NMSP_MATH_USE_SIMD
 
-template<class T> using Vec3_T = Vec3_SIMD_T<T>;
+template<class T> using Mat4_T = Mat4_SIMD_T<T>;
 
 #else
 
-template<class T> using Vec3_T = Vec3_Basic_T<T>;
+template<class T> using Mat4_T = Mat4_Basic_T<T>;
 
 #endif // NMSP_MATH_USE_SIMD
 
-using Vec3f_T = Vec3_T<f32>;
-using Vec3d_T = Vec3_T<f64>;
-using Vec3i_T = Vec3_T<i32>;
-using Vec3u_T = Vec3_T<u32>;
+using Mat4f_T = Mat4_T<f32>;
+using Mat4d_T = Mat4_T<f64>;
+using Mat4i_T = Mat4_T<i32>;
+using Mat4u_T = Mat4_T<u32>;
 
+
+#if 0
+#pragma mark --- Mat4_T_AddOns-Impl ---
+#endif // 0
+#if 1
 template<class T>
-void onFormat(fmt::format_context& ctx, const Vec3_T<T>& v)
+void onFormat(fmt::format_context& ctx, const Mat4_T<T>& v)
 {
-	formatTo(ctx, "({}, {}, {})", v.x, v.y, v.z);
+	formatTo(ctx, "({}, {}, {}, {})", v[0], v[1], v[2], v[3]);
 }
-NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec3_T<T> );
+NMSP_FORMATTER_T(NMSP_ARGS(class T), Mat4_T<T>);
+
+
+
+
+
+
+namespace Math {
+
+template<class T, class EP = T> NMSP_INLINE
+bool equals(const Mat4_T<T>& a, const Mat4_T<T>& b, const EP& ep = epsilon<T>())
+{
+	return a.equals(b, ep);
+}
+
+template<class T, class EP = T> NMSP_INLINE
+bool equals0(const Mat4_T<T>& a, const EP& ep = epsilon<T>())
+{
+	return a.equals0(ep);
+}
+
+}
+#endif
+
 
 }

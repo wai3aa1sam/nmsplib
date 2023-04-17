@@ -65,6 +65,9 @@ void _log(const char* format, ARGS&&... args)
 
 #endif
 
-
+inline void _notYetSupported()
+{
+	NMSP_ASSERT(false, "not yet supported");
+}
 
 }

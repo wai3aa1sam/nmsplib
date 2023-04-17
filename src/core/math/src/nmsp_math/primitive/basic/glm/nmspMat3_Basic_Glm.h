@@ -3,9 +3,9 @@
 #include "nmsp_math/common/nmsp_math_common.h"
 
 #include "nmsp_math/nmspMath.h"
-#include "nmsp_math/primitive/nmspTuple3.h"
-
-#include "nmsp_math/primitive/nmspVec2.h"
+#include "nmsp_math/primitive/nmspVec3.h"
+#include "nmsp_math/primitive/nmspVec4.h"
+#include "nmsp_math/primitive/nmspQuat4.h"
 
 #if NMSP_MATH_BACKEND_GLM
 
@@ -15,19 +15,24 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Mat3_T = glm::vec<3, T, glm::lowp>;
+template<class T> using Glm_Mat3_T = glm::mat<3, 3, T, glm::lowp>;
 
-template<class T> 
+template<class T>
 struct Mat3_Basic_Data_Glm : public Glm_Mat3_T<T>
 {
 public:
-	using Base		= Glm_Mat3_T<T>;
-	using SizeType	= size_t;
-	using IndexType	= i32;
+	using Base = Glm_Mat3_T<T>;
+	using Vec3 = Glm_Vec3_T<T>;
+	using Vec4 = Glm_Vec4_T<T>;
+
+	using SizeType = size_t;
+	using IndexType = i32;
 
 public:
 	Mat3_Basic_Data_Glm()
-		: Base(T(0.0), T(0.0), T(0.0))
+		: Base(Vec3{ T(0.0), T(0.0), T(0.0) }
+			 , Vec3{ T(0.0), T(0.0), T(0.0) }
+			 , Vec3{ T(0.0), T(0.0), T(0.0) })
 	{
 	}
 
@@ -41,10 +46,15 @@ template<class T, class DATA = Mat3_Basic_Data_Glm<T> >
 struct Mat3_Basic_Glm : public DATA
 {
 public:
-	using Base		= DATA;
-	using Mat3		= Mat3_Basic_Glm;
-	using Tuple3	= Tuple3_T<T>;
-	using Vec2		= Vec2_T<T>;
+	using Base	= DATA;
+	using Mat3	= Mat3_Basic_Glm;
+	using Vec4	= Vec4_T<T>;
+	using Vec3	= Vec3_T<T>;
+	using Quat4 = Quat4_T<T>;
+
+	using Rect2 = /*Rect2_T<T>*/int;
+
+	template<class T2> using Vec4_T = Vec4_T<T2>;
 
 	template<class T2, class DATA2> using Mat3_T = Mat3_Basic_Glm<T2, DATA2>;
 
@@ -52,63 +62,74 @@ public:
 	using IndexType = typename Base::IndexType;
 
 public:
-	using Base::x;
-	using Base::y;
-	using Base::z;
-	using Base::data;
+	//using Base::cx;
+	//using Base::cy;
+	//using Base::cz;
+	//using Base::cw;
+	//using Base::_columns;
+	//using Base::data;
 
 public:
-	static constexpr SizeType s_kElementCount = 3;
+	static constexpr size_t s_kElementCount = 16;
+	static constexpr size_t s_kRowCount = 4;
+	static constexpr size_t s_kColumnCount = 4;
 
 public:
-	static Mat3 s_zero		();
-	static Mat3 s_one		();
-	static Mat3 s_forward	();
-	static Mat3 s_up		();
-	static Mat3 s_right		();
-	static Mat3 s_back		();
-	static Mat3 s_down		();
-	static Mat3 s_left		();
-	static Mat3 s_inf		();
-	static Mat3 s_negInf	();
+	static Mat3 s_zero();
+	static Mat3 s_one();
+	static Mat3 s_identity();
 
 	template<class T2, class DATA2> static Mat3 s_cast(const Mat3_T<T2, DATA2>& rhs);
 
+	static Mat3 s_translate(const Vec3& t);
+	static Mat3 s_rotate(const Vec3& r);
+	static Mat3 s_rotateX(T rad);
+	static Mat3 s_rotateY(T rad);
+	static Mat3 s_rotateZ(T rad);
+	static Mat3 s_scale(const Vec3& r);
+	static Mat3 s_shear(const Vec3& r);
+
+	static Mat3	s_quat(const Quat4& q);
+
+	static Mat3	s_TRS(const Vec3& translate, const Vec3& rotate, const Vec3& scale);
+	static Mat3	s_TRS(const Vec3& translate, const Quat4& rotate, const Vec3& scale);
+	static Mat3	s_TS(const Vec3& translate, const Vec3& scale);
+
+	static Mat3	s_perspective(T fovy_rad, T aspect, T zNear, T zFar);
+	static Mat3	s_ortho(T left, T right, T bottom, T top, T zNear, T zFar);
+	static Mat3	s_lookAt(const Vec3& eye, const Vec3& aim, const Vec3& up);
+
 public:
 	Mat3() = default;
-	Mat3(T x_, T y_, T z_);
-	Mat3(const Tuple3& r);
-	Mat3(const Vec2& r, T z_);
-	template<class T2, class DATA2> Mat3(const Mat3_T<T2, DATA2>& rhs);
+	Mat3(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
 
-	void	set				(T x_, T y_, T z_);
-	void	set				(const Tuple3& rhs);
-	void	set				(const Vec2& rhs, T z_);
-	void	setAll			(T val);
+	const Vec4& col(SizeType i) const;
+		  Vec4	row(SizeType i) const;
+	void		setCol(SizeType i,	 const Vec4& v);
+	void		setRow(SizeType i,	 const Vec4& v);
+	void		set(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
 
-	bool	equals	(const Mat3& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(const Mat3& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals(const Mat3& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals0(const T& epsilon = Math::epsilon<T>()) const;
 
-	NMSP_NODISCARD T		dot				(const Mat3& rhs)									const;
-	NMSP_NODISCARD Mat3		cross			(const Mat3& rhs)									const;
-	NMSP_NODISCARD Mat3		reflect			(const Mat3& normal)								const;
-	NMSP_NODISCARD Mat3		orthogonal		()													const;
+	Mat3 transpose()	const;
 
-	NMSP_NODISCARD T		distance		(const Mat3& rhs)									const;
-	NMSP_NODISCARD T		sqrDistance		(const Mat3& rhs)									const;
-	NMSP_NODISCARD T		magnitude		()													const;
-	NMSP_NODISCARD T		sqrMagnitude	()													const;
-	NMSP_NODISCARD T		normalize		()													const;
+	T determinant3x3() const;
 
-	NMSP_NODISCARD Mat3		lerp			(const Mat3& b, T t)								const;
-	NMSP_NODISCARD Mat3		slerp			(const Mat3& b, T t)								const;
-	NMSP_NODISCARD Mat3		rotateTo		(const Mat3& target, T maxRadDelta, T maxMagDelta)	const;
+	Mat3 inverse() const;
+	Mat3 inverse3x3() const;
+	Mat3 inverse3x3Transpose() const;
 
-	NMSP_NODISCARD Tuple3	toTuple3()	const;
-	NMSP_NODISCARD Vec2		toVec2()	const;
+	Vec4	mulPoint(const Vec4& v) const;
+	Vec3	mulPoint4x3(const Vec3& v) const;	// faster than mulPoint but no projection
+	Vec3	mulVector(const Vec3& v) const;	// for vector (direction)
 
-	T	operator[](IndexType i) const;
-	T&	operator[](IndexType i);
+	Vec3	mulNormal(const Vec3& v) const; // for normal non-uniform scale
+	Vec3	unprojectPoint(const Vec3& screenPos, const Rect2& viewport) const;
+	Vec3	unprojectPointFromInv(const Vec3& screenPos, const Rect2& viewport) const;
+
+	Vec4& operator[](IndexType i);
+	const	Vec4& operator[](IndexType i) const;
 
 	Mat3 operator-() const;
 
@@ -135,12 +156,9 @@ public:
 	bool operator==(const Mat3& rhs) const;
 	bool operator!=(const Mat3& rhs) const;
 
-private:
+public:
 	using Glm_Mat3 = typename DATA::Base;
 	Mat3(const Glm_Mat3& rhs); // for glm only
-
-	/*operator Glm_Mat3<T>() const	{ return Glm_Mat3<T>{x, y, z}; }
-	operator Glm_Mat3<T>()			{ return Glm_Mat3<T>{x, y, z}; }*/
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -151,346 +169,383 @@ private:
 #if 1
 
 template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_zero		()
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_zero()
 {
-	return Mat3{ T(0), T(0), T(0)};
+	return Mat3{ Vec4::s_zero(), Vec4::s_zero(), Vec4::s_zero(), Vec4::s_zero() };
 }
 
 template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_one		()
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_one()
 {
-	return Mat3{ T(1), T(1), T(1)};
+	return Mat3{ Vec4::s_one(), Vec4::s_one(), Vec4::s_one(), Vec4::s_one() };
 }
 
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_forward	()
-{
-	return Mat3{ T(0), T(0), T(1)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_up		()
-{
-	return Mat3{ T(0), T(1), T(0)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_right	()
-{
-	return Mat3{ T(1), T(0), T(0)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_back		()
-{
-	return Mat3{ T(0), T(0), -T(1)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_down		()
-{
-	return Mat3{ T(0), -T(1), T(0)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_left		()
-{
-	return Mat3{ -T(1), T(0), T(0)};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_inf		()
-{
-	auto f = Math::inf<T>();
-	return Mat3{ f, f, f};
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_negInf	()
-{
-	return -s_inf();
-}
-
-template<class T, class DATA> 
+template<class T, class DATA>
 template<class T2, class DATA2> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_cast(const Mat3_T<T2, DATA2>& rhs)
 {
-	return Mat3{ T(rhs.x), T(rhs.y), T(rhs.z) };
+	return Mat3{ Vec4(rhs[0]), Vec4(rhs[1]), Vec4(rhs[2]), Vec4(rhs[3]) };
 }
 
 template<class T, class DATA> inline
-Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(T x_, T y_, T z_)
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_identity()
 {
-	set(x_, y_, z_);
+	return Mat3{
+		  Vec4(rhs[0])
+		, Vec4(rhs[1])
+		, Vec4(rhs[2])
+		, Vec4(rhs[3]) };
 }
 
 template<class T, class DATA> inline
-Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(const Tuple3& rhs)
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_translate(const Vec3& t)
 {
-	set(rhs);
+	return glm::translate(t);
 }
 
 template<class T, class DATA> inline
-Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(const Vec2& rhs, T z_)
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_rotate(const Vec3& r)
 {
-	set(rhs, z_);
-}
-
-template<class T, class DATA> 
-template<class T2, class DATA2>  inline
-Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(const Mat3_T<T2, DATA2>& rhs)
-{
-	set(sCast<T>(rhs.x), sCast<T>(rhs.y), sCast<T>(rhs.z));
-}
-
-template<class T, class DATA> inline
-void Mat3_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_)
-{
-	this->x = x_;
-	this->y = y_;
-	this->z = z_;
-}
-
-template<class T, class DATA> inline
-void Mat3_Basic_Glm<T, DATA>::set				(const Tuple3& rhs)
-{
-	this->x = rhs.x;
-	this->y = rhs.y;
-	this->z = rhs.z;
-}
-
-template<class T, class DATA> inline
-void Mat3_Basic_Glm<T, DATA>::set				(const Vec2& rhs, T z_)
-{
-	this->x = rhs.x;
-	this->y = rhs.y;
-	this->z = z_;
-}
-
-template<class T, class DATA> inline
-void Mat3_Basic_Glm<T, DATA>::setAll			(T val)
-{
-	this->x = val;
-	this->y = val;
-	this->z = val;
-}
-
-template<class T, class DATA> inline
-bool Mat3_Basic_Glm<T, DATA>::equals	(const Mat3& rhs, const T& epsilon) const
-{
-	return Math::equals(x, rhs.x, epsilon)
-		&& Math::equals(y, rhs.y, epsilon)
-		&& Math::equals(z, rhs.z, epsilon);
-}
-
-template<class T, class DATA> inline
-bool Mat3_Basic_Glm<T, DATA>::equals0	(const Mat3& rhs, const T& epsilon) const
-{
-	return Math::equals0(x, rhs.x, epsilon)
-		&& Math::equals0(y, rhs.y, epsilon)
-		&& Math::equals0(z, rhs.z, epsilon);
-}
-
-template<class T, class DATA> inline
-T										Mat3_Basic_Glm<T, DATA>::dot		(const Mat3& rhs)		const
-{
-	return glm::dot(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(rhs));
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::cross		(const Mat3& rhs)		const
-{
-	return glm::cross(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(rhs));
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::reflect	(const Mat3& normal)	const
-{
-	return glm::reflect(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(normal));
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::orthogonal	()						const
-{
-	NMSP_ASSERT(false, "not yet supported");
+	NMSP_ASSERT(false, "not yet support");
 	return {};
 }
 
 template<class T, class DATA> inline
-T										Mat3_Basic_Glm<T, DATA>::distance	(const Mat3& rhs)		const
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_rotateX(T rad)
 {
-	return glm::distance(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(rhs));
-}
-
-template<class T, class DATA> inline
-T										Mat3_Basic_Glm<T, DATA>::sqrDistance(const Mat3& rhs)		const
-{
-	return glm::distance2(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(rhs));
-}
-
-template<class T, class DATA> inline
-T Mat3_Basic_Glm<T, DATA>::magnitude	()	const
-{
-	return glm::length(sCast<Glm_Mat3>(*this));
-}
-
-template<class T, class DATA> inline
-T Mat3_Basic_Glm<T, DATA>::sqrMagnitude	()	const
-{
-	return glm::length2(sCast<Glm_Mat3>(*this));
-}
-
-template<class T, class DATA> inline
-T Mat3_Basic_Glm<T, DATA>::normalize		()	const
-{
-	return glm::normalize(sCast<Glm_Mat3>(*this));
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::lerp			(const Mat3& b, T t)									const
-{
-	return glm::lerp(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(b), t);
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::slerp			(const Mat3& b, T t)									const
-{
-	return glm::slerp(sCast<Glm_Mat3>(*this), sCast<Glm_Mat3>(b), t);
-}
-
-template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::rotateTo		(const Mat3& target, T maxRadDelta, T maxMagDelta)	const
-{
-	NMSP_ASSERT(false, "not yet supported");
+	NMSP_ASSERT(false, "not yet support");
 	return {};
 }
 
 template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Tuple3	Mat3_Basic_Glm<T, DATA>::toTuple3()	const
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_rotateY(T rad)
 {
-	return Tuple3{ x, y, z };
+	NMSP_ASSERT(false, "not yet support");
+	return {};
 }
 
 template<class T, class DATA> inline
-typename Mat3_Basic_Glm<T, DATA>::Vec2		Mat3_Basic_Glm<T, DATA>::toVec2()	const
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_rotateZ(T rad)
 {
-	return Vec2{ x, y };
+	NMSP_ASSERT(false, "not yet support");
+	return {};
 }
 
 template<class T, class DATA> inline
-T	Mat3_Basic_Glm<T, DATA>::operator[](IndexType i) const
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_scale(const Vec3& r)
 {
-	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Mat3_Basic_Glm<T, DATA>::operator[]");
-	return Base::operator[](i);
+	return glm::scale(r);
 }
 
 template<class T, class DATA> inline
-T&	Mat3_Basic_Glm<T, DATA>::operator[](IndexType i)
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_shear(const Vec3& r)
 {
-	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Mat3_Basic_Glm<T, DATA>::operator[]");
-	return Base::operator[](i);
+	NMSP_ASSERT(false, "not yet support");
+	return {};
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_quat(const Quat4& q)
+{
+	return glm::toMat3(q);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_TRS(const Vec3& translate, const Vec3& rotate, const Vec3& scale)
+{
+	return s_translate(translate) * s_rotate(rotate) * s_scale(scale);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_TRS(const Vec3& translate, const Quat4& rotate, const Vec3& scale)
+{
+	return s_translate(translate) * s_quat(rotate) * s_scale(scale);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_TS(const Vec3& translate, const Vec3& scale)
+{
+	return s_translate(translate) * s_scale(scale);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_perspective(T fovy_rad, T aspect, T zNear, T zFar)
+{
+	return glm::perspective(fovy_rad, aspect, zNear, zFar);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_ortho(T left, T right, T bottom, T top, T zNear, T zFar)
+{
+	return glm::ortho(left, right, bottom, top, zNear, zFar);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::s_lookAt(const Vec3& eye, const Vec3& aim, const Vec3& up)
+{
+	return glm::lookAt(eye, aim, up);
+}
+
+template<class T, class DATA> inline
+Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_)
+{
+	set(cx_, cy_, cz_, cw_);
+}
+
+template<class T, class DATA> inline
+const typename Mat3_Basic_Glm<T, DATA>::Vec4& Mat3_Basic_Glm<T, DATA>::col(SizeType i) const
+{
+	return (*this)[i];
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec4	Mat3_Basic_Glm<T, DATA>::row(SizeType i) const
+{
+	return Vec4{ (*this)[0][i], (*this)[1][i], (*this)[2][i], (*this)[3][i] };
+}
+
+template<class T, class DATA> inline
+void Mat3_Basic_Glm<T, DATA>::setCol(SizeType i, const Vec4& v)
+{
+	(*this)[i] = v;
+}
+
+template<class T, class DATA> inline
+void Mat3_Basic_Glm<T, DATA>::setRow(SizeType i, const Vec4& v)
+{
+	(*this)[0][i] = v[0];
+	(*this)[1][i] = v[1];
+	(*this)[2][i] = v[2];
+	(*this)[3][i] = v[3];
+}
+
+template<class T, class DATA> inline
+bool Mat3_Basic_Glm<T, DATA>::equals(const Mat3& rhs, const T& epsilon) const
+{
+	return Math::equals((*this)[0], rhs[0], epsilon)
+		&& Math::equals((*this)[1], rhs[1], epsilon)
+		&& Math::equals((*this)[2], rhs[2], epsilon)
+		&& Math::equals((*this)[3], rhs[3], epsilon);
+}
+
+template<class T, class DATA> inline
+bool Mat3_Basic_Glm<T, DATA>::equals0(const T& epsilon) const
+{
+	return Math::equals0((*this)[0], epsilon)
+		&& Math::equals0((*this)[1], epsilon)
+		&& Math::equals0((*this)[2], epsilon)
+		&& Math::equals0((*this)[3], epsilon);
+}
+
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::transpose()	const
+{
+	return glm::transpose()
+}
+
+template<class T, class DATA> inline
+T	Mat3_Basic_Glm<T, DATA>::determinant3x3() const
+{
+	_notYetSupported();
+	return {};
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::inverse() const
+{
+	return glm::inverse(*this);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::inverse3x3() const
+{
+	_notYetSupported();
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::inverse3x3Transpose() const
+{
+	_notYetSupported();
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec4	Mat3_Basic_Glm<T, DATA>::mulPoint(const Vec4& v) const
+{
+	return sCast<Vec4>(*this * v);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec3	Mat3_Basic_Glm<T, DATA>::mulPoint4x3(const Vec3& v) const
+{
+	return mulPoint(Vec4{ v, 1.0 }).toVec3();
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec3	Mat3_Basic_Glm<T, DATA>::mulVector(const Vec3& v) const
+{
+	return Vec3{ (*this)[0].toVec3() * v.x + (*this)[1].toVec3() * v.y + (*this)[2].toVec3() * v.z };
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec3	Mat3_Basic_Glm<T, DATA>::mulNormal(const Vec3& v) const
+{
+	return this->inverse3x3Transpose().mulVector(v);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec3	Mat3_Basic_Glm<T, DATA>::unprojectPoint(const Vec3& screenPos, const Rect2& viewport) const
+{
+	return inverse().unprojectPointFromInv(screenPos, viewport);
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec3	Mat3_Basic_Glm<T, DATA>::unprojectPointFromInv(const Vec3& screenPos, const Rect2& viewport) const
+{
+	auto  tmp = Vec4(screenPos, 1);
+	tmp.y = viewport.h - tmp.y; // y is down
+
+	tmp.x = (tmp.x - viewport.x) / viewport.w * 2 - 1;
+	tmp.y = (tmp.y - viewport.y) / viewport.h * 2 - 1;
+
+	auto obj = mulPoint(tmp);
+	return obj.toVec3();
+}
+
+template<class T, class DATA> inline
+const	typename Mat3_Basic_Glm<T, DATA>::Vec4& Mat3_Basic_Glm<T, DATA>::operator[](IndexType i) const
+{
+	NMSP_ASSERT(i >= 0 && i < s_kColumnCount, "Mat3_Basic_Glm<T, DATA>::operator[]");
+	return sCast<const	Vec4&>(Base::operator[](i));
+}
+
+template<class T, class DATA> inline
+typename Mat3_Basic_Glm<T, DATA>::Vec4& Mat3_Basic_Glm<T, DATA>::operator[](IndexType i)
+{
+	NMSP_ASSERT(i >= 0 && i < s_kColumnCount, "Mat3_Basic_Glm<T, DATA>::operator[]");
+	return sCast<		Vec4&>(Base::operator[](i));
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator-()		const
 {
-	return Mat3{ -x, -y, -z };
+	return Mat3{ -(*this)[0], -(*this)[1], -(*this)[2], -(*this)[3] };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator+(T val)	const
 {
-	return Mat3{ x + val, y + val, z + val };
+	Vec4 v = { val, val, val, val };
+	return Mat3{ (*this)[0] + v, (*this)[1] + v, (*this)[2] + v, (*this)[3] + v };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator-(T val)	const
 {
-	return Mat3{ x - val, y - val, z - val };
+	Vec4 v = { val, val, val, val };
+	return Mat3{ (*this)[0] - v, (*this)[1] - v, (*this)[2] - v, (*this)[3] - v };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator*(T val)	const
 {
-	return Mat3{ x * val, y * val, z * val };
+	Vec4 v = { val, val, val, val };
+	return Mat3{ (*this)[0] * v, (*this)[1] * v, (*this)[2] * v, (*this)[3] * v };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator/(T val)	const
 {
-	return Mat3{ x / val, y / val, z / val };
+	Vec4 v = { val, val, val, val };
+	return Mat3{ (*this)[0] / v, (*this)[1] / v, (*this)[2] / v, (*this)[3] / v };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator+=(T val)
 {
-	x += val; y += val; z += val;
+	Vec4 v = { val, val, val, val };
+	(*this)[0] += val; (*this)[1] += val; (*this)[2] += val; (*this)[3] += val;
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator-=(T val)
 {
-	x -= val; y -= val; z -= val;
+	Vec4 v = { val, val, val, val };
+	(*this)[0] -= val; (*this)[1] -= val; (*this)[2] -= val; (*this)[3] -= val;
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator*=(T val)
 {
-	x *= val; y *= val; z *= val;
+	Vec4 v = { val, val, val, val };
+	(*this)[0] *= val; (*this)[1] *= val; (*this)[2] *= val; (*this)[3] *= val;
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator/=(T val)
 {
-	x /= val; y /= val; z /= val;
+	Vec4 v = { val, val, val, val };
+	(*this)[0] /= val; (*this)[1] /= val; (*this)[2] /= val; (*this)[3] /= val;
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator+(const Mat3& rhs)	const
 {
-	return Mat3{ x + rhs.x, y + rhs.y, z + rhs.z };
+	return Mat3{ (*this)[0] + rhs[0], (*this)[1] + rhs[1], (*this)[2] + rhs[2], (*this)[3] + rhs[3] };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator-(const Mat3& rhs)	const
 {
-	return Mat3{ x - rhs.x, y - rhs.y, z - rhs.z };
+	return Mat3{ (*this)[0] - rhs[0], (*this)[1] - rhs[1], (*this)[2] - rhs[2], (*this)[3] - rhs[3] };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator*(const Mat3& rhs)	const
 {
-	return Mat3{ x * rhs.x, y * rhs.y, z * rhs.z };
+	return Mat3{ (*this)[0] * rhs[0], (*this)[1] * rhs[1], (*this)[2] * rhs[2], (*this)[3] * rhs[3] };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator/(const Mat3& rhs)	const
 {
-	return Mat3{ x / rhs.x, y / rhs.y, z / rhs.z };
+	return Mat3{ (*this)[0] / rhs[0], (*this)[1] / rhs[1], (*this)[2] / rhs[2], (*this)[3] / rhs[3] };
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator+=(const Mat3& rhs)
 {
-	x += rhs.x; y += rhs.y; z += rhs.z;
+	(*this)[0] += rhs[0];
+	(*this)[1] += rhs[1];
+	(*this)[2] += rhs[2];
+	(*this)[3] += rhs[3];
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator-=(const Mat3& rhs)
 {
-	x -= rhs.x; y -= rhs.y; z -= rhs.z;
+	(*this)[0] -= rhs[0];
+	(*this)[1] -= rhs[1];
+	(*this)[2] -= rhs[2];
+	(*this)[3] -= rhs[3];
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator*=(const Mat3& rhs)
 {
-	x *= rhs.x; y *= rhs.y; z *= rhs.z;
+	(*this)[0] *= rhs[0];
+	(*this)[1] *= rhs[1];
+	(*this)[2] *= rhs[2];
+	(*this)[3] *= rhs[3];
 }
 
 template<class T, class DATA> inline
 typename Mat3_Basic_Glm<T, DATA>::Mat3	Mat3_Basic_Glm<T, DATA>::operator/=(const Mat3& rhs)
 {
-	x /= rhs.x; y /= rhs.y; z /= rhs.z;
+	(*this)[0] /= rhs[0];
+	(*this)[1] /= rhs[1];
+	(*this)[2] /= rhs[2];
+	(*this)[3] /= rhs[3];
 }
 
 template<class T, class DATA> inline
@@ -509,7 +564,7 @@ template<class T, class DATA> inline
 Mat3_Basic_Glm<T, DATA>::Mat3_Basic_Glm(const Glm_Mat3& rhs) // for glm only
 	: Base(rhs)
 {
-	
+
 }
 
 #endif

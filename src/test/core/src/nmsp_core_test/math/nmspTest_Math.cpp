@@ -6,6 +6,13 @@
 
 namespace nmsp {
 
+template<class T, class ENABLE = void>
+struct has_equal : std::false_type {};
+
+template<class T>
+struct has_equal<T, decltype(std::declval<T>.s_zero() ) > : std::true_type {};
+
+
 class Test_Math : public UnitTest
 {
 public:
@@ -87,6 +94,26 @@ public:
 			
 			//auto s = Math::epsilon<float>()();
 			//_NMSP_DUMP_VAR(Math::Epsilon<float>()());
+		}
+
+		{
+			Mat4f_T a;
+			a.equals(a);
+			auto	b = a[0];
+			auto&	c = a[0];
+			_NMSP_DUMP_VAR(b);
+			_NMSP_DUMP_VAR(c);
+
+			NMSP_TEST_CHECK(b == c);
+			NMSP_TEST_CHECK(Math::equals(c, b));
+			a.s_translate(Vec3f_T::s_zero());
+			a.inverse();
+			a.mulPoint4x3(Vec3f_T::s_one());
+
+			if (has_equal<Vec4f_T>())
+			{
+				_NMSP_DUMP_VAR(c);
+			}
 		}
 
 		//a.data

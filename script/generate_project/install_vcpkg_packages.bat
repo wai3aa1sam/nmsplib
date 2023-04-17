@@ -24,7 +24,6 @@ vcpkg install tracy:x64-windows             --recurse
 vcpkg install eastl:x64-windows             --recurse
 vcpkg install concurrentqueue:x64-windows   --recurse 
 vcpkg install spdlog:x64-windows            --recurse
-vcpkg install spdlog:x64-windows            --recurse
 vcpkg install glm:x64-windows               --recurse
 
 POPD

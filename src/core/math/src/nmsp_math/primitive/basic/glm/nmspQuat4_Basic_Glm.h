@@ -3,49 +3,49 @@
 #include "nmsp_math/common/nmsp_math_common.h"
 
 #include "nmsp_math/nmspMath.h"
-#include "nmsp_math/primitive/nmspTuple4.h"
+#include "nmsp_math/primitive/nmspVec4.h"
 
 #if NMSP_MATH_BACKEND_GLM
 
 namespace nmsp {
 #if 0
-#pragma mark --- Vec4_Basic_Glm-Decl ---
+#pragma mark --- Quat4_T-Decl ---
 #endif // 0
 #if 1
 
-template<class T> using Glm_Vec4_T = glm::vec<4, T, glm::lowp>;
+template<class T> using Glm_Quat4_T = glm::qua<T, glm::lowp>;
 
-template<class T> 
-struct Vec4_Basic_Data_Glm : public Glm_Vec4_T<T>
+template<class T>
+struct Quat4_Basic_Data_Glm : public Glm_Quat4_T<T>
 {
 public:
-	using Base		= Glm_Vec4_T<T>;
+	using Base		= Glm_Quat4_T<T>;
 	using SizeType	= size_t;
-	using IndexType	= i32;
+	using IndexType = i32;
 
 public:
-	Vec4_Basic_Data_Glm()
+	Quat4_Basic_Data_Glm()
 		: Base(T(0.0), T(0.0), T(0.0), T(0.0))
 	{
 	}
 
-	Vec4_Basic_Data_Glm(const Base& rhs)
+	Quat4_Basic_Data_Glm(const Base& rhs)
 		: Base(rhs)
 	{
 	}
 };
 
-template<class T, class DATA = Vec4_Basic_Data_Glm<T> >
-struct Vec4_Basic_Glm : public DATA
+template<class T, class DATA = Quat4_Basic_Data_Glm<T> >
+struct Quat4_Basic_Glm : public DATA
 {
 public:
-	using Base		= DATA;
-	using Vec4		= Vec4_Basic_Glm;
-	using Tuple4	= Tuple4_T<T>;
-	using Vec2		= Vec2_T<T>;
-	using Vec3		= Vec3_T<T>;
+	using Base = DATA;
+	using Quat4 = Quat4_Basic_Glm;
+	using Tuple4 = Tuple4_T<T>;
+	using Vec2 = Vec2_T<T>;
+	using Vec3 = Vec3_T<T>;
 
-	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
+	template<class T2, class DATA2> using Quat4_T = Quat4_Basic_Glm<T2, DATA2>;
 
 	using SizeType	= typename Base::SizeType;
 	using IndexType = typename Base::IndexType;
@@ -58,202 +58,173 @@ public:
 	using Base::data;
 
 public:
-	static constexpr size_t s_kElementCount = 4;
+	static constexpr SizeType s_kElementCount = 4;
 
 public:
-	static Vec4 s_zero		();
-	static Vec4 s_one		();
-	static Vec4 s_forward	();
-	static Vec4 s_up		();
-	static Vec4 s_right		();
-	static Vec4 s_back		();
-	static Vec4 s_down		();
-	static Vec4 s_left		();
-	static Vec4 s_inf		();
-	static Vec4 s_negInf	();
+	static Quat4 s_identity();
+	static Quat4 s_angleAxis(T rad, const Vec3& axis);
 
-	template<class T2, class DATA2> static Vec4 s_cast(const Vec4_T<T2, DATA2>& rhs);
+	static Quat4 s_euler	(const Vec3& r);
+	static Quat4 s_eulerDeg(const Vec3& deg);
+	static Quat4 s_eulerX	(T rad);
+	static Quat4 s_eulerY	(T rad);
+	static Quat4 s_eulerZ	(T rad);
+
+	static Quat4 s_eulerDegX(T deg);
+	static Quat4 s_eulerDegY(T deg);
+	static Quat4 s_eulerDegZ(T deg);
+
+	static Quat4 s_fromToRotation(const Vec3& from, const Vec3& to);
+
+	template<class T2, class DATA2> static Quat4 s_cast(const Quat4_T<T2, DATA2>& rhs);
 
 public:
-	Vec4() = default;
-	Vec4(T x_, T y_, T z_, T w_);
-	Vec4(const Tuple4& r);
-	Vec4(const Vec3& r, T w_);
-	Vec4(const Vec2& r, T z_, T w_);
-	template<class T2, class DATA2> Vec4(const Vec4_T<T2, DATA2>& rhs);
+	explicit constexpr Quat4() = default;
+	explicit constexpr Quat4(T x_, T y_, T z_, T w_);
+	template<class T2, class DATA2> explicit Quat4(const Quat4_T<T2, DATA2>& rhs);
 
-	void	set				(T x_, T y_, T z_, T w_);
-	void	set				(const Tuple4& rhs);
-	void	set				(const Vec3& rhs, T w_);
-	void	set				(const Vec2& rhs, T z_, T w_);
-	void	setAll			(T val);
+	constexpr void set(T x_, T y_, T z_, T w_);
 
-	bool	equals	(const Vec4& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals (const Quat4& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals0(const Quat4& rhs, const T& epsilon = Math::epsilon<T>()) const;
 
-	NMSP_NODISCARD T		dot				(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		cross			(const Vec4& rhs)									const;
-	NMSP_NODISCARD Vec4		reflect			(const Vec4& normal)								const;
-	NMSP_NODISCARD Vec4		orthogonal		()													const;
+	T	 angle() const;
+	Vec3 axis () const;
 
-	NMSP_NODISCARD T		distance		(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		sqrDistance		(const Vec4& rhs)									const;
-	NMSP_NODISCARD T		magnitude		()													const;
-	NMSP_NODISCARD T		sqrMagnitude	()													const;
-	NMSP_NODISCARD T		normalize		()													const;
+	void setEuler (const Vec3& r);
+	void setEulerX(T rad);
+	void setEulerY(T rad);
+	void setEulerZ(T rad);
 
-	NMSP_NODISCARD Vec4		lerp			(const Vec4& b, T t)								const;
-	NMSP_NODISCARD Vec4		slerp			(const Vec4& b, T t)								const;
-	NMSP_NODISCARD Vec4		rotateTo		(const Vec4& target, T maxRadDelta, T maxMagDelta)	const;
+	void setEulerDegX(T deg);
+	void setEulerDegY(T deg);
+	void setEulerDegZ(T deg);
 
-	NMSP_NODISCARD Tuple4	toTuple4()	const;
-	NMSP_NODISCARD Vec2		toVec2()	const;
-	NMSP_NODISCARD Vec3		toVec3()	const;
+	Vec3 euler () const;
+	T	 eulerX() const;
+	T	 eulerY() const;
+	T	 eulerZ() const;
 
-	T	operator[](IndexType i) const;
-	T&	operator[](IndexType i);
+	Quat4 conjugate	() const;
+	Quat4 inverse	() const;
+	Quat4 normalize	() const;
 
-	Vec4 operator-() const;
+	T dot(const Quat4& r) const;
 
-	Vec4 operator+(T val) const;
-	Vec4 operator-(T val) const;
-	Vec4 operator*(T val) const;
-	Vec4 operator/(T val) const;
+	bool operator==(const Quat4& r) const;
+	bool operator!=(const Quat4& r) const;
 
-	Vec4 operator+=(T val);
-	Vec4 operator-=(T val);
-	Vec4 operator*=(T val);
-	Vec4 operator/=(T val);
+	Quat4 operator-() const;
 
-	Vec4 operator+(const Vec4& rhs) const;
-	Vec4 operator-(const Vec4& rhs) const;
-	Vec4 operator*(const Vec4& rhs) const;
-	Vec4 operator/(const Vec4& rhs) const;
+	Quat4 operator*(const Quat4& r) const;
+	Vec3  operator*(const Vec3& v)  const;
 
-	Vec4 operator+=(const Vec4& rhs);
-	Vec4 operator-=(const Vec4& rhs);
-	Vec4 operator*=(const Vec4& rhs);
-	Vec4 operator/=(const Vec4& rhs);
+	Quat4 operator+(const Quat4& r) const;
+	Quat4 operator-(const Quat4& r) const;
 
-	bool operator==(const Vec4& rhs) const;
-	bool operator!=(const Vec4& rhs) const;
+	Quat4 operator*(const T&    v) const;
+	Quat4 operator/(const T&    v) const;
 
-private:
-	using Glm_Vec4 = typename DATA::Base;
-	Vec4(const Glm_Vec4& rhs); // for glm only
-
-	/*operator Glm_Vec4<T>() const	{ return Glm_Vec4<T>{x, y, z}; }
-	operator Glm_Vec4<T>()			{ return Glm_Vec4<T>{x, y, z}; }*/
+public:
+	using Glm_Quat4 = typename DATA::Base;
+	Quat4(const Glm_Quat4& rhs); // for glm only
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
 
 #if 0
-#pragma mark --- Vec4_Basic_Glm-Impl ---
+#pragma mark --- Quat4_T-Impl ---
 #endif // 0
 #if 1
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_zero		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_identity()
 {
-	return Vec4{ T(0), T(0), T(0), T(0)};
+	return Quat4{ T(0), T(0), T(0), T(1) };
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_one		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_angleAxis(T rad, const Vec3& axis)
 {
-	return Vec4{ T(1), T(1), T(1), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_forward	()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_euler(const Vec3& r)
 {
-	return Vec4{ T(0), T(0), T(1), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_up		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerDeg(const Vec3& deg)
 {
-	return Vec4{ T(0), T(1), T(0), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_right	()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerX	(T rad)
 {
-	return Vec4{ T(1), T(0), T(0), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_back		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerY	(T rad)
 {
-	return Vec4{ T(0), T(0), -T(1), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_down		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerZ	(T rad)
 {
-	return Vec4{ T(0), -T(1), T(0), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_left		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerDegX(T deg)
 {
-	return Vec4{ -T(1), T(0), T(0), T(0)};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_inf		()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerDegY(T deg)
 {
-	auto f = Math::inf<T>();
-	return Vec4{ f, f, f, f};
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_negInf	()
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerDegZ(T deg)
 {
-	return -s_inf();
+
 }
 
-template<class T, class DATA> 
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_fromToRotation(const Vec3& from, const Vec3& to)
+{
+
+}
+
+template<class T, class DATA>
 template<class T2, class DATA2> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_cast(const Vec4_T<T2, DATA2>& rhs)
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_cast(const Quat4_Basic_Glm<T2, DATA2>& rhs)
 {
-	return Vec4{ T(rhs.x), T(rhs.y), T(rhs.z), T(rhs.w)};
+	return Quat4{ T(rhs.x), T(rhs.y), T(rhs.z), T(rhs.w) };
 }
 
-template<class T, class DATA> inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(T x_, T y_, T z_, T w_)
+template<class T, class DATA> inline constexpr
+Quat4_Basic_Glm<T, DATA>::Quat4_Basic_Glm(T x_, T y_, T z_, T w_)
 {
 	set(x_, y_, z_, w_);
 }
 
-template<class T, class DATA> inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Tuple4& rhs)
-{
-	set(rhs);
-}
-
-template<class T, class DATA> inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec3& rhs, T w_)
-{
-	set(rhs, w_);
-}
-
-template<class T, class DATA> inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec2& rhs, T z_, T w_)
-{
-	set(rhs, w_, z_);
-}
-
-template<class T, class DATA> 
+template<class T, class DATA>
 template<class T2, class DATA2>  inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec4_T<T2, DATA2>& rhs)
+Quat4_Basic_Glm<T, DATA>::Quat4_Basic_Glm(const Quat4_Basic_Glm<T2, DATA2>& rhs)
 {
 	set(sCast<T>(rhs.x), sCast<T>(rhs.y), sCast<T>(rhs.z), sCast<T>(rhs.w));
 }
 
-template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_, T w_)
+template<class T, class DATA> inline constexpr
+void Quat4_Basic_Glm<T, DATA>::set(T x_, T y_, T z_, T w_)
 {
 	this->x = x_;
 	this->y = y_;
@@ -262,42 +233,7 @@ void Vec4_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_, T w_)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set				(const Tuple4& rhs)
-{
-	this->x = rhs.x;
-	this->y = rhs.y;
-	this->z = rhs.z;
-	this->w = rhs.w;
-}
-
-template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set				(const Vec3& rhs, T w_)
-{
-	this->x = rhs.x;
-	this->y = rhs.y;
-	this->z = rhs.z;
-	this->w = w_;
-}
-
-template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set				(const Vec2& rhs, T z_, T w_)
-{
-	this->x = rhs.x;
-	this->y = rhs.y;
-	this->z = z_;
-	this->w = w_;
-}
-
-template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::setAll			(T val)
-{
-	this->x = val;
-	this->y = val;
-	this->z = val;
-}
-
-template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::equals	(const Vec4& rhs, const T& epsilon) const
+bool Quat4_Basic_Glm<T, DATA>::equals(const Quat4& rhs, const T& epsilon) const
 {
 	return Math::equals(x, rhs.x, epsilon)
 		&& Math::equals(y, rhs.y, epsilon)
@@ -306,258 +242,93 @@ bool Vec4_Basic_Glm<T, DATA>::equals	(const Vec4& rhs, const T& epsilon) const
 }
 
 template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
+bool Quat4_Basic_Glm<T, DATA>::equals0(const Quat4& rhs, const T& epsilon) const
 {
-	return Math::equals0(x, epsilon)
-		&& Math::equals0(y, epsilon)
-		&& Math::equals0(z, epsilon)
-		&& Math::equals0(w, epsilon);
+	return Math::equals0(x, rhs.x, epsilon)
+		&& Math::equals0(y, rhs.y, epsilon)
+		&& Math::equals0(z, rhs.z, epsilon)
+		&& Math::equals0(w, rhs.w, epsilon);
+}
+
+
+template<class T, class DATA> inline
+T										Quat4_Basic_Glm<T, DATA>::angle() const
+{
+
 }
 
 template<class T, class DATA> inline
-T										Vec4_Basic_Glm<T, DATA>::dot		(const Vec4& rhs)		const
+typename Quat4_Basic_Glm<T, DATA>::Vec3	Quat4_Basic_Glm<T, DATA>::axis () const
 {
-	return glm::dot(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::cross		(const Vec4& rhs)		const
+void Quat4_Basic_Glm<T, DATA>::setEuler(const Vec3& r)
 {
-	return glm::cross(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::reflect	(const Vec4& normal)	const
+void Quat4_Basic_Glm<T, DATA>::setEulerX(T rad)
 {
-	return glm::reflect(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(normal));
+
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::orthogonal	()						const
+void Quat4_Basic_Glm<T, DATA>::setEulerY(T rad)
 {
-	NMSP_ASSERT(false, "not yet supported");
-	return {};
+
 }
 
 template<class T, class DATA> inline
-T										Vec4_Basic_Glm<T, DATA>::distance	(const Vec4& rhs)		const
+void Quat4_Basic_Glm<T, DATA>::setEulerZ(T rad)
 {
-	return glm::distance(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
+
+}
+
+
+void setEulerDegX(T deg);
+void setEulerDegY(T deg);
+void setEulerDegZ(T deg);
+
+Vec3 euler () const;
+T	 eulerX() const;
+T	 eulerY() const;
+T	 eulerZ() const;
+
+Quat4 conjugate	() const;
+Quat4 inverse	() const;
+Quat4 normalize	() const;
+
+T dot(const Quat4& r) const;
+
+template<class T, class DATA> inline
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const Quat4& r)		const
+{
+	
 }
 
 template<class T, class DATA> inline
-T										Vec4_Basic_Glm<T, DATA>::sqrDistance(const Vec4& rhs)		const
-{
-	return glm::distance2(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(rhs));
-}
-
-template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::magnitude	()	const
-{
-	return glm::length(sCast<Glm_Vec4>(*this));
-}
-
-template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::sqrMagnitude	()	const
-{
-	return glm::length2(sCast<Glm_Vec4>(*this));
-}
-
-template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::normalize		()	const
-{
-	return glm::normalize(sCast<Glm_Vec4>(*this));
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::lerp			(const Vec4& b, T t)									const
-{
-	return glm::lerp(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(b), t);
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::slerp			(const Vec4& b, T t)									const
-{
-	return glm::slerp(sCast<Glm_Vec4>(*this), sCast<Glm_Vec4>(b), t);
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::rotateTo		(const Vec4& target, T maxRadDelta, T maxMagDelta)	const
-{
-	NMSP_ASSERT(false, "not yet supported");
-	return {};
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Tuple4	Vec4_Basic_Glm<T, DATA>::toTuple4()	const
-{
-	return Tuple4{ x, y, z, w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec2		Vec4_Basic_Glm<T, DATA>::toVec2()	const
-{
-	return Vec2{ x, y };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec3		Vec4_Basic_Glm<T, DATA>::toVec3()	const
-{
-	return Vec3{ x, y, z, T(0) };
-}
-
-template<class T, class DATA> inline
-T	Vec4_Basic_Glm<T, DATA>::operator[](IndexType i) const
-{
-	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec4_Basic_Glm<T, DATA>::operator[]");
-	return Base::operator[](i);
-}
-
-template<class T, class DATA> inline
-T&	Vec4_Basic_Glm<T, DATA>::operator[](IndexType i)
-{
-	NMSP_ASSERT(i >= 0 && i < s_kElementCount, "Vec4_Basic_Glm<T, DATA>::operator[]");
-	return Base::operator[](i);
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-()		const
-{
-	return Vec4{ -x, -y, -z, -w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+(T val)	const
-{
-	return Vec4{ x + val, y + val, z + val, w + val };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-(T val)	const
-{
-	return Vec4{ x - val, y - val, z - val, w - val };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*(T val)	const
-{
-	return Vec4{ x * val, y * val, z * val, w * val };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/(T val)	const
-{
-	return Vec4{ x / val, y / val, z / val, w / val };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+=(T val)
-{
-	x += val; y += val; z += val; w += val;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-=(T val)
-{
-	x -= val; y -= val; z -= val; w -= val;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*=(T val)
-{
-	x *= val; y *= val; z *= val; w *= val;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/=(T val)
-{
-	x /= val; y /= val; z /= val; w /= val;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+(const Vec4& rhs)	const
-{
-	return Vec4{ x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-(const Vec4& rhs)	const
-{
-	return Vec4{ x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*(const Vec4& rhs)	const
-{
-	return Vec4{ x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/(const Vec4& rhs)	const
-{
-	return Vec4{ x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w };
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+=(const Vec4& rhs)
-{
-	x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-=(const Vec4& rhs)
-{
-	x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*=(const Vec4& rhs)
-{
-	x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w;
-}
-
-template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/=(const Vec4& rhs)
-{
-	x /= rhs.x; y /= rhs.y; z /= rhs.z; w /= rhs.w;
-}
-
-template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::operator==(const Vec4& rhs) const
+bool Quat4_Basic_Glm<T, DATA>::operator==(const Quat4& rhs) const
 {
 	return equals(rhs);
 }
 
 template<class T, class DATA> inline
-bool Vec4_Basic_Glm<T, DATA>::operator!=(const Vec4& rhs) const
+bool Quat4_Basic_Glm<T, DATA>::operator!=(const Quat4& rhs) const
 {
 	return !operator==();
 }
 
 template<class T, class DATA> inline
-Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Glm_Vec4& rhs) // for glm only
+Quat4_Basic_Glm<T, DATA>::Quat4_Basic_Glm(const Glm_Quat4& rhs) // for glm only
 	: Base(rhs)
 {
 
 }
 
 #endif
-
-namespace Math {
-
-template<class T, class EP = T> 
-NMSP_INLINE bool equals (const Vec4_Basic_Glm<T>& a, const Vec4_Basic_Glm<T>& b, const EP& ep = epsilon<T>()) 
-{ 
-	return a.equals(b, ep)
-}
-
-template<class T, class EP = T> 
-NMSP_INLINE bool equals0(const Vec4_Basic_Glm<T>& a,             const EP& ep = epsilon<T>())
-{ 
-	return a.equals0(ep); 
-}
-
-}
 
 }
 
