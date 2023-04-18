@@ -109,20 +109,20 @@ public:
 	Vec2 operator*(T val) const;
 	Vec2 operator/(T val) const;
 
-	Vec2 operator+=(T val);
-	Vec2 operator-=(T val);
-	Vec2 operator*=(T val);
-	Vec2 operator/=(T val);
+	void operator+=(T val);
+	void operator-=(T val);
+	void operator*=(T val);
+	void operator/=(T val);
 
 	Vec2 operator+(const Vec2& rhs) const;
 	Vec2 operator-(const Vec2& rhs) const;
 	Vec2 operator*(const Vec2& rhs) const;
 	Vec2 operator/(const Vec2& rhs) const;
 
-	Vec2 operator+=(const Vec2& rhs);
-	Vec2 operator-=(const Vec2& rhs);
-	Vec2 operator*=(const Vec2& rhs);
-	Vec2 operator/=(const Vec2& rhs);
+	void operator+=(const Vec2& rhs);
+	void operator-=(const Vec2& rhs);
+	void operator*=(const Vec2& rhs);
+	void operator/=(const Vec2& rhs);
 
 	bool operator==(const Vec2& rhs) const;
 	bool operator!=(const Vec2& rhs) const;
@@ -368,25 +368,25 @@ typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator/(T val)
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator+=(T val)
+void	Vec2_Basic_Glm<T, DATA>::operator+=(T val)
 {
 	x += val; y += val;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator-=(T val)
+void	Vec2_Basic_Glm<T, DATA>::operator-=(T val)
 {
 	x -= val; y -= val;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator*=(T val)
+void	Vec2_Basic_Glm<T, DATA>::operator*=(T val)
 {
 	x *= val; y *= val;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator/=(T val)
+void	Vec2_Basic_Glm<T, DATA>::operator/=(T val)
 {
 	x /= val; y /= val;
 }
@@ -416,25 +416,25 @@ typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator/(const 
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator+=(const Vec2& rhs)
+void	Vec2_Basic_Glm<T, DATA>::operator+=(const Vec2& rhs)
 {
 	x += rhs.x; y += rhs.y;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator-=(const Vec2& rhs)
+void	Vec2_Basic_Glm<T, DATA>::operator-=(const Vec2& rhs)
 {
 	x -= rhs.x; y -= rhs.y;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator*=(const Vec2& rhs)
+void	Vec2_Basic_Glm<T, DATA>::operator*=(const Vec2& rhs)
 {
 	x *= rhs.x; y *= rhs.y;
 }
 
 template<class T, class DATA> inline
-typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::operator/=(const Vec2& rhs)
+void	Vec2_Basic_Glm<T, DATA>::operator/=(const Vec2& rhs)
 {
 	x /= rhs.x; y /= rhs.y;
 }

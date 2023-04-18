@@ -378,7 +378,7 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator-() c
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const Quat4& r) const
 {
-
+	return *this * r;
 }
 
 template<class T, class DATA> inline

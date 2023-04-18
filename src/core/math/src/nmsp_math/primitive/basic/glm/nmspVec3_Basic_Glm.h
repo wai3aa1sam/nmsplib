@@ -120,20 +120,20 @@ public:
 	Vec3 operator*(T val) const;
 	Vec3 operator/(T val) const;
 
-	Vec3 operator+=(T val);
-	Vec3 operator-=(T val);
-	Vec3 operator*=(T val);
-	Vec3 operator/=(T val);
+	void operator+=(T val);
+	void operator-=(T val);
+	void operator*=(T val);
+	void operator/=(T val);
 
 	Vec3 operator+(const Vec3& rhs) const;
 	Vec3 operator-(const Vec3& rhs) const;
 	Vec3 operator*(const Vec3& rhs) const;
 	Vec3 operator/(const Vec3& rhs) const;
 
-	Vec3 operator+=(const Vec3& rhs);
-	Vec3 operator-=(const Vec3& rhs);
-	Vec3 operator*=(const Vec3& rhs);
-	Vec3 operator/=(const Vec3& rhs);
+	void operator+=(const Vec3& rhs);
+	void operator-=(const Vec3& rhs);
+	void operator*=(const Vec3& rhs);
+	void operator/=(const Vec3& rhs);
 
 	bool operator==(const Vec3& rhs) const;
 	bool operator!=(const Vec3& rhs) const;
@@ -422,25 +422,25 @@ typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator/(T val)
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator+=(T val)
+void	Vec3_Basic_Glm<T, DATA>::operator+=(T val)
 {
 	x += val; y += val; z += val;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator-=(T val)
+void	Vec3_Basic_Glm<T, DATA>::operator-=(T val)
 {
 	x -= val; y -= val; z -= val;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator*=(T val)
+void	Vec3_Basic_Glm<T, DATA>::operator*=(T val)
 {
 	x *= val; y *= val; z *= val;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator/=(T val)
+void	Vec3_Basic_Glm<T, DATA>::operator/=(T val)
 {
 	x /= val; y /= val; z /= val;
 }
@@ -470,25 +470,25 @@ typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator/(const 
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator+=(const Vec3& rhs)
+void	Vec3_Basic_Glm<T, DATA>::operator+=(const Vec3& rhs)
 {
 	x += rhs.x; y += rhs.y; z += rhs.z;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator-=(const Vec3& rhs)
+void	Vec3_Basic_Glm<T, DATA>::operator-=(const Vec3& rhs)
 {
 	x -= rhs.x; y -= rhs.y; z -= rhs.z;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator*=(const Vec3& rhs)
+void	Vec3_Basic_Glm<T, DATA>::operator*=(const Vec3& rhs)
 {
 	x *= rhs.x; y *= rhs.y; z *= rhs.z;
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::operator/=(const Vec3& rhs)
+void	Vec3_Basic_Glm<T, DATA>::operator/=(const Vec3& rhs)
 {
 	x /= rhs.x; y /= rhs.y; z /= rhs.z;
 }

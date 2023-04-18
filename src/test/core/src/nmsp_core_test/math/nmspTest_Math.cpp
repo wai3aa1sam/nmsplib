@@ -129,6 +129,18 @@ public:
 			{
 				_NMSP_DUMP_VAR(c);
 			}
+
+			auto bbb = a * a;
+			_NMSP_DUMP_VAR(bbb);
+			bbb *= bbb;
+
+			auto ccc = bbb / bbb;
+			bbb /= bbb;
+			_NMSP_DUMP_VAR(ccc);
+
+			auto m1 = Mat4f_T::s_identity();
+			/*NMSP_TEST_CHECK(Mat4f_T::s_rotate(Vec3f_T{ math::radians(45.5f), math::radians(65.5f), math::radians(75.5f) }) 
+				== Mat4f_T::s_rotate2(Vec3f_T{ math::radians(45.5f), math::radians(65.5f), math::radians(75.5f) }));*/
 		}
 
 		//a.data

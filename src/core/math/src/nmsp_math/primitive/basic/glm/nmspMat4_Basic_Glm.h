@@ -47,6 +47,7 @@ template<class T, class DATA = Mat4_Basic_Data_Glm<T> >
 struct Mat4_Basic_Glm : public DATA
 {
 public:
+	using Data		= DATA;
 	using Base		= DATA;
 	using Mat4		= Mat4_Basic_Glm;
 	using Vec4		= Vec4_T<T>;
@@ -84,7 +85,7 @@ public:
 	template<class T2, class DATA2> static Mat4 s_cast(const Mat4_T<T2, DATA2>& rhs);
 
 	static Mat4 s_translate	(const Vec3& t);
-	static Mat4 s_rotate	(const Vec3& r);
+	static Mat4 s_rotate	(const Vec3& rad);
 	static Mat4 s_rotateX	(T rad);
 	static Mat4 s_rotateY	(T rad);
 	static Mat4 s_rotateZ	(T rad);
@@ -105,11 +106,12 @@ public:
 	Mat4() = default;
 	Mat4(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
 
-	const Vec4&	col		(SizeType i) const;
-		  Vec4	row		(SizeType i) const;
-	void		setCol	(SizeType i, const Vec4& v);
-	void		setRow	(SizeType i, const Vec4& v);
-	void		set		(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
+	void set(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
+
+	const Vec4&	col		(IndexType i) const;
+		  Vec4	row		(IndexType i) const;
+	void		setCol	(IndexType i, const Vec4& v);
+	void		setRow	(IndexType i, const Vec4& v);
 	
 	bool	equals	(const Mat4& rhs, const T& epsilon = math::epsilon<T>()) const;
 	bool	equals0	(				  const T& epsilon = math::epsilon<T>()) const;
@@ -140,20 +142,20 @@ public:
 	Mat4 operator*(T val) const;
 	Mat4 operator/(T val) const;
 
-	Mat4 operator+=(T val);
-	Mat4 operator-=(T val);
-	Mat4 operator*=(T val);
-	Mat4 operator/=(T val);
+	void operator+=(T val);
+	void operator-=(T val);
+	void operator*=(T val);
+	void operator/=(T val);
 
 	Mat4 operator+(const Mat4& rhs) const;
 	Mat4 operator-(const Mat4& rhs) const;
 	Mat4 operator*(const Mat4& rhs) const;
 	Mat4 operator/(const Mat4& rhs) const;
 
-	Mat4 operator+=(const Mat4& rhs);
-	Mat4 operator-=(const Mat4& rhs);
-	Mat4 operator*=(const Mat4& rhs);
-	Mat4 operator/=(const Mat4& rhs);
+	void operator+=(const Mat4& rhs);
+	void operator-=(const Mat4& rhs);
+	void operator*=(const Mat4& rhs);
+	void operator/=(const Mat4& rhs);
 
 	bool operator==(const Mat4& rhs) const;
 	bool operator!=(const Mat4& rhs) const;
@@ -161,6 +163,8 @@ public:
 public:
 	using Glm_Mat4 = typename DATA::Base;
 	Mat4(const Glm_Mat4& rhs); // for glm only
+
+	const Data& toData() const;
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -192,11 +196,11 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_cast(const Mat
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_identity()
 {
-	return Mat4{ 
-		  Vec4(rhs[0])
-		, Vec4(rhs[1])
-		, Vec4(rhs[2])
-		, Vec4(rhs[3])};
+	return Mat4{
+		  Vec4{1.0, 0.0, 0.0, 0.0}
+		, Vec4{0.0, 1.0, 0.0, 0.0}
+		, Vec4{0.0, 0.0, 1.0, 0.0}
+		, Vec4{0.0, 0.0, 0.0, 1.0}};
 }
 
 template<class T, class DATA> inline
@@ -206,10 +210,21 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_translate(cons
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotate	(const Vec3& r)
+typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotate	(const Vec3& rad)
 {
-	NMSP_ASSERT(false, "not yet support");
-	return {};
+	if (rad.equals0()) return s_identity();
+
+	Vec3 s, c;
+	math::sincos(rad.x, s.x, c.x);
+	math::sincos(rad.y, s.y, c.y);
+	math::sincos(rad.z, s.z, c.z);
+
+	return Mat4(
+		{(c.y*c.z), (s.x*s.y*c.z - c.x*s.z), (s.x*s.z + c.x*s.y*c.z), 0},
+		{(c.y*s.z), (c.x*c.z + s.x*s.y*s.z), (c.x*s.y*s.z - s.x*c.z), 0},
+		{(-s.y),    (s.x*c.y),               (c.x*c.y),               0},
+		{0,         0,                        0,                      1}
+	);
 }
 
 template<class T, class DATA> inline
@@ -295,25 +310,34 @@ Mat4_Basic_Glm<T, DATA>::Mat4_Basic_Glm(const Vec4& cx_, const Vec4& cy_, const 
 }
 
 template<class T, class DATA> inline
-const typename Mat4_Basic_Glm<T, DATA>::Vec4&	Mat4_Basic_Glm<T, DATA>::col		(SizeType i) const
+void	Mat4_Basic_Glm<T, DATA>::set(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_)
+{
+	(*this)[0] = cx_;
+	(*this)[1] = cy_;
+	(*this)[2] = cz_;
+	(*this)[3] = cw_;
+}
+
+template<class T, class DATA> inline
+const typename Mat4_Basic_Glm<T, DATA>::Vec4&	Mat4_Basic_Glm<T, DATA>::col		(IndexType i) const
 {
 	return (*this)[i];
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Vec4	Mat4_Basic_Glm<T, DATA>::row		(SizeType i) const
+typename Mat4_Basic_Glm<T, DATA>::Vec4	Mat4_Basic_Glm<T, DATA>::row		(IndexType i) const
 {
 	return Vec4{ (*this)[0][i], (*this)[1][i], (*this)[2][i], (*this)[3][i] };
 }
 
 template<class T, class DATA> inline
-void Mat4_Basic_Glm<T, DATA>::setCol	(SizeType i, const Vec4& v)
+void Mat4_Basic_Glm<T, DATA>::setCol	(IndexType i, const Vec4& v)
 {
 	(*this)[i] = v;
 }
 
 template<class T, class DATA> inline
-void Mat4_Basic_Glm<T, DATA>::setRow	(SizeType i, const Vec4& v)
+void Mat4_Basic_Glm<T, DATA>::setRow	(IndexType i, const Vec4& v)
 {
 	(*this)[0][i] = v[0];
 	(*this)[1][i] = v[1];
@@ -343,7 +367,7 @@ bool Mat4_Basic_Glm<T, DATA>::equals0	(const T& epsilon) const
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::transpose()	const
 {
-	return glm::transpose()
+	return glm::transpose(*this);
 }
 
 template<class T, class DATA> inline
@@ -463,28 +487,28 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/(T val)
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator+=(T val)
+void	Mat4_Basic_Glm<T, DATA>::operator+=(T val)
 {
 	Vec4 v = { val, val, val, val };
 	(*this)[0] += val; (*this)[1] += val; (*this)[2] += val; (*this)[3] += val;
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-=(T val)
+void	Mat4_Basic_Glm<T, DATA>::operator-=(T val)
 {
 	Vec4 v = { val, val, val, val };
 	(*this)[0] -= val; (*this)[1] -= val; (*this)[2] -= val; (*this)[3] -= val;
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator*=(T val)
+void	Mat4_Basic_Glm<T, DATA>::operator*=(T val)
 {
 	Vec4 v = { val, val, val, val };
 	(*this)[0] *= val; (*this)[1] *= val; (*this)[2] *= val; (*this)[3] *= val;
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/=(T val)
+void	Mat4_Basic_Glm<T, DATA>::operator/=(T val)
 {
 	Vec4 v = { val, val, val, val };
 	(*this)[0] /= val; (*this)[1] /= val; (*this)[2] /= val; (*this)[3] /= val;
@@ -505,17 +529,17 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-(const 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator*(const Mat4& rhs)	const
 {
-	return Mat4{ (*this)[0] * rhs[0], (*this)[1] * rhs[1], (*this)[2] * rhs[2], (*this)[3] * rhs[3] };
+	return (*this).toData() * rhs.toData();
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/(const Mat4& rhs)	const
 {
-	return Mat4{ (*this)[0] / rhs[0], (*this)[1] / rhs[1], (*this)[2] / rhs[2], (*this)[3] / rhs[3] };
+	return (*this).toData() / rhs.toData();
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator+=(const Mat4& rhs)
+void	Mat4_Basic_Glm<T, DATA>::operator+=(const Mat4& rhs)
 {
 	(*this)[0] += rhs[0];
 	(*this)[1] += rhs[1];
@@ -524,7 +548,7 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator+=(const
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-=(const Mat4& rhs)
+void	Mat4_Basic_Glm<T, DATA>::operator-=(const Mat4& rhs)
 {
 	(*this)[0] -= rhs[0];
 	(*this)[1] -= rhs[1];
@@ -533,16 +557,13 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-=(const
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator*=(const Mat4& rhs)
+void	Mat4_Basic_Glm<T, DATA>::operator*=(const Mat4& rhs)
 {
-	(*this)[0] *= rhs[0];
-	(*this)[1] *= rhs[1];
-	(*this)[2] *= rhs[2];
-	(*this)[3] *= rhs[3];
+	*this = *this * rhs;
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/=(const Mat4& rhs)
+void	Mat4_Basic_Glm<T, DATA>::operator/=(const Mat4& rhs)
 {
 	(*this)[0] /= rhs[0];
 	(*this)[1] /= rhs[1];
@@ -567,6 +588,12 @@ Mat4_Basic_Glm<T, DATA>::Mat4_Basic_Glm(const Glm_Mat4& rhs) // for glm only
 	: Base(rhs)
 {
 	
+}
+
+template<class T, class DATA> inline
+const typename Mat4_Basic_Glm<T, DATA>::Data&	Mat4_Basic_Glm<T, DATA>::toData() const
+{
+	return sCast<const DATA&>(*this);
 }
 
 #endif

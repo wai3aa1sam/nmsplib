@@ -114,7 +114,7 @@ public:
 	NMSP_NODISCARD Vec3		toVec3()	const;
 
 	T	operator[](IndexType i) const;
-	T& operator[](IndexType i);
+	T&	operator[](IndexType i);
 
 	Vec4 operator-() const;
 
@@ -123,20 +123,20 @@ public:
 	Vec4 operator*(T val) const;
 	Vec4 operator/(T val) const;
 
-	Vec4 operator+=(T val);
-	Vec4 operator-=(T val);
-	Vec4 operator*=(T val);
-	Vec4 operator/=(T val);
+	void operator+=(T val);
+	void operator-=(T val);
+	void operator*=(T val);
+	void operator/=(T val);
 
 	Vec4 operator+(const Vec4& rhs) const;
 	Vec4 operator-(const Vec4& rhs) const;
 	Vec4 operator*(const Vec4& rhs) const;
 	Vec4 operator/(const Vec4& rhs) const;
 
-	Vec4 operator+=(const Vec4& rhs);
-	Vec4 operator-=(const Vec4& rhs);
-	Vec4 operator*=(const Vec4& rhs);
-	Vec4 operator/=(const Vec4& rhs);
+	void operator+=(const Vec4& rhs);
+	void operator-=(const Vec4& rhs);
+	void operator*=(const Vec4& rhs);
+	void operator/=(const Vec4& rhs);
 
 	bool operator==(const Vec4& rhs) const;
 	bool operator!=(const Vec4& rhs) const;
@@ -452,25 +452,25 @@ typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/(T val)
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+=(T val)
+void	Vec4_Basic_Glm<T, DATA>::operator+=(T val)
 {
 	x += val; y += val; z += val; w += val;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-=(T val)
+void	Vec4_Basic_Glm<T, DATA>::operator-=(T val)
 {
 	x -= val; y -= val; z -= val; w -= val;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*=(T val)
+void	Vec4_Basic_Glm<T, DATA>::operator*=(T val)
 {
 	x *= val; y *= val; z *= val; w *= val;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/=(T val)
+void	Vec4_Basic_Glm<T, DATA>::operator/=(T val)
 {
 	x /= val; y /= val; z /= val; w /= val;
 }
@@ -500,25 +500,25 @@ typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/(const 
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator+=(const Vec4& rhs)
+void	Vec4_Basic_Glm<T, DATA>::operator+=(const Vec4& rhs)
 {
 	x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator-=(const Vec4& rhs)
+void	Vec4_Basic_Glm<T, DATA>::operator-=(const Vec4& rhs)
 {
 	x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator*=(const Vec4& rhs)
+void	Vec4_Basic_Glm<T, DATA>::operator*=(const Vec4& rhs)
 {
 	x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w;
 }
 
 template<class T, class DATA> inline
-typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::operator/=(const Vec4& rhs)
+void	Vec4_Basic_Glm<T, DATA>::operator/=(const Vec4& rhs)
 {
 	x /= rhs.x; y /= rhs.y; z /= rhs.z; w /= rhs.w;
 }
