@@ -8,7 +8,7 @@ references:
 */
 
 namespace nmsp {
-namespace Math {
+namespace math {
 
 template<class T> constexpr T max(const T& a, const T& b) { return a > b ? a : b; }
 template<class T> constexpr T min(const T& a, const T& b) { return a < b ? a : b; }
@@ -185,19 +185,25 @@ NMSP_INLINE double atan(double rad) { return ::atan (rad); }
 
 template<class T> T abs(const T& v) { return v < 0 ? -v : v; }
 
+template<class T, class ENABLE = void>
+struct HasMathEquals : public FalseType {};
+
+template<class T>
+struct HasMathEquals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
+
 #if 0
 #pragma mark --- Epsilon-Impl ---
 #endif // 0
 #if 1
 
-template<class T> struct Epsilon;
+template<class T, class ENABLE = void> struct Epsilon;
 template<>
 struct Epsilon<i32>
 {
 	using ValueType = i32;
 	static constexpr ValueType s_kValue = 0;
-					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
-	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()()			NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
 };
 
 template<>
@@ -205,8 +211,8 @@ struct Epsilon<f32>
 {
 	using ValueType = f32;
 	static constexpr ValueType s_kValue = FLT_EPSILON;
-					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
-	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()()			NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
 };
 
 template<>
@@ -214,8 +220,8 @@ struct Epsilon<f64>
 {
 	using ValueType = f64;
 	static constexpr ValueType s_kValue = DBL_EPSILON;
-					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
-	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()()			NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
 };
 
 template<>
@@ -223,8 +229,17 @@ struct Epsilon<f128>
 {
 	using ValueType = f128;
 	static constexpr ValueType s_kValue = LDBL_EPSILON;
-					constexpr ValueType operator()()		NMSP_NOEXCEPT	{ return s_kValue; }
-	NMSP_NODISCARD	constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()()			NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
+};
+
+template<class T>
+struct Epsilon<T, EnableIf<HasMathEquals<T>::value > >
+{
+	using ValueType = typename T::ElementType;
+	static constexpr ValueType s_kValue = Epsilon<ValueType>::s_kValue;
+	NMSP_NODISCARD constexpr ValueType operator()()			NMSP_NOEXCEPT	{ return s_kValue; }
+	NMSP_NODISCARD constexpr ValueType operator()() const	NMSP_NOEXCEPT	{ return s_kValue; }
 };
 
 template<class T> constexpr const T& epsilon() { return Epsilon<T>::s_kValue; }
@@ -243,30 +258,15 @@ struct EqualsHelper
 	template<class T, class EP = T> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<T>()) { return abs( a ) <= ep; }
 };
 
-template<class T, class ENABLE = void>
-struct hasMathEquals : public FalseType {};
-
 template<class T>
-struct hasMathEquals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
-
-template<class T, class ENABLE = void>
-struct has_equals : public FalseType {};
-
-template<class T>
-struct has_equals<T, EnableIf< IsMemPtr<decltype(&T::equals)> > > : public TrueType {};
-
-template<class T> inline constexpr bool	Ishas_equals  = IsMemPtr<decltype(&T::equals)>;
-
-
-template<class T>
-struct EqualsHelper<T, EnableIf<Ishas_equals<T>  > >
+struct EqualsHelper<T, EnableIf<HasMathEquals<T>::value  > >
 {
 	template<class T, class EP = typename T::ElementType> NMSP_INLINE static bool equals_Impl (const T& a, const T& b, const EP& ep = epsilon<typename T::ElementType>()) { return a.equals (b, ep); }
 	template<class T, class EP = typename T::ElementType> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<typename T::ElementType>()) { return a.equals0(ep); }
 };
 
-template<class T, class EP = T> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<T>()) { return EqualsHelper<T>::equals_Impl (a, b, ep); }
-template<class T, class EP = T> NMSP_INLINE bool equals0(const T& a,             const EP& ep = epsilon<T>()) { return EqualsHelper<T>::equals0_Impl(a,	ep); }
+template<class T, class EP = Epsilon<T>::ValueType> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<typename Epsilon<T>::ValueType>()) { return EqualsHelper<T>::equals_Impl (a, b, ep); }
+template<class T, class EP = Epsilon<T>::ValueType> NMSP_INLINE bool equals0(const T& a,             const EP& ep = epsilon<typename Epsilon<T>::ValueType>()) { return EqualsHelper<T>::equals0_Impl(a,	ep); }
 
 #endif // 1
 

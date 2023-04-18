@@ -81,8 +81,8 @@ public:
 	void	set				(const Tuple2& rhs);
 	void	setAll			(T val);
 
-	bool	equals	(const Vec2& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals	(const Vec2& rhs, const T& epsilon = math::epsilon<T>()) const;
+	bool	equals0	(				  const T& epsilon = math::epsilon<T>()) const;
 
 	NMSP_NODISCARD T		dot			(const Vec2& rhs)	const;
 	NMSP_NODISCARD Vec2		cross		(const Vec2& rhs)	const;
@@ -178,7 +178,7 @@ typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::s_left		()
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::s_inf		()
 {
-	auto f = Math::inf<T>();
+	auto f = math::inf<T>();
 	return Vec2{ f, f };
 }
 
@@ -238,15 +238,15 @@ void Vec2_Basic_Glm<T, DATA>::setAll			(T val)
 template<class T, class DATA> inline
 bool Vec2_Basic_Glm<T, DATA>::equals	(const Vec2& rhs, const T& epsilon) const
 {
-	return Math::equals(x, rhs.x, epsilon)
-		&& Math::equals(y, rhs.y, epsilon);
+	return math::equals(x, rhs.x, epsilon)
+		&& math::equals(y, rhs.y, epsilon);
 }
 
 template<class T, class DATA> inline
 bool Vec2_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
 {
-	return Math::equals0(x, epsilon)
-		&& Math::equals0(y, epsilon);
+	return math::equals0(x, epsilon)
+		&& math::equals0(y, epsilon);
 }
 
 template<class T, class DATA> inline

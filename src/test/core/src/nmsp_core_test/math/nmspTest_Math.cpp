@@ -95,8 +95,9 @@ public:
 			v4t[0];
 			auto v4t2 = v4t;
 			NMSP_TEST_CHECK(v4t2 == v4t);
-			NMSP_TEST_CHECK(Math::equals(v4t2, v4t));
-
+			NMSP_TEST_CHECK(math::equals(v4t2, v4t));
+			int a = 10;
+			_NMSP_DUMP_VAR(a, math::Epsilon<decltype(a)>::s_kValue);
 			
 			if (has_equals<Vec4f_T >())
 			{

@@ -88,8 +88,8 @@ public:
 
 	constexpr void set(T x_, T y_, T z_, T w_);
 
-	bool	equals (const Quat4& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0(const Quat4& rhs, const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals (const Quat4& rhs, const T& epsilon = math::epsilon<T>()) const;
+	bool	equals0(const Quat4& rhs, const T& epsilon = math::epsilon<T>()) const;
 
 	T	 angle() const;
 	Vec3 axis () const;
@@ -238,19 +238,19 @@ void Quat4_Basic_Glm<T, DATA>::set(T x_, T y_, T z_, T w_)
 template<class T, class DATA> inline
 bool Quat4_Basic_Glm<T, DATA>::equals(const Quat4& rhs, const T& epsilon) const
 {
-	return Math::equals(x, rhs.x, epsilon)
-		&& Math::equals(y, rhs.y, epsilon)
-		&& Math::equals(z, rhs.z, epsilon)
-		&& Math::equals(w, rhs.w, epsilon);
+	return math::equals(x, rhs.x, epsilon)
+		&& math::equals(y, rhs.y, epsilon)
+		&& math::equals(z, rhs.z, epsilon)
+		&& math::equals(w, rhs.w, epsilon);
 }
 
 template<class T, class DATA> inline
 bool Quat4_Basic_Glm<T, DATA>::equals0(const Quat4& rhs, const T& epsilon) const
 {
-	return Math::equals0(x, rhs.x, epsilon)
-		&& Math::equals0(y, rhs.y, epsilon)
-		&& Math::equals0(z, rhs.z, epsilon)
-		&& Math::equals0(w, rhs.w, epsilon);
+	return math::equals0(x, rhs.x, epsilon)
+		&& math::equals0(y, rhs.y, epsilon)
+		&& math::equals0(z, rhs.z, epsilon)
+		&& math::equals0(w, rhs.w, epsilon);
 }
 
 

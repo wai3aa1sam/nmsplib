@@ -111,8 +111,8 @@ public:
 	void		setRow	(SizeType i, const Vec4& v);
 	void		set		(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
 	
-	bool	equals	(const Mat4& rhs, const T& epsilon = Math::epsilon<T>()) const;
-	bool	equals0	(				  const T& epsilon = Math::epsilon<T>()) const;
+	bool	equals	(const Mat4& rhs, const T& epsilon = math::epsilon<T>()) const;
+	bool	equals0	(				  const T& epsilon = math::epsilon<T>()) const;
 
 	Mat4 transpose()	const;
 
@@ -324,19 +324,19 @@ void Mat4_Basic_Glm<T, DATA>::setRow	(SizeType i, const Vec4& v)
 template<class T, class DATA> inline
 bool Mat4_Basic_Glm<T, DATA>::equals	(const Mat4& rhs, const T& epsilon) const
 {
-	return Math::equals((*this)[0], rhs[0], epsilon)
-		&& Math::equals((*this)[1], rhs[1], epsilon)
-		&& Math::equals((*this)[2], rhs[2], epsilon)
-		&& Math::equals((*this)[3], rhs[3], epsilon);
+	return math::equals((*this)[0], rhs[0], epsilon)
+		&& math::equals((*this)[1], rhs[1], epsilon)
+		&& math::equals((*this)[2], rhs[2], epsilon)
+		&& math::equals((*this)[3], rhs[3], epsilon);
 }
 
 template<class T, class DATA> inline
 bool Mat4_Basic_Glm<T, DATA>::equals0	(const T& epsilon) const
 {
-	return Math::equals0((*this)[0], epsilon)
-		&& Math::equals0((*this)[1], epsilon)
-		&& Math::equals0((*this)[2], epsilon)
-		&& Math::equals0((*this)[3], epsilon);
+	return math::equals0((*this)[0], epsilon)
+		&& math::equals0((*this)[1], epsilon)
+		&& math::equals0((*this)[2], epsilon)
+		&& math::equals0((*this)[3], epsilon);
 }
 
 

@@ -38,19 +38,19 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Quat4_T<T> );
 
 
 
-namespace Math {
+namespace math {
 
-template<class T, class EP = T> NMSP_INLINE 
-bool equals (const Quat4_T<T>& a, const Quat4_T<T>& b, const EP& ep = epsilon<T>()) 
-{ 
-	return a.equals(b, ep);
-}
-
-template<class T, class EP = T> NMSP_INLINE 
-bool equals0(const Quat4_T<T>& a,					   const EP& ep = epsilon<T>())
-{ 
-	return a.equals0(ep); 
-}
+//template<class T, class EP = T> NMSP_INLINE 
+//bool equals (const Quat4_T<T>& a, const Quat4_T<T>& b, const EP& ep = epsilon<T>()) 
+//{ 
+//	return a.equals(b, ep);
+//}
+//
+//template<class T, class EP = T> NMSP_INLINE 
+//bool equals0(const Quat4_T<T>& a,					   const EP& ep = epsilon<T>())
+//{ 
+//	return a.equals0(ep); 
+//}
 
 }
 #endif

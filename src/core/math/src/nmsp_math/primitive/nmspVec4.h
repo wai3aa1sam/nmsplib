@@ -38,21 +38,10 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec4_T<T> );
 
 
 
-//namespace Math {
-//
-//template<class T, class EP = T> NMSP_INLINE 
-//bool equals (const Vec4_T<T>& a, const Vec4_T<T>& b, const EP& ep = epsilon<T>()) 
-//{ 
-//	return a.equals(b, ep);
-//}
-//
-//template<class T, class EP = T> NMSP_INLINE 
-//bool equals0(const Vec4_T<T>& a,					 const EP& ep = epsilon<T>())
-//{ 
-//	return a.equals0(ep); 
-//}
-//
-//}
+namespace math {
+
+
+}
 #endif
 
 
