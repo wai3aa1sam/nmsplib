@@ -21,10 +21,12 @@ struct Mat3_SIMD_Data_Glm : public Glm_Mat3_SIMD_T<T>
 {
 public:
 	using Base		= Glm_Mat3_SIMD_T<T>;
-	using SizeType	= size_t;
-	using IndexType	= i32;
-
+	
 	using Vec3 = Vec3_T<T>;
+
+	using ElementType	= T;
+	using SizeType		= NmspMathTraits::SizeType;
+	using IndexType		= NmspMathTraits::IndexType;
 
 public:
 	Mat3_SIMD_Data_Glm()

@@ -261,8 +261,8 @@ template<class T> inline constexpr bool	Ishas_equals  = IsMemPtr<decltype(&T::eq
 template<class T>
 struct EqualsHelper<T, EnableIf<Ishas_equals<T>  > >
 {
-	template<class T, class EP = T> NMSP_INLINE static bool equals_Impl (const T& a, const T& b, const EP& ep = epsilon<T>()) { return a.equals (b, ep); }
-	template<class T, class EP = T> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<T>()) { return a.equals0(ep); }
+	template<class T, class EP = typename T::ElementType> NMSP_INLINE static bool equals_Impl (const T& a, const T& b, const EP& ep = epsilon<typename T::ElementType>()) { return a.equals (b, ep); }
+	template<class T, class EP = typename T::ElementType> NMSP_INLINE static bool equals0_Impl(const T& a,             const EP& ep = epsilon<typename T::ElementType>()) { return a.equals0(ep); }
 };
 
 template<class T, class EP = T> NMSP_INLINE bool equals (const T& a, const T& b, const EP& ep = epsilon<T>()) { return EqualsHelper<T>::equals_Impl (a, b, ep); }

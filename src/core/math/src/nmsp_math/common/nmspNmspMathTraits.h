@@ -6,11 +6,12 @@ namespace nmsp {
 
 struct NmspMathDefaultTraits_T : public NmspTraits
 {
-
+	using SizeType	= size_t;
+	using IndexType = i32;
 };
 
 
-#if !NMSP_CUSTOM_STL_TRAITS
+#if !NMSP_MATH_CUSTOM_TRAITS
 
 using NmspMathTraits = NmspMathDefaultTraits_T;
 

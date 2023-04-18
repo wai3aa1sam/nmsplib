@@ -20,8 +20,10 @@ struct Vec4_Basic_Data_Glm : public Glm_Vec4_T<T>
 {
 public:
 	using Base = Glm_Vec4_T<T>;
-	using SizeType = size_t;
-	using IndexType = i32;
+
+	using ElementType	= T;
+	using SizeType		= NmspMathTraits::SizeType;
+	using IndexType		= NmspMathTraits::IndexType;
 
 public:
 	Vec4_Basic_Data_Glm()
@@ -47,7 +49,7 @@ public:
 
 	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
 
-	using ElementType	= T;
+	using ElementType	= typename Base::ElementType;
 	using SizeType		= typename Base::SizeType;
 	using IndexType		= typename Base::IndexType;
 

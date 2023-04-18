@@ -19,7 +19,9 @@ template<class T>
 struct Tuple4_T
 {
 public:
-	using SizeType = int;
+	using ElementType	= T;
+	using SizeType		= NmspMathTraits::SizeType;
+	using IndexType		= NmspMathTraits::IndexType;
 
 public:
 	static constexpr size_t s_kElementCount = 4;

@@ -21,10 +21,12 @@ struct Mat4_SIMD_Data_Glm : public Glm_Mat4_SIMD_T<T>
 {
 public:
 	using Base		= Glm_Mat4_SIMD_T<T>;
-	using SizeType	= size_t;
-	using IndexType	= i32;
-
+	
 	using Vec4 = Vec4_T<T>;
+
+	using ElementType = T;
+	using SizeType = NmspMathTraits::SizeType;
+	using IndexType = NmspMathTraits::IndexType;
 
 public:
 	Mat4_SIMD_Data_Glm()

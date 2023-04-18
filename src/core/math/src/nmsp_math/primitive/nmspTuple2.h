@@ -18,7 +18,9 @@ template<class T>
 struct Tuple2_T
 {
 public:
-	using SizeType = i32;
+	using ElementType	= T;
+	using SizeType		= NmspMathTraits::SizeType;
+	using IndexType		= NmspMathTraits::IndexType;
 
 public:
 	static constexpr size_t s_kElementCount = 2;
