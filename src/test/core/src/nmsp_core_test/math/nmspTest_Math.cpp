@@ -143,6 +143,12 @@ public:
 				== Mat4f_T::s_rotate2(Vec3f_T{ math::radians(45.5f), math::radians(65.5f), math::radians(75.5f) }));*/
 		}
 
+		{
+			Quat4f_T q4f;
+			auto angle = q4f.angle();
+			_NMSP_DUMP_VAR(angle);
+		}
+
 		//a.data
 		//b = a + Vec3f{};
 		nmsp::Tuple3_T<float> aa;

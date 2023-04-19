@@ -42,6 +42,7 @@ struct Quat4_Basic_Glm : public DATA
 {
 public:
 	using Base = DATA;
+	using Data = DATA;
 	using Quat4 = Quat4_Basic_Glm;
 	using Tuple4 = Tuple4_T<T>;
 	using Vec2 = Vec2_T<T>;
@@ -67,8 +68,8 @@ public:
 	static Quat4 s_identity();
 	static Quat4 s_angleAxis(T rad, const Vec3& axis);
 
-	static Quat4 s_euler	(const Vec3& r);
-	static Quat4 s_eulerDeg(const Vec3& deg);
+	static Quat4 s_euler	(const Vec3& rad);
+	static Quat4 s_eulerDeg	(const Vec3& deg);
 	static Quat4 s_eulerX	(T rad);
 	static Quat4 s_eulerY	(T rad);
 	static Quat4 s_eulerZ	(T rad);
@@ -131,6 +132,7 @@ public:
 public:
 	using Glm_Quat4 = typename DATA::Base;
 	Quat4(const Glm_Quat4& rhs); // for glm only
+	const Data& toData() const;
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -153,9 +155,9 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_angleAxis(T
 }
 
 template<class T, class DATA> inline
-typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_euler(const Vec3& r)
+typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_euler(const Vec3& rad)
 {
-
+	
 }
 
 template<class T, class DATA> inline
@@ -257,19 +259,19 @@ bool Quat4_Basic_Glm<T, DATA>::equals0(const Quat4& rhs, const T& epsilon) const
 template<class T, class DATA> inline
 T										Quat4_Basic_Glm<T, DATA>::angle() const
 {
-
+	return glm::angle(*this);
 }
 
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Vec3	Quat4_Basic_Glm<T, DATA>::axis () const
 {
-
+	return glm::axis(*this);
 }
 
 template<class T, class DATA> inline
 void Quat4_Basic_Glm<T, DATA>::setEuler(const Vec3& r)
 {
-
+	
 }
 
 template<class T, class DATA> inline
@@ -416,6 +418,12 @@ Quat4_Basic_Glm<T, DATA>::Quat4_Basic_Glm(const Glm_Quat4& rhs) // for glm only
 	: Base(rhs)
 {
 
+}
+
+template<class T, class DATA> inline
+const typename Quat4_Basic_Glm<T, DATA>::Data& Quat4_Basic_Glm<T, DATA>::toData() const
+{
+	return sCast<const Data&>(*this);
 }
 
 #endif

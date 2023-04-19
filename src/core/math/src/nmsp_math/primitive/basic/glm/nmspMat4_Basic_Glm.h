@@ -593,7 +593,7 @@ Mat4_Basic_Glm<T, DATA>::Mat4_Basic_Glm(const Glm_Mat4& rhs) // for glm only
 template<class T, class DATA> inline
 const typename Mat4_Basic_Glm<T, DATA>::Data&	Mat4_Basic_Glm<T, DATA>::toData() const
 {
-	return sCast<const DATA&>(*this);
+	return sCast<const Data&>(*this);
 }
 
 #endif
