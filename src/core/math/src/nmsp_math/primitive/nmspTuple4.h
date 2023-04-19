@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/nmsp_math_common.h"
+#include "nmsp_math/primitive/nmspMathPrimitve_Common.h"
 
 namespace nmsp {
 

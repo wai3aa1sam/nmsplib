@@ -10,3 +10,5 @@ references:
 #include "nmsp_math/nmspMath.h"
 
 #include "nmsp_math/primitive/nmspMathPrimitive.h"
+
+#include "nmsp_math/geometry/nmspMathGeometry.h"

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "nmsp_math/common/nmsp_math_common.h"
+#include "nmsp_math/primitive/nmspMathPrimitve_Common.h"
 
-#include "nmsp_math/nmspMath.h"
 #include "nmsp_math/primitive/nmspVec4.h"
 
 #if NMSP_MATH_BACKEND_GLM

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "nmsp_math/common/nmsp_math_common.h"
+#include "nmsp_math/primitive/nmspMathPrimitve_Common.h"
 
-#include "nmsp_math/nmspMath.h"
 #include "nmsp_math/primitive/nmspTuple3.h"
 
 #include "nmsp_math/primitive/nmspVec2.h"
