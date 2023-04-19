@@ -163,8 +163,10 @@ public:
 public:
 	using Glm_Mat4 = typename DATA::Base;
 	Mat4(const Glm_Mat4& rhs); // for glm only
-
 	const Data& toData() const;
+
+private:
+	const Glm_Mat4& toGlm() const;
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -197,10 +199,11 @@ template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_identity()
 {
 	return Mat4{
-		  Vec4{1.0, 0.0, 0.0, 0.0}
-		, Vec4{0.0, 1.0, 0.0, 0.0}
-		, Vec4{0.0, 0.0, 1.0, 0.0}
-		, Vec4{0.0, 0.0, 0.0, 1.0}};
+			  Vec4{1.0, 0.0, 0.0, 0.0}
+			, Vec4{0.0, 1.0, 0.0, 0.0}
+			, Vec4{0.0, 0.0, 1.0, 0.0}
+			, Vec4{0.0, 0.0, 0.0, 1.0}
+		};
 }
 
 template<class T, class DATA> inline
@@ -230,22 +233,40 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotate	(const 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateX	(T rad)
 {
-	NMSP_ASSERT(false, "not yet support");
-	return {};
+	if (math::equals0(rad)) return s_identity();
+
+	T s, c;
+	math::sincos(rad, s, c);
+	return Mat4({1, 0, 0, 0},
+				{0, c, s, 0},
+				{0,-s, c, 0},
+				{0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateY	(T rad)
 {
-	NMSP_ASSERT(false, "not yet support");
-	return {};
+	if (math::equals0(rad)) return s_identity();
+
+	T s, c;
+	math::sincos(rad, s, c);
+	return Mat4({c, 0,-s, 0},
+				{0, 1, 0, 0},
+				{s, 0, c, 0},
+				{0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateZ	(T rad)
 {
-	NMSP_ASSERT(false, "not yet support");
-	return {};
+	if (math::equals0(rad)) return s_identity();
+
+	T s, c;
+	math::sincos(rad, s, c);
+	return Mat4({ c, s, 0, 0},
+				{-s, c, 0, 0},
+				{ 0, 0, 1, 0},
+				{ 0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
@@ -257,8 +278,10 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_scale	(const V
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_shear	(const Vec3& r)
 {
-	NMSP_ASSERT(false, "not yet support");
-	return {};
+	return Mat4( {  1,   0,  0,  0},
+				 {v.x,   1,  0,  0},
+				 {v.y, v.z,  1,  0},
+				 {  0,   0,  0,  1});
 }
 
 template<class T, class DATA> inline
@@ -270,7 +293,16 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_quat		(const Q
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TRS(const Vec3 & translate, const Vec3 & rotate, const Vec3 & scale)
 {
-	return s_translate(translate) * s_rotate(rotate) * s_scale(scale);
+	Vec3 s, c;
+	Math::sincos(rotate.x, s.x, c.x);
+	Math::sincos(rotate.y, s.y, c.y);
+	Math::sincos(rotate.z, s.z, c.z);
+
+	return Mat4(
+		{scale.x * (c.y*c.z),				scale.x * (c.y*s.z),				scale.x * (-s.y),		0},
+		{scale.y * (s.x*s.y*c.z - c.x*s.z),	scale.y * (c.x*c.z + s.x*s.y*s.z),	scale.y * (s.x*c.y),	0},
+		{scale.z * (s.x*s.z + c.x*s.y*c.z),	scale.z * (c.x*s.y*s.z - s.x*c.z),	scale.z * (c.x*c.y),	0},
+		{translate.x,						translate.y,						translate.z,			1});
 }
 
 template<class T, class DATA> inline
@@ -282,7 +314,10 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TRS(const Vec3
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TS (const Vec3 & translate, const Vec3 & scale)
 {
-	return s_translate(translate) * s_scale(scale);
+	return Mat4({scale.x, 0, 0, 0},
+				{0, scale.y, 0, 0},
+				{0, 0, scale.z, 0},
+				{translate.x, translate.y, translate.z, 1});
 }
 
 template<class T, class DATA> inline
@@ -387,12 +422,14 @@ template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse3x3			() const
 {
 	_notYetSupported();
+	return {};
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse3x3Transpose() const
 {
 	_notYetSupported();
+	return {};
 }
 
 template<class T, class DATA> inline
@@ -529,13 +566,13 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-(const 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator*(const Mat4& rhs)	const
 {
-	return (*this).toData() * rhs.toData();
+	return toGlm() * rhs.toGlm();
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/(const Mat4& rhs)	const
 {
-	return (*this).toData() / rhs.toData();
+	return toGlm() / rhs.toGlm();
 }
 
 template<class T, class DATA> inline
@@ -594,6 +631,12 @@ template<class T, class DATA> inline
 const typename Mat4_Basic_Glm<T, DATA>::Data&	Mat4_Basic_Glm<T, DATA>::toData() const
 {
 	return sCast<const Data&>(*this);
+}
+
+template<class T, class DATA> inline
+const typename Mat4_Basic_Glm<T, DATA>::Glm_Mat4& Mat4_Basic_Glm<T, DATA>::toGlm() const
+{
+	return sCast<const Glm_Mat4&>(*this);
 }
 
 #endif

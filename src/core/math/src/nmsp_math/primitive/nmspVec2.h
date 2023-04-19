@@ -29,7 +29,7 @@ using Vec2u_T = Vec2_T<u32>;
 template<class T>
 void onFormat(fmt::format_context& ctx, const Vec2_T<T>& v)
 {
-	formatTo(ctx, "({}, {})", v.x, v.y);
+	formatTo(ctx, "Vec2({}, {})", v.x, v.y);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec2_T<T> );
 

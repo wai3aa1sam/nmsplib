@@ -28,7 +28,7 @@ using Vec3u_T = Vec3_T<u32>;
 template<class T>
 void onFormat(fmt::format_context& ctx, const Vec3_T<T>& v)
 {
-	formatTo(ctx, "({}, {}, {})", v.x, v.y, v.z);
+	formatTo(ctx, "Vec3({}, {}, {})", v.x, v.y, v.z);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec3_T<T> );
 
@@ -38,6 +38,10 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec3_T<T> );
 
 
 namespace math {
+
+
+template<class T> NMSP_INLINE Vec3_T<T>	radians(Vec3_T<T> deg) { constexpr f = (PI<T>() / static_cast<T>(180)); return {deg.x * f, deg.y * f, deg.z * f}; }
+template<class T> NMSP_INLINE Vec3_T<T>	degrees(Vec3_T<T> rad) { constexpr f = (static_cast<T>(180) / PI<T>()); return {rad.x * f, rad.y * f, rad.z * f}; }
 
 
 }

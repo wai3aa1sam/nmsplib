@@ -41,7 +41,9 @@ template<class T, class DATA = Vec2_Basic_Data_Glm<T> >
 struct Vec2_Basic_Glm : public DATA
 {
 public:
-	using Base		= DATA;
+	using Base = DATA;
+	using Data = DATA;
+
 	using Vec2		= Vec2_Basic_Glm;
 	using Tuple2	= Tuple2_T<T>;
 
@@ -130,6 +132,9 @@ public:
 public:
 	using Glm_Vec2 = typename DATA::Base;
 	Vec2(const Glm_Vec2& rhs); // for glm only
+	const Data& toData() const;
+private:
+	const Glm_Vec2& toGlm() const;
 };
 #endif // NMSP_MATH_BACKEND_GLM
 
@@ -252,75 +257,75 @@ bool Vec2_Basic_Glm<T, DATA>::equals0	(				  const T& epsilon) const
 template<class T, class DATA> inline
 T										Vec2_Basic_Glm<T, DATA>::dot		(const Vec2& rhs)		const
 {
-	return glm::dot(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(rhs));
+	return glm::dot(toGlm(), rhs.toGlm());
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::cross		(const Vec2& rhs)		const
 {
-	return glm::cross(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(rhs));
+	return glm::cross(toGlm(), rhs.toGlm());
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::reflect	(const Vec2& normal)	const
 {
-	return glm::reflect(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(normal));
+	return glm::reflect(toGlm(), normal.toGlm());
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::orthogonal	()						const
 {
 	_notYetSupported()
-	return {};
+		return {};
 }
 
 template<class T, class DATA> inline
 T										Vec2_Basic_Glm<T, DATA>::distance	(const Vec2& rhs)		const
 {
-	return glm::distance(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(rhs));
+	return glm::distance(toGlm(), rhs.toGlm());
 }
 
 template<class T, class DATA> inline
 T										Vec2_Basic_Glm<T, DATA>::sqrDistance(const Vec2& rhs)		const
 {
-	return glm::distance2(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(rhs));
+	return glm::distance2(toGlm(), rhs.toGlm());
 }
 
 template<class T, class DATA> inline
 T Vec2_Basic_Glm<T, DATA>::magnitude	()	const
 {
-	return glm::length(sCast<Glm_Vec2>(*this));
+	return glm::length(toGlm());
 }
 
 template<class T, class DATA> inline
 T Vec2_Basic_Glm<T, DATA>::sqrMagnitude	()	const
 {
-	return glm::length2(sCast<Glm_Vec2>(*this));
+	return glm::length2(toGlm());
 }
 
 template<class T, class DATA> inline
 T Vec2_Basic_Glm<T, DATA>::normalize		()	const
 {
-	return glm::normalize(sCast<Glm_Vec2>(*this));
+	return glm::normalize(toGlm());
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::lerp			(const Vec2& b, T t)									const
 {
-	return glm::lerp(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(b), t);
+	return glm::lerp(toGlm(), b.toGlm(), t);
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::slerp			(const Vec2& b, T t)									const
 {
-	return glm::slerp(sCast<Glm_Vec2>(*this), sCast<Glm_Vec2>(b), t);
+	return glm::slerp(toGlm(), b.toGlm(), t);
 }
 
 template<class T, class DATA> inline
 typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::rotateTo		(const Vec2& target, T maxRadDelta, T maxMagDelta)	const
 {
 	_notYetSupported()
-	return {};
+		return {};
 }
 
 template<class T, class DATA> inline
@@ -455,7 +460,19 @@ template<class T, class DATA> inline
 Vec2_Basic_Glm<T, DATA>::Vec2_Basic_Glm(const Glm_Vec2& rhs) // for glm only
 	: Base(rhs)
 {
-	
+
+}
+
+template<class T, class DATA> inline
+const typename Vec2_Basic_Glm<T, DATA>::Data& Vec2_Basic_Glm<T, DATA>::toData() const
+{
+	return sCast<const Data&>(*this);
+}
+
+template<class T, class DATA> inline
+const typename Vec2_Basic_Glm<T, DATA>::Glm_Vec2& Vec2_Basic_Glm<T, DATA>::toGlm() const
+{
+	return sCast<const Glm_Vec2&>(*this);
 }
 
 #endif

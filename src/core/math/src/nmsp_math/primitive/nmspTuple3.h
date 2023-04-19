@@ -49,7 +49,7 @@ private:
 template<class T>
 void onFormat(fmt::format_context& ctx, const Tuple3_T<T>& v)
 {
-	formatTo(ctx, "({}, {}, {})", v.x, v.y, v.z);
+	formatTo(ctx, "Tuple3({}, {}, {})", v.x, v.y, v.z);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple3_T<T> );
 

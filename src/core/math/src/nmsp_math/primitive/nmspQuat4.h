@@ -29,7 +29,7 @@ using Quat4u_T = Quat4_T<u32>;
 template<class T>
 void onFormat(fmt::format_context& ctx, const Quat4_T<T>& v)
 {
-	formatTo(ctx, "({}, {}, {}, {})", v.w, v.x, v.y, v.z);
+	formatTo(ctx, "Quat4({}, {}, {}, {})", v.w, v.x, v.y, v.z);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Quat4_T<T> );
 

@@ -92,6 +92,7 @@ public:
 			gv4[0];
 
 			Vec4f_T v4t;
+			auto k = v4t.dot(v4t); NMSP_UNUSED(k);
 			v4t[0];
 			auto v4t2 = v4t;
 			NMSP_TEST_CHECK(v4t2 == v4t);
@@ -147,6 +148,9 @@ public:
 			Quat4f_T q4f;
 			auto angle = q4f.angle();
 			_NMSP_DUMP_VAR(angle);
+			q4f * Vec3f_T::s_one();
+
+			NMSP_TEST_CHECK(q4f.euler() == Vec3f_T{glm::eulerAngles(q4f.toData())});
 		}
 
 		//a.data

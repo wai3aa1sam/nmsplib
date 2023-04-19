@@ -24,7 +24,7 @@ using Mat3u_T = Mat3_T<u32>;
 template<class T>
 void onFormat(fmt::format_context& ctx, const Mat3_T<T>& v)
 {
-	formatTo(ctx, "({}, {}, {})", v.x, v.y, v.z);
+	formatTo(ctx, "Mat3(\n	{},\n	{},\n	{})", v.row(0), v.row(1), v.row(2));
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Mat3_T<T> );
 

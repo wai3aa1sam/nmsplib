@@ -179,6 +179,9 @@ NMSP_INLINE double acos(double rad) { return ::acos (rad); }
 NMSP_INLINE float  atan(float  rad) { return ::atanf(rad); }
 NMSP_INLINE double atan(double rad) { return ::atan (rad); }
 
+NMSP_INLINE float  atan2(float  y, float  x) { return ::atan2f(y, x); }
+NMSP_INLINE double atan2(double y, double x) { return ::atan2 (y, x); }
+
 #if 0
 #pragma mark ----------------
 #endif
