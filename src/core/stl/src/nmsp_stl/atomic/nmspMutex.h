@@ -7,7 +7,7 @@
 #endif // 0
 #if 1
 
-#if NMSP_BUILD_STL_STD_SYNC
+#if NMSP_STL_BUILD_STD_SYNC
 
 	#include "std/nmspMutex_Std.h"
 
@@ -21,7 +21,7 @@
 
 	}
 
-#elif NMSP_BUILD_STL_NMSP_SYNC
+#elif NMSP_STL_BUILD_NMSP_SYNC
 
 	#include "nmsp/nmspMutex_Nmsp.h"
 
@@ -30,7 +30,7 @@
 	}
 
 
-#elif NMSP_BUILD_STL_EASTL_SYNC
+#elif NMSP_STL_BUILD_EASTL_SYNC
 
 	#include "eastl/nmspMutex_Eastl.h"
 

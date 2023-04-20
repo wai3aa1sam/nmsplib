@@ -7,7 +7,7 @@
 #endif // 0
 #if 1
 
-#if NMSP_BUILD_STL_STD_THREAD
+#if NMSP_STL_BUILD_STD_THREAD
 
 	#include "std/nmspThread_Std.h"
 
@@ -17,7 +17,7 @@
 
 	}
 
-#elif NMSP_BUILD_STL_NMSP_THREAD
+#elif NMSP_STL_BUILD_NMSP_THREAD
 
 	#include "nmsp/nmspNativeThread_Nmsp.h"
 
@@ -28,7 +28,7 @@
 	}
 
 
-#elif NMSP_BUILD_STL_EASTL_THREAD
+#elif NMSP_STL_BUILD_EASTL_THREAD
 
 	#include "eastl/nmspThread_Eastl.h"
 

@@ -2,15 +2,15 @@
 
 #include "../common/nmsp_stl_common.h"
 
-#if NMSP_BUILD_STL_STD
+#if NMSP_STL_BUILD_STD
 
 	#include <iterator>
 
-#elif NMSP_BUILD_STL_NMSP
+#elif NMSP_STL_BUILD_NMSP
 
 	#include "nmsp/nmspIterator_Nmsp.h"
 	
-#elif NMSP_BUILD_STL_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_EASTL_CONTAINER
 
 	#include "eastl/nmspIterator_Eastl.h"
 
@@ -19,7 +19,7 @@
 	}
 
 #else
-	#error "unsupported stl build container"
+	#error "--- error: nmsp_stl unsupported build container"
 #endif // 0
 
 namespace nmsp {

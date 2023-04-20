@@ -4,7 +4,7 @@
 
 
 #if 0
-#pragma mark --- stl_math_backend_switch-Impl ---
+#pragma mark --- nmsp_math_backend_switch-Impl ---
 #endif // 0
 #if 1
 
@@ -31,7 +31,7 @@
 	}
 
 #else
-	#error "--- error: stl_math_backend_switch"
+	#error "--- error: nmsp_math_backend_switch"
 #endif // NMSP_MATH_BACKEND_NMSP
 
 namespace nmsp {

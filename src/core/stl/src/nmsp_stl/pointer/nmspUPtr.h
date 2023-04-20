@@ -7,7 +7,7 @@
 #endif // 0
 #if 1
 
-#if NMSP_BUILD_STL_STD_CONTAINER
+#if NMSP_STL_BUILD_STD_CONTAINER
 
 	#include "nmsp/nmspUPtr_Std.h"
 
@@ -16,7 +16,7 @@
 
 	}
 
-#elif NMSP_BUILD_STL_NMSP_CONTAINER
+#elif NMSP_STL_BUILD_NMSP_CONTAINER
 
 	#include "nmsp/nmspUPtr_Nmsp.h"
 
@@ -24,7 +24,7 @@
 
 	}
 
-#elif NMSP_BUILD_STL_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_EASTL_CONTAINER
 
 	#include "eastl/nmspUPtr_Eastl.h"
 
@@ -35,7 +35,7 @@
 	}
 
 #else
-	#error "unsupported stl build container"
+	#error "--- error: nmsp_stl unsupported build container"
 #endif // 0
 
 #endif

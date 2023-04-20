@@ -11,7 +11,7 @@ references
 
 namespace nmsp {
 
-#if !NMSP_ENABLE_IVECTOR
+#if !NMSP_STL_ENABLE_IVECTOR
 	template<typename T, size_t LOCAL_COUNT, class FALLBACK_ALLOC = DefaultAllocator >
 	using VectorAllocator_T = class LocalAllocator_T<LOCAL_COUNT * sizeof(T), NMSP_ALIGN_OF(T), 0, FALLBACK_ALLOC>;
 #endif // 0
@@ -121,7 +121,7 @@ public:
 	template <typename Iter>
 	IVector_Nmsp(Iter beg, Iter end, const Allocator& alloc = Allocator);
 
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 	virtual ~IVector_Nmsp();
 	#else
 	~IVector_Nmsp();
@@ -216,7 +216,7 @@ public:
 	CRevEnumerator	revEach() const;
 
 protected:
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 	virtual T*		_on_allocate(SizeType n);
 	virtual void	_on_free(T* ptr_, SizeType n)	= 0;
 	#else
@@ -262,7 +262,7 @@ protected:
 
 template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>
 class Vector_Nmsp : 
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 		public IVector_Nmsp<T, FALLBACK_ALLOC>, protected LocalBuffer_T<N * sizeof(T), NMSP_ALIGN_OF(T)>
 	#else
 		public IVector_Nmsp<T, VectorAllocator_T<T, N, FALLBACK_ALLOC> >
@@ -270,7 +270,7 @@ class Vector_Nmsp :
 {
 public:
 	using FallbackAllocator = FALLBACK_ALLOC;
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 		using Allocator		 = FallbackAllocator;
 		using LocalAllocator = typename LocalBuffer_T<N * sizeof(T), NMSP_ALIGN_OF(T)>;
 	#else
@@ -291,7 +291,7 @@ public:
 
 public:
 	Vector_Nmsp();
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 	virtual ~Vector_Nmsp();
 	#else
 	~Vector_Nmsp();
@@ -301,7 +301,7 @@ public:
 
 
 protected:
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 	virtual T*		_on_allocate(SizeType n);
 	virtual void	_on_free(T* ptr_, SizeType n);
 	#else
@@ -834,7 +834,7 @@ IVector_Nmsp<T, ALLOC>::_on_insert_iters(CIter pos, CIter beg, CIter end)
 	return _begin + index;
 }
 
-#if NMSP_ENABLE_IVECTOR
+#if NMSP_STL_ENABLE_IVECTOR
 
 template<class T, class ALLOC> inline
 T* IVector_Nmsp<T, ALLOC>::_on_allocate(SizeType n)
@@ -875,7 +875,7 @@ Vector_Nmsp<T, N, FALLBACK_ALLOC>::~Vector_Nmsp()
 	}
 }
 
-#if NMSP_ENABLE_IVECTOR
+#if NMSP_STL_ENABLE_IVECTOR
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 T* Vector_Nmsp<T, N, FALLBACK_ALLOC>::_on_allocate(SizeType n)

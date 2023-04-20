@@ -7,7 +7,7 @@
 #endif // 0
 #if 1
 
-#if NMSP_BUILD_STL_STD_CONTAINER
+#if NMSP_STL_BUILD_STD_CONTAINER
 
 	#include "std/nmspVector_Std.h"
 
@@ -18,24 +18,24 @@
 
 	}
 
-#elif NMSP_BUILD_STL_NMSP_CONTAINER
+#elif NMSP_STL_BUILD_NMSP_CONTAINER
 
 	#include "nmsp/nmspVector_Nmsp.h"
 
 	namespace nmsp {
 	
-	#if NMSP_ENABLE_IVECTOR
+	#if NMSP_STL_ENABLE_IVECTOR
 		template<class T, class ALLOC> using IVector_Impl = IVector_Nmsp<T, ALLOC>;
 	#else
 		template<class T, class ALLOC> using IVector_Impl = Vector_Nmsp<T, 0, ALLOC>;
-	#endif // NMSP_ENABLE_IVECTOR
+	#endif // NMSP_STL_ENABLE_IVECTOR
 
 	template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>	using Vector_Impl = Vector_Nmsp<T, N, FALLBACK_ALLOC>;
 
 	}
 
 	
-#elif NMSP_BUILD_STL_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_EASTL_CONTAINER
 
 	#include "eastl/nmspVector_Eastl.h"
 
@@ -47,7 +47,7 @@
 	}
 
 #else
-	#error "unsupported stl build container"
+	#error "--- error: nmsp_stl unsupported build container"
 #endif // 0
 
 #endif
