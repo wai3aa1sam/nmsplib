@@ -25,8 +25,8 @@ public:
 	using Vec3 = Vec3_T<T>;
 
 	using ElementType	= T;
-	using SizeType		= NmspMathTraits::SizeType;
-	using IndexType		= NmspMathTraits::IndexType;
+	using SizeType		= MathTraits::SizeType;
+	using IndexType		= MathTraits::IndexType;
 
 public:
 	Mat3_SIMD_Data_Glm()

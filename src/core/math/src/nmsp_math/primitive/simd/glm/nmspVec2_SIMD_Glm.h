@@ -22,8 +22,8 @@ public:
 	using Base		= Glm_Vec2_SIMD_T<T>;
 	
 	using ElementType	= T;
-	using SizeType		= NmspMathTraits::SizeType;
-	using IndexType		= NmspMathTraits::IndexType;
+	using SizeType		= MathTraits::SizeType;
+	using IndexType		= MathTraits::IndexType;
 
 public:
 	Vec2_SIMD_Data_Glm()

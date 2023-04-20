@@ -27,7 +27,7 @@ public:
 	EmptyAllocator(const char* name = "EmptyAllocator") {};
 	~EmptyAllocator()	= default;
 
-	void* alloc(SizeType n, SizeType align = NmspTraits::s_kDefaultAlign, SizeType offset = 0)	{ return nullptr; }
+	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0)	{ return nullptr; }
 	void* alloc_all(SizeType n)																	{ return nullptr; }
 
 	void free(void* p, SizeType n = 0)	{}

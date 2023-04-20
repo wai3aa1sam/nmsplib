@@ -5,6 +5,8 @@ references:
 - sge_marco.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
 */
 
+#include <assert.h>
+
 #if 0
 #pragma mark --- util_marco-Impl ---
 #endif // 0

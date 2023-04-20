@@ -1,6 +1,11 @@
 #pragma once
 
 // should set in cmake after development
+
+#ifndef NMSP_CORE_BASE_CUSTOM_TRAITS
+	#define NMSP_CORE_BASE_CUSTOM_TRAITS 0
+#endif // 0
+
 #ifndef NMSP_ENABLE_EXCEPTION
 	#define NMSP_ENABLE_EXCEPTION			1
 #endif // 
@@ -15,10 +20,6 @@
 		#error "internal should not be on if asan is enabled"
 	#endif // 0
 
-#endif // 
-
-#ifndef NMSP_CUSTOM_TRAITS
-	#define NMSP_CUSTOM_TRAITS				0
 #endif // 
 
 #ifndef NMSP_ENABLE_CUSTOM_ALLOC

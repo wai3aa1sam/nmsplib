@@ -23,8 +23,8 @@ public:
 	using Base		= Glm_Quat4_SIMD_T<T>;
 	
 	using ElementType = T;
-	using SizeType = NmspMathTraits::SizeType;
-	using IndexType = NmspMathTraits::IndexType;
+	using SizeType = MathTraits::SizeType;
+	using IndexType = MathTraits::IndexType;
 
 public:
 	Quat4_SIMD_Data_Glm()

@@ -1,15 +1,14 @@
 #include "nmsp_stl-pch.h"
 
-#include "nmspNmspStlTraits.h"
+#include "nmsp_stl/common/nmsp_stl_traits.h"
 
 #include "nmsp_stl/atomic/nmspThreadStorage.h"
-
 #include "nmsp_stl/atomic/nmspAtomicUtil.h"
 
 namespace nmsp {
 
 #if 0
-#pragma mark --- NmspStlTraits-Impl ---
+#pragma mark --- StlTraits-Impl ---
 #endif // 0
 #if 1
 

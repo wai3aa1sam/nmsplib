@@ -266,7 +266,7 @@ void memory_copy(T* dst, const T* src, size_t n)
 	if constexpr(IsTrivial<T>)
 	{
 		size_t bytes = sizeof(T) * n;
-		if (bytes > NmspTraits::s_kThresholdToCallDMA)
+		if (bytes > StlTraits::s_kThresholdToCallDMA)
 		{
 			::memcpy(dst, src, bytes);
 			return;
@@ -287,7 +287,7 @@ void memory_move(T* dst, /*const*/ T* src, size_t n)
 	if constexpr (IsTrivial<T>)
 	{
 		size_t bytes = sizeof(T) * n;
-		if (bytes > NmspTraits::s_kThresholdToCallDMA)
+		if (bytes > StlTraits::s_kThresholdToCallDMA)
 		{
 			::memmove(dst, src, bytes);
 			return;
@@ -351,7 +351,7 @@ void memory_set(T* dst, size_t n, int val)
 	static_assert(IsTrivial<T>, "memory_set() must be Trivial Type");
 
 	size_t bytes = sizeof(T) * n;
-	if (bytes > NmspTraits::s_kThresholdToCallDMA)
+	if (bytes > StlTraits::s_kThresholdToCallDMA)
 	{
 		::memset(dst, val, bytes);
 		return;

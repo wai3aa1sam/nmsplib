@@ -1,13 +1,14 @@
 #pragma once
 
-#include <nmsp_core_base/common/nmspNmspTraits.h>
+#include <nmsp_core_base/common/nmsp_core_base_traits.h>
+#include "nmsp_stl-config.h"
 
 #include <thread>
 
 namespace nmsp {
 
 #if 0
-#pragma mark --- NmspStlTraits-Impl ---
+#pragma mark --- StlTraits-Impl ---
 #endif // 0
 #if 1
 
@@ -20,7 +21,7 @@ class AllThreadsDefaultStorage_T;
 using ThreadStorage		= ThreadDefaultStorage_T;
 using AllThreadsStorage = AllThreadsDefaultStorage_T;
 
-struct NmspStlDefaultTraits_T : public NmspTraits
+struct StlDefaultTraits_T : public CoreBaseTraits
 {
 	// Multi-thread Params
 	static constexpr size_t s_kMainThreadLocalId		= 0;
@@ -38,7 +39,7 @@ struct NmspStlDefaultTraits_T : public NmspTraits
 
 #if !NMSP_CUSTOM_STL_TRAITS
 
-using NmspStlTraits = NmspStlDefaultTraits_T;
+using StlTraits = StlDefaultTraits_T;
 
 #else
 

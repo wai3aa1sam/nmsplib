@@ -4,6 +4,7 @@
 //#include <nmsp_log.h>
 
 #include "nmsp_math-config.h"
+#include "nmsp_math_traits.h"
 
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
@@ -14,7 +15,6 @@
 
 #endif
 
-#include "nmspNmspMathTraits.h"
 
 #if NMSP_MATH_BACKEND_GLM
 

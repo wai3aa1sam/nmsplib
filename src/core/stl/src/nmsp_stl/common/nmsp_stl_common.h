@@ -3,8 +3,16 @@
 #include <nmsp_core_base.h>
 
 #include "nmsp_stl-config.h"
+#include "nmsp_stl_traits.h"
 
-#include "nmspNmspStlTraits.h"
+#if 0
+#pragma mark --- XXXX-Decl/Impl ---
+#endif // 0
+#if 1
+
+
+
+#endif
 
 #if 0
 

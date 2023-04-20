@@ -7,3 +7,13 @@
 #include <nmsp_math.h>
 
 #include "nmsp_core-config.h"
+#include "nmsp_core_traits.h"
+
+#if 0
+#pragma mark --- XXXX-Decl/Impl ---
+#endif // 0
+#if 1
+
+
+
+#endif

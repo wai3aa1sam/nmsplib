@@ -36,7 +36,7 @@ public:
 	using SizeType = size_t;
 
 public:
-	AllThreadsDefaultStorage_T(size_t n = NmspStlTraits::logicalThreadCount())
+	AllThreadsDefaultStorage_T(size_t n = StlTraits::logicalThreadCount())
 	{
 		_threadStorages.resize(n);
 	}
@@ -47,7 +47,7 @@ public:
 	}
 
 private:
-	Vector_T<ThreadStorage, NmspStlTraits::s_kEstLogicalThreadCount> _threadStorages;
+	Vector_T<ThreadStorage, StlTraits::s_kEstLogicalThreadCount> _threadStorages;
 };
 
 

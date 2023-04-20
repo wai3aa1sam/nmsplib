@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef NMSP_MATH_CUSTOM_TRAITS
+	#define NMSP_MATH_CUSTOM_TRAITS 0
+#endif // 0
+
 #ifndef NMSP_MATH_USE_SIMD
 	#define NMSP_MATH_USE_SIMD 1
 #endif // 0

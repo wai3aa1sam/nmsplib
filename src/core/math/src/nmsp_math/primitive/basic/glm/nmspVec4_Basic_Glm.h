@@ -21,8 +21,8 @@ public:
 	using Base = Glm_Vec4_T<T>;
 
 	using ElementType	= T;
-	using SizeType		= NmspMathTraits::SizeType;
-	using IndexType		= NmspMathTraits::IndexType;
+	using SizeType		= MathTraits::SizeType;
+	using IndexType		= MathTraits::IndexType;
 
 public:
 	Vec4_Basic_Data_Glm()

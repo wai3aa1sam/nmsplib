@@ -22,7 +22,7 @@ public:
 	AllocatorBase_Nmsp(const char* name = "AllocatorBase_Nmsp");
 	~AllocatorBase_Nmsp()	= default;
 
-	void* alloc(SizeType n, SizeType align = NmspTraits::s_kDefaultAlign, SizeType offset = 0);
+	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
 	void* alloc_all(SizeType n);
 
 	void free(void* p, SizeType n = 0);

@@ -23,8 +23,8 @@ public:
 	using Base		= Glm_Vec3_T<T>;
 
 	using ElementType	= T;
-	using SizeType		= NmspMathTraits::SizeType;
-	using IndexType		= NmspMathTraits::IndexType;
+	using SizeType		= MathTraits::SizeType;
+	using IndexType		= MathTraits::IndexType;
 
 public:
 	Vec3_Basic_Data_Glm()

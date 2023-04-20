@@ -261,7 +261,7 @@ public:
 		{ UPtr_T<int> up; up.reset(nmsp_new<int>()); }
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
 
-		{ sleep_ms(10); auto n = NmspStlTraits::logicalThreadCount(); NMSP_UNUSED(n); }
+		{ sleep_ms(10); auto n = StlTraits::logicalThreadCount(); NMSP_UNUSED(n); }
 		{
 			MutexProtected_T<Vector_T<int>> a;
 			auto data = a.scopedULock();

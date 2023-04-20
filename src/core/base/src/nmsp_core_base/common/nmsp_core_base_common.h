@@ -1,13 +1,7 @@
 #pragma once
 
 #include "nmsp_core_base-config.h"
-
-#ifndef _CRT_SECURE_NO_WARNINGS
-	#define _CRT_SECURE_NO_WARNINGS 1
-#endif
-
-#include "nmsp_core_base/detect_platform/nmsp_detect_platform.h"
-#include "nmsp_core_base/marco/nmsp_core_base_marco.h"
+#include "nmsp_core_base_traits.h"
 
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
@@ -80,8 +74,6 @@
 #pragma mark --- nmsp_core_base-common-Incl ---
 #endif // 0
 #if 1
-
-#include "nmspNmspTraits.h"
 
 #include "nmspAlloc_Common.h"
 

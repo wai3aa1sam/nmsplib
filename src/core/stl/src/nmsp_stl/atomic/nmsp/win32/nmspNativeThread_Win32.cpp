@@ -82,7 +82,7 @@ ThreadHnd	NativeThread_Win32::nativeHnd			()
 DWORD NativeThread_Win32::_routine(void* args)
 {
 	auto* nt = static_cast<NativeThread_Win32*>(args);
-	NmspStlTraits::setThreadLocalId(nt->localId());
+	StlTraits::setThreadLocalId(nt->localId());
 	auto ret = nt->onRoutine(); NMSP_UNUSED(ret);
 	return 0;
 }
@@ -90,7 +90,7 @@ DWORD NativeThread_Win32::_routine(void* args)
 DWORD WINAPI NativeThread_Win32::_basicRoutine(void* basicCreateDesc)
 {
 	auto* bcd = reinterpret_cast<BasicCreateDesc*>(basicCreateDesc);
-	NmspStlTraits::setThreadLocalId(bcd->affinityIdx);
+	StlTraits::setThreadLocalId(bcd->affinityIdx);
 
 	NMSP_ASSERT(bcd->routine, "BasicCreateDesc::routine is nullptr");
 	auto ret = bcd->routine(bcd->args); NMSP_UNUSED(ret);

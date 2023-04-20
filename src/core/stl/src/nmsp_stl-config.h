@@ -5,8 +5,8 @@
 #endif // 0
 #if 1
 
-#ifndef NMSP_CUSTOM_STL_TRAITS
-	#define NMSP_CUSTOM_STL_TRAITS				0
+#ifndef NMSP_STL_CUSTOM_TRAITS
+	#define NMSP_STL_CUSTOM_TRAITS				0
 #endif // 
 
 #ifndef NMSP_ENABLE_THREAD_LOCAL

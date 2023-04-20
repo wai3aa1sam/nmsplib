@@ -1,10 +1,7 @@
 #pragma once
 
-#include "nmsp_core_base/marco/nmsp_core_base_marco.h"
+#include "nmsp_core_base/common/nmsp_core_base_traits.h"
 
-#include "nmsp_core_base/marco/nmsp_core_base_internal_marco.h"
-
-#include "nmspNmspTraits.h"
 #include "nmspTypeTrait_Common.h"
 
 #include <new>
@@ -16,7 +13,7 @@
 
 namespace nmsp {
 
-void* nmsp_alloc(size_t size, size_t align = nmsp::NmspTraits::s_kDefaultAlign, size_t offset = 0)			NMSP_NOEXCEPT;
+void* nmsp_alloc(size_t size, size_t align = nmsp::CoreBaseTraits::s_kDefaultAlign, size_t offset = 0)		NMSP_NOEXCEPT;
 void  nmsp_free	(void* p, size_t size = 0)																	NMSP_NOEXCEPT;
 
 template<class T, class... ARGS> inline 
