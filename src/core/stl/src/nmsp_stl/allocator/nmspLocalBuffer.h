@@ -6,14 +6,14 @@
 namespace nmsp {
 
 template<size_t LOCAL_SIZE, size_t ALIGN> class LocalBuffer_Base;
-template<size_t LOCAL_SIZE, size_t ALIGN = NmspTraits::s_kDefaultAlign> using LocalBuffer_T = LocalBuffer_Base<LOCAL_SIZE, ALIGN>;
+template<size_t LOCAL_SIZE, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign> using LocalBuffer_T = LocalBuffer_Base<LOCAL_SIZE, ALIGN>;
 
 #if 0
 #pragma mark --- LocalBuffer_Base-Impl ---
 #endif // 0
 #if 1
 
-template<size_t LOCAL_SIZE, size_t ALIGN = NmspTraits::s_kDefaultAlign>
+template<size_t LOCAL_SIZE, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign>
 class LocalBuffer_Base
 {
 public:

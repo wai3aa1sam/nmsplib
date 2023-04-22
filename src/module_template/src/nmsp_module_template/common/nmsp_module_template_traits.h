@@ -1,7 +1,6 @@
 #pragma once
 
 #include <nmsp_core_base/common/nmsp_core_base_traits.h>
-
 #include "nmsp_module_template-config.h"
 
 namespace nmsp {
@@ -10,7 +9,7 @@ namespace nmsp {
 #pragma mark --- ModuleTemplateTraits-Impl ---
 #endif // 0
 #if 1
-struct ModuleTemplateDefaultTraits_T : public NmspTraits
+struct ModuleTemplateDefaultTraits_T : public CoreBaseTraits
 {
 	
 };

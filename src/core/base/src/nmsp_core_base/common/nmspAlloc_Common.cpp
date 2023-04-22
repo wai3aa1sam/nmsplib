@@ -11,7 +11,7 @@ namespace nmsp {
 
 #if !NMSP_CUSTOM_ALLOC
 
-	void* nmsp_alloc(size_t size, size_t align /*= nmsp::NmspTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
+	void* nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
 	{
 		auto alignSize	= nmsp::_alignTo(size, align);
 		auto* p			= std::malloc(alignSize);

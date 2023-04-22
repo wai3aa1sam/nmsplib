@@ -9,7 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<size_t ALIGN = NmspTraits::s_kDefaultAlign>
+template<size_t ALIGN = CoreBaseTraits::s_kDefaultAlign>
 class MallocAllocator_T : public Allocator_Base<MallocAllocator_T<ALIGN> >
 {
 public:
