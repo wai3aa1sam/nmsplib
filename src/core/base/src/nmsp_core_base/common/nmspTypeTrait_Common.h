@@ -99,6 +99,7 @@ using FalseType = std::false_type;
 template<class T, T VALUE> using					IntConstantT   = typename std::integral_constant<T, VALUE>;
 template<class T, T VALUE> inline constexpr bool	IntConstant     = std::integral_constant<T, VALUE>::value;
 
+template<class T> using EnumInt = typename std::underlying_type<T>::type;
 
 #endif
 

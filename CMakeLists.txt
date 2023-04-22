@@ -42,8 +42,8 @@ find_package(glm                        CONFIG REQUIRED)
 
 # --- core ---
 add_subdirectory(src/core/base)
-#add_subdirectory(src/core/os)
 add_subdirectory(src/core/stl)
+add_subdirectory(src/core/os)
 add_subdirectory(src/core/profiler)
 add_subdirectory(src/core/log)
 add_subdirectory(src/core/math)

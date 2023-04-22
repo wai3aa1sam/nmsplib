@@ -8,11 +8,11 @@ references:
 */
 
 #define	NMSP_TEST_CASE(TestClass, TestFunc) \
-	do{ \
+	do { \
 		::nmsp::_log("\n[--TEST_CASE--] " #TestClass "." #TestFunc "\n"); \
 		TestClass testObj; \
 		testObj.TestFunc; \
-	}while(false)
+	} while (false)
 //----
 
 #define NMSP_TEST_CHECK(a)			nmsp::testCheck_Impl(NMSP_SRCLOC, true,  bool(a), #a)
