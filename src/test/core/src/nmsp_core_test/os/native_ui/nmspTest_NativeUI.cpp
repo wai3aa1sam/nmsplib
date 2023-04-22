@@ -13,7 +13,11 @@ public:
 	{
 		{
 			NativeUIWindow_T window;
-			window.create(NativeUIWindow_T::makeCD());
+			window.create(NativeUIWindow_T::makeCDesc());
+			_NMSP_DUMP_VAR(NMSP_SRCLOC);
+
+			//NativeUIApp_T app;
+			//app.run(app.makeCDesc());
 		}
 	}
 

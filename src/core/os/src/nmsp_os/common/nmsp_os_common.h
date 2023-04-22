@@ -6,6 +6,9 @@
 #include "nmsp_os-config.h"
 #include "nmsp_os_traits.h"
 
+#include "nmspWindowRect2.h"
+#include "nmspOsUtil.h"
+
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
 #endif // 0

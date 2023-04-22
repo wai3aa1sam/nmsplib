@@ -148,9 +148,16 @@ STR fmtAs_T(const wchar_t* fmt, ARGS&&... args)
 
 #endif
 
+}
 
 
+namespace nmsp{
 
-
+template<> inline
+void onFormat(fmt::format_context& ctx, const SrcLoc& v)
+{
+	formatTo(ctx, "SrcLoc({}:{}: {})", v.file, v.line, v.func);
+}
 
 }
+NMSP_FORMATTER( SrcLoc );

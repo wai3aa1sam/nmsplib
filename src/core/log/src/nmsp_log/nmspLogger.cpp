@@ -22,7 +22,7 @@ Logger_T* Logger_T::s_instance = nullptr;
 
 std::atomic_int Logger_T::s_nLoggers = 0;
 
-Logger_T::CreateDesc	Logger_T::makeCD()
+Logger_T::CreateDesc	Logger_T::makeCDesc()
 {
 	return Logger_T::CreateDesc{};
 }

@@ -66,7 +66,7 @@ public:
 	using LoggerType = spdlog::logger;
 	//using LoggerType = spdlog::async_logger;
 public:
-	static CreateDesc	makeCD	();
+	static CreateDesc	makeCDesc	();
 	static Logger_T*	instance();
 	//static void			init	(const CreateDesc& cd) { instance()->create(cd); }
 

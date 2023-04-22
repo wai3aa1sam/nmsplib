@@ -16,7 +16,7 @@ FileStream_Win32::NativeFd		FileStream_Win32::kInvalid()
 	return INVALID_HANDLE_VALUE;
 }
 
-FileStream_Win32::CreateDesc	FileStream_Win32::makeCD()
+FileStream_Win32::CreateDesc	FileStream_Win32::makeCDesc()
 {
 	return CreateDesc{};
 }

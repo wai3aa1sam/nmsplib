@@ -2,6 +2,8 @@
 
 #include "nmsp_os/native_ui/nmspNativeUIWindow_Base.h"
 
+#include "../nmspOsUtil_Win32.h"
+
 #if NMSP_OS_WINDOWS
 
 namespace nmsp {
@@ -20,12 +22,17 @@ using NativeUIWindow_CreateDesc_Win32 = NativeUIWindow_CreateDesc_Base;
 class NativeUIWindow_Win32 : public NativeUIWindow_Base
 {
 public:
+	using This = NativeUIWindow_Win32;
 	using Base = NativeUIWindow_Base;
 
-	using CreateDesc = NativeUIWindow_CreateDesc_Win32;
+	using CreateDesc	= NativeUIWindow_CreateDesc_Win32;
+	using WndHnd		= HWND;
+	using Util			= OsUtil_Win32;
 
 public:
-	static CreateDesc	makeCD();
+
+public:
+	static CreateDesc	makeCDesc();
 
 public:
 	NativeUIWindow_Win32() = default;
@@ -33,11 +40,25 @@ public:
 
 	virtual ~NativeUIWindow_Win32();
 
+	virtual void onCloseButton	()				override;
+	virtual void onActive		(bool isActive) override;
+	virtual void onDraw			()				override;
+
+	WndHnd wndHnd();
+
 protected:
-	virtual void onCreate(const CreateDesc& cd) override;
+	virtual void onCreate			(const CreateDesc& cd)	override;
+	virtual void onSetWindowTitle	(StrViewA_T title)		override;
+	virtual void onClientRectChanged(const Rect2f& rect)	override;
+	virtual void onDrawNeeded		()						override;
+
 
 private:
+	static LRESULT WINAPI s_wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static This* s_getThis(WndHnd hwnd);
 
+private:
+	WndHnd _wndHnd;
 };
 
 

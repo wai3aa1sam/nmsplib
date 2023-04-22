@@ -11,13 +11,14 @@ enum class OSPlatform
 {
 	Windows = 0,
 	Linux,
-	kCount,
+	_kCount,
 };
 
 #if 0
-#pragma mark --- OSTraits-Impl ---
+#pragma mark --- OsTraits-Impl ---
 #endif // 0
 #if 1
+
 struct OSDefaultTraits_T : public CoreBaseTraits
 {
 	template<class T>	using Rect2  = WindowRect2_T<T>;
@@ -27,12 +28,15 @@ struct OSDefaultTraits_T : public CoreBaseTraits
 
 	static constexpr OSPlatform				platform();
 	static constexpr EnumInt<OSPlatform>	platformInt();
+
+	using SizeType	= size_t;
+	using IndexType	= i32;
 };
 
 
 #if !NMSP_OS_CUSTOM_TRAITS
 
-using OSTraits = OSDefaultTraits_T;
+using OsTraits = OSDefaultTraits_T;
 
 #else
 

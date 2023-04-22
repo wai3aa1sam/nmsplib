@@ -4,8 +4,12 @@
 
 #include "nmspFileUsage.h"
 
-namespace nmsp {
+/*
+references:
+- src/core/file/FileStream.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+*/
 
+namespace nmsp {
 
 #if 0
 #pragma mark --- FileStream_Base-Decl ---
@@ -34,7 +38,7 @@ public:
 
 public:
 	static NativeFd		kInvalid();
-	static CreateDesc	makeCD();
+	static CreateDesc	makeCDesc();
 
 public:
 	FileStream_Base() = default;

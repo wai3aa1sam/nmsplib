@@ -22,7 +22,7 @@ public:
 
 public:
 	static NativeFd		kInvalid();
-	static CreateDesc	makeCD();
+	static CreateDesc	makeCDesc();
 
 public:
 	FileStream_Win32() = default;

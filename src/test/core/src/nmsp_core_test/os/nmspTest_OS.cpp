@@ -16,7 +16,7 @@ public:
 		{
 			FileStream_T fs;
 			auto v = fs.kInvalid(); NMSP_UNUSED(v);
-			auto cd = FileStream_T::makeCD();
+			auto cd = FileStream_T::makeCDesc();
 			
 			FileStream_T fs2{cd};
 

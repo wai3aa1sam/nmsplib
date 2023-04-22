@@ -80,7 +80,7 @@ public:
 	NativeThread_Base();
 	virtual ~NativeThread_Base() = default;
 
-	NMSP_NODISCARD static CreateDesc makeCD();
+	NMSP_NODISCARD static CreateDesc makeCDesc();
 
 	void create(const CreateDesc& bcd);
 
@@ -144,7 +144,7 @@ void NativeThread_Base::create(const CreateDesc& cd)
 }
 
 inline
-NativeThread_Base::CreateDesc NativeThread_Base::makeCD()
+NativeThread_Base::CreateDesc NativeThread_Base::makeCDesc()
 {
 	return NativeThread_Base::CreateDesc{};
 }

@@ -14,7 +14,7 @@ public:
 		#if 1
 		Logger_T logger;
 		{
-			auto cd = Logger_T::makeCD();
+			auto cd = Logger_T::makeCDesc();
 			//cd.coreOutputFilepath = "../../../../../../log/log.txt";
 			logger.create(cd);
 		}
@@ -36,7 +36,7 @@ public:
 			};
 			{
 				NT nt;
-				auto cd = NT::makeCD();
+				auto cd = NT::makeCDesc();
 				//cd.name = "Render Thread";
 				cd.affinityIdx = 10;
 				nt.create(cd);
@@ -46,7 +46,7 @@ public:
 
 		{
 			{
-				auto cd = Logger_T::makeCD();
+				auto cd = Logger_T::makeCDesc();
 				Logger_T::instance();
 
 				Logger_T::instance();

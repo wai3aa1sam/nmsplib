@@ -297,7 +297,7 @@ public:
 				}
 			};
 			NT nt;
-			auto cd = NT::makeCD();
+			auto cd = NT::makeCDesc();
 			//cd.name = "Render Thread";
 			cd.affinityIdx = 10;
 			nt.create(cd);
