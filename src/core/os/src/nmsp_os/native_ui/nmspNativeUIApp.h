@@ -20,7 +20,7 @@
 
 #elif NMSP_OS_LINUX
 
-	#include "nmsp_os/backend/win32/native_ui/nmspNativeUIApp_Linux.h"
+	#include "nmsp_os/backend/linux/native_ui/nmspNativeUIApp_Linux.h"
 
 	namespace nmsp {
 

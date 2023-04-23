@@ -29,6 +29,9 @@ class NativeUIApp_Base : public NonCopyable
 public:
 	using CreateDesc = NativeUIApp_CreateDesc_Base;
 
+	using Msg		 = OsTraits::Msg;
+	using Util		 = OsTraits::Util;
+
 public:
 	static CreateDesc	makeCDesc();
 

@@ -2,7 +2,7 @@
 
 #include "nmsp_os/native_ui/nmspNativeUIApp_Base.h"
 
-#include "../nmspOsUtil_Win32.h"
+#include "../common/nmspOsUtil_Win32.h"
 
 #if NMSP_OS_WINDOWS
 
@@ -26,8 +26,6 @@ public:
 	using Base = NativeUIApp_Base;
 
 	using CreateDesc = NativeUIApp_CreateDesc_Win32;
-	using Msg		 = MSG;
-	using Util		 = OsUtil_Win32;
 
 public:
 	static CreateDesc	makeCDesc();

@@ -68,6 +68,9 @@ public:
 	using Rect2f = OsTraits::Rect2f;
 	using Vec2f  = typename Rect2f::Vec2;
 
+	using Util	 = OsTraits::Util;
+	using WndHnd = OsTraits::WndHnd;
+
 public:
 	static CreateDesc	makeCDesc();
 

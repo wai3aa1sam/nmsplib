@@ -2,7 +2,7 @@
 
 #include "nmsp_os/native_ui/nmspNativeUIWindow_Base.h"
 
-#include "../nmspOsUtil_Win32.h"
+#include "../common/nmspOs_Common_Win32.h"
 
 #if NMSP_OS_WINDOWS
 
@@ -26,8 +26,6 @@ public:
 	using Base = NativeUIWindow_Base;
 
 	using CreateDesc	= NativeUIWindow_CreateDesc_Win32;
-	using WndHnd		= HWND;
-	using Util			= OsUtil_Win32;
 
 public:
 

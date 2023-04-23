@@ -20,7 +20,7 @@
 
 #elif NMSP_OS_LINUX
 
-	#include "nmsp_os/backend/win32/file/nmspFileStream_Linux.h"
+	#include "nmsp_os/backend/linux/file/nmspFileStream_Linux.h"
 
 	namespace nmsp {
 

@@ -28,13 +28,10 @@ struct FileStream_CreateDesc_Base
 class FileStream_Base : public NonCopyable
 {
 public:
-	#if NMSP_OS_WINDOWS
-	using NativeFd = ::HANDLE;
-	#elif NMSP_OS_LINUX
-	using NativeFd = int;
-	#endif // NMSP_OS_WINDOWS
-
 	using CreateDesc = FileStream_CreateDesc_Base;
+
+	using NativeFd = OsTraits::NativeFd;
+	using FileSize = OsTraits::FileSize;
 
 public:
 	static NativeFd		kInvalid();
@@ -43,6 +40,30 @@ public:
 public:
 	FileStream_Base() = default;
 	FileStream_Base(const CreateDesc& cd);
+
+	void openRead	(StrViewA_T filename);
+	void openAppend	(StrViewA_T filename);
+	void openWrite	(StrViewA_T filename, bool truncate);
+
+	void open	(const CreateDesc& cd);
+	void close	();
+	void flush	();
+
+	void setFileSize(FileSize newSize);
+	FileSize filesize();
+
+	void		setPos		 (FileSize pos);
+	void		setPosFromEnd(FileSize pos);
+	FileSize getPos();
+
+	void readBytes	(Span_T<u8> data);
+	void writeBytes	(ByteSpan_T data);
+
+	const StringT&	filename() const;
+	NativeFd		nativeFd() const;
+
+private:
+	void _checkFd();
 
 private:
 	StringT		_filename;
