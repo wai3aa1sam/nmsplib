@@ -7,15 +7,27 @@ namespace nmsp {
 
 enum class FileMode
 {
-
+	CreateNew,
+	OpenExists,
+	OpenOrCreate,
 };
 
 enum class FileAccess
 {
-
+	Read,
+	ReadWrite,
+	WriteOnly,
 };
 
 enum class FileShareMode
+{
+	None,
+	Read,
+	Write,
+	ReadWrite,
+};
+
+struct File
 {
 
 };

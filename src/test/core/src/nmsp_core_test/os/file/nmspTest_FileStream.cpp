@@ -2,6 +2,8 @@
 
 #if NMSP_TEST_MODULE_OS || NMSP_TEST_ALL_MODULE
 
+#include "nmsp_os/file/nmspFileSteam.h"
+
 namespace nmsp {
 
 class Test_FileStream : public UnitTest
@@ -9,7 +11,16 @@ class Test_FileStream : public UnitTest
 public:
 	void test()
 	{
-
+		{
+			auto cd= FileStream_T::makeCDesc();
+			FileStream_T fs{};
+			fs.openWrite("testFs.txt", false);
+			
+			StringT str;
+			str = "get ur ass up";
+			fs.writeBytes(makeByteSpan(str));
+			fs.flush();
+		}
 	}
 
 	virtual void onSetup() override

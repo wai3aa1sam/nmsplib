@@ -13,15 +13,7 @@ class Test_OS : public UnitTest
 public:
 	void test()
 	{
-		{
-			FileStream_T fs;
-			auto v = fs.kInvalid(); NMSP_UNUSED(v);
-			auto cd = FileStream_T::makeCDesc();
-			
-			FileStream_T fs2{cd};
-
-		}
-
+		
 	}
 
 	virtual void onSetup() override

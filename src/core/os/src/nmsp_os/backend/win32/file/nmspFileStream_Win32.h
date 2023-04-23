@@ -1,6 +1,13 @@
 #pragma once
 
+#include "../common/nmspOs_Common_Win32.h"
+
 #include "nmsp_os/file/nmspFileStream_Base.h"
+
+/*
+references:
+- src/core/file/FileStream.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+*/
 
 #if NMSP_OS_WINDOWS
 
@@ -30,7 +37,31 @@ public:
 
 	~FileStream_Win32();
 
+	void openRead	(StrViewA_T filename);
+	void openAppend	(StrViewA_T filename);
+	void openWrite	(StrViewA_T filename, bool truncate);
+
+	void open	(const CreateDesc& cd);
+	void close	();
+	void flush	();
+
+	void setFileSize(FileSize newSize);
+	FileSize filesize();
+
+	void		setPos		 (FileSize pos);
+	void		setPosFromEnd(FileSize pos);
+	FileSize getPos();
+
+	void readBytes	(Span_T<u8> data);
+	void writeBytes	(ByteSpan_T data);
+
 	bool isOpened() const;
+
+	const StringT&	filename() const;
+	NativeFd		nativeFd() const;
+
+private:
+	void _checkFd();
 
 private:
 	NativeFd	_fd = kInvalid();

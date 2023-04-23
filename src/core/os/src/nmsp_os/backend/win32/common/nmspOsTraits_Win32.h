@@ -17,7 +17,7 @@ struct OsDefaultTraits_Win32 : public OsDefaultTraits_Base
 	static constexpr OsPlatform				platform();
 	static constexpr EnumInt<OsPlatform>	platformInt();
 
-	using Util	= OsUtil_Win32;
+	using Util = OsUtil_Win32;
 
 	using Msg		= MSG;
 	using WndHnd	= HWND;

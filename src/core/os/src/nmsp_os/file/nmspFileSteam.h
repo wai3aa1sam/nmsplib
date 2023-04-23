@@ -38,6 +38,13 @@
 namespace nmsp {
 
 using FileStream_CreateDesc = FileStream_CreateDesc_Impl;
-using FileStream_T			= FileStream_Impl;
+class FileStream_T : public FileStream_Impl
+{
+public:
+
+	void openRead	(StrViewA_T filename);
+	void openAppend	(StrViewA_T filename);
+	void openWrite	(StrViewA_T filename, bool truncate);
+};
 
 }

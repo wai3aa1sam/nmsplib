@@ -22,8 +22,18 @@ public:
 public:
 	static Rect2f toRect2f(const ::RECT& rect);
 
+	static void throwIf(bool cond);
+
+	template<class T>
+	static DWORD castDWord(T v);
+
 };
 
+template<class T>
+DWORD OsUtil_Win32::castDWord(T v)
+{
+	return sCast<DWORD>(v);
+}
 
 #endif
 

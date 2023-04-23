@@ -2,6 +2,7 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
+#include "nmspOsTraits_Win32.h"
 #include "nmspOsUtil_Win32.h"
 
 

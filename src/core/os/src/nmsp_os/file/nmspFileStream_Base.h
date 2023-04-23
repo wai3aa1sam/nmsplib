@@ -30,8 +30,10 @@ class FileStream_Base : public NonCopyable
 public:
 	using CreateDesc = FileStream_CreateDesc_Base;
 
-	using NativeFd = OsTraits::NativeFd;
-	using FileSize = OsTraits::FileSize;
+	using Util		= OsTraits::Util;
+	using NativeFd	= OsTraits::NativeFd;
+	using FileSize	= OsTraits::FileSize;
+
 
 public:
 	static NativeFd		kInvalid();
@@ -59,13 +61,15 @@ public:
 	void readBytes	(Span_T<u8> data);
 	void writeBytes	(ByteSpan_T data);
 
+	bool isOpened() const;
+
 	const StringT&	filename() const;
 	NativeFd		nativeFd() const;
 
 private:
 	void _checkFd();
 
-private:
+protected:
 	StringT		_filename;
 };
 

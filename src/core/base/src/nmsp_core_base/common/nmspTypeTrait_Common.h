@@ -2,6 +2,7 @@
 
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 #include <type_traits>
+#include <limits>
 
 /*
 references:
@@ -100,6 +101,8 @@ template<class T, T VALUE> using					IntConstantT   = typename std::integral_con
 template<class T, T VALUE> inline constexpr bool	IntConstant     = std::integral_constant<T, VALUE>::value;
 
 template<class T> using EnumInt = typename std::underlying_type<T>::type;
+
+template<class T> using NumLimit = typename std::numeric_limits<T>;
 
 #endif
 

@@ -23,12 +23,168 @@ FileStream_Win32::CreateDesc	FileStream_Win32::makeCDesc()
 
 FileStream_Win32::FileStream_Win32(const CreateDesc& cd)
 {
-	cd.filename;
+	open(cd);
 }
 
 FileStream_Win32::~FileStream_Win32()
 {
+	close();
+}
 
+void FileStream_Win32::open(const CreateDesc& cd)
+{
+	close();
+	_filename = cd.filename;
+
+	DWORD	create_flags	= 0;
+	DWORD	access_flags	= 0;
+	DWORD	share_flags		= 0;
+
+	switch (cd.mode) 
+	{
+		case FileMode::CreateNew: 		{ create_flags |= CREATE_NEW;	 } break;
+		case FileMode::OpenExists:		{ create_flags |= OPEN_EXISTING; } break;
+		case FileMode::OpenOrCreate:	{ create_flags |= OPEN_ALWAYS;	 } break;
+	}
+
+	switch (cd.access) 
+	{
+		case FileAccess::Read:			{ access_flags |= GENERIC_READ;					} break;
+		case FileAccess::ReadWrite:		{ access_flags |= GENERIC_READ | GENERIC_WRITE;	} break;
+		case FileAccess::WriteOnly:		{ access_flags |= GENERIC_WRITE;				} break;
+	}
+
+	switch (cd.shareMode) 
+	{
+		case FileShareMode::None:		{ } break;
+		case FileShareMode::Read:		{ share_flags |= FILE_SHARE_READ;						} break;
+		case FileShareMode::ReadWrite:	{ share_flags |= FILE_SHARE_READ | FILE_SHARE_WRITE;	} break;
+		case FileShareMode::Write:		{ share_flags |= FILE_SHARE_WRITE;						} break;
+	}
+
+	TempStringW_T<> filenameW;
+	UtfUtil::convert(filenameW, cd.filename);
+
+	_fd = ::CreateFile(filenameW.c_str(), access_flags, share_flags, nullptr, create_flags, FILE_ATTRIBUTE_NORMAL, nullptr );
+	Util::throwIf(_fd == kInvalid());
+}
+
+void FileStream_Win32::close()
+{
+	if (!isOpened()) 
+		return;
+	BOOL ret = ::CloseHandle(_fd);
+	if (!ret)
+		NMSP_THROW("close file error");
+	_fd = kInvalid();
+}
+
+void FileStream_Win32::flush()
+{
+	_checkFd();
+
+	auto ret = ::FlushFileBuffers(_fd);
+	Util::throwIf(!ret);
+}
+
+void FileStream_Win32::setFileSize(FileSize newSize)
+{
+	_checkFd();
+	FileSize oldPos = getPos();
+	setPos(newSize);
+	::SetEndOfFile(_fd);
+
+	if (oldPos < newSize)
+		setPos(oldPos);
+}
+
+FileStream_Win32::FileSize FileStream_Win32::filesize()
+{
+	return FileSize();
+}
+
+void FileStream_Win32::setPos(FileSize pos)
+{
+	_checkFd();
+	LONG high = static_cast<LONG>(pos >> 32);
+	LONG low  = static_cast<LONG>(pos);
+	::SetFilePointer( _fd, low, &high, FILE_BEGIN);
+}
+
+void FileStream_Win32::setPosFromEnd(FileSize pos)
+{
+	_checkFd();
+	LONG high = static_cast<LONG>(pos >> 32);
+	LONG low  = static_cast<LONG>(pos);
+	::SetFilePointer( _fd, low, &high, FILE_END);
+}
+
+FileStream_Win32::FileSize FileStream_Win32::getPos()
+{
+	_checkFd();
+	LONG high = 0;
+	LONG low  = ::SetFilePointer(_fd, 0, &high, FILE_CURRENT);
+	if (low < 0 || high < 0) 
+		NMSP_THROW("{}", NMSP_SRCLOC);
+
+	auto pos = sCast<FileSize>(low) | sCast<FileSize>(high) << 32;
+	return pos;
+}
+
+void FileStream_Win32::readBytes(Span_T<u8> data)
+{
+	_checkFd();
+	if (data.size() <= 0)
+		return;
+	if (data.size() >= NumLimit<u32>::max())
+	{
+		NMSP_THROW("{}", NMSP_SRCLOC);
+	}
+
+	DWORD dwSize = Util::castDWord(data.size());
+	DWORD result;
+	BOOL ret = ::ReadFile(_fd, data.data(), dwSize, &result, nullptr);
+	Util::throwIf(!ret);
+}
+
+void FileStream_Win32::writeBytes(ByteSpan_T data)
+{
+	_checkFd();
+	if (data.size() <= 0)
+		return;
+	if (data.size() >= NumLimit<u32>::max())
+	{
+		NMSP_THROW("{}", NMSP_SRCLOC);
+	}
+
+	DWORD dwSize = Util::castDWord(data.size());
+	DWORD result;
+	BOOL ret = ::WriteFile(_fd, data.data(), dwSize, &result, nullptr);
+	Util::throwIf(!ret);
+}
+
+bool FileStream_Win32::isOpened() const
+{
+	return _fd != kInvalid();
+}
+
+const StringT& FileStream_Win32::filename() const
+{
+	return _filename;
+}
+
+FileStream_Win32::NativeFd FileStream_Win32::nativeFd() const
+{
+	return _fd;
+}
+
+void FileStream_Win32::_checkFd()
+{
+	//NMSP_ASSERT(_fd != kInvalid(), NMSP_SRCLOC);
+	if (_fd == kInvalid())
+	{
+		NMSP_THROW("{}", NMSP_SRCLOC);
+	}
 }
 
 #endif
