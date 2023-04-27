@@ -31,7 +31,7 @@ void onFormat(fmt::format_context& ctx, const Vec4_T<T>& v)
 {
 	formatTo(ctx, "Vec4({}, {}, {}, {})", v.x, v.y, v.z, v.w);
 }
-NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec4_T<T> );
+NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec4_T<NMSP_ARGS(T)> );
 
 
 

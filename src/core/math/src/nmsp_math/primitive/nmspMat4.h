@@ -31,7 +31,7 @@ void onFormat(fmt::format_context& ctx, const Mat4_T<T>& v)
 {
 	formatTo(ctx, "Mat4(\n	{},\n	{},\n	{},\n	{})", v.row(0), v.row(1), v.row(2), v.row(3));
 }
-NMSP_FORMATTER_T(NMSP_ARGS(class T), Mat4_T<T>);
+NMSP_FORMATTER_T(NMSP_ARGS(class T), Mat4_T<NMSP_ARGS(T)>);
 
 
 

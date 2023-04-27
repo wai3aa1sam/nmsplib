@@ -51,7 +51,7 @@ void onFormat(fmt::format_context& ctx, const Tuple4_T<T>& v)
 {
 	formatTo(ctx, "Tuple4({}, {}, {}, {})", v.x, v.y, v.z, v.w);
 }
-NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple4_T<T> );
+NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple4_T<NMSP_ARGS(T)> );
 
 #endif
 

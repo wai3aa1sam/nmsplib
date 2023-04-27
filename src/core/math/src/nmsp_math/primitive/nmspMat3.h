@@ -26,6 +26,6 @@ void onFormat(fmt::format_context& ctx, const Mat3_T<T>& v)
 {
 	formatTo(ctx, "Mat3(\n	{},\n	{},\n	{})", v.row(0), v.row(1), v.row(2));
 }
-NMSP_FORMATTER_T( NMSP_ARGS(class T), Mat3_T<T> );
+NMSP_FORMATTER_T( NMSP_ARGS(class T), Mat3_T<NMSP_ARGS(T)> );
 
 }
