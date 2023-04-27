@@ -27,13 +27,13 @@ void onFormat(fmt::format_context& ctx, const T& v);
 template<class... ARGS> inline
 void formatTo(fmt::format_context& ctx, const char* fmt, ARGS&&... args)
 {
-	fmt::format_to(ctx.out(), fmt, forward<ARGS>(args)...);
+	fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 template<class... ARGS> inline
 void formatTo(fmt::format_context& ctx, const wchar_t* fmt, ARGS&&... args)
 {
-	fmt::format_to(ctx.out(), fmt, forward<ARGS>(args)...);
+	fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 #if 0
@@ -43,6 +43,30 @@ void formatTo(fmt::format_context& ctx, const wchar_t* fmt, ARGS&&... args)
 
 template<class T, class ENABLE = void>
 struct FormatTrait;
+
+template<>
+struct FormatTrait<u8, void>
+{
+	static constexpr const char* s_formatStr = "%hhu";
+};
+
+template<>
+struct FormatTrait<u16, void>
+{
+	static constexpr const char* s_formatStr = "%hu";
+};
+
+template<>
+struct FormatTrait<i8, void>
+{
+	static constexpr const char* s_formatStr = "%hhd";
+};
+
+template<>
+struct FormatTrait<i16, void>
+{
+	static constexpr const char* s_formatStr = "%hd";
+};
 
 template<class T>
 struct FormatTrait<T, EnableIf< IsUInt<T> && sizeof(T)		<= sizeof(u32) > >

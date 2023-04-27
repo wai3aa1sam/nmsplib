@@ -48,9 +48,16 @@ template<class T> using StrView_T = StrView_Impl<T>;
 using StrViewA_T = StrView_T<char>;
 using StrViewW_T = StrView_T<wchar_t>;
 
-inline StrViewA_T c_strToStrView(const char* str)
+inline 
+StrViewA_T c_strToStrView(const char* str)
 {
 	return str ? StrViewA_T{str, strlen(str)} : StrViewA_T{};
 }
 
+void onFormat(fmt::format_context& ctx, const StrViewA_T& v);
+void onFormat(fmt::format_context& ctx, const StrViewW_T& v);
+
 }
+
+NMSP_FORMATTER(StrViewA_T);
+NMSP_FORMATTER(StrViewW_T);

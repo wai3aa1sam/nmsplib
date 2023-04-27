@@ -59,6 +59,8 @@ public:
 	void operator+=(ViewType view);
 
 	operator ViewType() const NMSP_NOEXCEPT;
+
+	ViewType view() const;
 	
 private:
 
@@ -133,6 +135,13 @@ String_Eastl<T, N, FALLBACK_ALLOC>::operator ViewType() const NMSP_NOEXCEPT
 {
 	return ViewType{ data(), size() };
 }
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename String_Eastl<T, N, FALLBACK_ALLOC>::ViewType String_Eastl<T, N, FALLBACK_ALLOC>::view() const
+{
+	return ViewType{ data(), size() };
+}
+
 
 #endif
 

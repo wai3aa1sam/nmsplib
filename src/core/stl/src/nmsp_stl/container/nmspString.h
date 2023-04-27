@@ -71,4 +71,14 @@ template<class ALLOC = DefaultAllocator>				using TempStringW_T = TempString_T<w
 using StringT	= StringA_T<0>;
 using StringWT	= StringW_T<0>;
 
+
+template<class T, size_t N, class ALLOC>
+void onFormat(fmt::format_context& ctx, const String_T<T, N, ALLOC>& v)
+{
+	formatTo(ctx, "{}", v.view());
 }
+NMSP_FORMATTER_T(NMSP_ARGS(class T, size_t N, class ALLOC), String_T<NMSP_ARGS(T, N, ALLOC)> );
+
+}
+
+

@@ -15,5 +15,10 @@ inline ByteSpan_T makeByteSpan(StrViewA_T sv)
 	return ByteSpan_T{ reinterpret_cast<const u8*>(sv.data()), sv.size()};
 }
 
+inline ByteSpan_T makeByteSpan(Span_T<u8> sv)
+{
+	return ByteSpan_T{ reinterpret_cast<const u8*>(sv.data()), sv.size()};
+}
+
 
 }
