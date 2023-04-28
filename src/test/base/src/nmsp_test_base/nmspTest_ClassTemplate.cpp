@@ -1,4 +1,5 @@
 #include "nmsp_test_base/common/nmsp_test_base_common.h"
+// #include "nmsp_core_test/common/nmsp_core_test_common.h"
 
 #if NMSP_TEST_MODULE_TEMPLATE || NMSP_TEST_ALL_MODULE
 

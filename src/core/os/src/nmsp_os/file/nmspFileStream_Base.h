@@ -51,12 +51,12 @@ public:
 	void close	();
 	void flush	();
 
-	void setFileSize(FileSize newSize);
-	FileSize filesize();
+	void		setFileSize(FileSize newSize);
+	FileSize	fileSize();
 
 	void		setPos		 (FileSize pos);
 	void		setPosFromEnd(FileSize pos);
-	FileSize getPos();
+	FileSize	getPos();
 
 	void readBytes	(Span_T<u8> data);
 	void writeBytes	(ByteSpan_T data);

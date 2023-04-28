@@ -73,9 +73,10 @@ void FileStream_Win32::close()
 {
 	if (!isOpened()) 
 		return;
+
 	BOOL ret = ::CloseHandle(_fd);
-	if (!ret)
-		NMSP_THROW("close file error");
+	throwIf(!ret, "{}", NMSP_SRCLOC);
+	
 	_fd = kInvalid();
 }
 
@@ -98,24 +99,31 @@ void FileStream_Win32::setFileSize(FileSize newSize)
 		setPos(oldPos);
 }
 
-FileStream_Win32::FileSize FileStream_Win32::filesize()
+FileStream_Win32::FileSize FileStream_Win32::fileSize()
 {
-	return FileSize();
+	_checkFd();
+
+	DWORD high = 0;
+	DWORD low  = ::GetFileSize(_fd, &high);
+	throwIf(low == INVALID_FILE_SIZE, "{}", NMSP_SRCLOC);
+
+	auto fileSize = sCast<FileSize>(high) << 32 | low;
+	return fileSize;
 }
 
 void FileStream_Win32::setPos(FileSize pos)
 {
 	_checkFd();
-	LONG high = static_cast<LONG>(pos >> 32);
-	LONG low  = static_cast<LONG>(pos);
+	LONG high = sCast<LONG>(pos >> 32);
+	LONG low  = sCast<LONG>(pos);
 	::SetFilePointer( _fd, low, &high, FILE_BEGIN);
 }
 
 void FileStream_Win32::setPosFromEnd(FileSize pos)
 {
 	_checkFd();
-	LONG high = static_cast<LONG>(pos >> 32);
-	LONG low  = static_cast<LONG>(pos);
+	LONG high = sCast<LONG>(pos >> 32);
+	LONG low  = sCast<LONG>(pos);
 	::SetFilePointer( _fd, low, &high, FILE_END);
 }
 
@@ -124,8 +132,7 @@ FileStream_Win32::FileSize FileStream_Win32::getPos()
 	_checkFd();
 	LONG high = 0;
 	LONG low  = ::SetFilePointer(_fd, 0, &high, FILE_CURRENT);
-	if (low < 0 || high < 0) 
-		NMSP_THROW("{}", NMSP_SRCLOC);
+	throwIf(low < 0 || high < 0, "{}", NMSP_SRCLOC);
 
 	auto pos = sCast<FileSize>(low) | sCast<FileSize>(high) << 32;
 	return pos;
@@ -136,10 +143,8 @@ void FileStream_Win32::readBytes(Span_T<u8> data)
 	_checkFd();
 	if (data.size() <= 0)
 		return;
-	if (data.size() >= NumLimit<u32>::max())
-	{
-		NMSP_THROW("{}", NMSP_SRCLOC);
-	}
+	
+	throwIf(data.size() >= NumLimit<u32>::max(), "{}", NMSP_SRCLOC);
 
 	DWORD dwSize = Util::castDWord(data.size());
 	DWORD result;
@@ -152,10 +157,8 @@ void FileStream_Win32::writeBytes(ByteSpan_T data)
 	_checkFd();
 	if (data.size() <= 0)
 		return;
-	if (data.size() >= NumLimit<u32>::max())
-	{
-		NMSP_THROW("{}", NMSP_SRCLOC);
-	}
+
+	throwIf(data.size() >= NumLimit<u32>::max(), "{}", NMSP_SRCLOC);
 
 	DWORD dwSize = Util::castDWord(data.size());
 	DWORD result;
@@ -181,10 +184,7 @@ FileStream_Win32::NativeFd FileStream_Win32::nativeFd() const
 void FileStream_Win32::_checkFd()
 {
 	//NMSP_ASSERT(_fd != kInvalid(), NMSP_SRCLOC);
-	if (_fd == kInvalid())
-	{
-		NMSP_THROW("{}", NMSP_SRCLOC);
-	}
+	throwIf(_fd == kInvalid(), "{}", NMSP_SRCLOC);
 }
 
 #endif

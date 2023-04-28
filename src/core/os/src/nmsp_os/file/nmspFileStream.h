@@ -37,14 +37,25 @@
 
 namespace nmsp {
 
+#if 0
+#pragma mark --- FileStream_Base-Decl ---
+#endif // 0
+#if 1
+
 using FileStream_CreateDesc = FileStream_CreateDesc_Impl;
 class FileStream_T : public FileStream_Impl
 {
 public:
+	using Base = FileStream_Impl;
 
+public:
 	void openRead	(StrViewA_T filename);
 	void openAppend	(StrViewA_T filename);
 	void openWrite	(StrViewA_T filename, bool truncate);
+
+protected:
 };
+
+#endif
 
 }

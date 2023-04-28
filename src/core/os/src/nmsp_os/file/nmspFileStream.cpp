@@ -1,6 +1,6 @@
 #include "nmsp_os-pch.h"
 
-#include "nmspFileSteam.h"
+#include "nmspFileStream.h"
 
 namespace nmsp {
 

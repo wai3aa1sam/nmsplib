@@ -4,7 +4,7 @@
 
 #include <nmsp_os.h>
 
-#include <nmsp_os/file/nmspFileSteam.h>
+#include <nmsp_os/file/nmspFileStream.h>
 
 namespace nmsp {
 

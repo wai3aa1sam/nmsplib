@@ -46,7 +46,7 @@ public:
 	void flush	();
 
 	void setFileSize(FileSize newSize);
-	FileSize filesize();
+	FileSize fileSize();
 
 	void		setPos		 (FileSize pos);
 	void		setPosFromEnd(FileSize pos);

@@ -12,6 +12,10 @@ void run_temp_test()
 	NMSP_RUN_TEST(test_OS);
 	NMSP_RUN_TEST(test_FileStream);
 	NMSP_RUN_TEST(test_NativeUI);
+	NMSP_RUN_TEST(test_MemMapFile);
+	NMSP_RUN_TEST(test_Path);
+
+	NMSP_RUN_TEST(test_StrUtil);
 }
 
 // TODO: add a test manager class, then no need add to here

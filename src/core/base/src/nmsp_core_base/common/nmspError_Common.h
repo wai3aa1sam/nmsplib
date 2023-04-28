@@ -51,7 +51,7 @@ inline void throwIf(bool cond, ARGS&&... args)
 {
 	if (cond)
 	{
-		//throw NMSP_ERROR(forward<ARGS>(args)...);
+		throw NMSP_ERROR(nmsp::forward<ARGS>(args)...);
 	}
 }
 

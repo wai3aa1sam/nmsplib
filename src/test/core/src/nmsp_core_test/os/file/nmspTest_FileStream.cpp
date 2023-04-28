@@ -2,7 +2,7 @@
 
 #if NMSP_TEST_MODULE_OS || NMSP_TEST_ALL_MODULE
 
-#include "nmsp_os/file/nmspFileSteam.h"
+#include "nmsp_os/file/nmspFileStream.h"
 
 namespace nmsp {
 
@@ -21,6 +21,7 @@ public:
 			fs.writeBytes(makeByteSpan(str));
 			fs.flush();
 		}
+
 	}
 
 	virtual void onSetup() override

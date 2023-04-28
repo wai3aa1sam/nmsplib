@@ -27,9 +27,4 @@ enum class FileShareMode
 	ReadWrite,
 };
 
-struct File
-{
-
-};
-
 }
