@@ -12,6 +12,9 @@
 
 #include "nmsp_os/atomic/nmspAtomic.h"
 
+#include "nmsp_os/process/nmspProcess.h"
+#include "nmsp_os/process/nmspCommandLine.h"
+
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
 #endif // 0

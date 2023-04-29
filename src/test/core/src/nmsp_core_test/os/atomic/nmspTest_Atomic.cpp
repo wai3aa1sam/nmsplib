@@ -76,6 +76,9 @@ public:
 
 			{
 				OsUtil::sleep(1);
+
+				Atm_T<int> a;
+				_NMSP_DUMP_VAR(a.load());
 			}
 		}
 	}
