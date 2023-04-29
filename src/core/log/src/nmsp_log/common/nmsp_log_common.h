@@ -2,6 +2,7 @@
 
 #include <nmsp_core_base.h>
 #include <nmsp_stl.h>
+#include <nmsp_os.h>
 
 #include "nmsp_log-config.h"
 #include "nmsp_log_traits.h"

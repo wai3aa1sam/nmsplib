@@ -22,7 +22,7 @@ public:
 		NMSP_CORE_LOG("Hello World {} {}", 123, "Bye");
 
 		{
-			class NT : public NativeThread
+			class NT : public NativeThread_T
 			{
 			public:
 				virtual ~NT() { join(); }

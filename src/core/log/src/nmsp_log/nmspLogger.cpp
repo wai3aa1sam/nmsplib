@@ -8,8 +8,6 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include "spdlog/async.h"
 
-#include "nmsp_stl/atomic/nmspThreadStorage.h"
-
 namespace nmsp {
 
 //Logger_T* g_logger = nullptr;
