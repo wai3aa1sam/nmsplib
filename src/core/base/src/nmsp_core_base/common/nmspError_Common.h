@@ -47,11 +47,11 @@ private:
 #endif
 
 template<class... ARGS>
-inline void throwIf(bool cond, ARGS&&... args)
+inline void throwIf(bool cond, const char* fmt, ARGS&&... args)
 {
 	if (cond)
 	{
-		throw NMSP_ERROR(nmsp::forward<ARGS>(args)...);
+		throw NMSP_ERROR(fmt, nmsp::forward<ARGS>(args)...);
 	}
 }
 

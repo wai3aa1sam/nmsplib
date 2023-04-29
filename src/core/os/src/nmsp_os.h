@@ -10,6 +10,8 @@
 #include "nmsp_os/file/nmspFileStream.h"
 #include "nmsp_os/file/nmspMemMapFile.h"
 
+#include "nmsp_os/atomic/nmspAtomic.h"
+
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
 #endif // 0

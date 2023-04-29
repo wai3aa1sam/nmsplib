@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../common/nmspOs_Common_Win32.h"
+#include "nmsp_os/backend/win32/common/nmspOs_Common_Win32.h"
 
-#include "nmsp_os/native_ui/nmspNativeUIApp_Base.h"
+#include "nmsp_os/native_ui/base/nmspNativeUIApp_Base.h"
 
 #if NMSP_OS_WINDOWS
 

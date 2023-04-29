@@ -2,7 +2,7 @@
 
 #include "nmspNativeUIApp_Win32.h"
 
-#include "nmsp_stl/string/nmspUtfUtil.h"
+#include <nmsp_stl/string/nmspUtfUtil.h>
 
 #if NMSP_OS_WINDOWS
 

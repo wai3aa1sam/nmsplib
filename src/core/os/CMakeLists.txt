@@ -10,6 +10,10 @@ target_link_libraries(${sub_project_name}
     PUBLIC  ${project_namespace}_stl
     )
 
+target_link_libraries(${sub_project_name} 
+    PRIVATE unofficial::concurrentqueue::concurrentqueue
+)
+
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 
 #function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)

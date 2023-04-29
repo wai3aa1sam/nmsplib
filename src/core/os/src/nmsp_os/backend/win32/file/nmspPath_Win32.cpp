@@ -7,13 +7,15 @@ namespace nmsp {
 void Path_Win32::setCurrentDir(StrViewA_T dir)
 {
 	TempStringW_T<> tmp = UtfUtil::toStringW(dir);
-	::SetCurrentDirectory(tmp.c_str());
+	auto ret = ::SetCurrentDirectory(tmp.c_str());
+	Util::throwIf(!ret, "setCurrentDir: {}", dir);
 }
 
 StringT Path_Win32::getCurrentDir()
 {
 	wchar_t tmp[MAX_PATH+1];
-	throwIf(!::GetCurrentDirectory(MAX_PATH, tmp), "{}", NMSP_SRCLOC);
+	auto ret = ::GetCurrentDirectory(MAX_PATH, tmp);
+	Util::throwIf(!ret, "{}", NMSP_SRCLOC);
 	StringT o = UtfUtil::toString(tmp);
 	return o;
 }
@@ -23,8 +25,8 @@ void Path_Win32::rename(StrViewA_T src, StrViewA_T dst)
 	TempStringW_T<> srcW, dstW;
 	UtfUtil::convert(srcW, src);
 	UtfUtil::convert(dstW, dst);
-
-	throwIf(0 != ::_wrename(srcW.c_str(), dstW.c_str()), "rename file {}->{}", src, dst);
+	auto ret = ::_wrename(srcW.c_str(), dstW.c_str());
+	Util::throwIf(ret != 0, "rename file {}->{}", src, dst);
 }
 
 bool Path_Win32::isExist(StrViewA_T path)

@@ -5,6 +5,7 @@
 #include "nmspOsTraits_Win32.h"
 #include "nmspOsUtil_Win32.h"
 
+#include "nmspUtil_Win32.h"
 
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---

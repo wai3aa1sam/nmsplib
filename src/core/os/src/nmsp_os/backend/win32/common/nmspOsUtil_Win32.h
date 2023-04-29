@@ -1,7 +1,6 @@
 #pragma once
 
-#include "nmsp_os/common/nmsp_os_common.h"
-
+#include "nmsp_os/common/base/nmspOsUtil_Base.h"
 
 namespace nmsp {
 #if 0
@@ -9,10 +8,10 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-struct OsUtil_Win32 : public OsUtil
+struct OsUtil_Win32 : public OsUtil_Base
 {
 public:
-	using Base = OsUtil;
+	using Base = OsUtil_Base;
 
 	using Rect2f = typename Base::Rect2f;
 
@@ -20,19 +19,27 @@ public:
 	OsUtil_Win32() = delete;
 
 public:
-	static Rect2f toRect2f(const ::RECT& rect);
-
-	static void throwIf(bool cond);
-
-	template<class T>
-	static DWORD castDWord(T v);
+	static void sleep_ms(int ms);
+	static void sleep(int sec);
 
 };
+#endif
 
-template<class T>
-DWORD OsUtil_Win32::castDWord(T v)
+#if 0
+#pragma mark --- OsUtil_Win32-Impl ---
+#endif // 0
+#if 1
+
+inline
+void OsUtil_Win32::sleep_ms(int ms)
 {
-	return sCast<DWORD>(v);
+	::Sleep(ms);
+}
+
+inline
+void OsUtil_Win32::sleep(int sec)
+{
+	sleep_ms(sec * 1000);
 }
 
 #endif

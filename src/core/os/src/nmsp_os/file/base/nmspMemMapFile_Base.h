@@ -2,7 +2,7 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
-#include "nmspFileStream.h"
+#include "nmsp_os/file/nmspFileStream.h"
 
 /*
 references:

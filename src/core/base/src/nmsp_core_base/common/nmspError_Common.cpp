@@ -27,7 +27,7 @@ ErrorBase::ErrorBase(const SrcLoc & srcLoc)
 Error::Error(const SrcLoc& loc, const char* msg)
 	: Base(loc)
 {
-
+	_NMSP_LOG("{}: {}", loc, msg);
 }
 
 #endif

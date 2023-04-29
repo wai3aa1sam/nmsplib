@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nmsp_os/common/nmspOsTraits_Base.h"
+#include "nmsp_os/common/base/nmspOsTraits_Base.h"
 
 #if NMSP_OS_WINDOWS
 namespace nmsp {
@@ -11,13 +11,15 @@ namespace nmsp {
 #if 1
 
 struct OsUtil_Win32;
+struct Util_Win32;
 
 struct OsDefaultTraits_Win32 : public OsDefaultTraits_Base
 {
 	static constexpr OsPlatform				platform();
 	static constexpr EnumInt<OsPlatform>	platformInt();
 
-	using Util = OsUtil_Win32;
+	using OsUtil = OsUtil_Win32;
+	using Util	 = Util_Win32;
 
 	using Msg		= MSG;
 	using WndHnd	= HWND;

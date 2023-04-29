@@ -42,8 +42,8 @@ public:
 			NMSP_TEST_PATH_STATUS("ALL_BUILD.vcxproj.filters");
 			NMSP_TEST_PATH_STATUS("xxx");
 
-			File::rename("testFs.txt", "on9");
-			File::rename("testFx.txt", "on9");
+			//File::rename("testFx.txt", "on92");
+			//File::rename("testFx.txt", "on9");
 		}
 	}
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../common/nmspOs_Common_Win32.h"
+#include "nmsp_os/backend/win32/common/nmspOs_Common_Win32.h"
 
-#include "nmsp_os/file/nmspFileStream_Base.h"
+#include "nmsp_os/file/base/nmspFileStream_Base.h"
 
 /*
 references:

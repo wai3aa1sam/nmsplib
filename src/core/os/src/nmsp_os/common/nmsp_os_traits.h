@@ -2,7 +2,7 @@
 
 #include <nmsp_core_base/common/nmsp_core_base_traits.h>
 #include "nmsp_os-config.h"
-#include "nmspOsTraits_Base.h"
+#include "nmsp_os/common/base/nmspOsTraits_Base.h"
 
 #if 0
 #pragma mark --- nmsp_os_backend_switch-Impl ---
