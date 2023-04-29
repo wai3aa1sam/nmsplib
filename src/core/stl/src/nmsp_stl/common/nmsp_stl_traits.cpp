@@ -2,9 +2,6 @@
 
 #include "nmsp_stl/common/nmsp_stl_traits.h"
 
-#include "nmsp_stl/atomic/nmspThreadStorage.h"
-#include "nmsp_stl/atomic/nmspAtomicUtil.h"
-
 namespace nmsp {
 
 #if 0

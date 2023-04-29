@@ -12,7 +12,6 @@ target_link_libraries(${sub_project_name}
     )
 target_link_libraries(${sub_project_name} 
     PRIVATE EASTL
-            unofficial::concurrentqueue::concurrentqueue
     )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)

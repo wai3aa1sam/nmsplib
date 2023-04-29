@@ -8,11 +8,11 @@
 #endif // 0
 #if 1
 
-#if NMSP_STL_BUILD_STD_CONTAINER
+#if NMSP_STL_BUILD_CONTAINER_STD
 
-#elif NMSP_STL_BUILD_NMSP_CONTAINER
+#elif NMSP_STL_BUILD_CONTAINER_NMSP
 
-#elif NMSP_STL_BUILD_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_CONTAINER_EASTL
 	
 	#include "EASTL/functional.h"
 
@@ -28,7 +28,7 @@
 
 #else
 	#error "nmspFunctional.h should have backend switch"
-#endif // NMSP_STL_BUILD_EASTL_CONTAINER
+#endif // NMSP_STL_BUILD_CONTAINER_EASTL
 
 #endif
 

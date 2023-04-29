@@ -261,67 +261,6 @@ public:
 		{ UPtr_T<int> up; up.reset(nmsp_new<int>()); }
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
 
-		{ sleep_ms(10); auto n = StlTraits::logicalThreadCount(); NMSP_UNUSED(n); }
-		{
-			MutexProtected_T<Vector_T<int>> a;
-			auto data = a.scopedULock();
-		}
-
-		{
-			SMutexProtected_T<Vector_T<int>> a;
-			auto data = a.scopedSLock();
-		}
-
-		{
-			CondVarProtected_T<Vector_T<int>> s;
-			auto data = s.scopedULock();
-		}
-		{
-			SMtxCondVarProtected_T<Vector_T<int>> s;
-			auto data = s.scopedSLock();
-		}
-
-		{
-			class NT : public NativeThread
-			{
-			public:
-				virtual ~NT() { join(); }
-				virtual void* onRoutine() override
-				{
-					auto v = StrUtil::toTempStr((double)20.0f);
-					auto vw = StrUtil::toTempStrW((double)20.0f);
-
-					_NMSP_LOG("thread name: {}", v.data());
-
-					return nullptr;
-				}
-			};
-			NT nt;
-			auto cd = NT::makeCDesc();
-			//cd.name = "Render Thread";
-			cd.affinityIdx = 10;
-			nt.create(cd);
-		}
-
-		{
-			AtmQueue_T<i64> q;
-			q.push(10);
-
-			enum class Prior
-			{
-				max = 0,
-				high, mid, low,
-				count = 4
-			};
-
-			AtmPrioityQueue_T<int, enumInt(Prior::count), Prior> apq;
-			apq.push(10);
-
-			int a;
-			apq.try_pop(a);
-			_NMSP_LOG("a: {}", a);
-		}
-
 		{
 			int* p = NMSP_NEW(p);
 			NMSP_FREE(p);

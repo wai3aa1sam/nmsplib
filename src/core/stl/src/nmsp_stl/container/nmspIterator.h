@@ -10,7 +10,7 @@
 
 	#include "nmsp/nmspIterator_Nmsp.h"
 	
-#elif NMSP_STL_BUILD_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_CONTAINER_EASTL
 
 	#include "eastl/nmspIterator_Eastl.h"
 

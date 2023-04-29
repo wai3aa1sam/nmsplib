@@ -7,7 +7,7 @@
 #endif // 0
 #if 1
 
-#if NMSP_STL_BUILD_STD_CONTAINER
+#if NMSP_STL_BUILD_CONTAINER_STD
 
 	#include "nmsp/nmspSPtr_Std.h"
 
@@ -16,7 +16,7 @@
 
 	}
 
-#elif NMSP_STL_BUILD_NMSP_CONTAINER || NMSP_STL_INTRUSIVE_S_PTR
+#elif NMSP_STL_BUILD_CONTAINER_NMSP || NMSP_STL_INTRUSIVE_S_PTR
 
 	#include "nmsp/nmspSPtr_Nmsp.h"
 
@@ -26,7 +26,7 @@
 
 	}
 
-#elif NMSP_STL_BUILD_EASTL_CONTAINER
+#elif NMSP_STL_BUILD_CONTAINER_EASTL
 
 	#include "eastl/nmspSPtr_Eastl.h"
 

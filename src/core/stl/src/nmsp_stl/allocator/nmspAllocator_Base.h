@@ -92,13 +92,13 @@ bool	AllocatorBase_Nmsp<ALLOC>::operator!=(const AllocatorBase_Nmsp& rhs)
 
 #endif
 
-#if NMSP_STL_BUILD_EASTL_CONTAINER
+#if NMSP_STL_BUILD_CONTAINER_EASTL
 	template<class ALLOC> using AllocatorBase_Impl	= AllocatorBase_Eastl< AllocatorBase_Nmsp<ALLOC> >;
-#elif NMSP_STL_BUILD_NMSP_CONTAINER
+#elif NMSP_STL_BUILD_CONTAINER_NMSP
 	template<class ALLOC> using AllocatorBase_Impl	= AllocatorBase_Nmsp<ALLOC>;
 #else
 	#error "unspported stl build marco"
-#endif // NMSP_STL_BUILD_EASTL_CONTAINER
+#endif // NMSP_STL_BUILD_CONTAINER_EASTL
 
 template<class ALLOC> using Allocator_Base	= AllocatorBase_Impl<ALLOC>;
 
