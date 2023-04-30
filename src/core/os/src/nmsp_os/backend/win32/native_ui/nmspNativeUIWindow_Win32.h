@@ -4,6 +4,11 @@
 
 #include "nmsp_os/native_ui/base/nmspNativeUIWindow_Base.h"
 
+/*
+references:
+- src/core/native_ui/NativeUIWindow_Win32.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+*/
+
 #if NMSP_OS_WINDOWS
 
 namespace nmsp {
@@ -50,10 +55,15 @@ protected:
 	virtual void onClientRectChanged(const Rect2f& rect)	override;
 	virtual void onDrawNeeded		()						override;
 
-
 private:
 	static LRESULT WINAPI s_wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static This* s_getThis(WndHnd hwnd);
+
+	LRESULT _handleNativeEvent			(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	bool	_handleNativeUIMouseEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	bool	_handleNativeUIKeyEvent		(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	UIEventModifier _getWin32Modifier();
 
 private:
 	WndHnd _wndHnd;

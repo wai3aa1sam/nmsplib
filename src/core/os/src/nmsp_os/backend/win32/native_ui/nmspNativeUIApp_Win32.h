@@ -4,6 +4,11 @@
 
 #include "nmsp_os/native_ui/base/nmspNativeUIApp_Base.h"
 
+/*
+references:
+- src/core/native_ui/NativeUIApp_Win32.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+*/
+
 #if NMSP_OS_WINDOWS
 
 namespace nmsp {

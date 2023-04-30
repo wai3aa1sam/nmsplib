@@ -7,7 +7,8 @@
 
 namespace nmsp {
 
-template<class T> struct WindowRect2_T;;
+template<class T> struct WindowVec2_T;
+template<class T> struct WindowRect2_T;
 
 enum class OsPlatform
 {
@@ -39,6 +40,11 @@ struct OsDefaultTraits_Base : public CoreBaseTraits
 						using Rect2f = Rect2<f32>;
 						using Rect2d = Rect2<f64>;
 						using Rect2i = Rect2<i32>;
+
+	template<class T>	using Vec2  = WindowVec2_T<T>;
+						using Vec2f = Vec2<f32>;
+						using Vec2d = Vec2<f64>;
+						using Vec2i = Vec2<i32>;
 
 	using SizeType	= size_t;
 	using IndexType	= i32;

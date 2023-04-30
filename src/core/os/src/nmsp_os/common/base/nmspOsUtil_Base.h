@@ -13,7 +13,11 @@ namespace nmsp {
 struct OsUtil_Base
 {
 public:
-	using Rect2f = OsTraits::Rect2f;
+	template<class T> using Vec2_T	= OsTraits::Vec2<T>;
+	template<class T> using Rect2_T	= OsTraits::Rect2<T>;
+
+	using Vec2f		= OsTraits::Vec2f;
+	using Rect2f	= OsTraits::Rect2f;
 
 public:
 	OsUtil_Base() = delete;

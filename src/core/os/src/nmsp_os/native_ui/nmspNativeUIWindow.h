@@ -2,6 +2,11 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
+/*
+references:
+- src/core/native_ui/NativeUI.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+*/
+
 #if 0
 #pragma mark --- nmsp_os_backend_switch-Impl ---
 #endif // 0

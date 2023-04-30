@@ -13,7 +13,8 @@ struct Util_Win32 : public OsUtil_Base
 public:
 	using Base = OsUtil_Base;
 
-	using Rect2f = typename Base::Rect2f;
+	using Base::Vec2_T;
+	using Base::Rect2f;
 
 public:
 	Util_Win32() = delete;
@@ -24,8 +25,9 @@ public:
 	template<class... ARGS>
 	static void throwIf(bool cond, const char* fmt = "", ARGS&&... args);
 
-	template<class T>
-	static DWORD castDWord(T v);
+	template<class T> static DWORD		castDWord	(T v);
+	template<class T> static POINT		castPoint	(const Vec2_T<T>& v);
+	template<class T> static Vec2_T<T>	castVec2	(const POINT& pt);
 
 	static StringT getLastErrorMsg();
 
@@ -48,10 +50,26 @@ void Util_Win32::throwIf(bool cond, const char* fmt, ARGS&&... args)
 	}
 }
 
+
 template<class T> inline
 DWORD Util_Win32::castDWord(T v)
 {
 	return sCast<DWORD>(v);
+}
+
+template<class T> inline
+POINT Util_Win32::castPoint(const Vec2_T<T>& v)
+{
+	POINT o;
+	o.x = sCast<LONG>(v.x);
+	o.y = sCast<LONG>(v.y);
+	return o;
+}
+
+template<class T> inline
+Util_Win32::Vec2_T<T> Util_Win32::castVec2(const POINT& pt)
+{
+	return Vec2_T<T>{sCast<T>(pt.x), sCast<T>(pt.y)};
 }
 
 #endif

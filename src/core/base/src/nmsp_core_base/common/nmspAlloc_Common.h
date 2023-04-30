@@ -38,6 +38,7 @@ template<class T> inline void	nmsp_delete(T* p)	NMSP_NOEXCEPT
 
 #define NMSP_NEW_SELECT(COUNT) NMSP_NEW_##COUNT
 #define NMSP_NEW(...) NMSP_IDENTITY(NMSP_CALL(NMSP_NEW_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__) (__VA_ARGS__)))
+#define NMSP_DELETE(ptr, ...) ::nmsp::nmsp_delete(ptr)
 
 #define NMSP_ALLOC(ptr, size, ...)		::nmsp::sCast<decltype(ptr)>(::nmsp::nmsp_alloc(size, __VA_ARGS__))	;NMSP_ASSERT(ptr != nullptr)											
 #define NMSP_FREE(ptr, ...)				do{ ::nmsp::nmsp_free(ptr, __VA_ARGS__) ; } while(false)

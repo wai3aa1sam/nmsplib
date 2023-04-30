@@ -2,6 +2,7 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
+#include "nmsp_os/input/nmspUIInput.h"
 
 /*
 references:
@@ -85,21 +86,32 @@ public:
 
 	void drawNeeded();
 
-	virtual void onCloseButton	();
-	virtual void onActive		(bool isActive);
-	virtual void onDraw			();
+	virtual void onCloseButton	() {};
+	virtual void onActive		(bool isActive) {};
+	virtual void onDraw			() {};
 
 	const Rect2f& clientRect() const;
 
-protected:
-	virtual void onCreate			(const CreateDesc& cd);
-	virtual void onSetWindowTitle	(StrViewA_T title);
-	virtual void onClientRectChanged(const Rect2f& rect);
-	virtual void onDrawNeeded		();
+	virtual void onUIMouseEvent(UIMouseEvent& ev)		{};
+	virtual void onUIKeyboardEvent(UIKeyboardEvent& ev) {};
+
+	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UIKeyEventType::Down || _keys[enumInt(button_)] == UIKeyEventType::Hold; }
+	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UIKeyEventType::Up; }
 
 protected:
-	Rect2f _clientRect;
+	virtual void onCreate			(const CreateDesc& cd)	{};
+	virtual void onSetWindowTitle	(StrViewA_T title)		{};
+	virtual void onClientRectChanged(const Rect2f& rect)	{};
+	virtual void onDrawNeeded		()						{};
 
+	virtual void onUINativeMouseEvent(UIMouseEvent& ev);
+	virtual void onUINativeKeyboardEvent(UIKeyboardEvent& ev);
+
+protected:
+	Rect2f	_clientRect;
+
+	UIMouseEventButton	_pressedMouseButtons = UIMouseEventButton::None;
+	Vec2f				_mousePos{0,0};
 };
 
 #endif

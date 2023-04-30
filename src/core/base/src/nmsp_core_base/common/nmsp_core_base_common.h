@@ -78,6 +78,8 @@
 #include "nmspAlloc_Common.h"
 
 #include "nmspDataType_Common.h"
+#include "nmspBitUtil.h"
+
 #include "nmspFunction_Common.h"
 #include "nmspTypeTrait_Common.h"
 #include "nmspClass_Common.h"
@@ -86,6 +88,7 @@
 #include "nmspError_Common.h"
 
 #include "../fmt/nmspFmt.h"
+
 
 
 #endif

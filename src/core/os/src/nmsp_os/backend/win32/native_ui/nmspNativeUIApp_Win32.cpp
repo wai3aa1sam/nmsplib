@@ -24,7 +24,8 @@ NativeUIApp_Win32::~NativeUIApp_Win32()
 
 void NativeUIApp_Win32::pollMsg()
 {
-	while (::PeekMessage(&_win32Msg, NULL, 0, 0, PM_REMOVE)) {
+	while (::PeekMessage(&_win32Msg, NULL, 0, 0, PM_REMOVE)) 
+	{
 		::TranslateMessage(&_win32Msg);
 		::DispatchMessage(&_win32Msg);
 	}
@@ -45,7 +46,8 @@ void NativeUIApp_Win32::onRun()
 {
 	Base::onRun();
 
-	while (::GetMessage(&_win32Msg, NULL, 0, 0)) {
+	while (::GetMessage(&_win32Msg, NULL, 0, 0)) 
+	{
 		::TranslateMessage(&_win32Msg);
 		::DispatchMessage(&_win32Msg);
 	}
