@@ -13,15 +13,17 @@ target_link_libraries(${sub_project_name}
             ${project_namespace}_log
             ${project_namespace}_profiler
             ${project_namespace}_math
+            ${project_namespace}_file_io
             #${project_namespace}_core
     )
 
 
 target_compile_definitions(${sub_project_name} 
     PRIVATE NMSP_TEST_ALL_MODULE=0
-            NMSP_TEST_MODULE_STL=1
-            NMSP_TEST_MODULE_OS=1
-            NMSP_TEST_MODULE_LOG=1
-            NMSP_TEST_MODULE_PROFILER=1
-            NMSP_TEST_MODULE_MATH=1
+            NMSP_TEST_MODULE_STL=0
+            NMSP_TEST_MODULE_OS=0
+            NMSP_TEST_MODULE_LOG=0
+            NMSP_TEST_MODULE_PROFILER=0
+            NMSP_TEST_MODULE_MATH=0
+            NMSP_TEST_MODULE_FILE_IO=1
     )

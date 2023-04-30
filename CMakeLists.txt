@@ -36,6 +36,9 @@ find_package(EASTL                      CONFIG REQUIRED)
 find_package(unofficial-concurrentqueue CONFIG REQUIRED)
 find_package(spdlog                     CONFIG REQUIRED)
 find_package(glm                        CONFIG REQUIRED)
+find_package(PNG                               REQUIRED)
+
+find_package(nlohmann_json              CONFIG REQUIRED)
 
 # --- git_submodule ---
 #my_add_git_submodule(external/)
@@ -47,7 +50,7 @@ add_subdirectory(src/core/os)
 add_subdirectory(src/core/profiler)
 add_subdirectory(src/core/log)
 add_subdirectory(src/core/math)
-#add_subdirectory(src/core/file_io)
+add_subdirectory(src/core/file_io)
 #add_subdirectory(src/core/reflection)
 #add_subdirectory(src/core/job_system)
 #add_subdirectory(src/core/net)
