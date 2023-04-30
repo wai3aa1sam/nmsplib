@@ -4,6 +4,9 @@
 
 #include "nmsp_os/native_ui/nmspNativeUI.h"
 
+#include "nmsp_os/app/ProjectSetting.h"
+#include "nmsp_os/file/nmspDirectory.h"
+
 namespace nmsp {
 
 class Test_NativeUI : public UnitTest
@@ -84,6 +87,17 @@ public:
 
 			NTApp app;
 			app.run(app.makeCDesc());
+		}
+
+		{
+			ProjectSetting_T prjs;
+			ProjectSetting_T::instance()->setProjectRoot("../../../../..");
+
+			_NMSP_DUMP_VAR(Directory::getCurrent());
+
+			AppBase_T app;
+			
+			_NMSP_DUMP_VAR(app.getExecutableFilename());
 		}
 	}
 

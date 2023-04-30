@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nmsp_os/common/nmsp_os_common.h"
-
+#include "nmsp_os/app/AppBase.h"
 
 /*
 references:
@@ -24,7 +24,7 @@ public:
 };
 
 // interface only class
-class NativeUIApp_Base : public NonCopyable
+class NativeUIApp_Base : public AppBase_T
 {
 public:
 	using CreateDesc = NativeUIApp_CreateDesc_Base;
