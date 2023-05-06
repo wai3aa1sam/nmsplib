@@ -25,15 +25,15 @@ template<class T>
 void onFormat(fmt::format_context& ctx, const T& v);
 
 template<class... ARGS> inline
-void formatTo(fmt::format_context& ctx, const char* fmt, ARGS&&... args)
+decltype(auto) formatTo(fmt::format_context& ctx, const char* fmt, ARGS&&... args)
 {
-	fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
+	return fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 template<class... ARGS> inline
-void formatTo(fmt::format_context& ctx, const wchar_t* fmt, ARGS&&... args)
+decltype(auto) formatTo(fmt::format_context& ctx, const wchar_t* fmt, ARGS&&... args)
 {
-	fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
+	return fmt::format_to(ctx.out(), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 #if 0

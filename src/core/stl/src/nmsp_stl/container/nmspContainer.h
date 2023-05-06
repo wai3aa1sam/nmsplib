@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nmspIterator.h"
+#include "nmspArray.h"
 #include "nmspVector.h"
 #include "nmspString.h"
 #include "nmspMap.h"

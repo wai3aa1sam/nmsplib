@@ -6,6 +6,19 @@
 
 namespace nmsp {
 
+template<class T>
+constexpr T con(T t)
+{
+	return t;
+}
+
+template<class T>
+constexpr T con2(T t)
+{
+	return con(t);
+}
+
+
 class Test_FileIO : public UnitTest
 {
 public:
@@ -14,6 +27,107 @@ public:
 		nlohmann::json js;
 		js.find("asdsd");
 
+		_NMSP_LOG("{}", ColorModel::None);
+		_NMSP_LOG("{}", ColorType::Rb);
+
+		{
+			//auto res = TypeMixture_T<TestEnum>::s_make({ 1, (u8)2, (u8)4 });
+			//_NMSP_LOG("TypeMixture_T<TestEnum>: {}", enumInt(res));
+		}
+		{
+			/*Tuple_T t = { 1, 2.0f, 4.0f };
+			constexpr size_t i = 0;
+			t.get<0>();*/
+
+			
+			//decltype(t)::Base st;
+			auto st = std::make_tuple(1, 2.0f, 4.0f);
+			auto st0 = std::get<0>(st);
+			_NMSP_LOG("{}", st0);
+
+		}
+		{
+			auto t = std::make_tuple(1, 2.0f, "123");
+			/*for (constexpr size_t i = 0; i < 3; i++)
+			{
+				auto t0 = std::get<i>(t);
+				_NMSP_LOG("{}", t0);
+			}*/
+			/*for... (auto elem : t) {
+				std::cout << elem << " "; 
+			}*/
+
+		}
+		{
+			auto t = std::make_tuple(1, 2.0f, "123");
+			auto testFunc = [](auto& v, auto i)
+			{
+				_NMSP_LOG("{}", v);
+			};
+			//tupleLoop(testFunc, t);
+		}
+
+		{
+			//constexpr int 
+			//_NMSP_DUMP_VAR(sCast<int>(TestEnum::k));
+			constexpr Tuple_T<int, u8> t = Tuple_T<int, u8>{1, (u8)2};
+			constexpr auto t0	= std::get<0>(t); NMSP_UNUSED(t0);
+			constexpr auto t0_1 = t.get<0>(); NMSP_UNUSED(t0_1);
+
+			_NMSP_DUMP_VAR(t0_1);
+
+		}
+		{
+			_NMSP_DUMP_VAR(enumInt(TestEnum::k1));
+			_NMSP_DUMP_VAR(enumInt(TestEnum::k2));
+
+			constexpr auto a = con2(4); NMSP_UNUSED(a);
+
+
+		}
+
+		{
+			auto a = makeTM_offsets<TestEnum>;
+			_NMSP_DUMP_VAR(a[0], a[1], a[2]);
+		}
+
+		{
+			size_t arr[3] = { 1, 2, 3 };
+			auto cm = sCast < EnumInt<ColorModel> >(arr[0]);
+			_NMSP_DUMP_VAR(cm);
+
+		}
+
+		{
+			auto arr = makeArray<std::integer_sequence<size_t, 1, 2, 3>>;
+			_NMSP_DUMP_VAR(arr[0]);
+		}
+
+		{
+			//Array_T<int, 1> a;
+			//std::array<int, 1> n;
+		}
+
+		{
+			constexpr auto t = Tuple_T<int, u8, u8>{1, (u8)2, (u8)1};
+			decltype(t)::ElementType<0> a = 10;
+			_NMSP_DUMP_VAR(a);
+
+			TypeMixture_T<TestEnum>::Types::ElementType<1> b = 20;
+			_NMSP_DUMP_VAR(b);
+
+			//auto tmArr = makeTMValue<TestEnum>(t);
+			constexpr auto ca = t.get<0>();
+			_NMSP_DUMP_VAR(ca);
+		}
+
+		{
+			//constexpr auto t = Tuple_T<int, u8, u8>{1, (u8)2, (u8)1};
+			//TypeMixture_T<TestEnum>::s_make({1, 1, 1});
+
+			constexpr auto a2 = TestEnum::k6;
+			_NMSP_DUMP_VAR((int)a2);
+		}
 	}
 
 	virtual void onSetup() override

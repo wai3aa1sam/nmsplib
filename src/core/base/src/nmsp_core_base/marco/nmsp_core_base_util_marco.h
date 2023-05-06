@@ -3,6 +3,7 @@
 /*
 references:
 - sge_marco.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+- REP in https://stackoverflow.com/questions/8551418/c-preprocessor-macro-for-returning-a-string-repeated-a-certain-number-of-times
 */
 
 #include <assert.h>
@@ -20,7 +21,6 @@ references:
 #define NMSP_IDENTITY(x) x
 #define NMSP_CALL(M, ARGS) NMSP_IDENTITY( M(ARGS) )
 
-
 #define NMSP_CONCAT(x, ...)		x ## __VA_ARGS__
 
 #define NMSP_CALL_ARGS(x, ...)	NMSP_IDENTITY( x(__VA_ARGS__) )
@@ -36,6 +36,8 @@ references:
 #define NMSP_NOEXCEPT				noexcept
 #define NMSP_NOEXCEPT_IF(...)		noexcept(__VA_ARGS__)
 
+#define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
+
 #if NMSP_ENABLE_ASSERT
 	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
 	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
@@ -48,10 +50,37 @@ references:
 #define NMSP_ALIGN_AS(x) alignas(x)
 
 #if NMSP_DEBUG
-#define NMSP_SRCLOC	SrcLoc(__FILE__, __LINE__, NMSP_FUNC_NAME_SZ)
+	#define NMSP_SRCLOC	SrcLoc(__FILE__, __LINE__, NMSP_FUNC_NAME_SZ)
 #else
-#define NMSP_SRCLOC	SrcLoc()
+	#define NMSP_SRCLOC	SrcLoc()
 #endif
 
+#define NMSP_REP0(X)
+#define NMSP_REP1(X) X
+#define NMSP_REP2(X)  NMSP_REP1(X) X
+#define NMSP_REP3(X)  NMSP_REP2(X) X
+#define NMSP_REP4(X)  NMSP_REP3(X) X
+#define NMSP_REP5(X)  NMSP_REP4(X) X
+#define NMSP_REP6(X)  NMSP_REP5(X) X
+#define NMSP_REP7(X)  NMSP_REP6(X) X
+#define NMSP_REP8(X)  NMSP_REP7(X) X
+#define NMSP_REP9(X)  NMSP_REP8(X) X
+#define NMSP_REP10(X) NMSP_REP9(X) X
+#define NMSP_REP_TO(HUNDREDS,TENS,ONES,X) \
+  NMSP_REP##HUNDREDS(NMSP_REP10(NMSP_REP10(X))) \
+  NMSP_REP##TENS(REP10(X)) \
+  NMSP_REP##ONES(X)
+
+#define NMSP_IDX_LIST_IMPL(SEP, I, X, ...)	SEP NMSP_IDENTITY(X(I __VA_ARGS__))
+#define NMSP_IDX_LIST_1(SEP, X, ...)		NMSP_IDENTITY(X(0 __VA_ARGS__))
+#define NMSP_IDX_LIST_2(SEP, X, ...)		NMSP_IDX_LIST_1(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 1, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_3(SEP, X, ...)		NMSP_IDX_LIST_2(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 2, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_4(SEP, X, ...)		NMSP_IDX_LIST_3(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 3, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_5(SEP, X, ...)		NMSP_IDX_LIST_4(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 4, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_6(SEP, X, ...)		NMSP_IDX_LIST_5(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 5, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_7(SEP, X, ...)		NMSP_IDX_LIST_6(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 6, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_8(SEP, X, ...)		NMSP_IDX_LIST_7(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 7, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_9(SEP, X, ...)		NMSP_IDX_LIST_8(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 8, X, __VA_ARGS__)
+#define NMSP_IDX_LIST_10(SEP, X, ...)		NMSP_IDX_LIST_9(SEP, X, __VA_ARGS__) NMSP_IDX_LIST_IMPL(SEP, 9, X, __VA_ARGS__)
 
 #endif

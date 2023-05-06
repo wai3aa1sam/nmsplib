@@ -25,8 +25,8 @@ class TypeDisplayer;
 #endif // 0
 #if 1
 
-template<bool COND> using EnableIfT = typename std::enable_if<COND>;
-template<bool COND> using EnableIf  = typename EnableIfT<COND>::type;
+template<bool COND, class T = void> using EnableIfT = typename std::enable_if<COND, T>;
+template<bool COND, class T = void> using EnableIf  = typename EnableIfT<COND, T>::type;
 
 template<bool COND, class IF_TRUE_T, class IF_FASLE_T> using ConditionalT   = typename std::conditional<COND, IF_TRUE_T, IF_FASLE_T>;
 template<bool COND, class IF_TRUE_T, class IF_FASLE_T> using Conditional    = typename ConditionalT<COND, IF_TRUE_T, IF_FASLE_T>::type;
