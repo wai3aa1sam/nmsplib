@@ -6,18 +6,25 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- FileIOTraits-Impl ---
+#pragma mark --- FileIoTraits-Impl ---
 #endif // 0
 #if 1
-struct FileIODefaultTraits_T : public CoreBaseTraits
+struct FileIoDefaultTraits_T : public CoreBaseTraits
 {
-	
+public:
+	using Base = CoreBaseTraits;
+
+	using SizeType	= size_t;
+	using IndexType = i32;
+
+public:
+
 };
 
 
 #if !NMSP_FILE_IO_CUSTOM_TRAITS
 
-using FileIOTraits = FileIODefaultTraits_T;
+using FileIoTraits = FileIoDefaultTraits_T;
 
 #else
 

@@ -25,13 +25,21 @@ namespace nmsp {
 //	return std::get<I>(t);
 //}
 
+template<size_t I, class TUPLE>
+struct TupleElementT
+{
+	using Type = typename std::tuple_element<I, typename TUPLE::Base>::type;
+};
+template<size_t I, class TUPLE> using TupleElement = typename TupleElementT<I, TUPLE>::Type;
+
 template<class... ARGS>
 class Tuple_T : public std::tuple<ARGS...>
 {
 public:
 	using Base = std::tuple<ARGS...>;
+	using This = Tuple_T<ARGS...>;
 
-	template<size_t I> using ElementType = typename std::tuple_element<I, Base>::type;
+	template<size_t I> using ElementType = typename TupleElement<I, This>;
 
 public:
 	Tuple_T() = default;

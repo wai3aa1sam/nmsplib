@@ -31,6 +31,8 @@ public:
 
 	template<class T>	constexpr	static void	byteSize();
 
+	template<class T>	constexpr	static T setN(T n);
+
 };
 
 template<class T>	inline constexpr bool	BitUtil::hasAny		(T  value, T bits)			{ return (value & bits) != T(0);    }
@@ -48,6 +50,16 @@ template<class T>	inline constexpr void	BitUtil::setBit		(T& value, int nth)		{ 
 template<class T>	inline constexpr void	BitUtil::unsetBit	(T& value, int nth)		{ NMSP_ASSERT(nth < byteSize<T>()); value &= ~bit(nth); }
 
 template<class T>	constexpr	static void	BitUtil::byteSize(){ return sizeof(T) * 8; }
+
+template<class T>	constexpr	static T	BitUtil::setN(T n)
+{
+	T res = 0;
+	for (T i = 0; i < n; i++)
+	{
+		set(res, bit(i));
+	}
+	return res;
+}
 
 template<class T> constexpr
 int BitUtil::highest(T value) {

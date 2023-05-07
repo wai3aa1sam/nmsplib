@@ -9,3 +9,4 @@
 
 #include <libpng16/png.h>
 
+#include "nmsp_file_io/color/nmspColor.h"

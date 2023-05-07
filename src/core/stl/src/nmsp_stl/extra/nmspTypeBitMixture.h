@@ -6,7 +6,7 @@
 namespace nmsp {
 
 #define NMSP_TBM_CALCULATE_VALUE_IMPL(I, T, TUPLE) ( TypeBitMixture_T<T>::getIntValue<I>(TUPLE) )
-#define NMSP_TBM_MAKE_SELECT(COUNT)		NMSP_IDX_LIST_##COUNT
+#define NMSP_TBM_MAKE_SELECT(COUNT)		NMSP_IDX_SEQ_##COUNT
 #define NMSP_TBM_MAKE(T, ...) \
 NMSP_IDENTITY(NMSP_CALL(NMSP_TBM_MAKE_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__)) (|, NMSP_TBM_CALCULATE_VALUE_IMPL, NMSP_ARGS(, T, TypeBitMixture_T<T>::Types(__VA_ARGS__) ) ))
 
@@ -30,14 +30,17 @@ struct TypeBitMixture_Impl
 };
 
 template<class T>
-struct TBM
+struct TBM : public TypeBitMixture_T<T, TypeBitMixture_Impl<T> >
 {
-	using TypeBitMixture	= TypeBitMixture_T<T, TypeBitMixture_Impl<T> >;
-	using ValueType		= typename TypeBitMixture::ValueType;
-	using IntType		= typename TypeBitMixture::IntType;
-	using Types			= typename TypeBitMixture::Types;
-	template<class VAL_T, class... ARGS> static constexpr ValueType make	(const VAL_T& v, ARGS&&... args) { return TypeBitMixture::make		(v, nmsp::forward<ARGS>(args)...); }
-	template<class VAL_T, class... ARGS> static constexpr IntType	makeInt	(const VAL_T& v, ARGS&&... args) { return TypeBitMixture::makeInt	(v, nmsp::forward<ARGS>(args)...); }
+	//using TypeBitMixture	= TypeBitMixture_T<T, TypeBitMixture_Impl<T> >;
+	//using ValueType		= typename TypeBitMixture::ValueType;
+	//using IntType		= typename TypeBitMixture::IntType;
+	//using Types			= typename TypeBitMixture::Types;
+
+	//template<size_t I> using ElementType = Types::ElementType<I>;
+
+	//template<class VAL_T, class... ARGS> static constexpr ValueType make	(const VAL_T& v, ARGS&&... args) { return TypeBitMixture::make		(v, nmsp::forward<ARGS>(args)...); }
+	//template<class VAL_T, class... ARGS> static constexpr IntType	makeInt	(const VAL_T& v, ARGS&&... args) { return TypeBitMixture::makeInt	(v, nmsp::forward<ARGS>(args)...); }
 };
 
 template<class T, class IMPL = TypeBitMixture_Impl<T> >
@@ -48,8 +51,12 @@ public:
 
 	using ValueType = T;
 	using IntType	= typename EnumInt<ValueType>;
-	using typename Base::Types;
-	//template<size_t I> using ElementType = typename Base::ElementType<I>;
+
+	using Types = typename Base::Types;
+	template<size_t I> using ElementType	= typename TupleElement<I, Types>;
+	template<size_t I> using ElementIntType = typename EnumInt<ElementType<I> >;
+
+	//template<size_t I> using ElementIntType = typename Types::ElementType<I>;
 
 	using SizeType = StlTraits::SizeType;
 
@@ -65,7 +72,10 @@ public:
 	template<class VAL_T, class... ARGS> static constexpr IntType	makeInt	(const VAL_T& v, ARGS&&... args);
 	
 	template<size_t I>				static constexpr IntType	getIntValue	(const Types& t);
-	template<size_t I, class VAL_T> static constexpr ValueType	getVal		(const VAL_T& v);
+	template<size_t I, class VAL_T> static constexpr ValueType	getValue	(const VAL_T& v);
+
+	template<size_t I> static constexpr ElementIntType<I>	getElementIntValue	(const ValueType& v);
+	template<size_t I> static constexpr ElementType<I>		getElementValue		(const ValueType& v);
 
 	template<size_t I>	static constexpr SizeType	offset();
 						static constexpr SizeType	offsets(SizeType i);
@@ -157,14 +167,32 @@ template<size_t I> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::IntType TypeBitMixture_T<T, IMPL>::getIntValue(const Types& t)
 {
 	NMSP_S_ASSERT(s_kByteUsed <= s_kByteSize);
-	return sCast<IntType>(getVal<I>(t.get<I>()));
+	return sCast<IntType>(getValue<I>(t.get<I>()));
 }
 
 template<class T, class IMPL>
 template<size_t I, class VAL_T> inline constexpr
-typename TypeBitMixture_T<T, IMPL>::ValueType TypeBitMixture_T<T, IMPL>::getVal(const VAL_T& v)
+typename TypeBitMixture_T<T, IMPL>::ValueType TypeBitMixture_T<T, IMPL>::getValue(const VAL_T& v)
 {
 	return sCast<ValueType>(sCast<IntType>(v) << offset<I>());
+}
+
+template<class T, class IMPL>
+template<size_t I> inline constexpr 
+typename TypeBitMixture_T<T, IMPL>::ElementIntType<I>
+TypeBitMixture_T<T, IMPL>::getElementIntValue(const ValueType& v)
+{
+	return sCast<ElementIntType<I> >(getElementValue<I>(v));
+}
+
+template<class T, class IMPL>
+template<size_t I> inline constexpr
+typename TypeBitMixture_T<T, IMPL>::ElementType<I>
+TypeBitMixture_T<T, IMPL>::getElementValue(const ValueType& v)
+{
+	auto mask = BitUtil::setN(s_kSizes[I]);
+	auto res = sCast<SizeType>(v) & mask;
+	return sCast<ElementType<I> >((res) >> offset<I>());
 }
 
 template<class T, class IMPL>
@@ -186,7 +214,7 @@ template<size_t I, class VAL_T> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ValueType 
 TypeBitMixture_T<T, IMPL>::_make(const VAL_T& v)
 {
-	return getVal<I>(v);
+	return getValue<I>(v);
 }
 
 template<class T, class IMPL>
@@ -194,9 +222,8 @@ template<size_t I, class VAL_T, class... ARGS> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ValueType 
 TypeBitMixture_T<T, IMPL>::_make(const VAL_T& v, ARGS&&... args)
 {
-	return sCast<ValueType>(sCast<IntType>(getVal<I>(v)) | sCast<IntType>(_make<I + 1>(nmsp::forward<ARGS>(args)...) ) );
+	return sCast<ValueType>(sCast<IntType>(getValue<I>(v)) | sCast<IntType>(_make<I + 1>(nmsp::forward<ARGS>(args)...) ) );
 }
-
 
 template<class T, class IMPL> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::SizeType 
@@ -397,7 +424,7 @@ struct Cal
 };
 
 template<class T, typename TypeBitMixture_Impl<T>::IntType... VALS>
-typename TypeBitMixture_Impl<T>::IntType getVal()
+typename TypeBitMixture_Impl<T>::IntType getValue()
 {
 	return 0;
 }
@@ -411,7 +438,7 @@ typename TypeBitMixture_Impl<T>::IntType make_0_impl(const TUPLE& t, std::index_
 	//constexpr IntType o = 0;
 	//constexpr IntType o = ( (cal_make<T, IDXS>(t) | cal_make<T, IDXS - 1>(t)), ... );
 	return ( (cal_make<T, IDXS>(t)), ... );
-	//return getVal<T, cal_make<T, IDXS>(t), ...>();
+	//return getValue<T, cal_make<T, IDXS>(t), ...>();
 	//return Cal<T
 }
 
@@ -481,9 +508,12 @@ enum class TestEnum : int
 	k2 = 20,
 	k3 = TypeBitMixture_T<TestEnum>::_addValue<1, 1, 1>(),
 	k4 = TypeBitMixture_T<TestEnum>::_addValue<1, 1, 1>(),
-	k5 = Tuple_T<int, u8, u8>{1, (u8)2, (u8)1}.get<0>(),
+	k5 = Tuple_T<int, u8, u8>{ 1, (u8)2, (u8)1 }.get<0>(),
 	k6 = TBM<TestEnum>::make(1, 1, 1),
 	k7 = TypeBitMixture_T<TestEnum>::offsets(1),
+	//k9 = Index<TypeBitMixture_T<TestEnum>::T1, TBM<TestEnum>::Types>::value,
+	//k10 = Index<TypeBitMixture_T<TestEnum>::T2, TBM<TestEnum>::Types>::value,
+	k11 = BitUtil::setN(4),
 };
 
 #endif // 1
