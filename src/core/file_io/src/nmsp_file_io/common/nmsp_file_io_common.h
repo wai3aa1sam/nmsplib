@@ -2,6 +2,7 @@
 
 #include <nmsp_core_base.h>
 #include <nmsp_stl.h>
+#include <nmsp_math.h>
 #include <nmsp_os.h>
 
 #include "nmsp_file_io-config.h"
