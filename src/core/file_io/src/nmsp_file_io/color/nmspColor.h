@@ -146,7 +146,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 1;
-	static constexpr i32				s_kAlphaBits			= 0;
+	static constexpr int				s_kAlphaBits			= 0;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::R, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -183,7 +183,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 2;
-	static constexpr i32				s_kAlphaBits			= 0;
+	static constexpr int				s_kAlphaBits			= 0;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RG, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -219,7 +219,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 3;
-	static constexpr i32				s_kAlphaBits			= 0;
+	static constexpr int				s_kAlphaBits			= 0;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RGB, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -256,7 +256,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 4;
-	static constexpr i32				s_kAlphaBits			= BitUtil::byteSize<T>();
+	static constexpr int				s_kAlphaBits			= BitUtil::byteSize<T>();
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RGB, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -293,7 +293,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 1;
-	static constexpr i32				s_kAlphaBits			= 0;
+	static constexpr int				s_kAlphaBits			= 0;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::L, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -330,7 +330,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 2;
-	static constexpr i32				s_kAlphaBits			= BitUtil::byteSize<T>();
+	static constexpr int				s_kAlphaBits			= BitUtil::byteSize<T>();
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::LA, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -367,8 +367,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 1;
-	static constexpr i32				s_kBytesPerPixelBlock	= 8;
+	static constexpr int				s_kAlphaBits			= 1;
+	static constexpr int				s_kBytesPerPixelBlock	= 8;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC1);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -384,8 +384,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 4;
-	static constexpr i32				s_kBytesPerPixelBlock	= 16;
+	static constexpr int				s_kAlphaBits			= 4;
+	static constexpr int				s_kBytesPerPixelBlock	= 16;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC2);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -401,8 +401,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 8;
-	static constexpr i32				s_kBytesPerPixelBlock	= 16;
+	static constexpr int				s_kAlphaBits			= 8;
+	static constexpr int				s_kBytesPerPixelBlock	= 16;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC3);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -418,8 +418,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 0;
-	static constexpr i32				s_kBytesPerPixelBlock	= 8;
+	static constexpr int				s_kAlphaBits			= 0;
+	static constexpr int				s_kBytesPerPixelBlock	= 8;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC4);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -435,8 +435,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 0;
-	static constexpr i32				s_kBytesPerPixelBlock	= 16;
+	static constexpr int				s_kAlphaBits			= 0;
+	static constexpr int				s_kBytesPerPixelBlock	= 16;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC5);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -452,8 +452,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 0;
-	static constexpr i32				s_kBytesPerPixelBlock	= 16;
+	static constexpr int				s_kAlphaBits			= 0;
+	static constexpr int				s_kBytesPerPixelBlock	= 16;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC6h);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -469,8 +469,8 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 0;
-	static constexpr i32				s_kAlphaBits			= 8;
-	static constexpr i32				s_kBytesPerPixelBlock	= 16;
+	static constexpr int				s_kAlphaBits			= 8;
+	static constexpr int				s_kBytesPerPixelBlock	= 16;
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BlockCompression, getColorElementType<ElementType>(), ColorCompressType::BC7);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);

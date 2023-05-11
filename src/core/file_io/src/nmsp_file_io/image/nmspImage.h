@@ -74,7 +74,10 @@ public:
 
 	void create(const CreateDesc& cd);
 
-	ByteSpan_T data() const;
+	Span_T<const u8>	data() const;
+	Span_T<u8>			data() ;
+
+	SizeType totalByteSize() const;
 
 	int					width		() const;
 	int					height		() const;
@@ -86,6 +89,52 @@ private:
 	ImageInfo		_info;
 	Vector_T<u8>	_pixelData;
 };
+
+#endif
+
+
+
+#if 0
+#pragma mark --- Image_T-Impl ---
+#endif // 0
+#if 1
+
+inline 
+typename Image_T::SizeType Image_T::totalByteSize() const
+{
+	return width() * height() * pixelSize();
+}
+
+
+inline ByteSpan_T Image_T::data() const
+{
+	return ByteSpan_T();
+}
+
+inline int Image_T::width() const
+{
+	return 0;
+}
+
+inline int Image_T::height() const
+{
+	return 0;
+}
+
+inline typename Image_T::SizeType Image_T::pixelSize() const
+{
+	return SizeType();
+}
+
+inline ColorType Image_T::colorType() const
+{
+	return _info.colorType;
+}
+
+inline const ImageInfo& Image_T::info() const
+{
+	return _info;
+}
 
 #endif
 

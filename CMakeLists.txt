@@ -37,7 +37,7 @@ find_package(unofficial-concurrentqueue CONFIG REQUIRED)
 find_package(spdlog                     CONFIG REQUIRED)
 find_package(glm                        CONFIG REQUIRED)
 find_package(PNG                               REQUIRED)
-
+find_package(Stb                               REQUIRED)
 find_package(nlohmann_json              CONFIG REQUIRED)
 
 # --- git_submodule ---

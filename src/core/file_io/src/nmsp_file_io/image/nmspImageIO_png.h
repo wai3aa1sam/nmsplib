@@ -19,7 +19,7 @@ public:
 	public:
 		~Reader();
 
-		void load(Image_T& image, ByteSpan_T data, ColorType execptType = ColorType::None);
+		void load(Image_T& image, ByteSpan_T data, ColorType expectType = ColorType::None);
 
 
 	};
