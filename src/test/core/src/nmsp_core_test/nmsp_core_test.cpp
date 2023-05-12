@@ -20,7 +20,8 @@ void run_temp_test()
 
 	//NMSP_RUN_TEST(test_StrUtil);
 
-	NMSP_RUN_TEST(test_FileIO);
+	//NMSP_RUN_TEST(test_FileIO);
+	NMSP_RUN_TEST(test_Image);
 
 }
 
@@ -68,6 +69,7 @@ void run_all_test()
 	#if NMSP_TEST_MODULE_FILE_IO || NMSP_TEST_ALL_MODULE
 
 	NMSP_RUN_TEST(test_FileIO);
+	NMSP_RUN_TEST(test_Image);
 
 	#endif
 

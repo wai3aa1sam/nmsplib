@@ -66,11 +66,11 @@ public:
 
 	void load		(StrViewA_T filename);
 
-	void loadPng	(StrViewA_T filename);
+	void loadPngFile(StrViewA_T filename);
 	void loadPngMem	(ByteSpan_T data);
 
-	void loadDds	(StrViewA_T filename);
-	void loadDdaMem	(ByteSpan_T data);
+	void loadDdsFile(StrViewA_T filename);
+	void loadDdsMem	(ByteSpan_T data);
 
 	void create(const CreateDesc& cd);
 	template<class COLOR> void fill(const COLOR& v);

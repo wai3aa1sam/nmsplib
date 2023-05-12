@@ -86,7 +86,7 @@ private:
 	FUNC_END	_end;
 };
 template<class FUNC_BEGIN, class FUNC_END>
-void makeScopedAction(FUNC_BEGIN&& funcBeg, FUNC_END&& funcEnd)
+NMSP_NODISCARD ScopedAction<FUNC_BEGIN, FUNC_END> makeScopedAction(FUNC_BEGIN&& funcBeg, FUNC_END&& funcEnd)
 {
 	return ScopedAction{ funcBeg, funcEnd };
 }

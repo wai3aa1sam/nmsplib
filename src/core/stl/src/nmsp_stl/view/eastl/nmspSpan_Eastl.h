@@ -35,8 +35,8 @@ public:
 	}*/
 	NMSP_CONSTEXPR Span_Eastl() = default;
 	NMSP_CONSTEXPR Span_Eastl(const Span_Eastl& rhs) = default;
-	NMSP_CONSTEXPR Span_Eastl(const T* s, IndexType count);
-	NMSP_CONSTEXPR Span_Eastl(const T* s);
+	NMSP_CONSTEXPR Span_Eastl(T* s, IndexType count);
+	NMSP_CONSTEXPR Span_Eastl(T* s);
 
 
 	bool is_empty() const;
@@ -51,14 +51,14 @@ public:
 #if 1
 
 template<class T> inline NMSP_CONSTEXPR
-Span_Eastl<T>::Span_Eastl(const T* s, IndexType count)
+Span_Eastl<T>::Span_Eastl(T* s, IndexType count)
 	: Base (s, count)
 {
 
 }
 
 template<class T> inline NMSP_CONSTEXPR
-Span_Eastl<T>::Span_Eastl(const T* s)
+Span_Eastl<T>::Span_Eastl(T* s)
 	: Base (s)
 {
 
@@ -71,4 +71,5 @@ bool Span_Eastl<T>::is_empty() const
 }
 
 #endif
+
 }

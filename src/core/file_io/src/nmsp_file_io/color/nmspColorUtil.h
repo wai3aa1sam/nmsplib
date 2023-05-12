@@ -18,9 +18,11 @@ namespace nmsp {
 
 struct ColorUtil
 {
+	static int getColorElementCount(ColorType v);
+	static int getColorElementCount(ColorModel v);
 
-	static int getElementCount(ColorType v);
-	static int getElementCount(ColorModel v);
+	static int getColorElementByteSize(ColorType v);
+	static int getColorElementByteSize(ColorElementType v);
 
 	static int pixelByteSize(ColorType v);
 
@@ -35,14 +37,14 @@ struct ColorUtil
 #if 1
 
 inline 
-int ColorUtil::getElementCount(ColorType v)
+int ColorUtil::getColorElementCount(ColorType v)
 {
 	auto type = TBM<ColorType>::getElementValue<0>(v);
-	return getElementCount(type);
+	return getColorElementCount(type);
 }
 
 inline 
-int ColorUtil::getElementCount(ColorModel v)
+int ColorUtil::getColorElementCount(ColorModel v)
 {
 	using EM = ColorModel;
 	switch (v)
@@ -61,6 +63,30 @@ int ColorUtil::getElementCount(ColorModel v)
 	return 0;
 }
 
+inline 
+int ColorUtil::getColorElementByteSize(ColorType v)
+{
+	ColorElementType t = TBM<ColorType>::getElementValue<1>(v);
+	return getColorElementByteSize(t);
+}
+
+inline 
+int ColorUtil::getColorElementByteSize(ColorElementType v)
+{
+	using EM = ColorElementType;
+	switch (v)
+	{
+		case EM::None:		{ return 0;  } break;
+		case EM::UNorm8:	{ return 8;  } break;
+		case EM::UNorm16:	{ return 16; } break;
+		case EM::Float16:	{ return 16; } break;
+		case EM::Float32:	{ return 32; } break;
+		case EM::Float64:	{ return 64; } break;
+	};
+
+	NMSP_ASSERT(false, "not supported ColorElementType");
+	return 0;
+}
 inline 
 int ColorUtil::pixelByteSize(ColorType v)
 {

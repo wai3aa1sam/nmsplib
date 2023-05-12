@@ -2,6 +2,9 @@
 
 #include "nmspImage.h"
 
+#include "nmspImageIO_png.h"
+#include "nmspImageIO_dds.h"
+
 namespace nmsp {
 
 #if 0
@@ -9,32 +12,56 @@ namespace nmsp {
 #endif // 0
 #if 1
 
+Image_T::CreateDesc Image_T::makeCDesc()
+{
+	return CreateDesc{};
+}
+
 Image_T::~Image_T()
 {
 }
 
 void Image_T::clear()
 {
+	_pixelData.clear();
 }
 
 void Image_T::load(StrViewA_T filename)
 {
+	auto ext	= Path::extension(filename);
+	int ret		= 0;
+
+	ret = StrUtil::ignoreCaseCompare(ext, "png");
+	if (ret == 0) { return loadPngFile(filename); }
+
+	ret = StrUtil::ignoreCaseCompare(ext, "dds");
+	if (ret == 0) { return loadDdsFile(filename); }
 }
 
-void Image_T::loadPng(StrViewA_T filename)
+void Image_T::loadPngFile(StrViewA_T filename)
 {
+	MemMapFile_T mmf;
+	mmf.open(filename);
+	return loadPngMem(mmf.span());
 }
 
 void Image_T::loadPngMem(ByteSpan_T data)
 {
+	ImageIO_png::Reader reader;
+	reader.load(*this, data);
 }
 
-void Image_T::loadDds(StrViewA_T filename)
+void Image_T::loadDdsFile(StrViewA_T filename)
 {
+	MemMapFile_T mmf;
+	mmf.open(filename);
+	return loadDdsMem(mmf.span());
 }
 
-void Image_T::loadDdaMem(ByteSpan_T data)
+void Image_T::loadDdsMem(ByteSpan_T data)
 {
+	ImageIO_dds::Reader reader;
+	reader.load(*this, data);
 }
 
 void Image_T::create(const CreateDesc& cd)
