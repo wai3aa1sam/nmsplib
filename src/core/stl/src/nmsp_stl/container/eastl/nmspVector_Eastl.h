@@ -35,7 +35,8 @@ public:
 	using ValueType = typename Base::value_type;
 	using Allocator = FALLBACK_ALLOC;
 
-	using ViewType = Span_T<T>;
+	using ViewType 	= Span_T<T>;
+	using CViewType = Span_T<const T>;
 
 public:
 	using Base::data;
@@ -51,6 +52,9 @@ public:
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
 	bool is_empty() const NMSP_NOEXCEPT;
+
+	ViewType 	span();
+	CViewType 	span() const;
 
 private:
 

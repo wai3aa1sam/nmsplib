@@ -20,7 +20,7 @@ public:
 		~Reader();
 
 		void load(Image_T& image, ByteSpan_T data, ColorType expectType = ColorType::None);
-
+		void setFilter(int channel);
 
 	};
 

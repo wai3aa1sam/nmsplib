@@ -29,20 +29,26 @@ ImageIO_png::Reader::~Reader()
 
 void ImageIO_png::Reader::load(Image_T& image, ByteSpan_T data, ColorType expectType)
 {
-	int size		= sCast<int>(data.size());
 	auto imageCd	= image.makeCDesc();
+
+	int size		= sCast<int>(data.size());
 	int channel		= 0;
 	int reqChannel	= ColorUtil::getElementCount(expectType);
 
-	stbi_uc* p = stbi_load_from_memory(data.data(), size, &imageCd.width, &imageCd.height, &channel, reqChannel);
+	stbi__context s;
+   	stbi__start_mem(&s, data.data(), data.size());
+	stbi__result_info ri;
+	void* p = stbi__load_main(&s, &imageCd.width, &imageCd.height, &channel, reqChannel, &ri, 8);
+
+	//stbi_load_from_memory
+
 	NMSP_ASSERT(channel != 0, "");
 	NMSP_ASSERT(p, "");
-
+	
 	// setReadFilter
 
 	image.create(imageCd);
-
-	memory_copy(image.data().data(), reinCast<const u8*>(p), image.totalByteSize());
+	memory_copy(image.dataPtr(), reinCast<const u8*>(p), image.totalByteSize());
 
 }
 

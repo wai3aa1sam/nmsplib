@@ -9,10 +9,6 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-
-
-#endif
-
 Image_T::~Image_T()
 {
 }
@@ -43,7 +39,16 @@ void Image_T::loadDdaMem(ByteSpan_T data)
 
 void Image_T::create(const CreateDesc& cd)
 {
+    _info.size.set(cd.width, cd.height);
+    _info.colorType     = cd.colorType;
+    _info.mipmapCount   = cd.mipmapCount;
+    _info.strideInBytes = cd.strideInBytes == 0 ? ColorUtil::pixelByteSize(cd.colorType) * cd.width : cd.dataSizeInBytes;
+
+    _pixelData.clear();
+    _pixelData.resize(totalByteSize());
 }
 
+
+#endif
 
 }

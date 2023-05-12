@@ -2,7 +2,7 @@
 
 #include "nmsp_file_io/common/nmsp_file_io_common.h"
 
-#include "nmsp_file_io/color/nmspColor.h"
+#include "nmsp_file_io/color/nmspColorUtil.h"
 
 /*
 references:
@@ -29,7 +29,7 @@ public:
 	int mipmapCount		= 1;
 
 public:
-	SizeType pixelSize() const { return 0; }
+	int pixelByteSize() const { return ColorUtil::pixelByteSize(colorType); }
 };
 
 struct Image_CreateDesc
@@ -43,7 +43,7 @@ public:
 	int height;
 	int strideInBytes;
 	int mipmapCount = 1;
-	SizeType dataSizeInBytes;
+	int dataSizeInBytes;
 };
 
 class Image_T : public NonCopyable
@@ -73,17 +73,37 @@ public:
 	void loadDdaMem	(ByteSpan_T data);
 
 	void create(const CreateDesc& cd);
+	template<class COLOR> void fill(const COLOR& v);
 
+	Span_T<		 u8>	data();
 	Span_T<const u8>	data() const;
-	Span_T<u8>			data() ;
 
+	template<class COLOR> 		COLOR& pixel(int x, int y);
+	template<class COLOR> const COLOR& pixel(int x, int y) const;
+
+	template<class COLOR> Span_T<		COLOR> row(int y);
+	template<class COLOR> Span_T<const 	COLOR> row(int y) const;
+
+	template<class COLOR> Span_T<		COLOR> row_noCheck(int y);
+	template<class COLOR> Span_T<const 	COLOR> row_noCheck(int y) const;
+
+	Span_T< 	 u8> rowBytes(int y);
+	Span_T<const u8> rowBytes(int y) const;
+
+			u8* dataPtr();
+	const 	u8* dataPtr() const;
+	
 	SizeType totalByteSize() const;
 
-	int					width		() const;
-	int					height		() const;
-	SizeType			pixelSize	() const;
-	ColorType			colorType	() const;
-	const ImageInfo&	info		() const;
+	int					width			() const;
+	int					height			() const;
+	int					pixelByteSize	() const;
+	int					strideInBytes	() const;
+	ColorType			colorType		() const;
+	const ImageInfo&	info			() const;
+
+private:
+	void _checkColorType(ColorType v) const;
 
 private:
 	ImageInfo		_info;
@@ -91,8 +111,6 @@ private:
 };
 
 #endif
-
-
 
 #if 0
 #pragma mark --- Image_T-Impl ---
@@ -102,39 +120,129 @@ private:
 inline 
 typename Image_T::SizeType Image_T::totalByteSize() const
 {
-	return width() * height() * pixelSize();
+	return width() * height() * pixelByteSize();
 }
 
-
-inline ByteSpan_T Image_T::data() const
+inline 
+Span_T<u8> Image_T::data()
 {
-	return ByteSpan_T();
+	return _pixelData.span(); 
 }
 
-inline int Image_T::width() const
+inline 
+Span_T<const u8> Image_T::data() const
 {
-	return 0;
+	return _pixelData.span(); 
 }
 
-inline int Image_T::height() const
+template<class COLOR> inline 		
+COLOR& Image_T::pixel(int x, int y)
 {
-	return 0;
+	return row_noCheck(y)[x];
 }
 
-inline typename Image_T::SizeType Image_T::pixelSize() const
+template<class COLOR> inline 
+const COLOR& Image_T::pixel(int x, int y) const
 {
-	return SizeType();
+	return row_noCheck(y)[x];
 }
 
-inline ColorType Image_T::colorType() const
+template<class COLOR> inline
+Span_T<		 	COLOR> Image_T::row(int y)
+{
+	_checkColorType(COLOR::s_kColorType);
+	return row_noCheck(y);
+}
+
+template<class COLOR> inline
+Span_T<const 	COLOR> Image_T::row(int y) const
+ {
+	_checkColorType(COLOR::s_kColorType);
+	return row_noCheck(y);
+ }
+
+template<class COLOR> inline 		
+Span_T<		 	COLOR> Image_T::row_noCheck(int y)
+{
+	return Span_T<COLOR>{reinCast<COLOR*>(rowBytes(y)), width()};
+}
+
+template<class COLOR> inline 
+Span_T<const 	COLOR> Image_T::row_noCheck(int y) const
+{
+	return Span_T<const COLOR>{reinCast<const COLOR*>(rowBytes(y)), width()};
+}
+
+inline 
+Span_T< 	 u8> Image_T::rowBytes(int y)
+{
+	NMSP_ASSERT(y >= 0 && y < height());
+	auto rowByteSize = strideInBytes();
+	return Span_T<u8>(dataPtr() + y * rowByteSize, rowByteSize);
+}
+
+inline 
+Span_T<const u8> Image_T::rowBytes(int y) const
+{
+	NMSP_ASSERT(y >= 0 && y < height());
+	auto rowByteSize = strideInBytes();
+	return Span_T<const u8>(dataPtr() + y * rowByteSize, rowByteSize);
+}
+
+inline 		
+u8* Image_T::dataPtr()
+{
+	return _pixelData.data();
+}
+
+inline 
+const 	u8* Image_T::dataPtr() const
+{
+	return _pixelData.data();
+}
+
+inline 
+int Image_T::width() const
+{
+	return info().size.x;
+}
+
+inline 
+int Image_T::height() const
+{
+	return info().size.y;
+}
+
+inline 
+typename int Image_T::pixelByteSize() const
+{
+	return info().pixelByteSize();
+}
+
+inline 
+typename int Image_T::strideInBytes() const
+{
+	return info().strideInBytes;
+}
+
+inline 
+ColorType Image_T::colorType() const
 {
 	return _info.colorType;
 }
 
-inline const ImageInfo& Image_T::info() const
+inline 
+const ImageInfo& Image_T::info() const
 {
 	return _info;
 }
+
+inline
+void Image_T::_checkColorType(ColorType v) const
+{
+	throwIf(v != colorType(), "{}", NMSP_SRCLOC);
+}
+
 
 #endif
 
