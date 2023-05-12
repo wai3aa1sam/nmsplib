@@ -479,6 +479,45 @@ public:
 
 #endif
 
+using ColorRb_T 	= ColorR_T<u8>;
+using ColorRs_T 	= ColorR_T<u16>;
+using ColorRf_T 	= ColorR_T<float>;
+
+using ColorRGb_T 	= ColorRG_T<u8>;
+using ColorRGs_T 	= ColorRG_T<u16>;
+using ColorRGf_T 	= ColorRG_T<float>;
+
+using ColorRGBb_T 	= ColorRGB_T<u8>;
+using ColorRGBs_T 	= ColorRGB_T<u16>;
+using ColorRGBf_T 	= ColorRGB_T<float>;
+
+using ColorRGBAb_T 	= ColorRGB_T<u8>;
+using ColorRGBAs_T 	= ColorRGB_T<u16>;
+using ColorRGBAf_T 	= ColorRGB_T<float>;
+
+using Color1b_T = ColorRb_T;
+using Color1s_T = ColorRs_T;
+using Color1f_T = ColorRf_T;
+
+using Color2b_T = ColorRGb_T;
+using Color2s_T = ColorRGs_T;
+using Color2f_T = ColorRGf_T;
+
+using Color3b_T = ColorRGBb_T;
+using Color3s_T = ColorRGBs_T;
+using Color3f_T = ColorRGBf_T;
+
+using Color4b_T = ColorRGBAb_T;
+using Color4s_T = ColorRGBAs_T;
+using Color4f_T = ColorRGBAf_T;
+
+using ColorLb_T = ColorL_T<u8>;
+using ColorLs_T = ColorL_T<u16>;
+using ColorLf_T = ColorL_T<float>;
+
+using ColorLAb_T = ColorLA_T<u8>;
+using ColorLAs_T = ColorLA_T<u16>;
+using ColorLAf_T = ColorLA_T<float>;
 
 
 }

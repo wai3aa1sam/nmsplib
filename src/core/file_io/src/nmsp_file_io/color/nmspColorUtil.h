@@ -22,6 +22,8 @@ struct ColorUtil
 	static int getElementCount(ColorType v);
 	static int getElementCount(ColorModel v);
 
+	static int pixelByteSize(ColorType v);
+
 };
 
 #endif
@@ -32,12 +34,14 @@ struct ColorUtil
 #endif // 0
 #if 1
 
+inline 
 int ColorUtil::getElementCount(ColorType v)
 {
 	auto type = TBM<ColorType>::getElementValue<0>(v);
 	return getElementCount(type);
 }
 
+inline 
 int ColorUtil::getElementCount(ColorModel v)
 {
 	using EM = ColorModel;
@@ -56,6 +60,33 @@ int ColorUtil::getElementCount(ColorModel v)
 	NMSP_ASSERT(false, "not supported ColorModel");
 	return 0;
 }
+
+inline 
+int ColorUtil::pixelByteSize(ColorType v)
+{
+	using EM = ColorType;
+	switch (v)
+	{
+		#define E(TYPE) case EM::TYPE:				{ return sizeof(Color ## TYPE ## _T); } break
+		E(Rb);
+		E(Rs);
+		E(Rf);
+		E(RGb);
+		E(RGs);
+		E(RGf);
+		E(RGBb);
+		E(RGBs);
+		E(RGBf);
+		E(RGBAb);
+		E(RGBAs);
+		E(RGBAf);
+		//case EM::HSV:				{ return 1; } break;
+		//case EM::BlockCompression:	{ return 1; } break;
+	}
+	NMSP_ASSERT(false, "not supported ColorType");
+	return 0;
+}
+
 
 #endif	
 }
