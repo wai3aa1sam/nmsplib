@@ -21,7 +21,8 @@ void run_temp_test()
 	//NMSP_RUN_TEST(test_StrUtil);
 
 	//NMSP_RUN_TEST(test_FileIO);
-	NMSP_RUN_TEST(test_Image);
+	//NMSP_RUN_TEST(test_Image);
+	NMSP_RUN_TEST(test_Json);
 
 }
 
@@ -70,6 +71,7 @@ void run_all_test()
 
 	NMSP_RUN_TEST(test_FileIO);
 	NMSP_RUN_TEST(test_Image);
+	NMSP_RUN_TEST(test_Json);
 
 	#endif
 
