@@ -48,8 +48,11 @@ struct StrUtil
 	static int ignoreCaseCompare(StrViewA_T a, StrViewA_T b);
 	static int ignoreCaseCompare(char a, char b);
 
-	template<class T, size_t N> static StringA_T<N>		toStr			(const T& val);
-	template<class T, size_t N> static StringW_T<N>		toStrW			(const T& val);
+
+	template<class T>			static StringT			toStr			(const T& val);
+	template<class T>			static StringWT			toStrW			(const T& val);
+	template<size_t N, class T> static StringA_T<N>		toStr_N			(const T& val);
+	template<size_t N, class T> static StringW_T<N>		toStrW_N		(const T& val);
 	template<class T>			static TempStringA_T<>	toTempStr		(const T& val);
 	template<class T>			static TempStringW_T<>	toTempStrW		(const T& val);
 	template<class T, size_t N> static bool				convertToStr	(StringA_T<N>& o, const T& val);
@@ -150,8 +153,11 @@ int StrUtil::ignoreCaseCompare(char a, char b)
 #endif // 0
 #if 1
 
-template<class T, size_t N> inline StringA_T<N> StrUtil::toStr (const T& val)					{ return toStr_T <StringA_T<N> >(val); }
-template<class T, size_t N> inline StringW_T<N> StrUtil::toStrW(const T& val)					{ return toStrW_T<StringW_T<N> >(val); }
+template<class T>			inline StringT	StrUtil::toStr (const T& val)						{ return toStr_N<0>(val); }
+template<class T>			inline StringWT StrUtil::toStrW(const T& val)						{ return toStrW_N<0>(val); }
+
+template<size_t N, class T> inline StringA_T<N> StrUtil::toStr_N (const T& val)					{ return toStr_T <StringA_T<N> >(val); }
+template<size_t N, class T> inline StringW_T<N> StrUtil::toStrW_N(const T& val)					{ return toStrW_T<StringW_T<N> >(val); }
 
 template<class T>			inline TempStringA_T<> StrUtil::toTempStr (const T& val)			{ return toStr_T <TempStringA_T<> >(val); }
 template<class T>			inline TempStringW_T<> StrUtil::toTempStrW(const T& val)			{ return toStrW_T<TempStringW_T<> >(val); }

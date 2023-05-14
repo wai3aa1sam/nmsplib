@@ -22,13 +22,13 @@ template<class T>
 struct JsonIO
 {
 	template<class SE>
-	static void onJson(SE& se, const T& v);
+	static void onJson(SE& se, T& v);
 };
 
-template<class T, class ENABLE = void>
+template<class SE, class T, class ENABLE = void>
 struct JsonSE_Helper
 {
-	static void io(JsonSerializer_T& se, const T& v) 
+	static void io(SE& se, T& v) 
 	{
 		se.io_beginObject();
 		JsonIO<T>::onJson(se, v);
@@ -41,9 +41,9 @@ class JsonSerializer_T
 public:
 	using Json = Json_T;
 
-	template<class T, class ENABLE> friend struct JsonSE_Helper;
-
 	using SizeType = FileIoTraits::SizeType;
+
+	template<class SE, class T, class ENABLE> friend struct JsonSE_Helper;
 
 public:
 	static constexpr SizeType s_kLocalStackSize = 64;
@@ -51,23 +51,23 @@ public:
 public:
 	JsonSerializer_T(Json& j);
 
-	template<class T> void named_fixed_io(const T& v, const char* name);
-	template<class T> void fixed_io(const T& v);
+	template<class T> void named_fixed_io(T& v, const char* name);
+	template<class T> void fixed_io(T& v);
 
 protected:
-	void fixed_io(const u8 & v);
-	void fixed_io(const u16& v);
-	void fixed_io(const u32& v);
-	void fixed_io(const u64& v);
+	void fixed_io(u8 & v);
+	void fixed_io(u16& v);
+	void fixed_io(u32& v);
+	void fixed_io(u64& v);
 
-	void fixed_io(const i8 & v);
-	void fixed_io(const i16& v);
-	void fixed_io(const i32& v);
-	void fixed_io(const i64& v);
+	void fixed_io(i8 & v);
+	void fixed_io(i16& v);
+	void fixed_io(i32& v);
+	void fixed_io(i64& v);
 
-	//void fixed_io(const f16& v);
-	void fixed_io(const f32& v);
-	void fixed_io(const f64& v);
+	//void fixed_io(f16& v);
+	void fixed_io(f32& v);
+	void fixed_io(f64& v);
 
 	void fixed_io(bool v);
 
@@ -79,10 +79,10 @@ protected:
 	void io_resizeArray	(SizeType n);
 
 	template<class T> void toValue			(const T& v);
-	template<class T> void toObjectMember	(const T& v, const char* name);
+	template<class T> void toObjectMember	(T& v, const char* name);
 	template<class T> void toStr			(StrView_T<T> v);
 	template<class T> void toEnum			(const T& v);
-	template<class T> void toArrayElement	(const T& v, SizeType i);
+	template<class T> void toArrayElement	(T& v, SizeType i);
 
 private:
 	Vector_T<Json*, s_kLocalStackSize> _stack;
@@ -103,30 +103,30 @@ JsonSerializer_T::JsonSerializer_T(Json& j)
 }
 
 template<class T> inline 
-void JsonSerializer_T::named_fixed_io(const T& v, const char* name)
+void JsonSerializer_T::named_fixed_io(T& v, const char* name)
 {
 	toObjectMember(v, name);
 }
 
 template<class T> inline
-void JsonSerializer_T::fixed_io(const T& v)
+void JsonSerializer_T::fixed_io(T& v)
 {
-	JsonSE_Helper<T>::io(*this, v);
+	JsonSE_Helper<JsonSerializer_T, T>::io(*this, v);
 }
 
-inline void JsonSerializer_T::fixed_io(const u8 & v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const u16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const u32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const u64& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(u8 & v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(u16& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(u32& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(u64& v) { toValue(v); }
 
-inline void JsonSerializer_T::fixed_io(const i8 & v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const i16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const i32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const i64& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(i8 & v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(i16& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(i32& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(i64& v) { toValue(v); }
 
-//inline void JsonSerializer_T::fixed_io(const f16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const f32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(const f64& v) { toValue(v); }
+//inline void JsonSerializer_T::fixed_io(f16& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(f32& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(f64& v) { toValue(v); }
 
 inline void JsonSerializer_T::fixed_io(bool v) { toValue(v); }
 
@@ -181,7 +181,7 @@ void JsonSerializer_T::toValue(const T& v)
 	cur = v;
 }
 template<class T> inline 
-void JsonSerializer_T::toObjectMember(const T& v, const char* name)
+void JsonSerializer_T::toObjectMember(T& v, const char* name)
 {
 	auto& cur = *_stack.back();
 	NMSP_ASSERT(cur.is_object(), "");
@@ -214,7 +214,7 @@ void JsonSerializer_T::toEnum(const T& v)
 }
 
 template<class T> inline
-void JsonSerializer_T::toArrayElement(const T& v, SizeType i)
+void JsonSerializer_T::toArrayElement(T& v, SizeType i)
 {
 	auto& cur = *_stack.back();
 	auto& arr = *cur.get_ptr<Json_T::array_t*>();
@@ -235,31 +235,32 @@ void JsonSerializer_T::toArrayElement(const T& v, SizeType i)
 #if 1
 
 template<class T>
-struct JsonSE_Helper<T, EnableIf<IsEnum<T> > >
+struct JsonSE_Helper<JsonSerializer_T, T, EnableIf<IsEnum<T> > >
 {
-	static void io(JsonSerializer_T& se, const T& v) 
+	static void io(JsonSerializer_T& se, T& v) 
 	{
 		se.toEnum(v);
 	}
 };
 
 template<class CHAR, size_t N, class ALLOC>
-struct JsonSE_Helper<String_T<CHAR, N, ALLOC>>
+struct JsonSE_Helper<JsonSerializer_T, String_T<CHAR, N, ALLOC> >
 {
-	static void io(JsonSerializer_T& se, const String_T<CHAR, N, ALLOC>& v) 
+	static void io(JsonSerializer_T& se, String_T<CHAR, N, ALLOC>& v) 
 	{
 		se.toStr(v.view());
 	}
 };
 
 template<class T, size_t N, class ALLOC>
-struct JsonSE_Helper<Vector_T<T, N, ALLOC>>
+struct JsonSE_Helper<JsonSerializer_T, Vector_T<T, N, ALLOC> >
 {
-	static void io(JsonSerializer_T& se, const Vector_T<T, N, ALLOC>& v) 
+	static void io(JsonSerializer_T& se, Vector_T<T, N, ALLOC>& v) 
 	{
 		se.io_beginArray();
-		se.io_resizeArray(v.size());
-		for (size_t i = 0; i < v.size(); i++)
+		auto n = v.size();
+		se.io_resizeArray(n);
+		for (size_t i = 0; i < n; i++)
 		{
 			se.toArrayElement(v[i], i);
 		}

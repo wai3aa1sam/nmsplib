@@ -6,6 +6,7 @@
 
 #include "nmspJsonSerializer.h"
 #include "nmspJsonDeserializer.h"
+#include "nmspJsonUtil.h"
 
 
 namespace nmsp {

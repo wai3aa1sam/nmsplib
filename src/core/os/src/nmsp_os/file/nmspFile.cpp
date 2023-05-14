@@ -92,7 +92,9 @@ char File::writeFileIfChanged(StrViewA_T filename, ByteSpan_T data, bool createD
 		}
 	}
 
-	return ret;
+	if (ret == '=')
+		return ret;
+	return writeFile(filename, data, createDir, logResult);
 }
 
 char File::writeFileIfChanged(StrViewA_T filename, StrViewA_T data, bool createDir, bool logResult, bool logNoChange)

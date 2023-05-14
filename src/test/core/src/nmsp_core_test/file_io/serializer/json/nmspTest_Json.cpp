@@ -7,7 +7,6 @@
 
 namespace nmsp {
 
-#define NMSP_NAMED_FIXED_IO(SE, OBJ, MEMBER) SE.named_fixed_io(OBJ.MEMBER, #MEMBER)
 
 template<class T>
 struct TempTestJsonInner
@@ -61,7 +60,7 @@ template<class T>
 struct JsonIO<TempTestJsonInner<T> >
 {
 	template<class SE>
-	static void onJson(SE& se, const TempTestJsonInner<T>& v)
+	static void onJson(SE& se, TempTestJsonInner<T>& v)
 	{
 		NMSP_NAMED_FIXED_IO(se, v, inner);
 	}
@@ -71,7 +70,7 @@ template<class T>
 struct JsonIO<TempTestJson<T> >
 {
 	template<class SE>
-	static void onJson(SE& se, const TempTestJson<T>& v)
+	static void onJson(SE& se, TempTestJson<T>& v)
 	{
 		NMSP_NAMED_FIXED_IO(se, v, t);
 	}
@@ -81,7 +80,7 @@ template<>
 struct JsonIO<TestOnJson >
 {
 	template<class SE>
-	static void onJson(SE& se, const TestOnJson& v)
+	static void onJson(SE& se, TestOnJson& v)
 	{
 		NMSP_NAMED_FIXED_IO(se, v, a);
 		NMSP_NAMED_FIXED_IO(se, v, b);
@@ -96,7 +95,6 @@ struct JsonIO<TestOnJson >
 		NMSP_NAMED_FIXED_IO(se, v, ct);
 	}
 };
-
 
 class Test_Json : public UnitTest
 {
@@ -117,11 +115,43 @@ public:
 			Json_T j;
 			JsonSerializer_T se{j};
 			TestOnJson t;
+			size_t N = 5;
+			t._vTmpStr.resize(5);
+			for (size_t i = 0; i < N; i++)
+			{
+				StrUtil::convertToStr(t._vTmpStr[i], i);
+				//t._vTmpStr[i] = StrUtil::toStr(i);
+			}
 			se.fixed_io(t);
 
 			_NMSP_DUMP_VAR(j.dump(4));
 
+			TestOnJson t2;
+
+			{
+				auto str = j.dump(4);
+				Json_T j2 = Json_T::parse(str.begin(), str.end());
+
+				JsonDeserializer_T dse{ j2 };
+				dse.fixed_io(t2);
+				NMSP_TEST_CHECK(t._vTmpStr == t2._vTmpStr);
+			}
+
+			if (!Path::isExist(fmtAs_T<StringT>("{}/asset", Path::getCurrentDir())))
+			{
+				Path::setCurrentDir("../../../../../example/Test000");
+				_NMSP_DUMP_VAR(Path::getCurrentDir());
+			}
+
+			JsonUtil::writeFileIfChanged(StrViewA_T{ "JsonUtil_text.txt" }, t2, true);
+
+			TestOnJson t3;
+			JsonUtil::readFile(StrViewA_T{ "JsonUtil_text.txt" }, t3);
+			NMSP_TEST_CHECK(t2._vTmpStr == t3._vTmpStr);
+
 		}
+
+	
 	}
 
 	virtual void onSetup() override
