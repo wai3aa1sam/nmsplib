@@ -22,8 +22,9 @@ void run_temp_test()
 
 	//NMSP_RUN_TEST(test_FileIO);
 	//NMSP_RUN_TEST(test_Image);
-	NMSP_RUN_TEST(test_Json);
+	//NMSP_RUN_TEST(test_Json);
 
+	NMSP_RUN_TEST(test_JobSystem);
 }
 
 // TODO: add a test manager class, then no need add to here
@@ -75,6 +76,11 @@ void run_all_test()
 
 	#endif
 
+	#if NMSP_TEST_MODULE_JOB_SYSTEM || NMSP_TEST_ALL_MODULE
+
+	NMSP_RUN_TEST(test_JobSystem);
+
+	#endif
 }
 
 #if !NMSP_ENABLE_FUZZ_TESTING

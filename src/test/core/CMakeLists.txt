@@ -14,6 +14,7 @@ target_link_libraries(${sub_project_name}
             ${project_namespace}_profiler
             ${project_namespace}_math
             ${project_namespace}_file_io
+            ${project_namespace}_job_system
             #${project_namespace}_core
     )
 
@@ -25,5 +26,6 @@ target_compile_definitions(${sub_project_name}
             NMSP_TEST_MODULE_LOG=0
             NMSP_TEST_MODULE_PROFILER=0
             NMSP_TEST_MODULE_MATH=0
-            NMSP_TEST_MODULE_FILE_IO=1
+            NMSP_TEST_MODULE_FILE_IO=0
+            NMSP_TEST_MODULE_JOB_SYSTEM=1
     )
