@@ -7,7 +7,7 @@
 
 namespace nmsp {
 
-#define NMSP_NAMED_FIXED_IO(OBJ, MEMBER) se.named_fixed_io(OBJ.MEMBER, #MEMBER)
+#define NMSP_NAMED_FIXED_IO(SE, OBJ, MEMBER) SE.named_fixed_io(OBJ.MEMBER, #MEMBER)
 
 template<class T>
 struct TempTestJsonInner
@@ -23,12 +23,18 @@ struct TempTestJson
 
 struct TestOnJson
 {
-	template<class SE> friend void onJson(const TestOnJson& v, SE& se);
+	template<class SE> friend struct JsonIO;
 
 	TestOnJson()
 	{
 		size_t N = 5;
 		_vI32.resize(N);
+		_vTmpTestJsonInner.resize(N);
+		for (int i = 0; i < N; i++)
+		{
+			_vI32[i] = i;
+		}
+
 		_vTmpTestJsonInner.resize(N);
 		for (int i = 0; i < N; i++)
 		{
@@ -48,15 +54,16 @@ struct TestOnJson
 	Vector_T<TempStringA_T<>, 32> _vTmpStr;
 	Vector_T<TempTestJsonInner<i32>, 32> _vTmpTestJsonInner;
 
+	ColorType ct = ColorType::BC6h;
 };
 
 template<class T>
 struct JsonIO<TempTestJsonInner<T> >
 {
 	template<class SE>
-	static void onJson(const TempTestJsonInner<T>& v, SE& se)
+	static void onJson(SE& se, const TempTestJsonInner<T>& v)
 	{
-		NMSP_NAMED_FIXED_IO(v, inner);
+		NMSP_NAMED_FIXED_IO(se, v, inner);
 	}
 };
 
@@ -64,9 +71,9 @@ template<class T>
 struct JsonIO<TempTestJson<T> >
 {
 	template<class SE>
-	static void onJson(const TempTestJson<T>& v, SE& se)
+	static void onJson(SE& se, const TempTestJson<T>& v)
 	{
-		NMSP_NAMED_FIXED_IO(v, t);
+		NMSP_NAMED_FIXED_IO(se, v, t);
 	}
 };
 
@@ -74,18 +81,19 @@ template<>
 struct JsonIO<TestOnJson >
 {
 	template<class SE>
-	static void onJson(const TestOnJson& v, SE& se)
+	static void onJson(SE& se, const TestOnJson& v)
 	{
-		NMSP_NAMED_FIXED_IO(v, a);
-		NMSP_NAMED_FIXED_IO(v, b);
-		NMSP_NAMED_FIXED_IO(v, c);
-		NMSP_NAMED_FIXED_IO(v, ttj);
-		NMSP_NAMED_FIXED_IO(v, str);
-		NMSP_NAMED_FIXED_IO(v, tmpStr);
-		NMSP_NAMED_FIXED_IO(v, bool_);
-		NMSP_NAMED_FIXED_IO(v, _vI32);
-		NMSP_NAMED_FIXED_IO(v, _vTmpStr);
-		NMSP_NAMED_FIXED_IO(v, _vTmpTestJsonInner);
+		NMSP_NAMED_FIXED_IO(se, v, a);
+		NMSP_NAMED_FIXED_IO(se, v, b);
+		NMSP_NAMED_FIXED_IO(se, v, c);
+		NMSP_NAMED_FIXED_IO(se, v, ttj);
+		NMSP_NAMED_FIXED_IO(se, v, str);
+		NMSP_NAMED_FIXED_IO(se, v, tmpStr);
+		NMSP_NAMED_FIXED_IO(se, v, bool_);
+		NMSP_NAMED_FIXED_IO(se, v, _vI32);
+		NMSP_NAMED_FIXED_IO(se, v, _vTmpStr);
+		NMSP_NAMED_FIXED_IO(se, v, _vTmpTestJsonInner);
+		NMSP_NAMED_FIXED_IO(se, v, ct);
 	}
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
-#include "nmspTypeTrait_Common.h"
+#include "nmspTypeTraits_Common.h"
 
 #include "fmt/format.h"
 

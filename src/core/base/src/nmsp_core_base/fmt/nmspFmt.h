@@ -3,7 +3,7 @@
 #include "fmt/format.h"
 
 #include "nmsp_core_base/common/nmspDataType_Common.h"
-#include "nmsp_core_base/common/nmspTypeTrait_Common.h"
+#include "nmsp_core_base/common/nmspTypeTraits_Common.h"
 
 
 #define NMSP_FORMATTER_T(TEMPLATE_ARGS, CLASS) \

@@ -21,7 +21,7 @@ class TypeDisplayer;
 // eg. TypeDisplayer<decltype(data->data)> x; (void)x;
 
 #if 0
-#pragma mark --- nmspTypeTrait_Util-Impl ---
+#pragma mark --- nmspTypeTraits_Util-Impl ---
 #endif // 0
 #if 1
 
@@ -34,7 +34,7 @@ template<bool COND, class IF_TRUE_T, class IF_FASLE_T> using Conditional    = ty
 #endif
 
 #if 0
-#pragma mark --- nmspTypeTrait_Remove-Impl ---
+#pragma mark --- nmspTypeTraits_Remove-Impl ---
 #endif // 0
 #if 1
 
@@ -51,7 +51,7 @@ template<class T> using RemovePtr   = typename RemovePtrT<T>::type;
 #endif
 
 #if 0
-#pragma mark --- nmspTypeTrait_IsType-Impl ---
+#pragma mark --- nmspTypeTraits_IsType-Impl ---
 #endif // 0
 #if 1
 
@@ -98,7 +98,7 @@ template<class T> inline constexpr bool	IsInt           = IsSigned<T>   && IsInt
 #endif
 
 #if 0
-#pragma mark --- nmspTypeTrait_Value-Impl ---
+#pragma mark --- nmspTypeTraits_Value-Impl ---
 #endif // 0
 #if 1
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nmspTypeTrait_Common.h"
+#include "nmspTypeTraits_Common.h"
 
 /*
 references:

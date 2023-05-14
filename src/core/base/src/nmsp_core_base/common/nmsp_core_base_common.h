@@ -81,7 +81,7 @@
 #include "nmspBitUtil.h"
 
 #include "nmspFunction_Common.h"
-#include "nmspTypeTrait_Common.h"
+#include "nmspTypeTraits_Common.h"
 #include "nmspClass_Common.h"
 #include "nmspEnum_Common.h"
 

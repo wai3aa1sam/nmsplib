@@ -2,7 +2,7 @@
 
 #include "nmsp_core_base/common/nmsp_core_base_traits.h"
 
-#include "nmspTypeTrait_Common.h"
+#include "nmspTypeTraits_Common.h"
 
 #include <new>
 
