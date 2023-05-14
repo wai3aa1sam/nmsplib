@@ -13,7 +13,6 @@ class Test_JobSystem : public UnitTest
 public:
 	void test()
 	{
-		#if 0
 		{
 			Function_T<void(void), 32> func{[]() {}};
 			auto lamb = []()
@@ -31,7 +30,6 @@ public:
 			_NMSP_DUMP_VAR(sizeof(LocalBuffer_T<12, 8>));
 			_NMSP_DUMP_VAR(sizeof(MallocAllocator_T<8>));
 		}
-		#endif // 0
 
 
 	}

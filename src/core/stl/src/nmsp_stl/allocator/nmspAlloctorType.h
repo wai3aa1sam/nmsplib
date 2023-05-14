@@ -55,7 +55,8 @@ public:
 	using SizeType = typename PrimaryAllocator::SizeType;
 
 	//static constexpr SizeType s_kPrimaryAlign	= PRIMARY_ALLOC::s_kAlign;
-	//static constexpr SizeType s_kFallbackAlign	= FALLBACK_ALLOC::s_kAlign;
+	static constexpr SizeType s_kFallbackAlign	= FallbackAllocator::s_kAlign;
+	static constexpr SizeType s_kDefaultAlign	= StlTraits::s_kDefaultAlign;
 
 	static constexpr bool s_enableFallbackAlloc = !IsSame<FALLBACK_ALLOC, NoFallbackAllocator_Policy>;
 
@@ -75,9 +76,13 @@ public:
 	bool is_owning(void* p, SizeType n);
 
 public:
-	//using Base::first;
-	//using Base::second;
+			PrimaryAllocator&	first();
+			FallbackAllocator&	second();
 
+	const	PrimaryAllocator&	first()  const;
+	const	FallbackAllocator&	second() const;
+
+public:
 	CompressedPair<PRIMARY_ALLOC, FALLBACK_ALLOC> _pair;
 };
 
@@ -87,6 +92,11 @@ public:
 #pragma mark --- FallbackAllocator_T-Impl ---
 #endif // 0
 #if 1
+
+template<class P, class F> inline typename		 FallbackAllocator_T<P, F>::PrimaryAllocator&	FallbackAllocator_T<P, F>::first()			{ return _pair.first(); }
+template<class P, class F> inline typename		 FallbackAllocator_T<P, F>::FallbackAllocator&	FallbackAllocator_T<P, F>::second()			{ return _pair.second(); }
+template<class P, class F> inline typename const FallbackAllocator_T<P, F>::PrimaryAllocator&	FallbackAllocator_T<P, F>::first()  const	{ return _pair.first(); }
+template<class P, class F> inline typename const FallbackAllocator_T<P, F>::FallbackAllocator&	FallbackAllocator_T<P, F>::second() const	{ return _pair.second(); }
 
 template<class P, class F> inline
 void* FallbackAllocator_T<P, F>::alloc(SizeType n, SizeType align, SizeType offset)

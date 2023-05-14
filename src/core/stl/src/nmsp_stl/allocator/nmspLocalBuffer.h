@@ -6,19 +6,19 @@
 namespace nmsp {
 
 template<size_t LOCAL_SIZE, size_t ALIGN> class LocalBuffer_Base;
-template<size_t LOCAL_SIZE, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign> using LocalBuffer_T = LocalBuffer_Base<LOCAL_SIZE, ALIGN>;
+template<size_t LOCAL_SIZE, size_t ALIGN = StlTraits::s_kDefaultAlign> using LocalBuffer_T = LocalBuffer_Base<LOCAL_SIZE, ALIGN>;
 
 #if 0
 #pragma mark --- LocalBuffer_Base-Impl ---
 #endif // 0
 #if 1
 
-template<size_t LOCAL_SIZE, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign>
+template<size_t LOCAL_SIZE, size_t ALIGN = StlTraits::s_kDefaultAlign>
 class LocalBuffer_Base
 {
 public:
-	using LocalBufferType = typename std::aligned_storage<LOCAL_SIZE, ALIGN>::type;
-	using SizeType = size_t;
+	using LocalBufferType	= typename std::aligned_storage<LOCAL_SIZE, ALIGN>::type;
+	using SizeType			= StlTraits::SizeType;
 
 	static constexpr SizeType s_kLocalSize	= LOCAL_SIZE;
 	static constexpr SizeType s_kAlign		= ALIGN;
@@ -57,11 +57,11 @@ template<size_t ALIGN>
 class LocalBuffer_Base<0, ALIGN>
 {
 public:
-	using LocalBufferType = void;
-	using SizeType = size_t;
+	using LocalBufferType	= void;
+	using SizeType			= StlTraits::SizeType;
 
-	static constexpr SizeType s_kLocalSize = 0;
-	static constexpr SizeType s_kAlign = 0;
+	static constexpr SizeType s_kLocalSize	= 0;
+	static constexpr SizeType s_kAlign		= 0;
 
 public:
 	using This = LocalBuffer_Base<s_kLocalSize, s_kAlign>;

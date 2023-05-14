@@ -20,6 +20,9 @@ template<class T>
 class TypeDisplayer;
 // eg. TypeDisplayer<decltype(data->data)> x; (void)x;
 
+
+using NullPtr = nullptr_t;
+
 #if 0
 #pragma mark --- nmspTypeTraits_Util-Impl ---
 #endif // 0

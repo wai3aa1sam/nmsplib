@@ -34,14 +34,14 @@ public:
 	LocalAllocator_T(const char* name = "LocalAllocator_T") {};
 	~LocalAllocator_T() = default;
 
-	void*	alloc(SizeType n)			{ return Base::alloc(n); }
-	void	free(void* p, SizeType n)	{ Base::free(p, n); }
+	void*	alloc(SizeType n)				{ return Base::alloc(n); }
+	void	free(void* p, SizeType n = 0)	{ Base::free(p, n); }
 
-	bool	isUsingLocalBuf(void* p)	{ return first().isUsingLocalBuffer(p); }
+	bool	isUsingLocalBuf(void* p)	{ return first().isUsingLocalBuf(p); }
 
 private:
-	using Base::first;
-	using Base::second;
+	//using Base::first;
+	//using Base::second;
 	//void* _pOverflowData = nullptr;
 };
 
