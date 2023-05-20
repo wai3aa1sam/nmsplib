@@ -59,6 +59,7 @@
 #include <signal.h>
 #include <codecvt>
 #include <limits>
+#include <random>
 
 #include <sstream>
 #include <string>

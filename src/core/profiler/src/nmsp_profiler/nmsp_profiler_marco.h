@@ -4,21 +4,21 @@
 #include <cstddef>
 
 #if NMSP_ENABLE_PROFILER
-	//#define TRACY_ENABLE 1	// set in cli
+	//#define TRACY_ENABLE 1	// set in cmake
 
 	#include <tracy/Tracy.hpp>
 	#include <tracy/TracyC.h>
 	#include <common/TracySystem.hpp>
 
-	#define NMSP_PROFILE_SCOPED()				ZoneScoped							
-	#define NMSP_PROFILE_FRAME()				FrameMark							
-	#define NMSP_PROFILE_SECTION(name)			ZoneScopedN(name)					
-	#define NMSP_PROFILE_TAG(str)				ZoneText(str, ::strlen(str))		
-	#define NMSP_PROFILE_LOG(text)				TracyMessage(text, ::strlen(text)	
-	#define NMSP_PROFILE_VALUE(text, value)		TracyPlot(text, value)				
+	#define NMSP_PROFILE_SCOPED()				ZoneScoped				
+	#define NMSP_PROFILE_FRAME()				FrameMark			
+	#define NMSP_PROFILE_SECTION(name)			ZoneScopedN(name)		
+	#define NMSP_PROFILE_TAG(str)				ZoneText(str, ::strlen(str))
+	#define NMSP_PROFILE_LOG(text)				TracyMessage(text, ::strlen(text))
+	#define NMSP_PROFILE_VALUE(text, value)		TracyPlot(text, value)	
 
-	#define NMSP_PROFILE_ALLOC(p, size)			TracyCAllocS(p, size, 12)		    
-	#define NMSP_PROFILE_FREE(p, size)			TracyCFreeS(p, 12)				    
+	#define NMSP_PROFILE_ALLOC(p, size)			TracyCAllocS(p, size, 12)    
+	#define NMSP_PROFILE_FREE(p, size)			TracyCFreeS(p, 12)		    
 
 	#define NMSP_PROFILE_SET_THREAD_NAME(name)	::tracy::SetThreadName(name)
 

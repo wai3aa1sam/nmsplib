@@ -18,8 +18,8 @@ if(${${project_namespace_marco}_ENABLE_PROFILER})
 message("--- ${project_namespace_marco}_ENABLE_PROFILER")
 target_link_libraries(${sub_project_name}       PRIVATE Tracy::TracyClient)
 target_compile_definitions(${sub_project_name}  
-    PRIVATE TRACY_ENABLE 
-            ${project_namespace_marco}_ENABLE_PROFILER=1
+    PRIVATE TRACY_ENABLE
+    PUBLIC  ${project_namespace_marco}_ENABLE_PROFILER=1
     )
 endif()
 
