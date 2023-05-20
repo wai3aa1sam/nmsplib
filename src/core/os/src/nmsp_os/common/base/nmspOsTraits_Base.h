@@ -22,7 +22,7 @@ enum class OsPlatform
 #endif // 0
 #if 1
 
-inline thread_local i32		_internal_threadLocalId			= 0;
+inline thread_local int		_internal_threadLocalId			= -1;
 inline thread_local bool	_internal_isSettedThreadLocalId = false;
 
 class ThreadDefaultStorage_T;
@@ -52,13 +52,14 @@ struct OsDefaultTraits_Base : public CoreBaseTraits
 
 
 	// Multi-thread Params
-	static constexpr size_t s_kMainThreadLocalId		= 0;
-	static constexpr size_t	s_kEstLogicalThreadCount	= 32;
+	static constexpr int		s_kMainThreadLocalId		= 0;
+	static constexpr SizeType	s_kEstLogicalThreadCount	= 32;
 
-	static void		setThreadLocalId	(i32 id) { NMSP_ASSERT(!_internal_isSettedThreadLocalId,	"threadLocalId should set only once");			_internal_threadLocalId = id; _internal_isSettedThreadLocalId = true; }
-	static i32		threadLocalId		()		 { /*NMSP_ASSERT(_internal_threadLocalId != -1,		"threadLocalId is -1, set it before use");*/	return _internal_threadLocalId; }
+	static void		setThreadLocalId	(int id) { NMSP_ASSERT(!_internal_isSettedThreadLocalId && ((id >= 0 && id <= logicalThreadCount()) || id == s_kMainThreadLocalId), "threadLocalId should set only once"); _internal_threadLocalId = id; _internal_isSettedThreadLocalId = true; }
+	static void		resetThreadLocalId	()		 { _internal_threadLocalId = -1; _internal_isSettedThreadLocalId = false; }
+	static int		threadLocalId		()		 { NMSP_ASSERT( _internal_isSettedThreadLocalId, "threadLocalId is not set, set it before use");	return _internal_threadLocalId; }
 	static bool		isMainThread		()		 { return threadLocalId() == s_kMainThreadLocalId; }
-	static size_t	logicalThreadCount	()		 { return std::thread::hardware_concurrency(); }
+	static SizeType	logicalThreadCount	()		 { return std::thread::hardware_concurrency(); }
 
 	//static AllThreadsStorage*	_internal_allThreadsStorage	();
 	//static ThreadStorage*		_internal_threadStorage		();

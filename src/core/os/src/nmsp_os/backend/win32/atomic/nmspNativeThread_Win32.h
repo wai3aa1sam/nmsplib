@@ -34,6 +34,7 @@ public:
 	size_t		threadId		();
 	ThreadHnd	nativeHnd		();
 
+	void		setName(StrViewA_T name);
 
 protected:
 	static DWORD WINAPI _routine(void* args);

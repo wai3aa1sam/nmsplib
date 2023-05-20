@@ -24,20 +24,14 @@ void NativeThread_Win32::create(const CreateDesc& cd)
 
 	if (cd.name.is_empty())
 	{
-		_name = "My_Thread_";
-		_name += StrUtil::toTempStr(cd.affinityIdx);
+		_name = "Nmsp_Thread_";
+		_name += StrUtil::toTempStr(cd.localId);
 	}
-
-	TempStringW_T<> nameW;
-	UtfUtil::convert(nameW, _name);
 
 	_hnd = ::CreateThread(nullptr, 0, &_routine, (LPVOID)this, 0, (LPDWORD)&_threadId);
 	throwIf(!_hnd, "");
 
-	OSRet ret;
-	ret = ::SetThreadDescription(_hnd, nameW.c_str());
-	_NMSP_PROFILE_SET_THREAD_NAME(_name.c_str());
-
+	setName(_name);
 	setAffinity(cd.affinityIdx);
 
 	#if NMSP_DEBUG
@@ -76,10 +70,22 @@ ThreadHnd	NativeThread_Win32::nativeHnd			()
 	return _hnd;
 }
 
+void		NativeThread_Win32::setName(StrViewA_T name)
+{
+	NMSP_ASSERT(_hnd, "");
+
+	TempStringW_T<> nameW;
+	UtfUtil::convert(nameW, _name);
+
+	OSRet ret;
+	ret = ::SetThreadDescription(_hnd, nameW.c_str());
+	_NMSP_PROFILE_SET_THREAD_NAME(_name.c_str());
+}
+
 DWORD NativeThread_Win32::_routine(void* args)
 {
 	auto* nt = static_cast<NativeThread_Win32*>(args);
-	OsTraits::setThreadLocalId(nt->localId());
+	//OsTraits::setThreadLocalId(nt->localId());
 	auto ret = nt->onRoutine(); NMSP_UNUSED(ret);
 	return 0;
 }

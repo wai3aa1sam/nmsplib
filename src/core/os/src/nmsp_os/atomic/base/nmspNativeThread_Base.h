@@ -21,6 +21,7 @@ struct BasicThread_CreateDesc
 {
 	StrViewA_T		name;
 	int				affinityIdx = -1;
+	int				localId		= -1;
 	ThreadRountine	routine = nullptr;
 	void* args = nullptr;
 };
@@ -30,6 +31,7 @@ struct NativeThread_CreateDesc : private BasicThread_CreateDesc
 	using Base = BasicThread_CreateDesc;
 	using Base::name;
 	using Base::affinityIdx;
+	using Base::localId;
 };
 
 #endif
@@ -55,12 +57,13 @@ public:
 	size_t		threadId();
 	ThreadHnd	nativeHnd();
 
-	int			localId()	const;
-	StrViewA_T	name()	const;
-
+	int				localId()	const;
+	int				affinity()	const;
+	const StringT&	name()	const;
 
 protected:
-	int		_localId = -1;
+	int		_localId	= -1;
+	int		_affinity	= -1;
 	StringT _name;
 
 	#if NMSP_DEBUG
@@ -112,18 +115,19 @@ Thread_Base::~Thread_Base()
 inline
 void			Thread_Base::create(const BasicCreateDesc& bcd)
 {
-	_localId = bcd.affinityIdx;
-	_name = bcd.name;
+	_localId	= bcd.localId;
+	_affinity	= bcd.affinityIdx;
+	_name		= bcd.name;
 }
 
 inline
-int			Thread_Base::localId() const
+int				Thread_Base::localId() const
 {
 	return _localId;
 }
 
 inline
-StrViewA_T	Thread_Base::name() const
+const StringT&	Thread_Base::name() const
 {
 	return _name;
 }
