@@ -90,6 +90,7 @@ void LinearAllocatorChunk_T::destructAndClear()
 
 // ---
 
+inline
 void LinearAllocator_T::setChunkSize(SizeType n)	{ _chunkSize = n; }
 
 template<class T> inline 
