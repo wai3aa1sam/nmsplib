@@ -65,20 +65,20 @@ private:
 #if 1
 
 template<class T> inline
-	T* StackSingleton_T<T>::instance()
+T* StackSingleton_T<T>::instance()
 {
 	return s_instance;
 }
 
 template<class T> inline
-	StackSingleton_T<T>::StackSingleton_T()
+StackSingleton_T<T>::StackSingleton_T()
 {
 	NMSP_ASSERT(!s_instance);
 	s_instance = sCast<T*>(this);
 }
 
 template<class T> inline
-	StackSingleton_T<T>::~StackSingleton_T()
+StackSingleton_T<T>::~StackSingleton_T()
 {
 	NMSP_ASSERT(s_instance);
 	s_instance = nullptr;

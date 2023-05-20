@@ -18,7 +18,7 @@ struct TestMovableType
 	constexpr static SizeType s_kMaxByteSize = MAX_BYTE;
 
 	#define _INTERNAL_NEW_BYTES(ptr)				ptr = NMSP_ALLOC(ptr, s_kMaxByteSize)
-	#define _INTERNAL_SIZE_TYPE_NEW_BYTES(ptr, i)	ptr = NMSP_NEW(ptr)
+	#define _INTERNAL_SIZE_TYPE_NEW_BYTES(ptr, i)	ptr = NMSP_NEW(SizeType, ptr)
 
 	//#define _INTERNAL_NEW_BYTES nullptr
 

@@ -55,7 +55,7 @@ public:
 	using SizeType = typename PrimaryAllocator::SizeType;
 
 	//static constexpr SizeType s_kPrimaryAlign	= PRIMARY_ALLOC::s_kAlign;
-	static constexpr SizeType s_kFallbackAlign	= FallbackAllocator::s_kAlign;
+	//static constexpr SizeType s_kFallbackAlign	= FallbackAllocator::s_kAlign;
 	static constexpr SizeType s_kDefaultAlign	= StlTraits::s_kDefaultAlign;
 
 	static constexpr bool s_enableFallbackAlloc = !IsSame<FALLBACK_ALLOC, NoFallbackAllocator_Policy>;

@@ -2,34 +2,6 @@
 
 #include "nmspAlloc_Common.h"
 
-namespace nmsp {
-
-#if 0
-#pragma mark --- nmspNmspAlloc-Impl ---
-#endif // 0
-#if 1
-
-#if !NMSP_CUSTOM_ALLOC
-
-	void* nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
-	{
-		auto alignSize	= nmsp::_alignTo(size, align);
-		auto* p			= std::malloc(alignSize);
-		_NMSP_PROFILE_ALLOC(p, alignSize);
-		return p; 
-	}
-
-	void  nmsp_free(void* p, size_t size /*= 0*/) NMSP_NOEXCEPT
-	{ 
-		_NMSP_PROFILE_FREE(p, size);
-		std::free(p);
-	}
-
-#endif
-
-#endif
-}
-
 #if NMSP_OVERRIDE_NEW_OP
 
 void*	operator new  (size_t size)

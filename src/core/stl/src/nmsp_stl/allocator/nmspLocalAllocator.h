@@ -5,6 +5,12 @@
 #include "nmspLocalBuffer.h"
 #include "nmspMallocAllocator.h"
 
+/*
+references:
+- CppCon 2015: Andrei Alexandrescu “std::allocator...” - YouTube (https://www.youtube.com/watch?v=LIb3L4vKZ7U)
+
+*/
+
 namespace nmsp {
 
 #if 0
@@ -26,7 +32,7 @@ public:
 
 	static constexpr SizeType s_kLocalSize			= LOCAL_SIZE;
 	static constexpr SizeType s_kAlign				= ALIGN;
-	//static constexpr bool	  s_enableFallbackAlloc = Base::s_enableFallbackAlloc;
+	static constexpr bool	  s_enableFallbackAlloc = Base::s_enableFallbackAlloc;
 
 	//static_assert(Base::s_kPrimaryAlign == Base::s_kFallBackAlign);
 

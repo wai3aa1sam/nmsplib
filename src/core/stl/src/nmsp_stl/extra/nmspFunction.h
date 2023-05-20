@@ -11,7 +11,7 @@ namespace nmsp {
 
 template <class T1, class T2> using EnableIfNotFunction_T = std::enable_if_t< !IsSame< Decay<T1>, Decay<T2> > >;
 
-template<class T, size_t LOCAL_SIZE = 32, size_t ALIGN = StlTraits::s_kDefaultAlign, class FALLBACK_ALLOCATOR = DefaultAllocator> // TODO: change  std::allocator<u8> to our own fallback allocator
+template<class T, size_t LOCAL_SIZE = 32, size_t ALIGN = StlTraits::s_kDefaultAlign, class FALLBACK_ALLOCATOR = DefaultAllocator>
 class Function_T;
 
 template<class RET, class... PARAMS, size_t LOCAL_SIZE, size_t ALIGN, class FALLBACK_ALLOCATOR>
