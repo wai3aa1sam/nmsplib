@@ -70,22 +70,20 @@ public:
 	void _internal_nextFrame();
 
 protected:
-	static JobHandle allocateJob();
+	static JobHandle		allocateJob();
+	static FrameAllocator&  _defaultAllocator();
 
-	static FrameAllocator& _defaultAllocator();
-	ThreadStorage& _threadStorage();
+	WorkerThread& thread();
+	const WorkerThread& thread() const;
+
+	ThreadStorage& threadStorage();
 
 	SizeType typedThreadCount() const;
 	bool isTypedThread(int threadLocalId = JobSystemTraits::threadLocalId()) const;
 
 private:
-	void _createTypedThreads();
-
-	bool _tryGetJob(JobHandle& job);
 	void _checkError() const;
-
-	static void _execute(JobHandle job);
-	static void _complete(JobHandle job);
+	void _createTypedThreads();
 
 private:
 	ThreadPool _threadPool;
@@ -120,6 +118,7 @@ JobSystem_T::JobHandle JobSystem_T::allocateJob()
 	return instance()->_defaultAllocator().allocJob();
 }
 
+
 inline JobSystem_T::SizeType JobSystem_T::workerStartIdx()	const	{ return _typedThreadCount; }
 inline JobSystem_T::SizeType JobSystem_T::workersEndIdx()  const	{ return JobSystemTraits::s_kJobSystemLogicalThreadCount - 1; }
 inline JobSystem_T::SizeType JobSystem_T::workerCount() const		{ return _threadPool.workerCount(); }
@@ -128,6 +127,32 @@ inline JobSystem_T::SizeType JobSystem_T::threadCount() const		{ return _threadP
 inline JobSystem_T::SizeType JobSystem_T::typedThreadCount() const	{ return _typedThreads.size(); }
 
 inline bool JobSystem_T::isTypedThread(int threadLocalId) const { return threadLocalId < _typedThreadCount; }
+
+inline
+JobSystem_T::WorkerThread& JobSystem_T::thread()
+{
+	NMSP_ASSERT(!JobSystemTraits::isMainThread(), "");
+	_checkError();
+	auto id = JobSystemTraits::threadLocalId();
+	return isTypedThread(id) ? *_typedThreads[id] : _threadPool.workerThreads(id);
+}
+
+inline
+const JobSystem_T::WorkerThread& JobSystem_T::thread() const
+{
+	NMSP_ASSERT(!JobSystemTraits::isMainThread(), "");
+	_checkError();
+	auto id = JobSystemTraits::threadLocalId();
+	return isTypedThread(id) ? *_typedThreads[id] : _threadPool.workerThreads(id);
+}
+
+inline
+JobSystem_T::ThreadStorage& JobSystem_T::threadStorage()
+{
+	_checkError();
+	auto id = JobSystemTraits::threadLocalId();
+	return isTypedThread(id) ? *_typedThreadStorages[id] : _threadPool.threadStroages(id);
+}
 
 #endif
 

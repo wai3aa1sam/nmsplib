@@ -47,10 +47,9 @@ public:
 	void terminate();
 
 	void submit(JobHandle job);
-	void run();
+	void execute(JobHandle job);
 
-	bool tryGetJob(JobHandle& job);
-
+	void run();	// useless now, maybe have a pending sumbit and then call run to execute those jobs
 	void nextFrame();
 
 	SizeType workerCount() const;
@@ -59,10 +58,17 @@ public:
 	SizeType workerId(int threadLocalId = JobSystemTraits::threadLocalId()) const;
 	ThreadStorage& threadStroages(int threadLocalId);
 	ThreadStorage& threadStroage();
+	
+	WorkerThread& workerThreads(int threadLocalId);
+	WorkerThread& workerThread();
+
+	const WorkerThread& workerThreads(int threadLocalId) const;
 
 protected:
+	bool tryGetJob(JobHandle& job);
 	bool trySteal(WorkerThread* worker, JobHandle& job);
-
+	void complete(JobHandle job);
+	void _submit(JobHandle job);
 	int getNextIndex(int i);
 
 private:
@@ -96,13 +102,33 @@ ThreadPool_T::SizeType ThreadPool_T::workerId(int threadLocalId) const
 inline
 ThreadPool_T::ThreadStorage& ThreadPool_T::threadStroage()
 {
-	return *_threadStorages[workerId()];
+	return threadStroages(JobSystemTraits::threadLocalId());
 }
 
 inline
 ThreadPool_T::ThreadStorage& ThreadPool_T::threadStroages(int threadLocalId)
 {
-	return *_threadStorages[workerId(threadLocalId)];
+	auto i = workerId(threadLocalId);
+	NMSP_ASSERT(_workers[i]->localId() == threadLocalId);
+	return *_threadStorages[i];
+}
+
+inline ThreadPool_T::WorkerThread& ThreadPool_T::workerThread() { return workerThreads(JobSystemTraits::threadLocalId()); }
+
+inline 
+ThreadPool_T::WorkerThread& ThreadPool_T::workerThreads(int threadLocalId)
+{
+	auto i = workerId();
+	NMSP_ASSERT(_workers[i]->localId() == threadLocalId);
+	return *_workers[i];
+}
+
+inline 
+const ThreadPool_T::WorkerThread& ThreadPool_T::workerThreads(int threadLocalId) const
+{
+	auto i = workerId();
+	NMSP_ASSERT(_workers[i]->localId() == threadLocalId);
+	return *_workers[i];
 }
 
 inline ThreadPool_T::SizeType ThreadPool_T::workerCount() const { return _workers.size(); }

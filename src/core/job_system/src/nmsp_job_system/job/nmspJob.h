@@ -35,13 +35,6 @@ using JobFunction = Function_T<void(const JobArgs&), 32, JobSystemTraits::s_kDef
 class Job_T //: public NonCopyable
 {
 public:
-
-	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
-
-	friend class WorkerThread_T;
-	friend class JobSystem_T;
-
-public:
 	using Priority	= JobPriority;
 	using Info		= JobInfo;
 	using JobHandle = JobHandle_T;
@@ -53,22 +46,27 @@ public:
 	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLine * 2;
 
 public:
+	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
+	friend class WorkerThread_T;
+	friend class ThreadPool_T;
+
+public:
 	~Job_T() = default;
 
 	void waitForComplete();
 	void submit();
 
-	bool isCompleted() const;
-	int jobRemainCount() const;
-
 	template<class... JOB> void runAfter (JOB&&... job);
 	template<class... JOB> void runBefore(JOB&&... job);
 
-	int dependencyCount()  const;
-	size_t runAfterCount() const;
+	void setEmpty();
+
+	bool		isCompleted		()const;
+	int			jobRemainCount	() const;
+	int			dependencyCount	() const;
+	SizeType	runAfterCount	() const;
 
 	const Info& info() const;
-
 	void print() const;
 
 	// only useful when enable SGE_JOB_SYSTEM_DEBUG
@@ -88,7 +86,6 @@ private:
 	void init(const Task& func, const Info& info, JobHandle parent = nullptr);
 
 	void _setInfo(const Info& info);
-	void setEmpty();
 
 	void addJobCount();
 	int	decrDependencyCount();
@@ -157,15 +154,15 @@ private:
 			_dependencyCount.store(0);
 		}
 
-		template<class FUNC>
-		void runAfterThis_for_each_ifNoDeps(const FUNC& func)
+		template<class T, class FUNC>
+		void runAfterThis_for_each_ifNoDeps(T& pool, const FUNC& func)
 		{
 			for (auto& job : _runAfterThis)
 			{
 				int count = job->decrDependencyCount();
 				if (count == 0)
 				{
-					func(job);
+					invoke(func, pool, job);
 				}
 			}
 		}
@@ -175,6 +172,7 @@ private:
 			auto ret = --_dependencyCount; 
 			return ret;
 		}
+
 		bool couldRun() const		{ return _dependencyCount.load() == 0; }
 
 	private:

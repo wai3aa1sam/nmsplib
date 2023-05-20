@@ -55,6 +55,8 @@ public:
 	JobQueue& queue();
 
 protected:
+	ThreadPool* threadPool();
+
 	bool _tryGetJob(JobHandle& job);
 
 	void resetSleepCount();
@@ -119,6 +121,8 @@ void  WorkerThread_T::log(ARGS&&... args)
 {
 	//atomicLog(nmsp::forward<ARGS>(args)...);
 }
+
+inline WorkerThread_T::ThreadPool* WorkerThread_T::threadPool() { return _threadPool; }
 
 #endif
 

@@ -67,7 +67,7 @@ void JobSystem_T::waitForComplete(JobHandle job)
 	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
 	auto* jsys = this;
 	auto& threadPool = this->_threadPool;
-	auto& storage = jsys->_threadStorage(); (void)storage;
+	auto& storage = jsys->threadStorage(); (void)storage;
 
 	while (!job->isCompleted())
 	{
@@ -75,7 +75,7 @@ void JobSystem_T::waitForComplete(JobHandle job)
 
 		if (threadPool.tryGetJob(tmp))
 		{
-			_execute(tmp);
+			threadPool.execute(tmp);
 		}
 
 		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
@@ -86,30 +86,8 @@ void JobSystem_T::waitForComplete(JobHandle job)
 
 void JobSystem_T::submit(JobHandle job)
 {
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
-	NMSP_ASSERT(!job->_storage._isSubmitted);
-	NMSP_ASSERT(!job->_storage._isExecuted);
-
-	job->_storage._isSubmitted.store(true);
-	job->_storage._isAllowAddDeps.store(false);
-	#endif // 0
-
-	#if NMSP_JOB_SYSTEM_ENABLE_SINGLE_THREAD_DEBUG
-	_execute(job);
-	#else
-
-	if (!job->_storage.dep.couldRun())
-	{
-		// rare case, maybe have some bug, all job should sumbit when dep count is 0
-		// 19/1/2023: no bug now, since _complete() are not reading and compare the copy, 
-		// when contex-switch, possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
-		// couldRun() would be compare negative number, since it is executed
-		NMSP_ASSERT(job->_storage.dep.couldRun());
-	}
-
 	auto& threadPool = instance()->_threadPool;
 	threadPool.submit(job);
-	#endif
 }
 
 void JobSystem_T::_internal_nextFrame()
@@ -120,17 +98,13 @@ void JobSystem_T::_internal_nextFrame()
 	DependencyManager::nextFrame();
 	#endif // 0
 
+	for (auto& ts : _typedThreadStorages)
+	{
+		ts->nextFrame();
+	}
 	_threadPool.nextFrame();
 }
 
-JobSystem_T::ThreadStorage& JobSystem_T::_threadStorage()
-{
-	auto* jsys = this;
-	jsys->_checkError();
-
-	auto id = JobSystemTraits::threadLocalId();
-	return jsys->isTypedThread(id) ? *jsys->_typedThreadStorages[id] : _threadPool.threadStroages(id);
-}
 
 JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
 {
@@ -139,34 +113,13 @@ JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
 	return job;
 }
 
-StrViewA_T JobSystem_T::threadName() const
-{
-	auto* jsys = this;
-	jsys->_checkError();
-	auto id = JobSystemTraits::threadLocalId();
-	if (id < typedThreadCount())
-	{
-		return jsys->_typedThreads[id]->name();
-	}
-	else
-	{
-		return jsys->_threadPool._workers[id]->name();
-	}
-}
-
-bool JobSystem_T::_tryGetJob(JobHandle& job)
-{
-	return _threadPool.tryGetJob(job);
-}
 
 JobSystem_T::FrameAllocator& JobSystem_T::_defaultAllocator()
 {
 	auto* jsys = JobSystem_T::instance();
 	jsys->_checkError();
 
-
-
-	auto& frameAlloc = jsys->_threadPool.threadStroages(JobSystemTraits::threadLocalId()).frameAllocator();
+	auto& frameAlloc = jsys->threadStorage().frameAllocator();
 	return frameAlloc;
 }
 
@@ -180,70 +133,13 @@ void JobSystem_T::_checkError() const
 	//NMSP_ASSERT(JobSystemTraits::threadLocalId() >= 0 && JobSystemTraits::threadLocalId() < _threadPool.threadCount());
 }
 
-void JobSystem_T::_complete(JobHandle job)
-{
-	auto& jobRemainCount	= job->_storage._jobRemainCount;
-	auto& parent			= job->_storage._parent;
-	//auto& depsOnThis		= job->_storage.dep._depsOnThis;
-
-	//atomicLog("=== task complete");
-	int ret = jobRemainCount.fetch_sub(1) - 1;
-	// must have a copy, consider the jobRemainCount maybe 1, when contex-switch, 
-	// other thread is decr the jobRemainCount, both of them will trigger jobRemainCount == 0,
-	// possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
-
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
-	if (!parent)
-		DependencyManager::jobFinish(job);
-	#endif // 0
-
-	if (ret == 0)	// must compare
-	{
-		if (parent)
-		{
-			_complete(parent);
-		}
-
-		job->_storage.dep.runAfterThis_for_each_ifNoDeps(JobSystem_T::submit);
-	}
-}
-
-void JobSystem_T::_execute(JobHandle job)
-{
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
-	DependencyManager::jobExecute(job);
-	#endif // 0
-
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
-	NMSP_ASSERT(job->_storage._isSubmitted);
-	NMSP_ASSERT(!job->_storage._isExecuted);
-
-	job->_storage._isAllowAddDeps.store(false);
-	job->_storage._isExecuted.store(true);
-	#endif // 0
-
-	auto& task  = job->_storage._task;
-	auto& info	= job->info();
-
-	JobArgs args;
-	args.batchID = info.batchID;
-
-	for (u32 i = info.batchOffset; i < info.batchEnd; ++i)
-	{
-		args.loopIndex  = i;
-		args.batchIndex = i - info.batchOffset;
-		task(args);
-	}
-
-	_complete(job);
-}
 void JobSystem_T::_createTypedThreads()
 {
 	_typedThreads.reserve(_typedThreadCount);
 	_typedThreadStorages.reserve(_typedThreadCount);
 
 	// Main Thread
-	_typedThreadStorages.emplace_back();
+	_typedThreadStorages.emplace_back(nmsp_new<ThreadStorage>());
 	_typedThreads.emplace_back(nullptr);
 
 	for (size_t i = 1; i < _typedThreadCount; i++)
@@ -251,7 +147,6 @@ void JobSystem_T::_createTypedThreads()
 		_typedThreadStorages.emplace_back(nmsp_new<ThreadStorage>());
 		_typedThreads.emplace_back(/*nmsp_new<WorkerThread>(workerCDesc)*/);
 	}
-
 }
 
 #endif

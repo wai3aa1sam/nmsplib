@@ -37,7 +37,7 @@ public:
 		JobFunction task;
 		if constexpr (TYPE == Job_Base<T>::s_kType)
 		{
-			SGE_ASSERT(loopCount == 1);
+			NMSP_ASSERT(loopCount == 1);
 			static_check<Job_Base<T>>();
 			task = [pObj](const JobArgs& args) { return pObj->execute(); };
 		}

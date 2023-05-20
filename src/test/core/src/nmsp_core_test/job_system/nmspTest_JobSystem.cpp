@@ -20,7 +20,7 @@ public:
 	static constexpr size_t	s_kPrimeStart = 1000000000LL;
 	//static constexpr size_t	s_kPrimeStart	= 2;
 
-	static constexpr size_t	s_kLoopCount = 16 * 4;
+	static constexpr size_t	s_kLoopCount = 16;
 
 private:
 	static bool s_isPrimeNumber(i64 v)
@@ -213,10 +213,9 @@ public:
 
 
 				NMSP_PROFILE_FRAME();
-				if (_isQuit)
+				if (_isQuit || true)
 				{
 					NMSP_PROFILE_SECTION("Test_Dispatch");
-					NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
 					break;
 				}
 
@@ -240,7 +239,51 @@ public:
 
 		//NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
 		//NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
+		NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
 
+
+		{
+			JobSystem_T _jsys;
+			auto jsysCDesc = _jsys.makeCDesc();
+			jsysCDesc.workerCount = OsTraits::logicalThreadCount();
+			_jsys.create(jsysCDesc);
+
+			auto* jsys = JobSystem_T::instance();
+
+			JobHandle_T handle0 = nullptr;
+			JobHandle_T handle1 = nullptr;
+
+			PrimeNumberSolver::SolverJob_ParFor		solverJob_ParFor0(PrimeNumberSolver::s_kPrimeStart);
+			PrimeNumberSolver::SolverJob_ParFor2	solverJob_ParFor1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
+
+			PrimeNumberSolver::SolverJob_For		solverJob_For0(PrimeNumberSolver::s_kPrimeStart);
+			PrimeNumberSolver::SolverJob_For2		solverJob_For1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
+
+			PrimeNumberSolver::SolverJob			solverJob0(PrimeNumberSolver::s_kPrimeStart);
+			PrimeNumberSolver::SolverJob2			solverJob1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
+
+
+			handle0 = solverJob_ParFor0.delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize);
+			handle1 = solverJob_ParFor1.delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize, handle0, handle0, handle0);
+			jsys->submit(handle0);
+			jsys->waitForComplete(handle1);
+			solverJob_ParFor0.print();
+			solverJob_ParFor1.print();
+
+			handle0 = solverJob_For0.delayDispatch(PrimeNumberSolver::s_kLoopCount);
+			handle1 = solverJob_For1.delayDispatch(PrimeNumberSolver::s_kLoopCount, handle0, handle0, handle0);
+			jsys->submit(handle0);
+			jsys->waitForComplete(handle1);
+			solverJob_For0.print();
+			solverJob_For1.print();
+
+			handle0 = solverJob0.delayDispatch();
+			handle1 = solverJob1.delayDispatch(handle0, handle0, handle0);
+			jsys->submit(handle0);
+			jsys->waitForComplete(handle1);
+			solverJob0.print();
+			solverJob1.print();
+		}
 	}
 
 	void poll()

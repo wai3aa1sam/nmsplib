@@ -26,6 +26,8 @@
 
 	template<class T> struct Hash		: public eastl::hash<T>		{};
 
+	template<class FUNC, class... ARGS> constexpr decltype(auto) invoke(ARGS&&... args);
+
 	}
 
 #else
@@ -59,6 +61,13 @@ constexpr T accumulateTo(const T (&arr)[N])
 	}
 	return sum;
 }
+
+template<class FUNC, class... ARGS> inline constexpr
+decltype(auto) invoke(FUNC&& func, ARGS&&... args)
+{
+	return eastl::invoke(nmsp::forward<FUNC>(func), nmsp::forward<ARGS>(args)...);
+}
+
 
 }
 

@@ -46,7 +46,6 @@ void* WorkerThread_T::onRoutine()
 	try
 	{
 		JobHandle job = nullptr;
-		auto* jsys = JobSystem_T::instance();
 
 		for (;;)
 		{
@@ -55,8 +54,8 @@ void* WorkerThread_T::onRoutine()
 				wake();
 
 				debugLog("=== thread {} execute job", localId());
-				jsys->_execute(job);
-				//job->_execute();
+				threadPool()->execute(job);
+				
 				job = nullptr;
 				_jobs.try_pop(job);
 			}
