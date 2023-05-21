@@ -9,23 +9,29 @@ UnitTestManager*	UnitTestManager::instance()
 	return s_instance;
 }
 
-UnitTestManager*	UnitTestManager::create()
+void UnitTestManager::create()
 {
+	destroy();
 	NMSP_ASSERT(s_instance == nullptr);
-	s_instance = new UnitTestManager();
-	return s_instance;
+	s_instance = this;
 }
 
 void UnitTestManager::destroy()
 {
 	if (!s_instance) 
 		return;
-	delete s_instance;
+	NMSP_ASSERT(s_instance == this);
 	s_instance = nullptr;
 }
 
 UnitTestManager::UnitTestManager()
 {
+	create();
+}
+
+UnitTestManager::~UnitTestManager()
+{
+	destroy();
 }
 
 void UnitTestManager::registerUnitTest(UnitTest* ut)

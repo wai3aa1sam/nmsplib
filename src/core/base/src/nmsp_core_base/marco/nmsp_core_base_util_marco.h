@@ -18,19 +18,19 @@ references:
 #define NMSP_ARGS(...) __VA_ARGS__
 #define NMSP_STRINGIFY(...)	#__VA_ARGS__
 
-#define NMSP_IDENTITY(x) x
+#define NMSP_IDENTITY(X) X
 #define NMSP_CALL(M, ARGS) NMSP_IDENTITY( M(ARGS) )
 
-#define NMSP_CONCAT(x, ...)		x ## __VA_ARGS__
+#define NMSP_CONCAT(X, ...)		X ## __VA_ARGS__
 
-#define NMSP_CALL_ARGS(x, ...)	NMSP_IDENTITY( x(__VA_ARGS__) )
+#define NMSP_CALL_ARGS(X, ...)	NMSP_IDENTITY( X(__VA_ARGS__) )
 #define NMSP_ANGLE_BRACKET(...) NMSP_IDENTITY( <__VA_ARGS__> )
 #define NMSP_BRACKET(...)		NMSP_IDENTITY( (__VA_ARGS__) )
 
 #define NMSP_VA_ARGS_COUNT(...) NMSP_IDENTITY( NMSP_VA_ARGS_COUNT_INTERNAL(__VA_ARGS__, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1) )
 #define NMSP_VA_ARGS_COUNT_INTERNAL(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, COUNT, ...) COUNT
 
-#define NMSP_UNUSED(x)	(void)x
+#define NMSP_UNUSED(X)	(void)X
 
 #define NMSP_CONSTEXPR				constexpr
 #define NMSP_NOEXCEPT				noexcept
@@ -39,15 +39,15 @@ references:
 #define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
 
 #if NMSP_ENABLE_ASSERT
-	#define NMSP_CORE_ASSERT(x, ...)	do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
-	#define NMSP_ASSERT(x, ...)			do{ if(!(x)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(x);  } } while(false)
+	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
+	#define NMSP_ASSERT(X, ...)			do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
 #else
-	#define NMSP_CORE_ASSERT(x, ...)
-	#define NMSP_ASSERT(x, ...)	
+	#define NMSP_CORE_ASSERT(X, ...)
+	#define NMSP_ASSERT(X, ...)	
 #endif // NMSP_ENABLE_ASSERT
 
-#define NMSP_ALIGN_OF(x) alignof(x)
-#define NMSP_ALIGN_AS(x) alignas(x)
+#define NMSP_ALIGN_OF(X) alignof(X)
+#define NMSP_ALIGN_AS(X) alignas(X)
 
 #if NMSP_DEBUG
 	#define NMSP_SRCLOC	SrcLoc(__FILE__, __LINE__, NMSP_FUNC_NAME_SZ)
@@ -83,7 +83,7 @@ references:
 #define NMSP_IDX_SEQ_9(SEP, X, ...)		NMSP_IDX_SEQ_8(SEP, X, __VA_ARGS__) NMSP_IDX_SEQ_IMPL(SEP, 8, X, __VA_ARGS__)
 #define NMSP_IDX_SEQ_10(SEP, X, ...)	NMSP_IDX_SEQ_9(SEP, X, __VA_ARGS__) NMSP_IDX_SEQ_IMPL(SEP, 9, X, __VA_ARGS__)
 
-#define NMSP_PARAMS_IMPL(I) a ## I
+#define NMSP_PARAMS_IMPL(I) A ## I
 #define NMSP_PARAMS_1		NMSP_IDX_SEQ_1(NMSP_COMMA, NMSP_PARAMS_IMPL)
 #define NMSP_PARAMS_2		NMSP_IDX_SEQ_2(NMSP_COMMA, NMSP_PARAMS_IMPL)
 #define NMSP_PARAMS_3		NMSP_IDX_SEQ_3(NMSP_COMMA, NMSP_PARAMS_IMPL)

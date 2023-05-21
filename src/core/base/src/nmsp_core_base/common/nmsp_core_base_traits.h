@@ -24,7 +24,7 @@ namespace nmsp {
 
 struct CoreBaseDefaultTraits_T
 {
-	static constexpr size_t s_kCahchLineSize		= std::hardware_destructive_interference_size;
+	static constexpr size_t s_kCacheLineSize		= std::hardware_destructive_interference_size;
 	static constexpr size_t s_kDefaultAlign			= NMSP_ALIGN_OF(std::max_align_t);
 	static constexpr size_t s_kThresholdToCallDMA	= 128;
 };

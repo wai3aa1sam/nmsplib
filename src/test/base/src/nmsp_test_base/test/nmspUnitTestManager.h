@@ -15,11 +15,12 @@ class UnitTestManager : public NonCopyable
 {
 public:
 	static UnitTestManager* instance();
-	static UnitTestManager* create();
-	static void				destroy();
 
 	UnitTestManager();
-	~UnitTestManager()	= default;
+	~UnitTestManager();
+
+	void create();
+	void destroy();
 
 	void registerUnitTest(UnitTest* ut);
 	void benchmark(int* argc, char* argv[]);

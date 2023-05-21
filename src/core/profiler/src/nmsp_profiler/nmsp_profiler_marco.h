@@ -12,28 +12,28 @@
 
 	#define NMSP_PROFILE_SCOPED()				ZoneScoped				
 	#define NMSP_PROFILE_FRAME()				FrameMark			
-	#define NMSP_PROFILE_SECTION(name)			ZoneScopedN(name)		
-	#define NMSP_PROFILE_TAG(str)				ZoneText(str, ::strlen(str))
-	#define NMSP_PROFILE_LOG(text)				TracyMessage(text, ::strlen(text))
-	#define NMSP_PROFILE_VALUE(text, value)		TracyPlot(text, value)	
+	#define NMSP_PROFILE_SECTION(NAME)			ZoneScopedN(NAME)		
+	#define NMSP_PROFILE_TAG(STR)				ZoneText(STR, ::strlen(STR))
+	#define NMSP_PROFILE_LOG(TEXT)				TracyMessage(TEXT, ::strlen(TEXT))
+	#define NMSP_PROFILE_VALUE(TEXT, VALUE)		TracyPlot(TEXT, VALUE)	
 
-	#define NMSP_PROFILE_ALLOC(p, size)			TracyCAllocS(p, size, 12)    
-	#define NMSP_PROFILE_FREE(p, size)			TracyCFreeS(p, 12)		    
+	#define NMSP_PROFILE_ALLOC(PTR, SIZE)		TracyCAllocS(PTR, SIZE, 12)    
+	#define NMSP_PROFILE_FREE(PTR, SIZE)		TracyCFreeS(PTR, 12)		    
 
-	#define NMSP_PROFILE_SET_THREAD_NAME(name)	::tracy::SetThreadName(name)
+	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)	::tracy::SetThreadName(NAME)
 
 #else
 
-	#define NMSP_PROFILE_SCOPED()					do{ ; } while(false)
-	#define NMSP_PROFILE_FRAME()					do{ ; } while(false)
-	#define NMSP_PROFILE_SECTION(name)				do{ ; } while(false)
-	#define NMSP_PROFILE_TAG(str)					do{ ; } while(false)
-	#define NMSP_PROFILE_LOG(text)					do{ ; } while(false)
-	#define NMSP_PROFILE_VALUE(text, value)			do{ ; } while(false)
+	#define NMSP_PROFILE_SCOPED()					_NMSP_PROFILE_SCOPED()
+	#define NMSP_PROFILE_FRAME()					_NMSP_PROFILE_FRAME()
+	#define NMSP_PROFILE_SECTION(NAME)				_NMSP_PROFILE_SECTION(NAME)
+	#define NMSP_PROFILE_TAG(STR)					_NMSP_PROFILE_TAG(STR)
+	#define NMSP_PROFILE_LOG(TEXT)					_NMSP_PROFILE_LOG(TEXT)
+	#define NMSP_PROFILE_VALUE(TEXT, VALUE)			_NMSP_PROFILE_VALUE(TEXT, VALUE)
 
-	#define NMSP_PROFILE_ALLOC(p, size)				do{ ; } while(false)
-	#define NMSP_PROFILE_FREE(p, size)				do{ ; } while(false)
+	#define NMSP_PROFILE_ALLOC(PTR, SIZE)			_NMSP_PROFILE_ALLOC(PTR, SIZE)
+	#define NMSP_PROFILE_FREE(PTR, SIZE)			_NMSP_PROFILE_FREE(PTR, SIZE)
 
-	#define NMSP_PROFILE_SET_THREAD_NAME(name)		do{ ; } while(false)
+	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)		_NMSP_PROFILE_SET_THREAD_NAME(NAME)
 
 #endif // NMSP_ENABLE_INTERNAL_PROFILER
