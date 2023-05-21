@@ -21,10 +21,13 @@ namespace nmsp {
 struct LinearAllocatorChunk_T
 {
 public:
+	using This = LinearAllocatorChunk_T;
 	using SizeType = StlTraits::SizeType;
 
 public:
 	LinearAllocatorChunk_T(SizeType n);
+
+	//void operator=(This&& rhs);
 
 	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign);
 	void  clear();
@@ -44,13 +47,18 @@ private:
 class LinearAllocator_T : public Allocator_Base<LinearAllocator_T>
 {
 public:
+	using This	= LinearAllocator_T;
 	using Chunk = LinearAllocatorChunk_T;
 
 	using SizeType = Chunk::SizeType;
 public:
+
+	//void operator=(This&& rhs);
+
 	void setChunkSize(SizeType n);
 
-	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign);
+	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
+	void  free(void* p, SizeType n = 0) {}
 	void  clear();
 
 	template<class T> void destruct();
@@ -67,6 +75,13 @@ private:
 #pragma mark --- LinearAllocator_T-Impl ---
 #endif // 0
 #if 1
+
+//inline 
+//void LinearAllocatorChunk_T::operator=(This&& rhs)
+//{
+//	_buffer = nmsp::move(rhs._buffer);
+//	_offset = rhs._offset;
+//}
 
 inline LinearAllocatorChunk_T::SizeType LinearAllocatorChunk_T::size()			const { return _offset; }
 inline LinearAllocatorChunk_T::SizeType LinearAllocatorChunk_T::remainSize()	const { return _buffer.size() - _offset; }
@@ -89,6 +104,18 @@ void LinearAllocatorChunk_T::destructAndClear()
 }
 
 // ---
+
+//inline
+//void LinearAllocator_T::operator=(This&& rhs)
+//{
+//	_chunks.clear();
+//	_chunks.reserve(rhs._chunks.size());
+//	for (auto& e : rhs._chunks)
+//	{
+//		_chunks.emplace_back(nmsp::move(e));
+//	}
+//	_chunkSize	= rhs._chunkSize;
+//}
 
 inline
 void LinearAllocator_T::setChunkSize(SizeType n)	{ _chunkSize = n; }

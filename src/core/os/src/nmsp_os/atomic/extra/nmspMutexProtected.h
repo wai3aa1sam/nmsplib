@@ -7,7 +7,7 @@
 
 namespace nmsp {
 
-template<class DATA> using EnableIfSMutex = std::enable_if_t< std::is_same<typename DATA::Mutex, SMutex_T>::value>;
+template<class DATA> using EnableIfSMutex = EnableIf< IsSame<typename DATA::Mutex, SMutex_T> >;
 
 #if 0
 #pragma mark --- Locked_T-Decl ---
@@ -52,7 +52,7 @@ protected:
 };
 
 template<class T, class DATA, class ENABLE = void>
-class MutexProtected_T_ : public DATA
+class MutexProtected_T_ : private DATA
 {
 public:
 	using Mutex = typename DATA::Mutex; 
@@ -67,7 +67,7 @@ protected:
 };
 
 template<class T, class DATA>
-class MutexProtected_T_<T, DATA, EnableIfSMutex<DATA> > : public DATA
+class MutexProtected_T_<T, DATA, EnableIfSMutex<DATA> > : private DATA
 {
 public:
 	using Mutex = typename DATA::Mutex;

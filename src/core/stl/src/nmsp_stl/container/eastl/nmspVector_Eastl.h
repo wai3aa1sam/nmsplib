@@ -48,6 +48,7 @@ public:
 	Vector_Eastl() = default;
 	~Vector_Eastl() = default;
 
+	explicit Vector_Eastl(Allocator& allocator);
 	Vector_Eastl(std::initializer_list<ValueType> ilist, const Allocator& allocator = Allocator{});
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
@@ -68,6 +69,13 @@ private:
 #pragma mark --- Vector_Eastl-Impl ---
 #endif // 0
 #if 1
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(Allocator& allocator)
+	: Base(allocator)
+{
+
+}
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(std::initializer_list<ValueType> ilist, const Allocator& allocator)

@@ -24,7 +24,7 @@ void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align)
 	}
 
 	_offset = newOffset + n;
-	return sCast<void*>(&_buffer[_offset]);
+	return sCast<void*>(&_buffer[newOffset]);
 }
 
 void LinearAllocatorChunk_T::clear()
@@ -32,7 +32,7 @@ void LinearAllocatorChunk_T::clear()
 	_offset = 0;
 }
 
-void* LinearAllocator_T::alloc(SizeType n, SizeType align)
+void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 {
 	if (!_chunks.is_empty())
 	{
