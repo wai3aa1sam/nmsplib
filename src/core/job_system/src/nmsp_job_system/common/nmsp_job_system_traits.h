@@ -14,8 +14,6 @@ struct JobSystemDefaultTraits_T : public OsTraits
 {
 	using SizeType = size_t;
 	
-	static constexpr int s_kCacheLine		= 64;
-
 	static constexpr int s_kIdleSleepTimeMS		= 1;
 	static constexpr int s_kBusySleepTimeMS		= 0;
 	static constexpr int s_kSleepCountThreshold	= 2000;

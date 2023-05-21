@@ -15,12 +15,12 @@ namespace nmsp {
 class PrimeNumberSolver
 {
 public:
-	static constexpr size_t s_kBatchSize = 4;
+	static constexpr size_t s_kBatchSize = 1;
 
 	static constexpr size_t	s_kPrimeStart = 1000000000LL;
 	//static constexpr size_t	s_kPrimeStart	= 2;
 
-	static constexpr size_t	s_kLoopCount = 16;
+	static constexpr size_t	s_kLoopCount = 16 * 1;
 
 private:
 	static bool s_isPrimeNumber(i64 v)
@@ -35,8 +35,8 @@ private:
 
 public:
 
-	template<class... ARGS>
-	class SolverJobT
+	template<class T, class... ARGS>
+	class SolverJobT : public T
 	{
 	public:
 		SolverJobT(size_t primeStart_)
@@ -54,7 +54,7 @@ public:
 
 		void execute()
 		{
-			NMSP_PROFILE_SCOPED();
+			_NMSP_PROFILE_SCOPED();
 
 			//_NMSP_LOG("=== i: {}", i);
 
@@ -67,7 +67,7 @@ public:
 
 		void execute(const JobArgs& args)
 		{
-			NMSP_PROFILE_SCOPED();
+			_NMSP_PROFILE_SCOPED();
 
 			auto i = args.loopIndex;
 			//_NMSP_LOG("=== i: {}", i);
@@ -75,13 +75,13 @@ public:
 			bool isPrime = s_isPrimeNumber(_numbers[i]);
 			_result[i] = isPrime;
 
-			auto buf = fmtAs_T<TempStringA_T<> >("execute: {}", i);
-			NMSP_PROFILE_LOG(buf.c_str());
+			//auto buf = fmtAs_T<TempStringA_T<> >("execute: {}", i);
+			//_NMSP_PROFILE_LOG(buf.c_str());
 		}
 
 		void execute_submit()
 		{
-			NMSP_PROFILE_SCOPED();
+			_NMSP_PROFILE_SCOPED();
 
 			bool isPrime = s_isPrimeNumber(_numbers[i]);
 			_result[i] = isPrime;
@@ -108,9 +108,9 @@ public:
 	};
 
 	template<class... ARGS>
-	class SolverJobT_testParFor : public JobParFor_Base<SolverJobT_testParFor<ARGS...>>, public SolverJobT<ARGS...>
+	class SolverJobT_testParFor : public SolverJobT<JobParFor_Base, ARGS...>
 	{
-		using Base = SolverJobT<ARGS...>;
+		using Base = SolverJobT<JobParFor_Base, ARGS...>;
 	public:
 		SolverJobT_testParFor(size_t primeStart_)
 			: Base(primeStart_)
@@ -119,9 +119,9 @@ public:
 	};
 
 	template<class... ARGS>
-	class SolverJobT_testFor : public JobFor_Base<SolverJobT_testFor<ARGS...>>, public SolverJobT<ARGS...>
+	class SolverJobT_testFor : public SolverJobT<JobFor_Base, ARGS...>
 	{
-		using Base = SolverJobT<ARGS...>;
+		using Base = SolverJobT<JobFor_Base, ARGS...>;
 	public:
 		SolverJobT_testFor(size_t primeStart_)
 			: Base(primeStart_)
@@ -130,9 +130,9 @@ public:
 	};
 
 	template<class... ARGS>
-	class SolverJobT_test : public Job_Base<SolverJobT_test<ARGS...>>, public SolverJobT<ARGS...>
+	class SolverJobT_test : public SolverJobT<Job_Base, ARGS...>
 	{
-		using Base = SolverJobT<ARGS...>;
+		using Base = SolverJobT<Job_Base, ARGS...>;
 	public:
 		SolverJobT_test(size_t primeStart_)
 			: Base(primeStart_)
@@ -152,6 +152,12 @@ public:
 	class Test_Dispatch
 	{
 	public:
+		Test_Dispatch()
+		{
+			solverJob_ParFor	= makeUnique<PrimeNumberSolver::SolverJob_ParFor	>(PrimeNumberSolver::s_kPrimeStart);
+			solverJob_For		= makeUnique<PrimeNumberSolver::SolverJob_For		>(PrimeNumberSolver::s_kPrimeStart);
+			solverJob			= makeUnique<PrimeNumberSolver::SolverJob			>(PrimeNumberSolver::s_kPrimeStart);
+		}
 
 		void test()
 		{
@@ -160,24 +166,65 @@ public:
 			jsysCDesc.workerCount = OsTraits::logicalThreadCount();
 			_jsys.create(jsysCDesc);
 			{
-				auto handle = solverJob_ParFor.dispatch(s_kLoopCount, s_kBatchSize);
-				//auto handle = solverJob_For.dispatch(s_kLoopCount);
-				//auto handle = solverJob.dispatch();
-				handle->waitForComplete();
+				auto handle = solverJob_ParFor->dispatch(s_kLoopCount, s_kBatchSize);
+				//auto handle = solverJob_For->dispatch(s_kLoopCount);
+				//auto handle = solverJob->dispatch();
+				_jsys.waitForComplete(handle);
 			}
 				
-			solverJob_ParFor.print();
-			solverJob_For.print();
-			solverJob.print();
+			solverJob_ParFor->print();
+			solverJob_For->print();
+			solverJob->print();
 		}
 
 	private:
-		PrimeNumberSolver::SolverJob_ParFor	solverJob_ParFor{PrimeNumberSolver::s_kPrimeStart};
-		PrimeNumberSolver::SolverJob_For	solverJob_For	{PrimeNumberSolver::s_kPrimeStart};
-		PrimeNumberSolver::SolverJob		solverJob		{PrimeNumberSolver::s_kPrimeStart};
+		UPtr_T<PrimeNumberSolver::SolverJob_ParFor>		solverJob_ParFor	;
+		UPtr_T<PrimeNumberSolver::SolverJob_For>		solverJob_For		;
+		UPtr_T<PrimeNumberSolver::SolverJob	>			solverJob			;
 	};
 
+	class TestDep
+	{
+	public:
+		template<class T1, class T2>
+		static void test()
+		{
+			JobSystem_T _jsys;
+			auto jsysCDesc = _jsys.makeCDesc();
+			jsysCDesc.workerCount = OsTraits::logicalThreadCount();
+			_jsys.create(jsysCDesc);
 
+			auto* jsys = JobSystem_T::instance();
+			JobHandle_T handle0	= nullptr;
+			JobHandle_T handle1	= nullptr;
+			auto solverJob0		= makeUnique<T1>(PrimeNumberSolver::s_kPrimeStart);
+			auto solverJob1		= makeUnique<T2>(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
+
+			if constexpr (IsBaseOf<JobParFor_Base, T1>)
+			{
+				handle0 = solverJob0->delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize);
+				handle1 = solverJob1->delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize, handle0, handle0, handle0);
+			}
+			else if constexpr (IsBaseOf<JobFor_Base, T1>)
+			{
+				handle0 = solverJob0->delayDispatch(PrimeNumberSolver::s_kLoopCount);
+				handle1 = solverJob0->delayDispatch(PrimeNumberSolver::s_kLoopCount, handle0, handle0, handle0);
+			}
+			else if constexpr (IsBaseOf<Job_Base, T1>)
+			{
+				handle0 = solverJob0->delayDispatch();
+				handle1 = solverJob1->delayDispatch(handle0, handle0, handle0);
+			}
+			else
+			{
+				NMSP_ASSERT(false);
+			}
+			jsys->submit(handle0);
+			jsys->waitForComplete(handle1);
+			solverJob0->print();
+			solverJob1->print();
+		}
+	};
 };
 
 
@@ -188,6 +235,8 @@ class Test_JobSystem : public UnitTest
 public:
 	void test()
 	{
+		using PS = PrimeNumberSolver;
+
 		{
 			Function_T<void(void), 32> func{[]() {}};
 			auto lamb = []()
@@ -204,25 +253,37 @@ public:
 
 			_NMSP_DUMP_VAR(sizeof(LocalBuffer_T<12, 8>));
 			_NMSP_DUMP_VAR(sizeof(MallocAllocator_T<8>));
+
+			_NMSP_DUMP_VAR(sizeof(Job_T));
+			_NMSP_DUMP_VAR(JobDispatchType::JobParFor_Base);
+
 		}
 		{
-
 			for (;;)
 			{
 				poll();
 
+				_NMSP_PROFILE_SECTION("Test_Dispatch");
+				// NMSP_TEST_CASE(PS::Test_Dispatch, test());
+				NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob_ParFor,	PS::SolverJob_ParFor2)>());
+				//NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob_For,		PS::SolverJob_For2)>());
+				//NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob,			PS::SolverJob2)>());
 
-				NMSP_PROFILE_FRAME();
+				/*{
+					JobSystem_T _jsys;
+					auto jsysCDesc = _jsys.makeCDesc();
+					jsysCDesc.workerCount = OsTraits::logicalThreadCount();
+					_jsys.create(jsysCDesc);
+				}*/
+
 				if (_isQuit || true)
 				{
-					NMSP_PROFILE_SECTION("Test_Dispatch");
 					break;
 				}
 
 			}
 			
 		}
-		
 	}
 
 	virtual void onSetup() override
@@ -236,53 +297,13 @@ public:
 
 	virtual void onBenchmark() override
 	{
-
+		using PS = PrimeNumberSolver;
 		//NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
-		//NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
-		NMSP_TEST_CASE(PrimeNumberSolver::Test_Dispatch, test());
-
 
 		{
-			JobSystem_T _jsys;
-			auto jsysCDesc = _jsys.makeCDesc();
-			jsysCDesc.workerCount = OsTraits::logicalThreadCount();
-			_jsys.create(jsysCDesc);
-
-			auto* jsys = JobSystem_T::instance();
-
-			JobHandle_T handle0 = nullptr;
-			JobHandle_T handle1 = nullptr;
-
-			PrimeNumberSolver::SolverJob_ParFor		solverJob_ParFor0(PrimeNumberSolver::s_kPrimeStart);
-			PrimeNumberSolver::SolverJob_ParFor2	solverJob_ParFor1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
-
-			PrimeNumberSolver::SolverJob_For		solverJob_For0(PrimeNumberSolver::s_kPrimeStart);
-			PrimeNumberSolver::SolverJob_For2		solverJob_For1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
-
-			PrimeNumberSolver::SolverJob			solverJob0(PrimeNumberSolver::s_kPrimeStart);
-			PrimeNumberSolver::SolverJob2			solverJob1(PrimeNumberSolver::s_kPrimeStart + PrimeNumberSolver::s_kLoopCount * 1);
-
-
-			handle0 = solverJob_ParFor0.delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize);
-			handle1 = solverJob_ParFor1.delayDispatch(PrimeNumberSolver::s_kLoopCount, PrimeNumberSolver::s_kBatchSize, handle0, handle0, handle0);
-			jsys->submit(handle0);
-			jsys->waitForComplete(handle1);
-			solverJob_ParFor0.print();
-			solverJob_ParFor1.print();
-
-			handle0 = solverJob_For0.delayDispatch(PrimeNumberSolver::s_kLoopCount);
-			handle1 = solverJob_For1.delayDispatch(PrimeNumberSolver::s_kLoopCount, handle0, handle0, handle0);
-			jsys->submit(handle0);
-			jsys->waitForComplete(handle1);
-			solverJob_For0.print();
-			solverJob_For1.print();
-
-			handle0 = solverJob0.delayDispatch();
-			handle1 = solverJob1.delayDispatch(handle0, handle0, handle0);
-			jsys->submit(handle0);
-			jsys->waitForComplete(handle1);
-			solverJob0.print();
-			solverJob1.print();
+			//NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob_ParFor,	PS::SolverJob_ParFor2)>());
+			//NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob_For,		PS::SolverJob_For2)>());
+			//NMSP_TEST_CASE(PS::TestDep, test<NMSP_ARGS(PS::SolverJob,			PS::SolverJob2)>());
 		}
 	}
 

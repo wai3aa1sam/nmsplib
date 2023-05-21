@@ -47,6 +47,8 @@ void ThreadPool_T::create(const CreateDesc& desc)
 			_threadStorages.emplace_back(nmsp_new<ThreadStorage>());
 			_workers.emplace_back(nmsp_new<WorkerThread>(workerCDesc));
 		}
+
+		_isReadyToRun.store(true);
 	}
 	catch (...)
 	{
@@ -61,6 +63,8 @@ void ThreadPool_T::terminate()
 	_isDone = true;
 	for (auto& t : _workers)
 	{
+		if (!t)
+			continue;
 		//atomicLog("ThreadPool_T::terminate(), thread {}", t->localId());
 		t->terminate();
 	}

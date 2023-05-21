@@ -3,6 +3,8 @@
 #include "nmsp_job_system/common/nmsp_job_system_common.h"
 
 #include <nmsp_stl/extra/nmspFunction.h>
+#include <nmsp_stl/allocator/nmspLinearAllocator.h>
+#include <nmsp_stl/extra/nmspPaddedData.h>
 
 namespace nmsp {
 
@@ -32,18 +34,20 @@ struct JobInfo
 
 using JobFunction = Function_T<void(const JobArgs&), 32, JobSystemTraits::s_kDefaultAlign, NoFallbackAllocator_Policy>;
 
-class Job_T //: public NonCopyable
+class Job_T : public NonCopyable
 {
 public:
-	using Priority	= JobPriority;
-	using Info		= JobInfo;
-	using JobHandle = JobHandle_T;
+	using Priority			= JobPriority;
+	using Info				= JobInfo;
+	using JobHandle			= JobHandle_T;
+	using LinearAllocator	= LinearAllocator_T;
+
 	using SizeType	= JobSystemTraits::SizeType;
 
 	using  Task = JobFunction;
 	static Task s_emptyTask;
 
-	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLine * 2;
+	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLineSize * 2;
 
 public:
 	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
@@ -52,9 +56,6 @@ public:
 
 public:
 	~Job_T() = default;
-
-	void waitForComplete();
-	void submit();
 
 	template<class... JOB> void runAfter (JOB&&... job);
 	template<class... JOB> void runBefore(JOB&&... job);
@@ -120,14 +121,14 @@ private:
 		void setPriority(Priority pri)	{ _priority.store(pri); }
 		Priority priority()				{ return _priority.load(); }
 
+	public:
 		Task				_task;
 		Info				_info;
 
 		// concept of parent and DepData::runAfterThis is a little bit different.
 		// parent may run before the child but DepData::runAfterThis must run after this job
-		JobHandle				_parent = nullptr;		
-		Atm_T<int>			_jobRemainCount = 1;
-
+		JobHandle	_parent = nullptr;		
+		Atm_T<int>	_jobRemainCount = 1;
 
 		#if NMSP_JOB_SYSTEM_DEBUG_CHECK
 		Atm_T<bool>		_isAllowAddDeps = true;
@@ -145,14 +146,11 @@ private:
 
 		static constexpr size_t s_kSizeWithoutDeps = sizeof(NormalData);
 		//static constexpr size_t s_kLocalDepsCount = (s_kTargetSize - s_kSizeWithoutDeps - sizeof(Vector<JobHandle>)) / sizeof(JobHandle) - 1;
-		static constexpr size_t s_kLocalDepsCount = 2;
+		static constexpr size_t s_kLocalDepsCount = 1;
 
-		using DepList = Vector_T<JobHandle, s_kLocalDepsCount/*, JobAllocator*/>;
+		using DepList = Vector_T<JobHandle, 0, LinearAllocator&>;
 
-		DepData()
-		{
-			_dependencyCount.store(0);
-		}
+		DepData();
 
 		template<class T, class FUNC>
 		void runAfterThis_for_each_ifNoDeps(T& pool, const FUNC& func)
@@ -183,12 +181,12 @@ private:
 	{
 		DepData dep;
 	};
-	struct Storage : public Data
+	struct Storage : public PaddedData_T<Data, JobSystemTraits::s_kCacheLineSize>
 	{
 		Storage()
 		{
-			sizeof(Data);
-			//static_assert(sizeof(Data) % s_kCacheLine == 0);
+			sizeof(Storage);
+			static_assert(sizeof(Storage) % JobSystemTraits::s_kCacheLineSize == 0);
 		}
 	};
 	#endif // 1

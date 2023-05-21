@@ -25,7 +25,7 @@ JobSystem_T::JobSystem_T(const CreateDesc& cDesc)
 
 JobSystem_T::~JobSystem_T()
 {
-	_threadPool.terminate();
+	terminate();
 }
 
 void JobSystem_T::create(const CreateDesc& cDesc)
@@ -86,6 +86,17 @@ void JobSystem_T::waitForComplete(JobHandle job)
 
 void JobSystem_T::submit(JobHandle job)
 {
+	//NMSP_ASSERT(JobSystemTraits::isMainThread(), "only can submit job in main thread");
+	//throwIf(!JobSystemTraits::isMainThread(), "only can submit job in main thread");
+	/*
+		- since Unity JobSystem cannot submit job in main thread only, however, we cannot follow it, 
+		since the job delayDispatch() in current implementation is create the actual job within a job. 
+		If want follow it, then we must found another implementation for delay dispatch  
+		(no job within job, then FrameAllocator will have no problem, 
+		currently I believe there is some rare bug when the frame run very fast 
+		and some job may allocate in the next frame since it may still doing stuff in previous frame, this may have bug
+	*/
+
 	auto& threadPool = instance()->_threadPool;
 	threadPool.submit(job);
 }
@@ -113,6 +124,16 @@ JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
 	return job;
 }
 
+void JobSystem_T::terminate()
+{
+	_threadPool.terminate();
+	for (auto& t : _typedThreads)
+	{
+		if (!t)
+			continue;
+		t->join();
+	}
+}
 
 JobSystem_T::FrameAllocator& JobSystem_T::_defaultAllocator()
 {

@@ -18,10 +18,13 @@ public:
 	using Job				= Job_T;
 	using JobHandle			= JobHandle_T;
 	using LinearAllocator	= LinearAllocator_T;
+
+	using SizeType			= JobSystemTraits::SizeType;
+
 public:
 	void clear();
 
-	JobHandle alloc();
+	JobHandle alloc(SizeType n = sizeof(Job));
 
 private:
 	LinearAllocator _allocator;
@@ -43,9 +46,9 @@ void JobAllocator_T::clear()
 }
 
 inline
-JobAllocator_T::JobHandle JobAllocator_T::alloc()
+JobAllocator_T::JobHandle JobAllocator_T::alloc(SizeType n)
 {
-	return sCast<JobHandle>(_allocator.alloc(sizeof(Job)));
+	return sCast<JobHandle>(_allocator.alloc(n));
 }
 
 

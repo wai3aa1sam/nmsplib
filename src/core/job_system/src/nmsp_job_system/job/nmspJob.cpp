@@ -12,16 +12,6 @@ namespace nmsp {
 
 Job_T::Task Job_T::s_emptyTask = [](const JobArgs& args) {};
 
-void Job_T::waitForComplete()
-{
-	JobSystem_T::instance()->waitForComplete(this);
-}
-
-void Job_T::submit()
-{
-	JobSystem_T::submit(this);
-}
-
 void Job_T::clear()
 {
 	_storage.dep._dependencyCount.store(0);
@@ -117,6 +107,7 @@ void Job_T::print() const
 void Job_T::init(const Task& func, const Info& info, Job_T* parent)
 {
 	clear();
+	new (&_storage.dep) Job_T::DepData();
 
 	_storage._jobRemainCount.store(1);
 	_storage._task = func;
@@ -158,5 +149,21 @@ const char* Job_T::name() const
 
 }
 #endif
+
+
+#if 0
+#pragma mark --- Job_T::DepData-Impl ---
+#endif // 0
+#if 1
+
+Job_T::DepData::DepData()
+	: _runAfterThis(JobSystem_T::_defaultAllocator().jobDepAllocator())
+{
+	_dependencyCount.store(0);
+}
+
+
+#endif // 1
+
 
 }

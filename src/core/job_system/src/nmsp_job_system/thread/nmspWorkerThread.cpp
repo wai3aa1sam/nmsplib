@@ -38,10 +38,15 @@ void WorkerThread_T::terminate()
 void* WorkerThread_T::onRoutine()
 {
 	JobSystemTraits::setThreadLocalId(Base::localId());
-	::tracy::SetThreadName(name().c_str());
+	NMSP_PROFILE_SET_THREAD_NAME(name().c_str());
 
 	std::exception_ptr ptr = nullptr;
 	//debugLog("=== threadLocalId {}, localId {} onProc()", threadLocalId(), localId());
+
+	while (!threadPool()->isReadyToRun())
+	{
+		sleep();
+	}
 
 	try
 	{

@@ -71,6 +71,8 @@ protected:
 	void _submit(JobHandle job);
 	int getNextIndex(int i);
 
+	bool isReadyToRun() const;
+
 private:
 	Vector_T<UPtr_T<WorkerThread>,	JobSystemTraits::s_kJobSystemLogicalThreadCount> _workers;
 	Vector_T<UPtr_T<ThreadStorage>, JobSystemTraits::s_kJobSystemLogicalThreadCount> _threadStorages;
@@ -78,7 +80,8 @@ private:
 	JobQueue _queue;
 
 	Atm_T<int>	_nextIndex = 0;
-	Atm_T<bool>	_isDone = false;
+	Atm_T<bool>	_isDone			= false;
+	Atm_T<bool>	_isReadyToRun	= false;
 
 	int _nfsNextIndex = 0;
 
@@ -96,7 +99,8 @@ private:
 inline
 ThreadPool_T::SizeType ThreadPool_T::workerId(int threadLocalId) const
 {
-	return math::clamp(threadLocalId - _typedThreadCount, sCast<SizeType>(0), _threadStorages.size() - 1);
+	return threadLocalId - _typedThreadCount;
+	//return math::clamp(threadLocalId - _typedThreadCount, sCast<SizeType>(0), _threadStorages.size() - 1);
 }
 
 inline
@@ -133,6 +137,8 @@ const ThreadPool_T::WorkerThread& ThreadPool_T::workerThreads(int threadLocalId)
 
 inline ThreadPool_T::SizeType ThreadPool_T::workerCount() const { return _workers.size(); }
 inline ThreadPool_T::SizeType ThreadPool_T::threadCount() const { return _threadStorages.size(); }
+
+inline bool ThreadPool_T::isReadyToRun() const { return _isReadyToRun.load(); }
 
 
 #endif

@@ -7,7 +7,6 @@
 #include "nmsp_job_system-config.h"
 #include "nmsp_job_system_traits.h"
 
-
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
 #endif // 0
@@ -29,10 +28,10 @@ namespace nmsp {
 NMSP_ENUM_CLASS(JobPriority, u8)
 
 #define NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE() \
-	template<class T> friend class Job_Base;									\
-	template<class T> friend class JobFor_Base;									\
-	template<class T> friend class JobParFor_Base;								\
-	template<class T, class ENABLE> friend struct JobDispatcher					\
+	friend class Job_Base;										\
+	friend class JobFor_Base;									\
+	friend class JobParFor_Base;								\
+	friend struct JobDispatcher									\
 //---
 
 

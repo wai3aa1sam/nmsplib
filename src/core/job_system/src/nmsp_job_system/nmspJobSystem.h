@@ -25,11 +25,6 @@ public:
 class JobSystem_T : public StackSingleton_T<JobSystem_T>
 {
 public:
-	friend class WorkerThread_T;
-	friend class ThreadPool_T;
-	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
-
-public:
 	using Base			= StackSingleton_T<JobSystem_T>;
 	using CreateDesc	= JobSystem_CreateDesc;
 
@@ -43,6 +38,12 @@ public:
 	using FrameAllocator	= FrameAllocator_T<JobSystemTraits::s_kMaxFrameInFlightCount>;
 
 	using SizeType			= JobSystemTraits::SizeType;
+
+public:
+	friend class WorkerThread_T;
+	friend class ThreadPool_T;
+	friend class Job_T;
+	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
 
 public:
 	JobSystem_T() = default;
@@ -70,6 +71,8 @@ public:
 	void _internal_nextFrame();
 
 protected:
+	void terminate();
+
 	static JobHandle		allocateJob();
 	static FrameAllocator&  _defaultAllocator();
 
