@@ -17,7 +17,8 @@ LinearAllocatorChunk_T::LinearAllocatorChunk_T(SizeType n)
 void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align)
 {
 	auto newOffset = _alignTo(_offset, align);
-	if (n > remainSize())
+	auto available = _buffer.size() - newOffset;
+	if (n > available)
 	{
 		return nullptr;
 	}

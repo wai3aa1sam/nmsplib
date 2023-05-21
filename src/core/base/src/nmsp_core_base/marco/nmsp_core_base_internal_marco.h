@@ -4,7 +4,7 @@
 #include <cstddef>
 #include "nmsp_core_base_util_marco.h"
 
-#if 1
+#if NMSP_ENABLE_INTERNAL_PROFILER
 	//#define TRACY_ENABLE 1	// set in cmake
 
 	#include <tracy/Tracy.hpp>
