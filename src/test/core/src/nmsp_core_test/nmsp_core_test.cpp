@@ -1,5 +1,7 @@
 #include "nmsp_core_test-pch.h"
 
+#include "nmsp_os/file/nmspPath.h"
+
 #if NMSP_TEST_ALL_MODULE
 	#include <nmsp_core.h>
 #endif // NMSP_TEST_ALL_MODULE
@@ -17,6 +19,7 @@ void run_temp_test()
 	//NMSP_RUN_TEST(test_Path);
 	//NMSP_RUN_TEST(test_Atomic);
 	//NMSP_RUN_TEST(test_Process);
+	NMSP_RUN_TEST(test_Lexer);
 
 	//NMSP_RUN_TEST(test_StrUtil);
 
@@ -24,7 +27,7 @@ void run_temp_test()
 	//NMSP_RUN_TEST(test_Image);
 	//NMSP_RUN_TEST(test_Json);
 
-	NMSP_RUN_TEST(test_JobSystem);
+	//NMSP_RUN_TEST(test_JobSystem);
 }
 
 // TODO: add a test manager class, then no need add to here
@@ -83,6 +86,16 @@ void run_all_test()
 	#endif
 }
 
+void setDirTest000()
+{
+	using namespace nmsp;
+	if (!Path::isExist(fmtAs_T<StringT>("{}/asset", Path::getCurrentDir())))
+	{
+		Path::setCurrentDir("../../../../../example/Test000");
+		_NMSP_DUMP_VAR(Path::getCurrentDir());
+	}
+}
+
 #if !NMSP_ENABLE_FUZZ_TESTING
 
 int main(int argc, char* argv[])
@@ -92,6 +105,8 @@ int main(int argc, char* argv[])
 	int exitCode = 0;
 	UnitTestManager unitTestManager;
 	unitTestManager.create();
+
+	setDirTest000();
 
 	{
 		MemoryLeakReportScope reportScope;

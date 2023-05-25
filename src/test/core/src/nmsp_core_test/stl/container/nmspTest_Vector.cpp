@@ -262,7 +262,7 @@ public:
 		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
 
 		{
-			int* p = NMSP_NEW(p);
+			int* p = nmsp_new<int>();
 			NMSP_FREE(p);
 			p = nullptr;
 			p = new int;

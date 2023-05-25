@@ -62,7 +62,7 @@ private:
 #if 1
 
 template<size_t N> inline
-void readFile(StrViewA_T filename, Vector_T<u8, N>& outData)
+void File::readFile(StrViewA_T filename, Vector_T<u8, N>& outData)
 {
 	_readFile(filename, outData);
 }
@@ -84,7 +84,7 @@ void File::_readFile(StrViewA_T filename, T& outData)
 	outData.resize(size);
 
 	size_t sizeInBytes = sizeof(typename T::ValueType) * outData.size();
-	Span_T<u8> span{reinCast<u8*>(outData.data(), sizeInBytes)};
+	Span_T<u8> span{reinCast<u8*>(outData.data()), sizeInBytes};
 	fs.readBytes(span);
 }
 

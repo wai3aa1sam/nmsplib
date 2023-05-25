@@ -54,8 +54,8 @@ public:
 
 	bool is_empty() const NMSP_NOEXCEPT;
 
-	ViewType 	span();
-	CViewType 	span() const;
+	Span_T<      T> span();
+	Span_T<const T> span() const;
 
 private:
 
@@ -91,6 +91,20 @@ template<class T, size_t N, class FALLBACK_ALLOC> inline
 bool Vector_Eastl<T, N, FALLBACK_ALLOC>::is_empty() const NMSP_NOEXCEPT
 {
 	return size() == 0;
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Span_T<T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span()
+{
+	return Span_T<T>{begin(), end()};
+	//return ViewType{begin(), end()};
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Span_T<const T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span() const
+{
+	return Span_T<const T>{begin(), end()};
+	//return CViewType{begin(), end()};
 }
 
 #endif

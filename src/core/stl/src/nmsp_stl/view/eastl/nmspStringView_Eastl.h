@@ -37,6 +37,7 @@ public:
 	NMSP_CONSTEXPR StrView_Eastl(const StrView_Eastl& rhs) = default;
 	NMSP_CONSTEXPR StrView_Eastl(const T* s, SizeType count);
 	NMSP_CONSTEXPR StrView_Eastl(const T* s);
+	NMSP_CONSTEXPR StrView_Eastl(const T* begin, const T* end);
 
 
 	bool is_empty() const;
@@ -60,6 +61,13 @@ StrView_Eastl<T>::StrView_Eastl(const T* s, SizeType count)
 template<class T> inline NMSP_CONSTEXPR
 StrView_Eastl<T>::StrView_Eastl(const T* s)
 	: Base (s)
+{
+
+}
+
+template<class T> inline NMSP_CONSTEXPR
+StrView_Eastl<T>::StrView_Eastl(const T* begin, const T* end)
+	: Base(begin, end - begin)
 {
 
 }

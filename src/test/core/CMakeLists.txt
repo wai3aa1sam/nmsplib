@@ -21,11 +21,11 @@ target_link_libraries(${sub_project_name}
 
 target_compile_definitions(${sub_project_name} 
     PRIVATE NMSP_TEST_ALL_MODULE=0
-            NMSP_TEST_MODULE_STL=0
+            NMSP_TEST_MODULE_STL=1
             NMSP_TEST_MODULE_OS=0
             NMSP_TEST_MODULE_LOG=0
             NMSP_TEST_MODULE_PROFILER=0
             NMSP_TEST_MODULE_MATH=0
             NMSP_TEST_MODULE_FILE_IO=0
-            NMSP_TEST_MODULE_JOB_SYSTEM=1
+            NMSP_TEST_MODULE_JOB_SYSTEM=0
     )
