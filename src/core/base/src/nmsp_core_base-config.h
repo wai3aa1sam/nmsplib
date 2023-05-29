@@ -26,7 +26,14 @@
 	#define NMSP_ENABLE_CUSTOM_ALLOC		0
 #endif // 
 
+#if 0
 #ifndef NMSP_OVERRIDE_NEW_OP
 	#define NMSP_OVERRIDE_NEW_OP			1
 #endif // 
+
+#ifndef NMSP_ENABLE_ALLOC_STATS
+	#define NMSP_ENABLE_ALLOC_STATS			1
+#endif // 
+#endif // 0
+
 

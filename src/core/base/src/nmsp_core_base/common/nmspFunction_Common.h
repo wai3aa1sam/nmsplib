@@ -47,6 +47,33 @@ static constexpr T _alignTo(T n, T a)
 	return r ? (n + a - r) : n;
 }
 
+#if 0
+#pragma mark --- nmsp_os_alloc-Impl ---
+#endif // 0
+#if 1
+
+inline void*
+os_aligned_alloc(size_t alignment, size_t size)
+{
+	#if NMSP_OS_WINDOWS
+	return _aligned_malloc(size, alignment);
+	#else
+	return std::aligned_alloc(alignment, size);
+	#endif
+}
+
+inline void
+os_aligned_free(void* p)
+{
+	#if NMSP_OS_WINDOWS
+	return _aligned_free(p);
+	#else
+	return std::free(p);
+	#endif
+}
+
+#endif // 0
+
 
 #if 0
 #pragma mark --- nmspInternalLog-Impl ---

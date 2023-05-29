@@ -5,20 +5,20 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 #include "nmspClass_Common.h"
 
-#define NMSP_ERROR(...) nmsp::Error(NMSP_SRCLOC, nmsp::fmtAs_T<nmsp::TempStringA_T<> >(__VA_ARGS__).c_str())
+#define NMSP_ERROR(...) nmsp::Error_T(NMSP_SRCLOC, nmsp::fmtAs_T<nmsp::TempStringA_T<> >(__VA_ARGS__).c_str())
 #define NMSP_THROW(...) throw NMSP_ERROR(__VA_ARGS__)
 
 namespace nmsp {
 
 #if 0
-#pragma mark --- ErrorBase-Impl ---
+#pragma mark --- Error_Base-Impl ---
 #endif // 0
 #if 1
 
-class ErrorBase : public std::exception
+class Error_Base : public std::exception
 {
 public:
-	ErrorBase(const SrcLoc& srcLoc);
+	Error_Base(const SrcLoc& srcLoc);
 
 private:
 	SrcLoc _srcLoc;
@@ -28,17 +28,17 @@ private:
 
 
 #if 0
-#pragma mark --- Error-Decl ---
+#pragma mark --- Error_T-Decl ---
 #endif // 0
 #if 1
 
-class Error : public ErrorBase
+class Error_T : public Error_Base
 {
 public:
-	using Base = ErrorBase;
+	using Base = Error_Base;
 
 public:
-	Error(const SrcLoc& loc, const char* msg);
+	Error_T(const SrcLoc& loc, const char* msg);
 
 private:
 

@@ -48,11 +48,13 @@ class LinearAllocator_T : public Allocator_Base<LinearAllocator_T>
 {
 public:
 	using This	= LinearAllocator_T;
+	using Base  = Allocator_Base<LinearAllocator_T>;
 	using Chunk = LinearAllocatorChunk_T;
 
 	using SizeType = Chunk::SizeType;
-public:
 
+public:
+	LinearAllocator_T(const char* name = "LinearAllocator_T");
 	//void operator=(This&& rhs);
 
 	void setChunkSize(SizeType n);

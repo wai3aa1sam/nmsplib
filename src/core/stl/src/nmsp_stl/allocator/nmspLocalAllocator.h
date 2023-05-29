@@ -3,7 +3,7 @@
 #include "nmspAllocator_Common.h"
 #include "nmspAlloctorType.h"
 #include "nmspLocalBuffer.h"
-#include "nmspMallocAllocator.h"
+#include "nmspMallocator.h"
 
 /*
 references:
@@ -18,7 +18,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<size_t LOCAL_SIZE = 0, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign, size_t OFFSET = 0, class FALLBACK_ALLOC = MallocAllocator_T<ALIGN> >
+template<size_t LOCAL_SIZE = 0, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign, size_t OFFSET = 0, class FALLBACK_ALLOC = Mallocator_T>
 class LocalAllocator_T : public FallbackAllocator_T<LocalBuffer_T<LOCAL_SIZE, ALIGN>, FALLBACK_ALLOC >
 {
 public:
@@ -37,7 +37,7 @@ public:
 	//static_assert(Base::s_kPrimaryAlign == Base::s_kFallBackAlign);
 
 public:
-	LocalAllocator_T(const char* name = "LocalAllocator_T") {};
+	LocalAllocator_T(const char* name = "LocalAllocator_T") : Base(name) {};
 	~LocalAllocator_T() = default;
 
 	void*	alloc(SizeType n)				{ return Base::alloc(n); }

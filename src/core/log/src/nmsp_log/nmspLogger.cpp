@@ -42,7 +42,7 @@ Logger_T*				Logger_T::instance()
 	static CallOnce co {
 		[&]()
 	{
-		Logger_T* p = NMSP_NEW(p);
+		Logger_T* p = NMSP_NEW(Logger_T);
 		NmspStlTraits::_internal_threadStorage()->setLogger(p);
 	}
 	};

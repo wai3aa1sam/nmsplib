@@ -249,7 +249,6 @@ void memory_move(T* dst, const T* src, size_t n);
 template<typename T> inline
 void memory_set(T* dst, size_t n, int val = 0);
 
-
 #endif
 
 #if 0

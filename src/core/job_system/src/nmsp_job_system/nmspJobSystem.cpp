@@ -160,13 +160,13 @@ void JobSystem_T::_createTypedThreads()
 	_typedThreadStorages.reserve(_typedThreadCount);
 
 	// Main Thread
-	_typedThreadStorages.emplace_back(nmsp_new<ThreadStorage>());
+	_typedThreadStorages.emplace_back(NMSP_NEW(ThreadStorage));
 	_typedThreads.emplace_back(nullptr);
 
 	for (size_t i = 1; i < _typedThreadCount; i++)
 	{
-		_typedThreadStorages.emplace_back(nmsp_new<ThreadStorage>());
-		_typedThreads.emplace_back(/*nmsp_new<WorkerThread>(workerCDesc)*/);
+		_typedThreadStorages.emplace_back(NMSP_NEW(ThreadStorage));
+		_typedThreads.emplace_back(/*NMSP_NEW(WorkerThread)(workerCDesc)*/);
 	}
 }
 

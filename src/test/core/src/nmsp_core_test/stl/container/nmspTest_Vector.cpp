@@ -258,12 +258,12 @@ public:
 		//{ Span_T<int> sv; Vector_T<int, 10> vect{sv};  }
 		{ StrViewA_T sv; StringA_T<> strs = sv;  }
 
-		{ UPtr_T<int> up; up.reset(nmsp_new<int>()); }
-		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(nmsp_new<TestRef>()); }
+		{ UPtr_T<int> up; up.reset(NMSP_NEW(int)); }
+		{ class TestRef : public RefCount_Base {}; SPtr_T<TestRef> sp; sp.reset(NMSP_NEW(TestRef)); }
 
 		{
-			int* p = nmsp_new<int>();
-			NMSP_FREE(p);
+			int* p = NMSP_NEW(int);
+			NMSP_DELETE(p);
 			p = nullptr;
 			p = new int;
 			delete p;

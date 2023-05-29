@@ -17,9 +17,6 @@ struct TestMovableType
 
 	constexpr static SizeType s_kMaxByteSize = MAX_BYTE;
 
-	#define _INTERNAL_NEW_BYTES(ptr)				ptr = NMSP_ALLOC(ptr, s_kMaxByteSize)
-	#define _INTERNAL_SIZE_TYPE_NEW_BYTES(ptr, i)	ptr = NMSP_NEW(SizeType, ptr)
-
 	//#define _INTERNAL_NEW_BYTES nullptr
 
 	TestMovableType(SizeType i)
@@ -27,7 +24,7 @@ struct TestMovableType
 		String tmp_str(std::to_string(i));
 		Map tmp_map;
 		tmp_map[0] = std::to_string(i);
-		SizeType* sp; _INTERNAL_SIZE_TYPE_NEW_BYTES(sp, i);
+		SizeType* sp = NMSP_NEW(SizeType)(i);
 		SPtr<SizeType> tmp_sptr(sp);
 
 		index	= i;
@@ -42,7 +39,7 @@ struct TestMovableType
 		String tmp_str("0");
 		Map tmp_map;
 		tmp_map[0] = "";
-		SizeType* sp; _INTERNAL_SIZE_TYPE_NEW_BYTES(sp, 0);
+		SizeType* sp = NMSP_NEW(sp);
 		SPtr<SizeType> tmp_sptr(sp);
 		*tmp_sptr = 1000;
 
@@ -70,13 +67,13 @@ struct TestMovableType
 	~TestMovableType()
 	{
 		if (pBytes)
-			NMSP_FREE(pBytes);
+			NMSP_DELETE(pBytes);
 	}
 
 	void operator=(const TestMovableType& rhs)
 	{
 		if (pBytes)
-			NMSP_FREE(pBytes);
+			NMSP_DELETE(pBytes);
 		_INTERNAL_NEW_BYTES(pBytes);
 		index	= rhs.index;
 		str		= rhs.str;
@@ -91,7 +88,7 @@ struct TestMovableType
 	{
 		if (pBytes)
 		{
-			NMSP_FREE(pBytes);
+			NMSP_DELETE(pBytes);
 		}
 		index	= rhs.index;
 		pBytes	= rhs.pBytes;

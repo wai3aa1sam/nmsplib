@@ -5,6 +5,10 @@
 #endif // 0
 #if 1
 
+#ifndef NMSP_STL_ENABLE_ALLOC_NAME
+	#define NMSP_STL_ENABLE_ALLOC_NAME 1
+#endif
+
 #ifndef NMSP_STL_CUSTOM_TRAITS
 	#define NMSP_STL_CUSTOM_TRAITS				0
 #endif // 

@@ -32,6 +32,12 @@ void LinearAllocatorChunk_T::clear()
 	_offset = 0;
 }
 
+LinearAllocator_T::LinearAllocator_T(const char* name)
+	: Base(name)
+{
+
+}
+
 void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 {
 	if (!_chunks.is_empty())

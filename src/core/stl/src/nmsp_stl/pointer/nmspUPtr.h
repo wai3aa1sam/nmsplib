@@ -16,15 +16,17 @@
 
 	}
 
-#elif NMSP_STL_BUILD_CONTAINER_NMSP
+#elif NMSP_STL_BUILD_CONTAINER_NMSP || 1
 
 	#include "nmsp/nmspUPtr_Nmsp.h"
 
 	namespace nmsp {
 
+	template<class T, class DELETER = UPtr_Deleter<T> > using UPtr_Impl = UPtr_Nmsp<T, DELETER>;
+
 	}
 
-#elif NMSP_STL_BUILD_CONTAINER_EASTL
+#elif NMSP_STL_BUILD_CONTAINER_EASTL && 0
 
 	#include "eastl/nmspUPtr_Eastl.h"
 
@@ -42,13 +44,12 @@
 
 namespace nmsp {
 
-template<class T, class DELETER = eastl::default_delete<T>> using UPtr_T = UPtr_Impl<T, DELETER>;
+template<class T, class DELETER = UPtr_Deleter<T>> using UPtr_T = UPtr_Impl<T, DELETER>;
 
 template<class T, class... ARGS>
 UPtr_T<T> makeUnique(ARGS&&... args)
 {
-	//auto* p = NMSP_NEW(T, p, NMSP_ARGS(nmsp::forward<ARGS>(args)...));
-	auto* p = nmsp_new<T>(nmsp::forward<ARGS>(args)...);
+	auto* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);
 	return UPtr_T<T>(p);
 }
 

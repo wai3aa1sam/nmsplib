@@ -30,9 +30,14 @@ public:
 
 	bool is_owning(void* p, SizeType n);
 
+	const char* name() const;
+
 	bool operator==(const AllocatorBase_Nmsp& rhs);
 	bool operator!=(const AllocatorBase_Nmsp& rhs);
 private:
+	#if NMSP_STL_ENABLE_ALLOC_NAME
+	const char* _name;
+	#endif // NMSP_STL_ENABLE_ALLOC_NAME
 };
 
 #endif
@@ -44,6 +49,7 @@ private:
 
 template<class ALLOC> inline
 AllocatorBase_Nmsp<ALLOC>::AllocatorBase_Nmsp(const char* name)
+	: _name(name)
 {
 
 }
@@ -79,6 +85,17 @@ bool	AllocatorBase_Nmsp<ALLOC>::is_owning(void* p, SizeType n)
 }
 
 template<class ALLOC> inline
+const char* 
+AllocatorBase_Nmsp<ALLOC>::name() const
+{
+	#if NMSP_STL_ENABLE_ALLOC_NAME
+	return _name;
+	#else
+	return nullptr;
+	#endif // NMSP_STL_ENABLE_ALLOC_NAME
+}
+
+template<class ALLOC> inline
 bool	AllocatorBase_Nmsp<ALLOC>::operator==(const AllocatorBase_Nmsp& rhs)
 {
 	return static_cast<ALLOC&>(*this) == static_cast<ALLOC&>(rhs);
@@ -102,7 +119,7 @@ bool	AllocatorBase_Nmsp<ALLOC>::operator!=(const AllocatorBase_Nmsp& rhs)
 
 template<class ALLOC> using Allocator_Base	= AllocatorBase_Impl<ALLOC>;
 
-template<size_t ALIGN> class MallocAllocator_T;
-using DefaultAllocator						= MallocAllocator_T<8>;
+class Mallocator_T;
+using DefaultAllocator = Mallocator_T;
 
 }

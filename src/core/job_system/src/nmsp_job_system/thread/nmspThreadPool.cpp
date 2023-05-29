@@ -44,8 +44,8 @@ void ThreadPool_T::create(const CreateDesc& desc)
 			workerCDesc.localId		= localId;
 			workerCDesc.name		= fmtAs_T<TempStringA_T<> >("Worker_{}", workerCDesc.affinityIdx);	// must not share TempBuffer, buffer will be race condition
 
-			_threadStorages.emplace_back(nmsp_new<ThreadStorage>());
-			_workers.emplace_back(nmsp_new<WorkerThread>(workerCDesc));
+			_threadStorages.emplace_back(NMSP_NEW(ThreadStorage)());
+			_workers.emplace_back(NMSP_NEW(WorkerThread)(workerCDesc));
 		}
 
 		_isReadyToRun.store(true);
@@ -111,6 +111,8 @@ void ThreadPool_T::execute(JobHandle job)
 	job->_storage._isAllowAddDeps.store(false);
 	job->_storage._isExecuted.store(true);
 	#endif // 0
+
+	NMSP_ASSERT(job->dependencyCount() == 0, "");
 
 	auto& task  = job->_storage._task;
 	auto& info	= job->info();

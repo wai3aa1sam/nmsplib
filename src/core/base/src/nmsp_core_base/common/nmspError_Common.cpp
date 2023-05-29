@@ -5,11 +5,11 @@
 namespace nmsp {
 
 #if 0
-#pragma mark --- ErrorBase-Impl ---
+#pragma mark --- Error_Base-Impl ---
 #endif // 0
 #if 1
 
-ErrorBase::ErrorBase(const SrcLoc & srcLoc)
+Error_Base::Error_Base(const SrcLoc & srcLoc)
 	: _srcLoc(srcLoc)
 {
 	#if !NMSP_ENABLE_EXCEPTION
@@ -20,11 +20,11 @@ ErrorBase::ErrorBase(const SrcLoc & srcLoc)
 #endif
 
 #if 0
-#pragma mark --- Error-Impl ---
+#pragma mark --- Error_T-Impl ---
 #endif // 0
 #if 1
 
-Error::Error(const SrcLoc& loc, const char* msg)
+Error_T::Error_T(const SrcLoc& loc, const char* msg)
 	: Base(loc)
 {
 	_NMSP_LOG("{}: {}", loc, msg);

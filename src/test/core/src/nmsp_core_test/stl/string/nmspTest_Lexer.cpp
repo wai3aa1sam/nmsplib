@@ -36,12 +36,32 @@ public:
 	}
 };
 
+class TestAlloc
+{
+public:
+	TestAlloc()
+	{
+		_NMSP_LOG("TestAlloc");
+	}
+
+	TestAlloc(int i)
+	{
+		_NMSP_LOG("TestAlloc(int)");
+	}
+
+	~TestAlloc()
+	{
+		_NMSP_LOG("~TestAlloc()");
+	}
+};
+
 class Test_Lexer : public UnitTest
 {
 public:
 	void test()
 	{
 		{
+			#if 0
 			MemMapFile_T mmf;
 			mmf.open("line.shader");
 
@@ -63,6 +83,23 @@ public:
 				testFunc(TestFunc::isAlpha, ch);
 				//testFunc(&TestFunc::isAlpha2, ch);
 				tf.test(&TestFunc::isAlpha2, ch);
+			}
+			#endif // 0
+
+			{
+				{
+					TestAlloc* p = new TestAlloc;
+					delete p;
+				}
+				{
+					TestAlloc* p = new TestAlloc[4];
+					size_t* ps = reinCast<size_t*>(p);
+					_NMSP_DUMP_VAR(ps[-1]);
+					delete[] p;
+				}
+			}
+			{
+
 			}
 		}
 	}

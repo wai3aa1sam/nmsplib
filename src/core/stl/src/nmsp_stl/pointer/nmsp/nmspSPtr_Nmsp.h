@@ -47,7 +47,7 @@ public:
 			auto c = --_p->_refCount;
 			if (c <= 0)
 			{
-				nmsp_delete(_p);
+				NMSP_DELETE(_p);
 			}
 		}
 		_p = p;
@@ -57,7 +57,7 @@ public:
 		}
 	}
 
-	T* detach() NMSP_NOEXCEPT { T* o = _p; _p = nullptr; return o; }
+	T* release() NMSP_NOEXCEPT { T* o = _p; _p = nullptr; return o; }
 private:
 	T* _p = nullptr;
 };

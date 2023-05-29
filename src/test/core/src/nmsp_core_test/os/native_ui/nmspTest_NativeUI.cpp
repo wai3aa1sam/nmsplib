@@ -56,7 +56,7 @@ public:
 			public:
 				NTApp()
 				{
-					_mainWnd = NMSP_NEW(_mainWnd);
+					_mainWnd = NMSP_NEW(NTApp);
 					_mainWnd->create(_mainWnd->makeCDesc());
 				}
 

@@ -41,6 +41,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <atomic>
+#include <stdlib.h>
 
 #include <iostream>
 #include <fstream>
@@ -76,7 +77,7 @@
 #endif // 0
 #if 1
 
-#include "nmspAlloc_Common.h"
+#include "nmsp_core_base/alloc/nmspAlloc.h"
 
 #include "nmspDataType_Common.h"
 #include "nmspBitUtil.h"

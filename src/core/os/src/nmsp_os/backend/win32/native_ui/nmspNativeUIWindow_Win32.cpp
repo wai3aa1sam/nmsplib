@@ -184,7 +184,7 @@ LRESULT WINAPI NativeUIWindow_Win32::s_wndProc(HWND hwnd, UINT msg, WPARAM wPara
 			{
 				::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)nullptr);
 				thisObj->_wndHnd = nullptr;
-				//nmsp_delete(thisObj);
+				//NMSP_DELETE(thisObj);
 			}
 		} break;
 

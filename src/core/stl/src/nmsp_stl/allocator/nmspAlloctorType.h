@@ -46,7 +46,7 @@ class FallbackAllocator_T : public Allocator_Base<FallbackAllocator_T<PRIMARY_AL
 {
 public:
 	//using Base = CompressedPair<PRIMARY_ALLOC, FALLBACK_ALLOC>;
-	using Base = CompressedPair<PRIMARY_ALLOC, FALLBACK_ALLOC>;
+	using Base = Allocator_Base<FallbackAllocator_T<PRIMARY_ALLOC, FALLBACK_ALLOC > >;
 	using This = FallbackAllocator_T<PRIMARY_ALLOC, FALLBACK_ALLOC>;
 public:
 	using PrimaryAllocator	= PRIMARY_ALLOC;
@@ -64,7 +64,7 @@ public:
 	static_assert(!s_enableFallbackAlloc || IsSame<typename PRIMARY_ALLOC::SizeType, typename FALLBACK_ALLOC::SizeType>);
 
 public:
-	FallbackAllocator_T(const char* name = "FallbackAllocator_T") {}
+	FallbackAllocator_T(const char* name = "FallbackAllocator_T") : Base(name) {}
 	~FallbackAllocator_T() = default;
 
 	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);

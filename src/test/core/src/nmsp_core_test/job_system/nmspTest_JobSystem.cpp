@@ -257,6 +257,9 @@ public:
 			_NMSP_DUMP_VAR(sizeof(Job_T));
 			_NMSP_DUMP_VAR(JobDispatchType::JobParFor_Base);
 
+			_NMSP_DUMP_VAR(sizeof(UPtr_T<int>));
+			_NMSP_DUMP_VAR(sizeof(UPtr_T<DefaultAllocator>));
+
 		}
 		{
 			for (;;)
