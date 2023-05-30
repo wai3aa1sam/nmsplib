@@ -10,7 +10,7 @@ namespace nmsp {
 #if 1
 
 template<class T>
-struct UPtr_Deleter
+struct UPtr_DefaultDeleter
 {
 	void operator() (T* p)
 	{
@@ -21,7 +21,7 @@ struct UPtr_Deleter
 	}
 };
 
-template<class T, class DELETER = UPtr_Deleter<T> >
+template<class T, class DELETER = UPtr_DefaultDeleter<T> >
 class UPtr_Nmsp : public DELETER/*, NonCopyable */
 {
 public:
@@ -61,6 +61,15 @@ public:
 	void operator=(const NonCopyable&)	= delete;
 private:
 	T* _p = nullptr;
+};
+
+template<class T, class DELETER>
+class UPtr_Nmsp<T[], DELETER> : public DELETER/*, NonCopyable */
+{
+	UPtr_Nmsp()
+	{
+		NMSP_S_ASSERT(false);
+	}
 };
 
 #endif

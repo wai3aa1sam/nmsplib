@@ -99,6 +99,8 @@ public:
 				}
 			}
 			{
+				auto up = makeUnique<int>(5);
+
 
 			}
 		}
