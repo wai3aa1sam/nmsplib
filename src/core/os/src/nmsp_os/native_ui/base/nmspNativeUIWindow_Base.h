@@ -95,8 +95,8 @@ public:
 	virtual void onUIMouseEvent(UIMouseEvent& ev)		{};
 	virtual void onUIKeyboardEvent(UIKeyboardEvent& ev) {};
 
-	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UIKeyEventType::Down || _keys[enumInt(button_)] == UIKeyEventType::Hold; }
-	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UIKeyEventType::Up; }
+	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UIKeyboardEventType::Down || _keys[enumInt(button_)] == UIKeyboardEventType::Hold; }
+	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UIKeyboardEventType::Up; }
 
 protected:
 	virtual void onCreate			(const CreateDesc& cd)	{};

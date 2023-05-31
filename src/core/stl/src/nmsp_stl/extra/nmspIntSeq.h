@@ -12,9 +12,8 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T, T... VS> using IntSeq_T = std::integer_sequence<T, VS...>;
-
-template<size_t N> using IdxSeq_T = std::make_index_sequence<N>;
+template<class T, T... VALS>	using IntSeq_T = std::integer_sequence<T, VALS...>;
+template<size_t N>				using IdxSeq_T = std::make_index_sequence<N>;
 
 #endif
 

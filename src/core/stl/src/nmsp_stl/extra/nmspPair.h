@@ -6,13 +6,13 @@
 
 namespace nmsp {
 
-template<class T1, class T2> using Pair = eastl::pair<T1, T2>;
+template<class T1, class T2> using Pair_T = eastl::pair<T1, T2>;
 
 //template<class T1, class T2> inline
 //Pair<T1, T2> makePair(T1 t1, T2 t2)		{ return Pair<T1, T2>{t1, t2}; }
 
 template<class T1, class T2> inline
-Pair<Decay<T1>, Decay<T2>> makePair(T1&& t1, T2&& t2) 
+Pair_T<Decay<T1>, Decay<T2>> makePair(T1&& t1, T2&& t2) 
 {
 	using T1_ = Decay<T1>;
 	using T2_ = Decay<T2>;

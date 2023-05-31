@@ -48,7 +48,7 @@ void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 			return p;
 	}
 
-	_chunks.emplace_back(makeUnique<Chunk>(_chunkSize));
+	_chunks.emplace_back(makeUPtr<Chunk>(_chunkSize));
 
 	auto* p = _chunks.back()->alloc(n, align);
 	NMSP_ASSERT(p, "{}: n is > ChunkSize", NMSP_SRCLOC);

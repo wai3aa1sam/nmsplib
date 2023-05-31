@@ -60,11 +60,11 @@ struct AtmQueueTraits : public AtmQueueDefaultTraits
 
 	static inline void* malloc(size_t size) 
 	{ 
-		return nmsp_alloc(size); 
+		return NMSP_ALLOC(size); 
 	}
 	static inline void free(void* ptr) 
 	{ 
-		return nmsp_free(ptr); 
+		return NMSP_FREE(ptr); 
 	}
 };
 

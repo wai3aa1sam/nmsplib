@@ -323,7 +323,7 @@ bool	NativeUIWindow_Win32::_handleNativeUIKeyEvent	(HWND hwnd, UINT msg, WPARAM 
 	UIKeyboardEvent ev;
 
 	using Button = UIKeyboardEventButton;
-	using Type   = UIKeyEventType;
+	using Type   = UIKeyboardEventType;
 
 	ev.modifier = _getWin32Modifier();
 

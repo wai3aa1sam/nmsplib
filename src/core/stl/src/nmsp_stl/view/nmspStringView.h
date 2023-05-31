@@ -49,7 +49,7 @@ using StrViewA_T = StrView_T<char>;
 using StrViewW_T = StrView_T<wchar_t>;
 
 inline 
-StrViewA_T c_strToStrView(const char* str)
+StrViewA_T toStrView(const char* str)
 {
 	return str ? StrViewA_T{str, strlen(str)} : StrViewA_T{};
 }

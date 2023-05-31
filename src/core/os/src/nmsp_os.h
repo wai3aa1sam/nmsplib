@@ -15,6 +15,9 @@
 #include "nmsp_os/process/nmspProcess.h"
 #include "nmsp_os/process/nmspCommandLine.h"
 
+#include "nmsp_os/app/ConsoleApp.h"
+#include "nmsp_os/app/ProjectSetting.h"
+
 #if 0
 #pragma mark --- XXXX-Decl/Impl ---
 #endif // 0

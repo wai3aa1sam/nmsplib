@@ -15,10 +15,6 @@ NMSP_IDENTITY(NMSP_CALL(NMSP_TBM_MAKE_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__)) (
 #endif // 0
 #if 1
 
-#if 1
-
-#endif // 0
-
 template<class T, class IMPL>	struct TypeBitMixture_T;
 template<class T>				struct TypeBitMixture_Impl;
 

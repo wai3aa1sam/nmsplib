@@ -46,8 +46,8 @@ namespace nmsp {
 
 template<class T, class DELETER = UPtr_DefaultDeleter<T>> using UPtr_T = UPtr_Impl<T, DELETER>;
 
-template<class T, class... ARGS>
-UPtr_T<T> makeUnique(ARGS&&... args)
+template<class T, class... ARGS> inline
+UPtr_T<T> makeUPtr(ARGS&&... args)
 {
 	auto* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);
 	return UPtr_T<T>(p);

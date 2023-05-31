@@ -83,7 +83,7 @@ public:
 	const	FallbackAllocator&	second() const;
 
 public:
-	CompressedPair<PRIMARY_ALLOC, FALLBACK_ALLOC> _pair;
+	CompressedPair_T<PRIMARY_ALLOC, FALLBACK_ALLOC> _pair;
 };
 
 #endif

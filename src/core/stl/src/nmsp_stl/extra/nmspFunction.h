@@ -20,7 +20,7 @@ class Function_T<RET(PARAMS...), LOCAL_SIZE, ALIGN, FALLBACK_ALLOCATOR> /*: publ
 public:
 	using FallbackAllocator = FALLBACK_ALLOCATOR;
 	using This				= Function_T<RET(PARAMS...), LOCAL_SIZE, ALIGN, FallbackAllocator>;
-	using Allocator			= LocalAllocator_T<LOCAL_SIZE, ALIGN, 0, FallbackAllocator>;
+	using Allocator			= LocalAllocator_T<LOCAL_SIZE, ALIGN, FallbackAllocator>;
 
 	using SizeType			= StlTraits::SizeType;
 

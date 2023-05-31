@@ -99,7 +99,7 @@ public:
 				}
 			}
 			{
-				auto up = makeUnique<int>(5);
+				auto up = makeUPtr<int>(5);
 
 
 			}

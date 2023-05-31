@@ -62,7 +62,7 @@ void NativeUIWindow_Base::onUINativeMouseEvent(UIMouseEvent& ev)
 void NativeUIWindow_Base::onUINativeKeyboardEvent(UIKeyboardEvent& ev)
 {
 	using Button = UIKeyboardEventButton;
-	using Type   = UIKeyEventType;
+	using Type   = UIKeyboardEventType;
 
 	onUIKeyboardEvent(ev);
 }

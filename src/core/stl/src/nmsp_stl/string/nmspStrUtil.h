@@ -37,8 +37,8 @@ struct StrUtil
 	static bool hasChar(StrViewA_T view, char ch);
 	static bool hasAny (StrViewA_T view, StrViewA_T charList);
 
-	static Pair<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, StrViewA_T seperators);
-	static Pair<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, char seperator);
+	static Pair_T<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, StrViewA_T seperators);
+	static Pair_T<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, char seperator);
 
 	static StrViewA_T	trimChar(StrViewA_T view, StrViewA_T seperators);
 
@@ -108,7 +108,7 @@ bool StrUtil::hasAny(StrViewA_T view, StrViewA_T charList)
 }
 
 inline 
-Pair<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, StrViewA_T seperators)
+Pair_T<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, StrViewA_T seperators)
 {
 	auto* s = view.begin();
 	auto* e = view.end();
@@ -123,7 +123,7 @@ Pair<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, StrViewA_T se
 }
 
 inline 
-Pair<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, char seperator)
+Pair_T<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, char seperator)
 {
 	return splitByChar(view, StrViewA_T{&seperator, 1});
 }

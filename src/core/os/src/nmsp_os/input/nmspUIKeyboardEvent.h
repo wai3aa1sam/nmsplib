@@ -7,14 +7,14 @@
 
 namespace nmsp {
 
-enum class UIKeyEventType : u8
+enum class UIKeyboardEventType : u8
 {
 	None,
 	Up,
 	Down,
 	Hold,
 };
-NMSP_ENUM_ALL_OPERATOR(UIKeyEventType)
+NMSP_ENUM_ALL_OPERATOR(UIKeyboardEventType)
 
 #if 0
 #pragma mark --- UIKeyboardEvent-Decl ---
@@ -23,7 +23,7 @@ NMSP_ENUM_ALL_OPERATOR(UIKeyEventType)
 
 struct UIKeyboardEvent
 {
-	using Type		= UIKeyEventType;
+	using Type		= UIKeyboardEventType;
 	using Modifier	= UIEventModifier;
 	using Button	= UIKeyboardEventButton;
 

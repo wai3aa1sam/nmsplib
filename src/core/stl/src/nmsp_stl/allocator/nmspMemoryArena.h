@@ -15,6 +15,8 @@ class MemoryArena_T : public ALLOC
 {
 public:
 	using Base = ALLOC;
+	using SizeType = StlTraits::SizeType;
+	//using Base::SizeType;
 
 public:
 	MemoryArena_T(const char* name = "MemoryArena_T");

@@ -18,13 +18,13 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<size_t LOCAL_SIZE = 0, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign, size_t OFFSET = 0, class FALLBACK_ALLOC = Mallocator_T>
+template<size_t LOCAL_SIZE = 0, size_t ALIGN = CoreBaseTraits::s_kDefaultAlign, class FALLBACK_ALLOC = DefaultAllocator>
 class LocalAllocator_T : public FallbackAllocator_T<LocalBuffer_T<LOCAL_SIZE, ALIGN>, FALLBACK_ALLOC >
 {
 public:
 	using LocalBuffer	= LocalBuffer_T<LOCAL_SIZE, ALIGN>;
 	using Base			= FallbackAllocator_T<LocalBuffer, FALLBACK_ALLOC >;
-	using This			= LocalAllocator_T<LOCAL_SIZE, ALIGN, OFFSET, FALLBACK_ALLOC>;
+	using This			= LocalAllocator_T<LOCAL_SIZE, ALIGN, FALLBACK_ALLOC>;
 
 public:
 	using SizeType			= size_t;

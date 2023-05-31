@@ -33,16 +33,16 @@ public:
 #else
 
 template<class T1, class T2>
-class CompressedPair : public eastl::compressed_pair<T1, T2>
+class CompressedPair_T : public eastl::compressed_pair<T1, T2>
 {
 	using Base = eastl::compressed_pair<T1, T2>;
 public:
 	template<class... ARGS>
-	CompressedPair(ARGS&&... args)
+	CompressedPair_T(ARGS&&... args)
 		: Base(forward<ARGS>(args)...)
 	{}
 
-	~CompressedPair() = default;
+	~CompressedPair_T() = default;
 };
 
 #endif // 0
