@@ -9,9 +9,12 @@ set_target_properties (${sub_project_name} PROPERTIES FOLDER ${project_namespace
 target_link_libraries(${sub_project_name} 
     PUBLIC  ${project_namespace}_core_base
             ${project_namespace}_stl
+            ${project_namespace}_math
+            ${project_namespace}_os
             ${project_namespace}_log
             ${project_namespace}_profiler
-            ${project_namespace}_math
+            ${project_namespace}_file_io
+            ${project_namespace}_job_system
     )
 
 #function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)
