@@ -119,7 +119,7 @@ NMSP_NODISCARD LeaveScopeAction<FUNC_END> makeLeaveScopeAction(FUNC_END&& funcEn
 #endif
 
 #if 0
-#pragma mark --- ScopedAction-Impl ---
+#pragma mark --- _Internal_Timer-Impl ---
 #endif // 0
 #if 1
 

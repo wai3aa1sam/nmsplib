@@ -110,7 +110,7 @@ bool	AllocatorBase_Nmsp<ALLOC>::operator!=(const AllocatorBase_Nmsp& rhs)
 #endif
 
 #if NMSP_STL_BUILD_CONTAINER_EASTL
-	template<class ALLOC> using AllocatorBase_Impl	= AllocatorBase_Eastl< AllocatorBase_Nmsp<ALLOC> >;
+	template<class ALLOC> using AllocatorBase_Impl	= AllocatorBase_Eastl< ALLOC >;
 #elif NMSP_STL_BUILD_CONTAINER_NMSP
 	template<class ALLOC> using AllocatorBase_Impl	= AllocatorBase_Nmsp<ALLOC>;
 #else

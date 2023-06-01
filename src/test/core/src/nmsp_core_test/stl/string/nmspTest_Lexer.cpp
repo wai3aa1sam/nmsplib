@@ -7,6 +7,8 @@
 #include <nmsp_os/file/nmspFile.h>
 #include <nmsp_os/file/nmspMemMapFile.h>
 
+#include <nmsp_stl/allocator/nmspLinearAllocator.h>
+
 namespace nmsp {
 
 template<class FUNC>
@@ -55,6 +57,24 @@ public:
 	}
 };
 
+struct Data
+{
+	size_t a = 0;
+};
+
+class Tes0 : public Allocator_Base<Tes0>
+{
+public:
+
+};
+
+class Tes1 : public Allocator_Base<Tes1>
+{
+public:
+
+	Data d;
+};
+
 class Test_Lexer : public UnitTest
 {
 public:
@@ -101,6 +121,9 @@ public:
 			{
 				auto up = makeUPtr<int>(5);
 
+				_NMSP_DUMP_VAR(sizeof(Tes0));
+				_NMSP_DUMP_VAR(sizeof(Tes1));
+				_NMSP_DUMP_VAR(sizeof(LinearAllocator_T));
 
 			}
 		}

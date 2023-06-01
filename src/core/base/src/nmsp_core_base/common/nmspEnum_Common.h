@@ -4,7 +4,7 @@
 
 /*
 references:
-- NMSP_marco.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
+- sge_marco.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
 */
 
 namespace nmsp {
