@@ -20,19 +20,21 @@ public:
 	Mallocator_T(const char* name = "Mallocator_T") : Base(name) {};
 	~Mallocator_T() = default;
 
-	void* alloc(SizeType n, SizeType align = s_kAlign, SizeType offset = 0)
+	static void* alloc(SizeType n, SizeType align = s_kAlign, SizeType offset = 0)
 	{
-		void* p = NMSP_ALLOC_ALIGNED(n, align);
+		void* p = os_aligned_alloc(n, align);
 		return p;
 	}
 
-	void free(void* p, size_t n = 0)
+	static void free(void* p, size_t n = 0)
 	{
-		NMSP_FREE_ALIGNED(p);
+		os_aligned_free(p);
 	}
 
 	//void freeAll() { _offset = _storage; }
-	bool is_owning(void* p, SizeType size) const { return true; }
+	static bool is_owning(void* p, SizeType size) { return true; }
+
+	static const char* name() { return "Mallocator_T"; }
 };
 
 

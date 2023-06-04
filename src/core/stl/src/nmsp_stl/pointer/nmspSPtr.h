@@ -56,8 +56,9 @@ template<class T> using SharedPtr_T = std::shared_ptr<T>;
 template<class T, class... ARGS> inline
 SharedPtr_T<T> makeShared(ARGS&&... args)
 {
-	T* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);
-	return SharedPtr_T<T>{p};
+	return std::make_shared<T>(nmsp::forward<ARGS>(args)...);
+	/*T* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);
+	return SharedPtr_T<T>{p};*/
 }
 
 }

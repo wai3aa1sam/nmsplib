@@ -119,7 +119,4 @@ bool	AllocatorBase_Nmsp<ALLOC>::operator!=(const AllocatorBase_Nmsp& rhs)
 
 template<class ALLOC> using Allocator_Base	= AllocatorBase_Impl<ALLOC>;
 
-class Mallocator_T;
-using DefaultAllocator = Mallocator_T;
-
 }

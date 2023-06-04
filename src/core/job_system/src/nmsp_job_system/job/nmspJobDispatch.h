@@ -181,6 +181,8 @@ public:
 #pragma mark --- JobDispatcher-Impl ---
 #endif // 0
 #if 1
+
+inline
 JobDispatcher::JobDispatcher()
 {
 	//NMSP_S_ASSERT(IsBaseOf<NMSP_ARGS(Job_Base, T)>,			"T is not base of Job_Base");		// TYPE 0

@@ -10,6 +10,7 @@
 //class logger;
 //}
 
+#if 0
 #if NMSP_DEBUG
 	#define NMSP_CORE_LOG(...)			do{ ::nmsp::Logger_T::instance()->coreLog(::nmsp::LogLevel::Info,		__VA_ARGS__); } while(false)
 	#define NMSP_CORE_LOG_DEBUG(...)	do{ ::nmsp::Logger_T::instance()->coreLog(::nmsp::LogLevel::Debug,		__VA_ARGS__); } while(false)
@@ -31,6 +32,8 @@
 	#define NMSP_LOG_WARN(...)			
 	#define NMSP_LOG_ERROR(...)			
 #endif // NMSP_DEBUG
+#endif // 0
+
 
 namespace nmsp {
 
@@ -57,7 +60,7 @@ enum class LogLevel
 	Error,
 };
 
-class Logger_T //: public TLSSingleton_T<Logger_T>
+class Logger_T
 {
 public:
 	using CreateDesc	= Logger_CreateDesc;
@@ -67,7 +70,7 @@ public:
 	//using LoggerType = spdlog::async_logger;
 public:
 	static CreateDesc	makeCDesc	();
-	static Logger_T*	instance();
+	//static Logger_T*	instance();
 	//static void			init	(const CreateDesc& cd) { instance()->create(cd); }
 
 	Logger_T();
@@ -82,16 +85,16 @@ public:
 	template<class... ARGS>
 	void clientLog(Level lv, const char* fmt, ARGS&&... args);
 
-private:
+protected:
 	template<class... ARGS>
 	void log(SharedPtr_T<LoggerType> logger, Level lv, const char* fmt, ARGS&&... args);
 
 private:
 	void _create(SharedPtr_T<LoggerType>& o, StrViewA_T name, StrViewA_T outputFilepath);
 
-private:
-	static std::atomic_int s_nLoggers;
-	static Logger_T* s_instance;
+protected:
+	/*static std::atomic_int s_nLoggers;
+	static Logger_T* s_instance;*/
 
 	SharedPtr_T<LoggerType> _coreLogger;
 	SharedPtr_T<LoggerType> _clientLogger;

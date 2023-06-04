@@ -76,17 +76,20 @@ private:
 #endif // 0
 #if 1
 
+inline
 JsonDeserializer_T::JsonDeserializer_T(Json& j)
 {
 	_stack.emplace_back(&j);
 }
 
-template<class T> inline void JsonDeserializer_T::named_fixed_io(T& v, const char* name)
+template<class T> inline 
+void JsonDeserializer_T::named_fixed_io(T& v, const char* name)
 {
 	toObjectMember(v, name);
 }
 
-template<class T> inline void JsonDeserializer_T::fixed_io(T& v)
+template<class T> inline 
+void JsonDeserializer_T::fixed_io(T& v)
 {
 	JsonSE_Helper<JsonDeserializer_T, T>::io(*this, v);
 }

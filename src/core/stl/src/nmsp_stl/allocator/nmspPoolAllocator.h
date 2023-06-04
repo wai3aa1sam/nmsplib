@@ -16,9 +16,7 @@ public:
 	using Base = Allocator_Base<PoolAllocator_T>;
 
 public:
-	PoolAllocator_T() = default;
 	PoolAllocator_T(const char* name = "PoolAllocator_T");
-
 	~PoolAllocator_T() = default;
 
 	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
@@ -37,22 +35,23 @@ private:
 #endif // 0
 #if 1
 
+inline
 PoolAllocator_T::PoolAllocator_T(const char* name)
 	: Base(name)
 {
 
 }
 
-void* 
+inline void* 
 PoolAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 {
-	return NMSP_ALLOC_ALIGNED(n, align);
+	return Mallocator_T::alloc(n, align, offset);
 }
 
-void  
+inline void  
 PoolAllocator_T::free(void* p, SizeType n)
 {
-	NMSP_FREE_ALIGNED(p);
+	Mallocator_T::free(p, n);
 }
 
 

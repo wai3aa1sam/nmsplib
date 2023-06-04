@@ -53,7 +53,7 @@ static constexpr T _alignTo(T n, T a)
 #if 1
 
 inline void*
-os_aligned_alloc(size_t alignment, size_t size)
+os_aligned_alloc(size_t size, size_t alignment)
 {
 	#if NMSP_OS_WINDOWS
 	return _aligned_malloc(size, alignment);

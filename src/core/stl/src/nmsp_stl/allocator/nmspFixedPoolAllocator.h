@@ -34,22 +34,23 @@ private:
 #endif // 0
 #if 1
 
+inline
 FixedPoolAllocator_T::FixedPoolAllocator_T(const char* name)
 	: Base(name)
 {
 
 }
 
-void* 
+inline void* 
 FixedPoolAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 {
-	return NMSP_ALLOC_ALIGNED(n, align);
+	return Mallocator_T::alloc(n, align);
 }
 
-void  
+inline void  
 FixedPoolAllocator_T::free(void* p, SizeType n)
 {
-	NMSP_FREE_ALIGNED(p);
+	Mallocator_T::free(p);
 }
 
 

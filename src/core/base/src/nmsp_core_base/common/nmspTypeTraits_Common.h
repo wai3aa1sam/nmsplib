@@ -117,6 +117,17 @@ template<class T> using EnumInt = typename std::underlying_type<T>::type;
 
 template<class T> using NumLimit = typename std::numeric_limits<T>;
 
+
+#if 0
+#pragma mark --- nmspTypeTraits_ArraySize-Impl ---
+#endif // 0
+#if 1
+
+template<class T, size_t N = 0> using					ArraySizeT  = std::extent<T, N>;
+template<class T, size_t N = 0> inline constexpr size_t	ArraySize   = ArraySizeT<T, N>::value;
+
+#endif // 1
+
 #endif
 
 
@@ -138,6 +149,7 @@ NMSP_NODISCARD constexpr RemoveRef<T>&& move(T&& arg) noexcept
 { // forward _Arg as movable
     return static_cast<RemoveRef<T>&&>(arg);
 }
+
 
 
 #endif // 1

@@ -14,8 +14,7 @@ namespace nmsp {
 
 struct StlDefaultTraits_T : public CoreBaseTraits
 {
-	using SizeType	= size_t;
-	using IndexType = size_t;
+	
 
 };
 

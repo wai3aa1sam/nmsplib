@@ -22,7 +22,7 @@
 
 	namespace nmsp {
 
-	template<class T, class DELETER = UPtr_Deleter<T> > using UPtr_Impl = UPtr_Nmsp<T, DELETER>;
+	template<class T, class DELETER = UPtr_DefaultDeleter<T> > using UPtr_Impl = UPtr_Nmsp<T, DELETER>;
 
 	}
 

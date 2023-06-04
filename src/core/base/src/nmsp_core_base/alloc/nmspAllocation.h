@@ -2,22 +2,51 @@
 
 #include "nmspAlloc_Common.h"
 
+#if 0
+#pragma mark --- nmspNmspAllocMarco-Impl ---
+#endif // 0
+#if 1
+
+#define NMSP_CUSTOM_ALLOC 1
+
+#define NMSP_ALLOC_ALIGNED(N, ALIGN)	::nmsp::nmsp_alloc(N, ALIGN)
+#define NMSP_FREE_ALIGNED(PTR, ...)		::nmsp::nmsp_free(PTR, __VA_ARGS__)
+
+#define NMSP_ALLOC(N)			NMSP_ALLOC_ALIGNED(N, ::nmsp::CoreBaseTraits::s_kDefaultAlign)
+#define NMSP_FREE(PTR, ...)		NMSP_FREE_ALIGNED(PTR, __VA_ARGS__)
+
+#define NMSP_NEW(T)				new(NMSP_ALLOC_ALIGNED(sizeof(T), NMSP_ALIGN_OF(T))) T
+#define NMSP_DELETE(PTR)		::nmsp::nmsp_delete(PTR)
+
+
+using nmspAllocCallback = void* (*)(size_t n, size_t align, size_t offset);
+using nmspFreeCallback	= void  (*)(void* p, size_t n);
+struct NmspAllocationCallback
+{
+	nmspAllocCallback	allocCallback;
+	nmspFreeCallback	freeCallback;
+};
+extern NmspAllocationCallback _nmspAllocationCallback;
+
+#endif
 
 #if 0
 #pragma mark --- nmspNmspAlloc-Impl ---
 #endif // 0
 #if 1
 
-namespace nmsp {
+namespace nmsp 
+{
 
 void* nmsp_alloc(size_t size, size_t align = nmsp::CoreBaseTraits::s_kDefaultAlign, size_t offset = 0)		NMSP_NOEXCEPT;
 void  nmsp_free	(void* p, size_t size = 0)																	NMSP_NOEXCEPT;
 
 #if !NMSP_CUSTOM_ALLOC
+
 inline void* 
 nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
 {
-	auto* p = nmsp::os_aligned_alloc(align, size);
+	auto* p = nmsp::os_aligned_alloc(size, align);
 	_NMSP_PROFILE_ALLOC(p, nmsp::_alignTo(size, align));
 	return p;
 }
@@ -28,6 +57,7 @@ nmsp_free(void* p, size_t size /*= 0*/) NMSP_NOEXCEPT
 	_NMSP_PROFILE_FREE(p, size);
 	nmsp::os_aligned_free(p);
 }
+
 #endif
 
 template<class T> inline 
@@ -40,23 +70,8 @@ nmsp_delete(T* p)	NMSP_NOEXCEPT
 
 }
 #endif
+
 #if 0
-#pragma mark --- nmspNmspAllocMarco-Impl ---
-#endif // 0
-#if 1
-
-
-#define NMSP_ALLOC_ALIGNED(N, ALIGN)	::nmsp::nmsp_alloc(N, ALIGN)
-#define NMSP_FREE_ALIGNED(PTR, ...)		::nmsp::nmsp_free(PTR, __VA_ARGS__)
-
-#define NMSP_ALLOC(N)			NMSP_ALLOC_ALIGNED(N, ::nmsp::CoreBaseTraits::s_kDefaultAlign)
-#define NMSP_FREE(PTR, ...)		NMSP_FREE_ALIGNED(PTR, __VA_ARGS__)
-
-#define NMSP_NEW(T)				new(NMSP_ALLOC_ALIGNED(sizeof(T), NMSP_ALIGN_OF(T))) T
-#define NMSP_DELETE(PTR)		::nmsp::nmsp_delete(PTR)
-
-#endif
-
 
 namespace nmsp {
 
@@ -186,3 +201,5 @@ namespace nmsp {
 //
 //#endif // 0
 //
+
+#endif // 0

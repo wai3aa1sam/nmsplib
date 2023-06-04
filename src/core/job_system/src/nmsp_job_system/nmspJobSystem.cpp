@@ -28,6 +28,14 @@ JobSystem_T::~JobSystem_T()
 	terminate();
 }
 
+void JobSystem_T::create(int workerCount, int threadTypeCount)
+{
+	auto cDesc = makeCDesc();
+	cDesc.workerCount = workerCount;
+	cDesc.threadTypeCount = threadTypeCount;
+	create(cDesc);
+}
+
 void JobSystem_T::create(const CreateDesc& cDesc)
 {
 	destroy();

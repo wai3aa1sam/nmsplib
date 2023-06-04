@@ -11,14 +11,14 @@
 namespace nmsp {
 
 //Logger_T* g_logger = nullptr;
-Logger_T* Logger_T::s_instance = nullptr;
+//Logger_T* Logger_T::s_instance = nullptr;
 
 #if 0
 #pragma mark --- Logger_T-Impl ---
 #endif // 0
 #if 1
 
-std::atomic_int Logger_T::s_nLoggers = 0;
+//std::atomic_int Logger_T::s_nLoggers = 0;
 
 Logger_T::CreateDesc	Logger_T::makeCDesc()
 {
@@ -27,10 +27,10 @@ Logger_T::CreateDesc	Logger_T::makeCDesc()
 
 #if 1
 
-Logger_T* Logger_T::instance()
-{
-	return s_instance;
-}
+//Logger_T* Logger_T::instance()
+//{
+//	return s_instance;
+//}
 
 #else
 
@@ -56,16 +56,16 @@ Logger_T*				Logger_T::instance()
 
 Logger_T::Logger_T()
 {
-	NMSP_ASSERT(!s_instance, "Logger_T only can be init once");
+	/*NMSP_ASSERT(!s_instance, "Logger_T only can be init once");
 	s_instance = this;
-	s_nLoggers++;
+	s_nLoggers++;*/
 }
 
 Logger_T::~Logger_T()
 {
-	NMSP_ASSERT(s_instance == this, "Logger_T only can be init once");
+	/*NMSP_ASSERT(s_instance == this, "Logger_T only can be init once");
 	s_instance = nullptr;
-	s_nLoggers--;
+	s_nLoggers--;*/
 	destroy();
 }
 
@@ -82,7 +82,7 @@ void Logger_T::destroy()
 	_coreLogger.reset();
 	_clientLogger.reset();
 
-	if (s_nLoggers.load() == 0)
+	//if (s_nLoggers.load() == 0)
 	{
 		spdlog::shutdown();
 	}

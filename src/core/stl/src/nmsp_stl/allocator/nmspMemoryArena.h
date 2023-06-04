@@ -26,6 +26,8 @@ public:
 	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
 	void  free(void* p, SizeType n = 0);
 
+	const char* name() const;
+
 private:
 
 };
@@ -48,14 +50,20 @@ template<class ALLOC, class BOUND_POLICY> inline
 void* 
 MemoryArena_T<ALLOC, BOUND_POLICY>::alloc(SizeType n, SizeType align, SizeType offset)
 {
-	return NMSP_ALLOC_ALIGNED(n, align);
+	return Base::alloc(n, align, offset);
 }
 
 template<class ALLOC, class BOUND_POLICY> inline
 void  
 MemoryArena_T<ALLOC, BOUND_POLICY>::free(void* p, SizeType n)
 {
-	NMSP_FREE_ALIGNED(p);
+	Base::free(p, n);
+}
+template<class ALLOC, class BOUND_POLICY> inline
+const char* 
+MemoryArena_T<ALLOC, BOUND_POLICY>::name() const
+{
+	return Base::name();
 }
 
 

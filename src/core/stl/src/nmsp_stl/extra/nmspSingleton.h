@@ -20,10 +20,9 @@ public:
 	StackSingleton_T();
 	~StackSingleton_T();
 
-private:
+protected:
 	static T* s_instance;
 };
-
 
 #endif
 
@@ -38,7 +37,11 @@ class Singleton_T : public NonCopyable
 public:
 	static T*	instance();
 
+	void create(T* p);
+	void destroy();
+
 private:
+	static T* s_instance;
 
 };
 
@@ -55,6 +58,39 @@ private:
 #else
 	template<class T> using TLSSingleton_T = Singleton_T<T>;
 #endif // !NMSP_ENABLE_MULTI_THREAD
+
+#endif
+	
+#if 0
+#pragma mark --- Singleton_T-Impl ---
+#endif // 0
+#if 1
+
+
+template<class T> inline
+T* 
+Singleton_T<T>::instance()
+{
+	return s_instance;
+}
+
+template<class T> inline
+void
+Singleton_T<T>::create(T* p)
+{
+	NMSP_ASSERT(!s_instance);
+	s_instance = p;
+}
+
+template<class T> inline
+void
+Singleton_T<T>::destroy()
+{
+	NMSP_ASSERT(s_instance);
+	s_instance = nullptr;
+}
+
+
 
 #endif
 

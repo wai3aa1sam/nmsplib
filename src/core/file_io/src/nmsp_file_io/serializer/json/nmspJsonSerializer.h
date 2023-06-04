@@ -96,6 +96,7 @@ private:
 #endif // 0
 #if 1
 
+inline
 JsonSerializer_T::JsonSerializer_T(Json& j)
 {
 	_stack.reserve(s_kLocalStackSize);
