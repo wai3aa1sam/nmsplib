@@ -54,7 +54,6 @@ public:
 	using Base = NativeUIApp_Impl;
 
 private:
-
 };
 #endif
 

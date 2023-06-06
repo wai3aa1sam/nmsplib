@@ -44,6 +44,8 @@ void NativeUIApp_Win32::onCreate(const CreateDesc& cd)
 
 void NativeUIApp_Win32::onRun()
 {
+	NMSP_ASSERT(false, "should not be called");
+
 	Base::onRun();
 
 	while (::GetMessage(&_win32Msg, NULL, 0, 0)) 
