@@ -30,7 +30,8 @@ public:
 	using This = NativeUIApp_Win32;
 	using Base = NativeUIApp_Base;
 
-	using CreateDesc = NativeUIApp_CreateDesc_Win32;
+	using CreateDesc_Base	= Base::CreateDesc_Base;
+	using CreateDesc		= NativeUIApp_CreateDesc_Win32;
 
 public:
 	static CreateDesc	makeCDesc();
@@ -45,7 +46,8 @@ public:
 	Msg msg();
 
 protected:
-	virtual void onCreate	(const CreateDesc& cd)	override;
+
+	virtual void onCreate	(const CreateDesc_Base& cd)	override;
 	virtual void onRun		() override;
 	virtual	void onQuit		() override;
 	virtual void willQuit	() override;

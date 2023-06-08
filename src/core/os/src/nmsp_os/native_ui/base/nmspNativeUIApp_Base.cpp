@@ -18,7 +18,7 @@ NativeUIApp_Base::~NativeUIApp_Base()
 {
 }
 
-i32 NativeUIApp_Base::run(const CreateDesc& cd)
+i32 NativeUIApp_Base::run(const CreateDesc_Base& cd)
 {
 	onCreate(cd);
 
@@ -33,7 +33,7 @@ void NativeUIApp_Base::quit(i32 exitCode)
 	onQuit();
 }
 
-void NativeUIApp_Base::onCreate(const CreateDesc& cd)
+void NativeUIApp_Base::onCreate(const CreateDesc_Base& cd)
 {
 }
 

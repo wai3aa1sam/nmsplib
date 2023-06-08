@@ -26,7 +26,7 @@ struct BasicThread_CreateDesc
 	void* args = nullptr;
 };
 
-struct NativeThread_CreateDesc : private BasicThread_CreateDesc
+struct NativeThread_CreateDesc : public BasicThread_CreateDesc
 {
 	using Base = BasicThread_CreateDesc;
 	using Base::name;
@@ -44,13 +44,14 @@ struct NativeThread_CreateDesc : private BasicThread_CreateDesc
 class Thread_Base : public NonCopyable
 {
 public:
-	using BasicCreateDesc = BasicThread_CreateDesc;
-	using CreateDesc = NativeThread_CreateDesc;
+	using CreateDesc_Base	= BasicThread_CreateDesc;
+	using CreateDesc		= BasicThread_CreateDesc;
+
 public:
 	Thread_Base();
 	~Thread_Base();
 
-	void create(const BasicCreateDesc& bcd);
+	void create(const CreateDesc& bcd);
 
 	void		join();
 	void		setAffinity(int k_th_bit);
@@ -73,17 +74,19 @@ protected:
 
 class NativeThread_Base : public Thread_Base
 {
-	using Base = Thread_Base;
 public:
-	using BasicCreateDesc = BasicThread_CreateDesc;
-	using CreateDesc = NativeThread_CreateDesc;
+	using Base = Thread_Base;
+
+	using CreateDesc_Base	= Base::CreateDesc_Base;
+	using CreateDesc		= NativeThread_CreateDesc;
+
 public:
 	NativeThread_Base();
 	virtual ~NativeThread_Base() = default;
 
 	NMSP_NODISCARD static CreateDesc makeCDesc();
 
-	void create(const CreateDesc& bcd);
+	void create(const CreateDesc_Base& bcd);
 
 	virtual void* onRoutine() = 0;
 
@@ -113,7 +116,7 @@ Thread_Base::~Thread_Base()
 }
 
 inline
-void			Thread_Base::create(const BasicCreateDesc& bcd)
+void			Thread_Base::create(const CreateDesc_Base& bcd)
 {
 	_localId	= bcd.localId;
 	_affinity	= bcd.affinityIdx;
@@ -140,9 +143,10 @@ NativeThread_Base::NativeThread_Base()
 }
 
 inline
-void NativeThread_Base::create(const CreateDesc& cd)
+void NativeThread_Base::create(const CreateDesc_Base& cd)
 {
-	Base::create((const BasicCreateDesc&)cd);
+	auto cDesc = sCast<const CreateDesc&>(cd);
+	Base::create(cDesc);
 }
 
 inline

@@ -47,8 +47,8 @@ public:
 
 public:
 	JobSystem_T() = default;
-	JobSystem_T(int workerCount, int threadTypeCount = 1);
-	JobSystem_T(const CreateDesc& cdesc);
+	//JobSystem_T(int workerCount, int threadTypeCount = 1);
+	//JobSystem_T(const CreateDesc& cdesc);
 	~JobSystem_T();
 
 	static CreateDesc makeCDesc();

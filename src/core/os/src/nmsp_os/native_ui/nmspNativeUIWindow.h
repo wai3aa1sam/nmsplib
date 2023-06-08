@@ -53,6 +53,9 @@ public:
 	using This = NativeUIWindow_T;
 	using Base = NativeUIWindow_Impl;
 
+	using CreateDesc_Base	= Base::CreateDesc;
+	using CreateDesc		= NativeUIWindow_CreateDesc;
+
 private:
 
 };

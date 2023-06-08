@@ -12,20 +12,20 @@ namespace nmsp {
 
 JobSystem_T* StackSingleton_T<JobSystem_T>::s_instance = nullptr;
 
-JobSystem_T::JobSystem_T(int workerCount, int threadTypeCount)
-{
-	auto cDesc = makeCDesc();
-	create(cDesc);
-}
-
-JobSystem_T::JobSystem_T(const CreateDesc& cDesc)
-{
-	create(cDesc);
-}
+//JobSystem_T::JobSystem_T(int workerCount, int threadTypeCount)
+//{
+//	auto cDesc = makeCDesc();
+//	create(cDesc);
+//}
+//
+//JobSystem_T::JobSystem_T(const CreateDesc& cDesc)
+//{
+//	create(cDesc);
+//}
 
 JobSystem_T::~JobSystem_T()
 {
-	terminate();
+	destroy();
 }
 
 void JobSystem_T::create(int workerCount, int threadTypeCount)
@@ -39,6 +39,7 @@ void JobSystem_T::create(int workerCount, int threadTypeCount)
 void JobSystem_T::create(const CreateDesc& cDesc)
 {
 	destroy();
+	Base::create();
 
 	auto threadTypeCount	= cDesc.threadTypeCount;
 	auto workerCount		= cDesc.workerCount;
@@ -51,8 +52,10 @@ void JobSystem_T::create(const CreateDesc& cDesc)
 	auto nWorkers = workerCount > 0 ? workerCount : total_thread - _typedThreadCount;
 	NMSP_ASSERT(nWorkers >= 0 && nWorkers<= OsTraits::logicalThreadCount(), "workerCount + threadTypeCount > logicalThreadCount");
 
-	JobSystemTraits::setThreadLocalId(JobSystemTraits::s_kMainThreadLocalId);
-	NMSP_PROFILE_SET_THREAD_NAME(JobSystemTraits::s_mainThreadName);
+	if (!JobSystemTraits::isMainThread())
+	{
+		JobSystemTraits::setMainThread();
+	}
 
 	_createTypedThreads();
 
@@ -64,10 +67,18 @@ void JobSystem_T::create(const CreateDesc& cDesc)
 
 void JobSystem_T::destroy()
 {
-	JobSystemTraits::resetThreadLocalId();
+	if (!s_instance)
+	{
+		return;
+	}
+
+	//JobSystemTraits::resetThreadLocalId();
+	terminate();
 	//_threadPool.destroy();
 	_typedThreadStorages.clear();
 	_typedThreads.clear();
+
+	Base::destroy();
 }
 
 void JobSystem_T::waitForComplete(JobHandle job)

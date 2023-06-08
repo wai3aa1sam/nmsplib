@@ -24,7 +24,7 @@ NativeUIWindow_Base::~NativeUIWindow_Base()
 
 }
 
-void NativeUIWindow_Base::create			(const CreateDesc& cd)
+void NativeUIWindow_Base::create			(const CreateDesc_Base& cd)
 {
 	onCreate(cd);
 }

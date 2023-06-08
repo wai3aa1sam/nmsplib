@@ -27,7 +27,10 @@ public:
 class NativeUIApp_Base : public AppBase_T
 {
 public:
-	using CreateDesc = NativeUIApp_CreateDesc_Base;
+	using Base = AppBase_T;
+	
+	using CreateDesc_Base	= NativeUIApp_CreateDesc_Base;
+	using CreateDesc		= NativeUIApp_CreateDesc_Base;
 
 	using Msg		 = OsTraits::Msg;
 	using Util		 = OsTraits::Util;
@@ -40,11 +43,11 @@ public:
 
 	virtual ~NativeUIApp_Base();
 
-	i32  run (const CreateDesc& cd);
+	i32  run (const CreateDesc_Base& cd);
 	void quit(i32 exitCode);
 
 protected:
-	virtual void onCreate	(const CreateDesc& cd);
+	virtual void onCreate	(const CreateDesc_Base& cd);
 	virtual void onRun		();
 	virtual void onQuit		();
 	virtual void willQuit	();

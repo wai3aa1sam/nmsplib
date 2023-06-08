@@ -52,9 +52,10 @@ NativeUIWindow_Win32::WndHnd NativeUIWindow_Win32::wndHnd()
 	return _wndHnd;
 }
 
-void NativeUIWindow_Win32::onCreate				(const CreateDesc& cd)
+void NativeUIWindow_Win32::onCreate				(const CreateDesc_Base& cd)
 {
-	Base::onCreate(cd);
+	auto cDesc = sCast<const CreateDesc&>(cd);
+	Base::onCreate(cDesc);
 
 	const wchar_t* clsName = L"NativeUIWindow";
 
@@ -73,27 +74,27 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc& cd)
 	wc.lpszClassName	= clsName;
 	wc.hIconSm			= LoadIcon(hInstance, IDI_APPLICATION);
 
-	if (!cd.hasCloseButton) {
+	if (!cDesc.hasCloseButton) {
 		wc.style |= CS_NOCLOSE;
 	}
 
 	DWORD dwStyle = 0;
 	DWORD dwExStyle = WS_EX_ACCEPTFILES;
-	if (cd.isAlwaysOnTop)
+	if (cDesc.isAlwaysOnTop)
 		dwExStyle |= WS_EX_TOPMOST;
 
-	switch (cd.type) 
+	switch (cDesc.type) 
 	{
 		case CreateDesc::Type::ToolWindow:
 		case CreateDesc::Type::NormalWindow: 
 		{
 			dwStyle   |= WS_OVERLAPPED | WS_SYSMENU;
 
-			if (cd.hasCloseButton) dwStyle |= WS_SYSMENU;
-			if (cd.isResizable   ) dwStyle |= WS_THICKFRAME;
-			if (cd.hasTitleBar   ) dwStyle |= WS_CAPTION;
-			if (cd.hasMinButton  ) dwStyle |= WS_MINIMIZEBOX;
-			if (cd.hasMaxButton  ) dwStyle |= WS_MAXIMIZEBOX;
+			if (cDesc.hasCloseButton) dwStyle |= WS_SYSMENU;
+			if (cDesc.isResizable   ) dwStyle |= WS_THICKFRAME;
+			if (cDesc.hasTitleBar   ) dwStyle |= WS_CAPTION;
+			if (cDesc.hasMinButton  ) dwStyle |= WS_MINIMIZEBOX;
+			if (cDesc.hasMaxButton  ) dwStyle |= WS_MAXIMIZEBOX;
 		} break;
 
 		case CreateDesc::Type::PopupWindow: 
@@ -107,7 +108,7 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc& cd)
 		} break;
 	}
 
-	if (cd.type == CreateDesc::Type::ToolWindow) 
+	if (cDesc.type == CreateDesc::Type::ToolWindow) 
 	{
 		dwExStyle |= WS_EX_TOOLWINDOW;
 	}
@@ -121,18 +122,18 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc& cd)
 		}
 	}
 
-	auto rect = cd.rect;
-	if (cd.isCenterToScreen) 
+	auto rect = cDesc.rect;
+	if (cDesc.isCenterToScreen) 
 	{
 		auto screenSize = Vec2f((float)GetSystemMetrics(SM_CXSCREEN), (float)GetSystemMetrics(SM_CYSCREEN));
 		rect.pos = (screenSize - rect.size) / 2;
 	}
 
 	_wndHnd = ::CreateWindowEx(dwExStyle, clsName, clsName, dwStyle,
-		(int)cd.rect.x,
-		(int)cd.rect.y,
-		(int)cd.rect.w,
-		(int)cd.rect.h,
+		(int)cDesc.rect.x,
+		(int)cDesc.rect.y,
+		(int)cDesc.rect.w,
+		(int)cDesc.rect.h,
 		nullptr, nullptr, hInstance, this);
 	if (!_wndHnd) 
 	{

@@ -20,7 +20,8 @@ namespace nmsp {
 struct NativeUIWindow_CreateDesc_Base
 {
 public:
-	using CreateDesc = NativeUIWindow_CreateDesc_Base;
+	using CreateDesc		= NativeUIWindow_CreateDesc_Base;
+	using CreateDesc_Base	= NativeUIWindow_CreateDesc_Base;
 
 	using Rect2 = OsTraits::Rect2f;
 
@@ -64,7 +65,8 @@ public:
 class NativeUIWindow_Base : public NonCopyable
 {
 public:
-	using CreateDesc = NativeUIWindow_CreateDesc_Base;
+	using CreateDesc		= NativeUIWindow_CreateDesc_Base;
+	using CreateDesc_Base	= NativeUIWindow_CreateDesc_Base;
 
 	using Rect2f = OsTraits::Rect2f;
 	using Vec2f  = typename Rect2f::Vec2;
@@ -81,7 +83,7 @@ public:
 
 	virtual ~NativeUIWindow_Base();
 
-	void create			(const CreateDesc& cd);
+	void create			(const CreateDesc_Base& cd);
 	void setWindowTitle	(StrViewA_T title);
 
 	void drawNeeded();
@@ -99,10 +101,10 @@ public:
 	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UIKeyboardEventType::Up; }
 
 protected:
-	virtual void onCreate			(const CreateDesc& cd)	{};
-	virtual void onSetWindowTitle	(StrViewA_T title)		{};
-	virtual void onClientRectChanged(const Rect2f& rect)	{};
-	virtual void onDrawNeeded		()						{};
+	virtual void onCreate			(const CreateDesc_Base& cd)	{};
+	virtual void onSetWindowTitle	(StrViewA_T title)			{};
+	virtual void onClientRectChanged(const Rect2f& rect)		{};
+	virtual void onDrawNeeded		()							{};
 
 	virtual void onUINativeMouseEvent(UIMouseEvent& ev);
 	virtual void onUINativeKeyboardEvent(UIKeyboardEvent& ev);

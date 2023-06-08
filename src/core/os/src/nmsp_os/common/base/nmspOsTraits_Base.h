@@ -33,6 +33,10 @@ using AllThreadsStorage = AllThreadsDefaultStorage_T;
 
 struct OsDefaultTraits_Base : public CoreBaseTraits
 {
+public:
+	static constexpr const char* s_mainThreadName = "Main Thread";
+
+public:
 	static constexpr OsPlatform				platform();
 	static constexpr EnumInt<OsPlatform>	platformInt();
 

@@ -18,10 +18,13 @@ struct JobSystemDefaultTraits_T : public OsTraits
 	static constexpr int s_kBusySleepTimeMS		= 0;
 	static constexpr int s_kSleepCountThreshold	= 2000;
 
-	static constexpr const char* s_mainThreadName = "Main Thread";
 
 	static constexpr SizeType s_kMaxFrameInFlightCount			= NMSP_JOB_SYSTEM_MAX_FRAME_IN_FLIGHT_COUNT;
 	static constexpr SizeType s_kJobSystemLogicalThreadCount	= NMSP_JOB_SYSTEM_LOGICAL_THREAD_COUNT;
+
+public:
+
+	static void setMainThread() { setThreadLocalId(s_kMainThreadLocalId); NMSP_PROFILE_SET_THREAD_NAME(s_mainThreadName);}
 };
 
 

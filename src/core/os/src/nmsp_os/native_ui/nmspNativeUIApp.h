@@ -53,6 +53,9 @@ public:
 	using This = NativeUIApp_T;
 	using Base = NativeUIApp_Impl;
 
+	using CreateDesc		= NativeUIApp_CreateDesc;
+	using CreateDesc_Base	= Base::CreateDesc_Base;
+
 private:
 };
 #endif

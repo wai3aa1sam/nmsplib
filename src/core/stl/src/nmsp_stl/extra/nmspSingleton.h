@@ -20,6 +20,9 @@ public:
 	StackSingleton_T();
 	~StackSingleton_T();
 
+	void create();
+	void destroy();
+
 protected:
 	static T* s_instance;
 };
@@ -37,10 +40,14 @@ class Singleton_T : public NonCopyable
 public:
 	static T*	instance();
 
+public:
+	Singleton_T();
+	~Singleton_T();
+
 	void create(T* p);
 	void destroy();
 
-private:
+protected:
 	static T* s_instance;
 
 };
@@ -66,13 +73,24 @@ private:
 #endif // 0
 #if 1
 
-
 template<class T> inline
 T* 
 Singleton_T<T>::instance()
 {
 	return s_instance;
 }
+
+template<class T> inline
+Singleton_T<T>::Singleton_T()
+{
+}
+
+template<class T> inline
+Singleton_T<T>::~Singleton_T()
+{
+}
+
+
 
 template<class T> inline
 void
@@ -109,16 +127,33 @@ T* StackSingleton_T<T>::instance()
 template<class T> inline
 StackSingleton_T<T>::StackSingleton_T()
 {
-	NMSP_ASSERT(!s_instance);
-	s_instance = sCast<T*>(this);
+	create();
 }
 
 template<class T> inline
 StackSingleton_T<T>::~StackSingleton_T()
 {
-	NMSP_ASSERT(s_instance);
+	NMSP_ASSERT(!s_instance);
+	//destroy();
+}
+
+template<class T> inline
+void 
+StackSingleton_T<T>::create()
+{
+	NMSP_ASSERT(!s_instance);
+	s_instance = sCast<T*>(this);
+}
+
+template<class T> inline
+void 
+StackSingleton_T<T>::destroy()
+{
+	//NMSP_ASSERT(s_instance);
 	s_instance = nullptr;
 }
+
+
 #endif
 
 }

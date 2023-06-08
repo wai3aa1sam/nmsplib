@@ -29,7 +29,9 @@ class WorkerThread_T : public NativeThread_T
 public:
 	using Base = NativeThread_T;
 
-	using CreateDesc	= WorkerThread_CreateDesc;
+	using CreateDesc		= WorkerThread_CreateDesc;
+	using CreateDesc_Base	= Base::CreateDesc_Base;
+
 	using JobQueue		= JobQueue_T<>;
 	using JobHandle		= JobHandle_T;
 	using ThreadPool	= ThreadPool_T;

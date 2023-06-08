@@ -30,7 +30,8 @@ public:
 	using This = NativeUIWindow_Win32;
 	using Base = NativeUIWindow_Base;
 
-	using CreateDesc	= NativeUIWindow_CreateDesc_Win32;
+	using CreateDesc		= NativeUIWindow_CreateDesc_Win32;
+	using CreateDesc_Base	= Base::CreateDesc_Base;
 
 public:
 
@@ -50,10 +51,10 @@ public:
 	WndHnd wndHnd();
 
 protected:
-	virtual void onCreate			(const CreateDesc& cd)	override;
-	virtual void onSetWindowTitle	(StrViewA_T title)		override;
-	virtual void onClientRectChanged(const Rect2f& rect)	override;
-	virtual void onDrawNeeded		()						override;
+	virtual void onCreate			(const CreateDesc_Base& cd)	override;
+	virtual void onSetWindowTitle	(StrViewA_T title)			override;
+	virtual void onClientRectChanged(const Rect2f& rect)		override;
+	virtual void onDrawNeeded		()							override;
 
 private:
 	static LRESULT WINAPI s_wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

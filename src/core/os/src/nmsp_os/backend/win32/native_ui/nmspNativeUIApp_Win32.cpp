@@ -36,9 +36,10 @@ NativeUIApp_Win32::Msg NativeUIApp_Win32::msg()
 	return _win32Msg;
 }
 
-void NativeUIApp_Win32::onCreate(const CreateDesc& cd)
+void NativeUIApp_Win32::onCreate(const CreateDesc_Base& cd)
 {
-	Base::onCreate(cd);
+	auto thisCDesc = sCast<const CreateDesc&>(cd);
+	Base::onCreate(thisCDesc);
 
 }
 

@@ -20,12 +20,14 @@ public:
 	using This = NativeThread_Win32;
 
 public:
-	using Base::CreateDesc;
+	using CreateDesc		= Base::CreateDesc;
+	using CreateDesc_Base	= Base::CreateDesc_Base;
+
 public:
 	//NativeThread_Win32()	= default;
 	virtual ~NativeThread_Win32();
 
-	void create(const CreateDesc& cd);
+	void create(const CreateDesc_Base& cd);
 
 	//void destroy();
 

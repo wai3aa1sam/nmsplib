@@ -18,8 +18,10 @@ NativeThread_Win32::~NativeThread_Win32()
 	NMSP_ASSERT(!_hnd,		"must call join() on derived class, also should be awaked");
 }
 
-void NativeThread_Win32::create(const CreateDesc& cd)
+void NativeThread_Win32::create(const CreateDesc_Base& cd)
 {
+	auto cDesc = sCast<const CreateDesc&>(cd);
+
 	Base::create(cd);
 
 	if (cd.name.is_empty())
@@ -84,18 +86,18 @@ void		NativeThread_Win32::setName(StrViewA_T name)
 
 DWORD NativeThread_Win32::_routine(void* args)
 {
-	auto* nt = static_cast<NativeThread_Win32*>(args);
+	auto* nt = sCast<NativeThread_Win32*>(args);
 	//OsTraits::setThreadLocalId(nt->localId());
 	auto ret = nt->onRoutine(); NMSP_UNUSED(ret);
 	return 0;
 }
 
-DWORD WINAPI NativeThread_Win32::_basicRoutine(void* basicCreateDesc)
+DWORD WINAPI NativeThread_Win32::_basicRoutine(void* cDescBase)
 {
-	auto* bcd = reinterpret_cast<BasicCreateDesc*>(basicCreateDesc);
+	auto* bcd = reinCast<CreateDesc_Base*>(cDescBase);
 	OsTraits::setThreadLocalId(bcd->affinityIdx);
 
-	NMSP_ASSERT(bcd->routine, "BasicCreateDesc::routine is nullptr");
+	NMSP_ASSERT(bcd->routine, "CreateDesc_Base::routine is nullptr");
 	auto ret = bcd->routine(bcd->args); NMSP_UNUSED(ret);
 	return 0;
 }
