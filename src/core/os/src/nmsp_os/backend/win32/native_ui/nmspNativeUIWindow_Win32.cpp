@@ -240,7 +240,7 @@ LRESULT WINAPI NativeUIWindow_Win32::s_wndProc(HWND hwnd, UINT msg, WPARAM wPara
 		{
 			if (auto* thisObj = s_getThis(hwnd)) 
 			{
-				thisObj->_handleNativeEvent(hwnd, msg, wParam, lParam);
+				return thisObj->_handleNativeEvent(hwnd, msg, wParam, lParam);
 			}
 		} break;
 	}
