@@ -39,7 +39,6 @@ void JobSystem_T::create(int workerCount, int threadTypeCount)
 void JobSystem_T::create(const CreateDesc& cDesc)
 {
 	destroy();
-	Base::create();
 
 	auto threadTypeCount	= cDesc.threadTypeCount;
 	auto workerCount		= cDesc.workerCount;
@@ -77,8 +76,6 @@ void JobSystem_T::destroy()
 	//_threadPool.destroy();
 	_typedThreadStorages.clear();
 	_typedThreads.clear();
-
-	Base::destroy();
 }
 
 void JobSystem_T::waitForComplete(JobHandle job)
