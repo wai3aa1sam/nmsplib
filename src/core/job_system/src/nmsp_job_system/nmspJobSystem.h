@@ -22,7 +22,7 @@ public:
 	SizeType workerCount = 0;
 };
 
-class JobSystem_T : public StackSingleton_T<JobSystem_T>
+class JobSystem_T : public Singleton_T<JobSystem_T>
 {
 public:
 	using Base			= StackSingleton_T<JobSystem_T>;
@@ -46,13 +46,13 @@ public:
 	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
 
 public:
-	JobSystem_T() = default;
-	//JobSystem_T(int workerCount, int threadTypeCount = 1);
-	//JobSystem_T(const CreateDesc& cdesc);
-	~JobSystem_T();
 
 	static CreateDesc makeCDesc();
 	static void submit(JobHandle job);
+
+public:
+	JobSystem_T() = default;
+	~JobSystem_T();
 
 	void create(int workerCount, int threadTypeCount = 1);
 	void create(const CreateDesc& cdesc);
@@ -72,7 +72,7 @@ public:
 	void _internal_nextFrame();
 
 protected:
-	void terminate();
+	void shutdown();
 
 	static JobHandle		allocateJob();
 	static FrameAllocator&  _defaultAllocator();

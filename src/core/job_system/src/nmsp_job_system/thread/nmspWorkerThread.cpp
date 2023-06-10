@@ -21,7 +21,7 @@ WorkerThread_T::WorkerThread_T(const CreateDesc& cdesc)
 WorkerThread_T::~WorkerThread_T()
 {
 	debugLog("thread {} ~WorkerThread_T()", localId());
-	terminate();
+	destroy();
 }
 
 void WorkerThread_T::submit(JobHandle task)
@@ -30,7 +30,7 @@ void WorkerThread_T::submit(JobHandle task)
 	//debugLog("thread {} submit(), current task size: {}", localId(), _jobs.size());
 }
 
-void WorkerThread_T::terminate()
+void WorkerThread_T::destroy()
 {
 	join();
 }

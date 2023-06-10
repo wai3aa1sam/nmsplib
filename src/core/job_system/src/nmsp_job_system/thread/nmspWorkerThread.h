@@ -48,7 +48,7 @@ public:
 	virtual void* onRoutine() override;
 
 	void submit(JobHandle task);
-	void terminate();
+	void destroy();
 
 	void wake();
 	void sleep();

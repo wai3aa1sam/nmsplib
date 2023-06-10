@@ -17,7 +17,7 @@ ThreadPool_T::ThreadPool_T(const CreateDesc& desc)
 
 ThreadPool_T::~ThreadPool_T()
 {
-	terminate();
+	destroy();
 }
 
 void ThreadPool_T::create(const CreateDesc& desc)
@@ -58,7 +58,7 @@ void ThreadPool_T::create(const CreateDesc& desc)
 	}
 }
 
-void ThreadPool_T::terminate()
+void ThreadPool_T::destroy()
 {
 	_isDone = true;
 	for (auto& t : _workers)
@@ -66,8 +66,10 @@ void ThreadPool_T::terminate()
 		if (!t)
 			continue;
 		//atomicLog("ThreadPool_T::terminate(), thread {}", t->localId());
-		t->terminate();
+		t->destroy();
 	}
+	_threadStorages.clear();
+	_workers.clear();
 }
 
 void ThreadPool_T::submit(JobHandle job)

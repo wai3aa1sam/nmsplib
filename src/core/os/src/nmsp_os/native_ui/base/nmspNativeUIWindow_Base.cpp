@@ -31,7 +31,7 @@ void NativeUIWindow_Base::create			(const CreateDesc_Base& cd)
 
 void NativeUIWindow_Base::setWindowTitle	(StrViewA_T title)
 {
-
+	onSetWindowTitle(title);
 }
 
 

@@ -10,18 +10,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-JobSystem_T* StackSingleton_T<JobSystem_T>::s_instance = nullptr;
-
-//JobSystem_T::JobSystem_T(int workerCount, int threadTypeCount)
-//{
-//	auto cDesc = makeCDesc();
-//	create(cDesc);
-//}
-//
-//JobSystem_T::JobSystem_T(const CreateDesc& cDesc)
-//{
-//	create(cDesc);
-//}
+JobSystem_T* Singleton_T<JobSystem_T>::s_instance = nullptr;
 
 JobSystem_T::~JobSystem_T()
 {
@@ -72,10 +61,8 @@ void JobSystem_T::destroy()
 	}
 
 	//JobSystemTraits::resetThreadLocalId();
-	terminate();
-	//_threadPool.destroy();
-	_typedThreadStorages.clear();
-	_typedThreads.clear();
+	_threadPool.destroy();
+	shutdown();
 }
 
 void JobSystem_T::waitForComplete(JobHandle job)
@@ -140,15 +127,16 @@ JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
 	return job;
 }
 
-void JobSystem_T::terminate()
+void JobSystem_T::shutdown()
 {
-	_threadPool.terminate();
 	for (auto& t : _typedThreads)
 	{
 		if (!t)
 			continue;
 		t->join();
 	}
+	_typedThreadStorages.clear();
+	_typedThreads.clear();
 }
 
 JobSystem_T::FrameAllocator& JobSystem_T::_defaultAllocator()

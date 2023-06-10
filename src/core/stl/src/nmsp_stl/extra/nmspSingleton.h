@@ -20,6 +20,9 @@ public:
 	/*static void create();
 	static void destroy();*/
 
+	static void init();
+	static void terminate();
+
 protected:
 	Singleton_T();
 	~Singleton_T();
@@ -78,21 +81,19 @@ Singleton_T<T>::~Singleton_T()
 	s_instance = nullptr;
 }
 
-//template<class T> inline
-//void
-//Singleton_T<T>::create()
-//{
-//	NMSP_ASSERT(!s_instance);
-//	//s_instance = p;
-//}
-//
-//template<class T> inline
-//void
-//Singleton_T<T>::destroy()
-//{
-//	NMSP_ASSERT(!s_instance || s_instance == this);
-//	s_instance = nullptr;
-//}
+template<class T> inline
+void
+Singleton_T<T>::init()
+{
+	NMSP_NEW(T)();
+}
+
+template<class T> inline
+void
+Singleton_T<T>::terminate()
+{
+	NMSP_DELETE(instance());
+}
 
 #endif
 

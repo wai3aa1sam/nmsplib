@@ -44,7 +44,7 @@ public:
 	~ThreadPool_T();
 
 	void create(const CreateDesc& desc);
-	void terminate();
+	void destroy();
 
 	void submit(JobHandle job);
 	void execute(JobHandle job);
