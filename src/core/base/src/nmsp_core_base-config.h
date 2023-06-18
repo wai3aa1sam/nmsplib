@@ -11,7 +11,7 @@
 #endif // 
 
 #ifndef NMSP_ENABLE_ASSERT
-	#define NMSP_ENABLE_ASSERT				1
+	#define NMSP_ENABLE_ASSERT				0
 #endif // 
 
 #ifndef NMSP_ENABLE_INTERNAL_PROFILER

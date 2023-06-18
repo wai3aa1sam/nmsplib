@@ -9,19 +9,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T>
-struct UPtr_DefaultDeleter
-{
-	void operator() (T* p)
-	{
-		if (p)
-		{
-			NMSP_DELETE(p);
-		}
-	}
-};
-
-template<class T, class DELETER = UPtr_DefaultDeleter<T> >
+template<class T, class DELETER = DefaultDeleter<T> >
 class UPtr_Nmsp : public DELETER/*, NonCopyable */
 {
 public:

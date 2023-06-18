@@ -169,14 +169,14 @@ void JsonDeserializer_T::toArrayElement	(T& v, SizeType i)
 inline 
 void JsonDeserializer_T::io_beginObject()
 {
-	auto& cur = *_stack.back();
+	auto& cur = *_stack.back(); NMSP_UNUSED(cur);
 	NMSP_ASSERT(cur.is_object(), "");
 }
 
 inline 
 void JsonDeserializer_T::io_endObject ()
 {
-	auto& cur = *_stack.back();
+	auto& cur = *_stack.back(); NMSP_UNUSED(cur);
 	NMSP_ASSERT(cur.is_object(), "");
 }
 
@@ -192,14 +192,14 @@ JsonDeserializer_T::SizeType JsonDeserializer_T::io_beginArray()
 inline 
 void JsonDeserializer_T::io_endArray()
 {
-	auto& cur = *_stack.back();
+	auto& cur = *_stack.back(); NMSP_UNUSED(cur);
 	NMSP_ASSERT(cur.is_array(), "");
 }
 
 template<class T> inline 
 void JsonDeserializer_T::io_resizeArray(T& v, SizeType n)
 {
-	auto& cur = *_stack.back();
+	auto& cur = *_stack.back(); NMSP_UNUSED(cur);
 	NMSP_ASSERT(cur.is_array(), "");
 	v.clear();
 	v.resize(n);

@@ -13,6 +13,9 @@ references:
 #endif // 0
 #if 1
 
+#define NMSP_FILE __FILE__
+#define NMSP_LINE __LINE__
+
 #define NMSP_COMMA ,
 #define NMSP_EMPTY
 #define NMSP_ARGS(...) __VA_ARGS__
@@ -36,9 +39,12 @@ references:
 #define NMSP_NOEXCEPT				noexcept
 #define NMSP_NOEXCEPT_IF(...)		noexcept(__VA_ARGS__)
 
+#define NMSP_ALIGN_OF(X) alignof(X)
+#define NMSP_ALIGN_AS(X) alignas(X)
+
 #define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
 
-#if NMSP_ENABLE_ASSERT
+#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
 	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
 	#define NMSP_ASSERT(X, ...)			do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
 #else
@@ -46,13 +52,15 @@ references:
 	#define NMSP_ASSERT(X, ...)	
 #endif // NMSP_ENABLE_ASSERT
 
-#define NMSP_ALIGN_OF(X) alignof(X)
-#define NMSP_ALIGN_AS(X) alignas(X)
-
 #if NMSP_DEBUG
-	#define NMSP_SRCLOC	SrcLoc(__FILE__, __LINE__, NMSP_FUNC_NAME_SZ)
+	#define NMSP_SRCLOC	SrcLoc(NMSP_FILE, NMSP_LINE, NMSP_FUNC_NAME_SZ)
+
+	#define NMSP_DEBUG_CALL(FUNC) FUNC
+
 #else
 	#define NMSP_SRCLOC	SrcLoc()
+
+	#define NMSP_DEBUG_CALL(FUNC) FUNC
 #endif
 
 #define NMSP_REP_0(X)

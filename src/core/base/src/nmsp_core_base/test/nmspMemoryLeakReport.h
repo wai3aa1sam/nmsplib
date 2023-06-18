@@ -9,7 +9,7 @@
 	#include <crtdbg.h>
 	
 	#ifdef _DEBUG
-		#define CRT_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
+		#define CRT_NEW new ( _CLIENT_BLOCK , NMSP_FILE , NMSP_LINE )
 		// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
 		// allocations to be of _CLIENT_BLOCK type
 	#else

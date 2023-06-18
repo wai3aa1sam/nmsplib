@@ -48,6 +48,7 @@ public:
 
 	String_Eastl(ViewType view);
 	explicit String_Eastl(ViewType sv, const Allocator& allocator = DefaultAllocator{});
+	String_Eastl(const T* cstr);
 
 	template<class STR> void operator= (STR&& rhs);
 	template<class STR> void operator+=(const STR& rhs);
@@ -86,6 +87,11 @@ String_Eastl<T, N, FALLBACK_ALLOC>::String_Eastl(ViewType view)
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 String_Eastl<T, N, FALLBACK_ALLOC>::String_Eastl(ViewType sv, const Allocator& allocator)
 	: Base(sv, allocator)
+{}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+String_Eastl<T, N, FALLBACK_ALLOC>::String_Eastl(const T* cstr)
+	: Base(cstr)
 {}
 
 template<class T, size_t N, class FALLBACK_ALLOC>

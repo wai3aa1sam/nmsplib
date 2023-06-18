@@ -134,5 +134,10 @@ int StrUtil::ignoreCaseCompare(StrViewA_T a, StrViewA_T b)
 	return 0;
 }
 
+bool StrUtil::isSame(const char* a, const char* b)
+{
+	return ::strcmp(a, b) == 0;
+}
+
 
 }

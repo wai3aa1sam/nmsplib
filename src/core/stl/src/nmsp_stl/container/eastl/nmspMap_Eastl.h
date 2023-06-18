@@ -2,7 +2,9 @@
 
 #include "../nmspContainer_Common.h"
 
+NMSP_DISABLE_ALL_WARNINGS()
 #include <EASTL/map.h>
+NMSP_RESTORE_ALL_WARNINGS()
 
 namespace nmsp {
 

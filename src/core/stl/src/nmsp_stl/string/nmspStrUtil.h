@@ -48,6 +48,8 @@ struct StrUtil
 	static int ignoreCaseCompare(StrViewA_T a, StrViewA_T b);
 	static int ignoreCaseCompare(char a, char b);
 
+	static bool isSame(const char* a, const char* b);
+
 
 	template<class T>			static StringT			toStr			(const T& val);
 	template<class T>			static StringWT			toStrW			(const T& val);

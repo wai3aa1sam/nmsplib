@@ -14,8 +14,9 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T>
-class SPtr_Nmsp : public NonCopyable {
+template<class T, class DELETER = DefaultDeleter<T> >
+class SPtr_Nmsp : public DELETER
+{
 public:
 	SPtr_Nmsp() = default;
 
@@ -47,7 +48,7 @@ public:
 			auto c = --_p->_refCount;
 			if (c <= 0)
 			{
-				NMSP_DELETE(_p);
+				DELETER::operator()(_p);
 			}
 		}
 		_p = p;

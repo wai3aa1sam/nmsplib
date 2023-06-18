@@ -160,7 +160,7 @@ void JsonSerializer_T::io_beginArray()
 inline
 void JsonSerializer_T::io_endArray()
 {
-	auto& cur	= *_stack.back();
+	auto& cur	= *_stack.back(); NMSP_UNUSED(cur);
 	NMSP_ASSERT(!_stack.is_empty(), "");
 	NMSP_ASSERT(cur.is_array(), "");
 }

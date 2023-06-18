@@ -22,7 +22,7 @@
 
 	namespace nmsp {
 
-	template<class T> using SPtr_Impl = SPtr_Nmsp<T>;
+	template<class T, class DELETER> using SPtr_Impl = SPtr_Nmsp<T, DELETER>;
 
 	}
 
@@ -32,7 +32,7 @@
 
 	namespace nmsp {
 
-	template<class T> using SPtr_Impl = SPtr_Eastl<T>;
+	template<class T, class DELETER> using SPtr_Impl = SPtr_Eastl<T>;
 
 	}
 
@@ -44,7 +44,7 @@
 
 namespace nmsp {
 
-template<class T> using SPtr_T = SPtr_Impl<T>;
+template<class T, class DELETER = DefaultDeleter<T> > using SPtr_T = SPtr_Impl<T, DELETER>;
 template<class T, class... ARGS> inline
 SPtr_T<T> makeSPtr(ARGS&&... args)
 {

@@ -107,3 +107,12 @@ references:
 
 // function
 #define NMSP_DEBUG_BREAK(...)		__debugbreak()
+
+#define NMSP_DISABLE_ALL_WARNINGS() \
+	__pragma(warning(push, 0)) \
+	__pragma(warning(disable: 4172)) \
+// ---
+
+#define NMSP_RESTORE_ALL_WARNINGS() \
+	__pragma(warning(pop)) \
+// ---

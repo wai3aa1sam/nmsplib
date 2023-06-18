@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nmsp_stl/common/nmsp_stl_common.h"
+
 #include <EASTL/version.h>
 
 namespace nmsp {
@@ -9,7 +10,6 @@ namespace nmsp {
 #pragma mark --- AllocatorBase_Eastl-Decl ---
 #endif // 0
 #if 1
-
 
 template<class ALLOC> class AllocatorBase_Nmsp;
 
