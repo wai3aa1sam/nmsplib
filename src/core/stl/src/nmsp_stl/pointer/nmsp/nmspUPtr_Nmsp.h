@@ -12,16 +12,17 @@ namespace nmsp {
 template<class T, class DELETER = DefaultDeleter<T> >
 class UPtr_Nmsp : public DELETER/*, NonCopyable */
 {
+	template <class, class> friend class UPtr_Nmsp;
 public:
 	UPtr_Nmsp() = default;
 
-	UPtr_Nmsp(T* p)					NMSP_NOEXCEPT	{ reset(p); }
-	//UPtr_Nmsp(UPtr_Nmsp && r)		NMSP_NOEXCEPT	{ _p = r._p; r._p = nullptr; }
-	UPtr_Nmsp(const UPtr_Nmsp& r)	NMSP_NOEXCEPT	{ reset(r._p); }
+	UPtr_Nmsp(T* p)																	NMSP_NOEXCEPT { reset(p); }
+	UPtr_Nmsp(const UPtr_Nmsp&) = delete;
+	template<class T2, class DELETER2> UPtr_Nmsp(UPtr_Nmsp<T2, DELETER2>&& r)		NMSP_NOEXCEPT { reset(nullptr); _p = r._p; r._p = nullptr;  }
 
-	void operator=(T* p)			NMSP_NOEXCEPT	{ reset(p); }
-	//void operator=(UPtr_Nmsp &  r)	NMSP_NOEXCEPT	{ reset(r.ptr()); }
-	void operator=(UPtr_Nmsp && r)	NMSP_NOEXCEPT	{ reset(nullptr); _p = r._p; r._p = nullptr; }
+	void operator=(T* p)															NMSP_NOEXCEPT { reset(p); }
+	void operator=(const UPtr_Nmsp&) = delete;
+	template<class T2, class DELETER2> void operator=(UPtr_Nmsp<T2, DELETER2>&& r)	NMSP_NOEXCEPT { reset(nullptr); _p = r._p; r._p = nullptr; }
 
 	~UPtr_Nmsp() NMSP_NOEXCEPT { reset(nullptr); }
 
@@ -45,8 +46,6 @@ public:
 
 	T* release() NMSP_NOEXCEPT { T* o = _p; _p = nullptr; return o; }
 
-	UPtr_Nmsp(const NonCopyable&)		= delete;
-	void operator=(const NonCopyable&)	= delete;
 private:
 	T* _p = nullptr;
 };

@@ -17,7 +17,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-struct ProjectSetting_T : public StackSingleton_T<ProjectSetting_T>
+struct ProjectSetting_T : public Singleton_T<ProjectSetting_T>
 {
 public:
 	ProjectSetting_T();

@@ -13,7 +13,7 @@ namespace nmsp {
 
 //ProjectSetting_T* ProjectSetting_T::s_instance = nullptr;
 
-ProjectSetting_T* StackSingleton_T<ProjectSetting_T>::s_instance = nullptr;
+ProjectSetting_T* ProjectSetting_T::s_instance = nullptr;
 
 ProjectSetting_T::ProjectSetting_T()
 {
