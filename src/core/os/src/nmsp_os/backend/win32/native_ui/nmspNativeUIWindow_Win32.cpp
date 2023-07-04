@@ -140,7 +140,10 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc_Base& cd)
 		NMSP_THROW("cannot create native window");
 	}
 
-	ShowWindow(_wndHnd, SW_SHOW);
+	if (cDesc.isVisible)
+	{
+		ShowWindow(_wndHnd, SW_SHOW);
+	}
 }
 
 void NativeUIWindow_Win32::onSetWindowTitle		(StrViewA_T title)

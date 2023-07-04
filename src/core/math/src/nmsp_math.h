@@ -11,6 +11,6 @@ references:
 
 #include "nmsp_math/primitive/nmspMathPrimitive.h"
 
-#include "nmsp_math/geometry/nmspMathGeometry.h"
+#include "nmsp_math/geometry/nmspMathRect2.h"
 
 #include "nmsp_math/nmspRandom.h"

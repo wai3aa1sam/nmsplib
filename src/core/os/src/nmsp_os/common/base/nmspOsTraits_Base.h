@@ -7,8 +7,11 @@
 
 namespace nmsp {
 
-template<class T> struct WindowVec2_T;
-template<class T> struct WindowRect2_T;
+//template<class T> struct WindowVec2_T;
+//template<class T> struct WindowRect2_T;
+
+//template<class T> struct Vec2_T;
+namespace math { template<class T> struct Rect2_T; }
 
 enum class OsPlatform
 {
@@ -39,13 +42,13 @@ public:
 public:
 	static constexpr OsPlatform				platform();
 	static constexpr EnumInt<OsPlatform>	platformInt();
-
-	template<class T>	using Rect2  = WindowRect2_T<T>;
+	
+	template<class T>	using Rect2  = math::Rect2_T<T>;
 						using Rect2f = Rect2<f32>;
 						using Rect2d = Rect2<f64>;
 						using Rect2i = Rect2<i32>;
 
-	template<class T>	using Vec2  = WindowVec2_T<T>;
+	template<class T>	using Vec2  = Vec2_T<T>;
 						using Vec2f = Vec2<f32>;
 						using Vec2d = Vec2<f64>;
 						using Vec2i = Vec2<i32>;

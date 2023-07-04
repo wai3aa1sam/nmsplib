@@ -13,10 +13,8 @@ void Path_Win32::setCurrentDir(StrViewA_T dir)
 
 StringT Path_Win32::getCurrentDir()
 {
-	wchar_t tmp[MAX_PATH+1];
-	auto ret = ::GetCurrentDirectory(MAX_PATH, tmp);
-	Util::throwIf(!ret, "{}", NMSP_SRCLOC);
-	StringT o = UtfUtil::toString(tmp);
+	StringT o;
+	getCurrentDirTo(o);
 	return o;
 }
 

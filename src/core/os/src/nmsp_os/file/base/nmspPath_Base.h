@@ -43,6 +43,7 @@ public:
 	//--- Platform Dependent
 	static void		setCurrentDir(StrViewA_T dir);
 	static StringT	getCurrentDir();
+	template<class STR> static void		getCurrentDirTo(STR& out);
 
 	static void rename(StrViewA_T src, StrViewA_T dst);
 

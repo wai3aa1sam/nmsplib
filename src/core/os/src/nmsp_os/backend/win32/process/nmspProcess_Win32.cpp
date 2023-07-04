@@ -1,5 +1,6 @@
 #include "nmsp_os-pch.h"
 #include "nmspProcess_Win32.h"
+#include "nmsp_os/file/nmspPath.h"
 
 #if NMSP_OS_WINDOWS
 namespace nmsp {
@@ -52,7 +53,17 @@ void Process_Win32::_init(StrViewA_T filename, StrViewA_T args)
 	clear();
 
 	TempStringW_T<> filenameW;
-	UtfUtil::convert(filenameW, filename);
+
+	if (Path::isRealpath(filename))
+	{
+		UtfUtil::convert(filenameW, filename);
+	}
+	else
+	{
+		TempStringA_T<> temp;
+		Path::realpathTo(temp, filename);
+		UtfUtil::convert(filenameW, temp);
+	}
 
 	TempStringW_T<> argsW;
 	UtfUtil::convert(argsW, args);

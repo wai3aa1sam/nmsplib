@@ -44,6 +44,8 @@ public:
 	//--- Platform Dependent
 	static void		setCurrentDir(StrViewA_T dir);
 	static StringT	getCurrentDir();
+	template<class STR> static void		getCurrentDirTo(STR& out);
+
 
 	static void rename(StrViewA_T src, StrViewA_T dst);
 
@@ -59,6 +61,16 @@ protected:
 
 	//template<class STR, class VIEW> static void realpathTo_T(STR& o, VIEW path);
 };
+
+template<class STR> inline
+void		
+Path_Win32::getCurrentDirTo(STR& out)
+{
+	wchar_t tmp[MAX_PATH+1];
+	auto ret = ::GetCurrentDirectory(MAX_PATH, tmp);
+	Util::throwIf(!ret, "{}", NMSP_SRCLOC);
+	out = UtfUtil::toTempString(tmp);
+}
 
 
 #endif

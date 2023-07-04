@@ -1,5 +1,7 @@
 #pragma once
 
+#include "nmspMathRect2.h"
+
 #include "nmspMathTriangle3.h"
 #include "nmspMathSphere3.h"
 #include "nmspMathPlane3.h"

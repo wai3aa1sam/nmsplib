@@ -69,7 +69,7 @@ public:
 	using CreateDesc_Base	= NativeUIWindow_CreateDesc_Base;
 
 	using Rect2f = OsTraits::Rect2f;
-	using Vec2f  = typename Rect2f::Vec2;
+	using Vec2f  = OsTraits::Vec2f;
 
 	using Util	 = OsTraits::Util;
 	using WndHnd = OsTraits::WndHnd;
@@ -103,18 +103,20 @@ public:
 protected:
 	virtual void onCreate			(const CreateDesc_Base& cd)	{};
 	virtual void onSetWindowTitle	(StrViewA_T title)			{};
-	virtual void onClientRectChanged(const Rect2f& rect)		{};
+	virtual void onClientRectChanged(const Rect2f& rect)		  ;
 	virtual void onDrawNeeded		()							{};
 
 	virtual void onUINativeMouseEvent(UIMouseEvent& ev);
 	virtual void onUINativeKeyboardEvent(UIKeyboardEvent& ev);
 
 protected:
-	Rect2f	_clientRect;
+	Rect2f	_clientRect {0, 0, 0, 0};
 
 	UIMouseEventButton	_pressedMouseButtons = UIMouseEventButton::None;
 	Vec2f				_mousePos{0,0};
 };
+
+inline void NativeUIWindow_Base::onClientRectChanged(const Rect2f& rect)		{ _clientRect = rect; };
 
 #endif
 

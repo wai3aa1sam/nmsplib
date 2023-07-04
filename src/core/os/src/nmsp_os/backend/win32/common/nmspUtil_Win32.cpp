@@ -11,7 +11,7 @@ namespace nmsp {
 typename Util_Win32::Rect2f Util_Win32::toRect2f(const ::RECT& rect)
 {
 	using T = typename Rect2f::ElementType;
-	return Rect2f{ sCast<T>(rect.left), sCast<T>(rect.top), sCast<T>(rect.right - rect.left), sCast<T>(rect.top - rect.bottom)};
+	return Rect2f{ sCast<T>(rect.left), sCast<T>(rect.top), sCast<T>(rect.right - rect.left), sCast<T>(rect.bottom - rect.top)};
 }
 
 

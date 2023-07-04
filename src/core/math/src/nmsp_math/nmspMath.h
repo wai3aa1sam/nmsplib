@@ -75,6 +75,11 @@ constexpr u64 nextPow2(u64 x) {
 	return x + 1;
 }
 
+template<class T> constexpr bool isPowOf2(T x) { return (x > 0) && ((x & (x - 1)) == 0); }
+
+// result is x % pow2Value
+template<class T, class U> constexpr T modPow2Val(T x, U pow2Value) { NMSP_ASSERT(isPowOf2(pow2Value), "is not pow of 2"); return ((x) & (pow2Value - 1)); }
+
 template<class T> T pow(const T& left, const T& right) { return std::pow(left, right); }
 
 template<class T> constexpr T pow2(T v_)				{ return (T(0x01) << v_); }

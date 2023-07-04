@@ -34,8 +34,8 @@ public:
 	static char writeFile(StrViewA_T filename, ByteSpan_T data, bool createDir, bool logResult = true);
 	static char writeFile(StrViewA_T filename, StrViewA_T data, bool createDir, bool logResult = true);
 
-	template<size_t N>	static void readFile (StrViewA_T filename, Vector_T<u8, N>&	outData);
-	template<size_t N>	static void readFile (StrViewA_T filename, StringA_T<N>&	outData);
+	template<size_t N, class ALLOC = DefaultAllocator>	static void readFile (StrViewA_T filename, Vector_T<u8, N,	ALLOC>&	outData);
+	template<size_t N, class ALLOC = DefaultAllocator>	static void readFile (StrViewA_T filename, StringA_T<N,		ALLOC>& outData);
 
 	static char writeFileIfChanged(	StrViewA_T filename, 
 		ByteSpan_T data, 
@@ -61,14 +61,14 @@ private:
 #endif // 0
 #if 1
 
-template<size_t N> inline
-void File::readFile(StrViewA_T filename, Vector_T<u8, N>& outData)
+template<size_t N, class ALLOC> inline
+void File::readFile(StrViewA_T filename, Vector_T<u8, N, ALLOC>& outData)
 {
 	_readFile(filename, outData);
 }
 
-template<size_t N> inline
-void File::readFile(StrViewA_T filename, StringA_T<N>& outData)
+template<size_t N, class ALLOC> inline
+void File::readFile(StrViewA_T filename, StringA_T<N, ALLOC>& outData)
 {
 	_readFile(filename, outData);
 }

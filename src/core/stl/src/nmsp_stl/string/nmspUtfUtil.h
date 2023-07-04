@@ -42,6 +42,9 @@ struct UtfUtil {
 	template<class SRC>	static StringT  toString (SRC& src) { StringT  o; convert(o, src); return o; }
 	template<class SRC>	static StringWT toStringW(SRC& src) { StringWT o; convert(o, src); return o; }
 
+	template<class SRC>	static TempStringA_T<> toTempString (SRC& src) { TempStringA_T<> o; convert(o, src); return o; }
+	template<class SRC>	static TempStringW_T<> toTempStringW(SRC& src) { TempStringA_T<> o; convert(o, src); return o; }
+
 private:
 	static uint32_t _decodeUtf(const char*&     src, const char*     end);
 	static uint32_t _decodeUtf(const char16_t*& src, const char16_t* end);

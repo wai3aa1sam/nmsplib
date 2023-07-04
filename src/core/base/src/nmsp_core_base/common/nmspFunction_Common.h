@@ -32,8 +32,8 @@ template<class DST, class SRC> constexpr 	   DST reinCast(	  SRC& v)	{ return re
 template<class DST, class SRC> constexpr const DST reinCast(const SRC* v)	{ return reinterpret_cast<const DST>(v); }
 template<class DST, class SRC> constexpr const DST reinCast(const SRC& v)	{ return reinterpret_cast<const DST>(v); }
 
-template<class T> constexpr T* constCast(const T* v) { return const_cast<T*>(v); }
-template<class T> constexpr T& constCast(const T& v) { return const_cast<T&>(v); }
+template<class DST, class SRC> constexpr DST* constCast(const SRC* v) { return const_cast<DST>(v); }
+template<class DST, class SRC> constexpr DST& constCast(const SRC& v) { return const_cast<DST>(v); }
 
 #endif
 

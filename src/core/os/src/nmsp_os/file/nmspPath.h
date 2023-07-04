@@ -93,7 +93,7 @@ void Path::realpathTo(StringA_T<N>& o, StrViewA_T path)
 	}
 	else
 	{
-		outStr = getCurrentDir();
+		getCurrentDirTo(outStr);
 		needSlash = true;
 	}
 
