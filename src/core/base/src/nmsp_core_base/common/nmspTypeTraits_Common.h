@@ -50,6 +50,8 @@ template<class T> using RemoveRef   = typename RemoveRefT<T>::type;
 template<class T> using RemovePtrT  = typename std::remove_pointer<T>;
 template<class T> using RemovePtr   = typename RemovePtrT<T>::type;
 
+template<class T> using RemoveArrT  = typename std::remove_extent<T>;
+template<class T> using RemoveArr   = typename RemoveArrT<T>::type;
 
 #endif
 
@@ -78,6 +80,9 @@ template<class T> inline constexpr bool	IsFunction      = IsFunctionT<T>::value;
 
 template<class T> using					IsMemPtrT       = std::is_member_pointer<T>;
 template<class T> inline constexpr bool	IsMemPtr        = IsMemPtrT<T>::value;
+
+template<class T> using					IsArrayT       = std::is_array<T>;
+template<class T> inline constexpr bool	IsArray        = IsArrayT<T>::value;
 
 template<class T> using                 IsEnumT         = std::is_enum<T>;
 template<class T> inline constexpr bool IsEnum          = IsEnumT<T>::value;

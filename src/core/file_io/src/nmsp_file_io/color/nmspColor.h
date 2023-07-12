@@ -81,8 +81,8 @@ enum class ColorType : u16;
 template<>
 struct TypeBitMixture_Impl<ColorType>
 {
-	using Types							= Tuple_T<ColorModel, ColorElementType, ColorCompressType>;
-	static constexpr size_t s_kSizes[]	=		 {		   8,				 4,					4,};
+	using Types								= Tuple_T<ColorModel, ColorElementType, ColorCompressType>;
+	static constexpr size_t s_kBitCounts[]	=		 {		   8,				 4,					4,};
 };
 
 #define ColorType_ENUM_LIST(E) \
@@ -256,7 +256,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 4;
-	static constexpr int				s_kAlphaBits			= BitUtil::byteSize<T>();
+	static constexpr int				s_kAlphaBits			= sCast<int>(BitUtil::bitSize<T>());
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RGB, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
@@ -330,7 +330,7 @@ public:
 
 public:
 	static constexpr SizeType			s_kElementCount			= 2;
-	static constexpr int				s_kAlphaBits			= BitUtil::byteSize<T>();
+	static constexpr int				s_kAlphaBits			= sCast<int>(BitUtil::byteSize<T>());
 	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::LA, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);

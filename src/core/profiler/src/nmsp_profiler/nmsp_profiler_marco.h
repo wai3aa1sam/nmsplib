@@ -3,12 +3,17 @@
 #include <stdint.h>
 #include <cstddef>
 
+#include "nmsp_profiler/common/nmsp_profiler_common.h"
+
 #if NMSP_ENABLE_PROFILER
+
 	//#define TRACY_ENABLE 1	// set in cmake
+	#define TRACY_CALLSTACK 1
 
 	#include <tracy/Tracy.hpp>
 	#include <tracy/TracyC.h>
 	#include <common/TracySystem.hpp>
+
 
 	#define NMSP_PROFILE_SCOPED()				ZoneScoped				
 	#define NMSP_PROFILE_FRAME()				FrameMark			
@@ -21,6 +26,13 @@
 	#define NMSP_PROFILE_FREE(PTR, SIZE)		TracyCFreeS(PTR, 12)		    
 
 	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)	::tracy::SetThreadName(NAME)
+
+namespace nmsp
+{
+
+using PColor = ::tracy::Color::ColorType;
+
+}
 
 #else
 

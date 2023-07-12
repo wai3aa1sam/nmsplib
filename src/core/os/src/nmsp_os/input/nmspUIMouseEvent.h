@@ -2,6 +2,8 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
+#include "nmsp_core_base/common/nmspBitUtil.h"
+
 #include "nmspUIEvent.h"
 
 /*

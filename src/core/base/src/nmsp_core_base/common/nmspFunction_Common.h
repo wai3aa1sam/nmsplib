@@ -3,8 +3,6 @@
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
 #include "nmspTypeTraits_Common.h"
 
-#include "fmt/format.h"
-
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
 
 #define _NMSP_DUMP_VAR_1(v0)				do{ _NMSP_LOG("DUMP_VAR: {}=[{}]",								#v0, (v0)); } while(false)
@@ -45,6 +43,15 @@ static constexpr T _alignTo(T n, T a)
 	static_assert(IsUInt<T>, "");
 	T r = n % a;
 	return r ? (n + a - r) : n;
+}
+
+template<class OBJ, class MEMBER> inline 
+constexpr ptrdiff_t 
+memberOffset(MEMBER OBJ::* member)
+{
+	OBJ*	o = nullptr;
+	MEMBER* m = &(o->*member);
+	return reinCast<intptr_t>(m);
 }
 
 #if 0

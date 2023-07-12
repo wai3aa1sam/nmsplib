@@ -68,7 +68,9 @@
 #include <unordered_map>
 #include <unordered_set>
 
+NMSP_DISABLE_ALL_WARNINGS()
 #include <fmt/format.h>
+NMSP_RESTORE_ALL_WARNINGS()
 
 #endif
 
@@ -80,7 +82,6 @@
 #include "nmsp_core_base/alloc/nmspAlloc.h"
 
 #include "nmspDataType_Common.h"
-#include "nmspBitUtil.h"
 
 #include "nmspFunction_Common.h"
 #include "nmspTypeTraits_Common.h"

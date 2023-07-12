@@ -3,9 +3,10 @@
 #include "nmsp_stl/common/nmsp_stl_common.h"
 #include "nmspIntSeq.h"
 
-namespace nmsp {
+// move to global scope, since cannot use template specialization for typedef class/struct
+//namespace nmsp {
 
-#define NMSP_TBM_CALCULATE_VALUE_IMPL(I, T, TUPLE) ( TypeBitMixture_T<T>::getIntValue<I>(TUPLE) )
+#define NMSP_TBM_CALCULATE_VALUE_IMPL(I, T, TUPLE) ( TypeBitMixture_T<T>::toDstInt<I>(TUPLE) )
 #define NMSP_TBM_MAKE_SELECT(COUNT)		NMSP_IDX_SEQ_##COUNT
 #define NMSP_TBM_MAKE(T, ...) \
 NMSP_IDENTITY(NMSP_CALL(NMSP_TBM_MAKE_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__)) (|, NMSP_TBM_CALCULATE_VALUE_IMPL, NMSP_ARGS(, T, TypeBitMixture_T<T>::Types(__VA_ARGS__) ) ))
@@ -22,7 +23,7 @@ template<class T>
 struct TypeBitMixture_Impl
 {
 	//using Types							= Tuple_T<int, u8, u8>;
-	//static constexpr size_t s_kSizes[3]	=		 {  4,	2,	4};
+	//static constexpr size_t s_kBitCounts[3]	=		 {  4,	2,	4};
 };
 
 template<class T>
@@ -39,6 +40,7 @@ struct TBM : public TypeBitMixture_T<T, TypeBitMixture_Impl<T> >
 	//template<class VAL_T, class... ARGS> static constexpr IntType	makeInt	(const VAL_T& v, ARGS&&... args) { return TypeBitMixture::makeInt	(v, nmsp::forward<ARGS>(args)...); }
 };
 
+// TODO: check total size
 template<class T, class IMPL = TypeBitMixture_Impl<T> >
 struct TypeBitMixture_T : public IMPL
 {
@@ -46,37 +48,45 @@ public:
 	using Base = IMPL;
 
 	using ValueType = T;
-	using IntType	= typename EnumInt<ValueType>;
+	using IntType	= typename ::nmsp::EnumInt<ValueType>;
 
 	using Types = typename Base::Types;
-	template<size_t I> using ElementType	= typename TupleElement<I, Types>;
-	template<size_t I> using ElementIntType = typename EnumInt<ElementType<I> >;
+	template<size_t I> using ElementType	= typename ::nmsp::TupleElement<I, Types>;
+	template<size_t I> using ElementIntType = typename ::nmsp::EnumInt<ElementType<I> >;
 
 	//template<size_t I> using ElementIntType = typename Types::ElementType<I>;
 
-	using SizeType = StlTraits::SizeType;
+	using SizeType = ::nmsp::StlTraits::SizeType;
 
 public:
-	using Base::s_kSizes;
+	using Base::s_kBitCounts;
 	static constexpr SizeType s_kElementCount	= Types::s_length();
-	static constexpr SizeType s_kByteSize		= sizeof(ValueType) * 8;
-	static constexpr SizeType s_kByteUsed		= accumulator(s_kSizes);
-	static constexpr SizeType s_kByteRemain		= s_kByteSize - s_kByteUsed;
+	static constexpr SizeType s_kBitSize		= sizeof(ValueType) * 8;
+	static constexpr SizeType s_kBitUsed		= ::nmsp::accumulator(s_kBitCounts);
+	static constexpr SizeType s_kBitRemain		= s_kBitSize - s_kBitUsed;
 
 public:
 	template<class VAL_T, class... ARGS> static constexpr ValueType make	(const VAL_T& v, ARGS&&... args);
 	template<class VAL_T, class... ARGS> static constexpr IntType	makeInt	(const VAL_T& v, ARGS&&... args);
 	
-	template<size_t I>				static constexpr IntType	getIntValue	(const Types& t);
-	template<size_t I, class VAL_T> static constexpr ValueType	getValue	(const VAL_T& v);
+	template<size_t I> static constexpr ValueType addElement(const ValueType& v, const ElementType<I>& e);
 
 	template<size_t I> static constexpr ElementIntType<I>	getElementIntValue	(const ValueType& v);
 	template<size_t I> static constexpr ElementType<I>		getElementValue		(const ValueType& v);
 
 	template<size_t I>	static constexpr SizeType	offset();
 						static constexpr SizeType	offsets(SizeType i);
+	
+	template<size_t I>	static constexpr SizeType	maxValue();
+						static constexpr SizeType	maxValues(SizeType i);
+						
+	//template<size_t I>				static constexpr IntType	typesToDstInt	(const Types& t);
+	
 
 private:
+	template<size_t I, class VAL_T> static constexpr IntType	_toDstInt		(const VAL_T& v);
+	template<size_t I, class VAL_T> static constexpr ValueType	_toDst			(const VAL_T& v);
+
 	template<size_t I = 0, class VAL_T>					static constexpr ValueType _make(const VAL_T& v);
 	template<size_t I = 0, class VAL_T, class... ARGS>	static constexpr ValueType _make(const VAL_T& v, ARGS&&... args);
 
@@ -95,11 +105,11 @@ constexpr auto makeTBM_offsets
 		res[0] = 0;
 		for (int j = 1; j < N; ++j)
 		{
-			// eq to res[j] = accumulateTo<j>(TBM::s_kSizes);
+			// eq to res[j] = accumulateTo<j>(TBM::s_kBitCounts);
 			size_t sum = 0;
 			for (int i = 0; i < j; ++i)
 			{
-				sum = std::plus()(sum, TBM::s_kSizes[i]);
+				sum = std::plus()(sum, TBM::s_kBitCounts[i]);
 			}
 			res[j] = sum;
 		}
@@ -120,6 +130,7 @@ struct TypeBitMixtureOffset
 	constexpr 
 	TypeBitMixtureOffset(const size_t sizes[])
 	{
+		using namespace nmsp;
 		_offsets[0] = 0;
 		for (size_t i = 1; i < N; i++)
 		{
@@ -145,8 +156,9 @@ template<class VAL_T, class... ARGS> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ValueType 
 TypeBitMixture_T<T, IMPL>::make(const VAL_T& v, ARGS&&... args)
 {
+	using namespace nmsp;
 	NMSP_S_ASSERT(s_kElementCount == sizeof...(ARGS) + 1);
-	NMSP_S_ASSERT(s_kByteUsed <= s_kByteSize);
+	NMSP_S_ASSERT(s_kBitUsed <= s_kBitSize);
 	return _make<0>(v, nmsp::forward<ARGS>(args)...);
 }
 
@@ -155,22 +167,44 @@ template<class VAL_T, class... ARGS> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::IntType 
 TypeBitMixture_T<T, IMPL>::makeInt(const VAL_T& v, ARGS&&... args)
 {
+	using namespace nmsp;
 	return sCast<IntType>(make(v, nmsp::forward<ARGS>(args)...));
 }
 
+#if 1
+//template<class T, class IMPL>
+//template<size_t I> inline constexpr
+//typename TypeBitMixture_T<T, IMPL>::IntType TypeBitMixture_T<T, IMPL>::toDstInt(const Types& t)
+//{
+//	using namespace nmsp;
+//	NMSP_S_ASSERT(s_kBitUsed <= s_kBitSize);
+//	return sCast<IntType>(toDst<I>(t.get<I>()));
+//}
+
 template<class T, class IMPL>
-template<size_t I> inline constexpr
-typename TypeBitMixture_T<T, IMPL>::IntType TypeBitMixture_T<T, IMPL>::getIntValue(const Types& t)
+template<size_t I, class VAL_T> inline constexpr
+typename TypeBitMixture_T<T, IMPL>::IntType TypeBitMixture_T<T, IMPL>::_toDstInt(const VAL_T& v)
 {
-	NMSP_S_ASSERT(s_kByteUsed <= s_kByteSize);
-	return sCast<IntType>(getValue<I>(t.get<I>()));
+	using namespace nmsp;
+	return sCast<IntType>(_toDst<I>(v));
 }
 
 template<class T, class IMPL>
 template<size_t I, class VAL_T> inline constexpr
-typename TypeBitMixture_T<T, IMPL>::ValueType TypeBitMixture_T<T, IMPL>::getValue(const VAL_T& v)
+typename TypeBitMixture_T<T, IMPL>::ValueType TypeBitMixture_T<T, IMPL>::_toDst(const VAL_T& v)
 {
+	using namespace nmsp;
 	return sCast<ValueType>(sCast<IntType>(v) << offset<I>());
+}
+#endif // 0
+
+template<class T, class IMPL>
+template<size_t I> inline constexpr 
+typename TypeBitMixture_T<T, IMPL>::ValueType 
+TypeBitMixture_T<T, IMPL>::addElement(const ValueType& v, const ElementType<I>& e)
+{
+	using namespace nmsp;
+	return sCast<ValueType>(sCast<IntType>(v) | sCast<IntType>(e) << offsets(I) );
 }
 
 template<class T, class IMPL>
@@ -178,6 +212,7 @@ template<size_t I> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ElementIntType<I>
 TypeBitMixture_T<T, IMPL>::getElementIntValue(const ValueType& v)
 {
+	using namespace nmsp;
 	return sCast<ElementIntType<I> >(getElementValue<I>(v));
 }
 
@@ -186,7 +221,8 @@ template<size_t I> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ElementType<I>
 TypeBitMixture_T<T, IMPL>::getElementValue(const ValueType& v)
 {
-	auto mask = BitUtil::setN(s_kSizes[I]);
+	using namespace nmsp;
+	auto mask = BitUtil::setN(s_kBitCounts[I]);
 	auto res = sCast<SizeType>(v) & mask;
 	return sCast<ElementType<I> >((res) >> offset<I>());
 }
@@ -196,21 +232,42 @@ template<size_t I> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::SizeType 
 TypeBitMixture_T<T, IMPL>::offset()
 {
+	using namespace nmsp;
 	if constexpr (I == 0)
 	{
 		return 0;
 	}
 	else
 	{
-		return accumulateTo<I>(s_kSizes);
+		return accumulateTo<I>(s_kBitCounts);
 	}
 }
+
+template<class T, class IMPL>
+template<size_t I> inline constexpr
+typename TypeBitMixture_T<T, IMPL>::SizeType 
+TypeBitMixture_T<T, IMPL>::maxValue()
+{
+	using namespace nmsp;
+	return math::pow2(s_kBitCounts[I]) - 1;
+}
+
+template<class T, class IMPL>
+inline constexpr
+typename TypeBitMixture_T<T, IMPL>::SizeType 
+TypeBitMixture_T<T, IMPL>::maxValues(SizeType i)
+{
+	using namespace nmsp;
+	return math::pow2(s_kBitCounts[i]) - 1;
+}
+
 template<class T, class IMPL>
 template<size_t I, class VAL_T> inline constexpr 
 typename TypeBitMixture_T<T, IMPL>::ValueType 
 TypeBitMixture_T<T, IMPL>::_make(const VAL_T& v)
 {
-	return getValue<I>(v);
+	using namespace nmsp;
+	return _toDst<I>(v);
 }
 
 template<class T, class IMPL>
@@ -218,7 +275,8 @@ template<size_t I, class VAL_T, class... ARGS> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::ValueType 
 TypeBitMixture_T<T, IMPL>::_make(const VAL_T& v, ARGS&&... args)
 {
-	return sCast<ValueType>(sCast<IntType>(getValue<I>(v)) | sCast<IntType>(_make<I + 1>(nmsp::forward<ARGS>(args)...) ) );
+	using namespace nmsp;
+	return sCast<ValueType>(_toDstInt<I>(v) | sCast<IntType>(_make<I + 1>(nmsp::forward<ARGS>(args)...) ) );
 }
 
 template<class T, class IMPL> inline constexpr
@@ -226,6 +284,7 @@ typename TypeBitMixture_T<T, IMPL>::SizeType
 TypeBitMixture_T<T, IMPL>::offsets(SizeType i)
 {
 	constexpr auto off = makeTBM_offsets<T>;
+	//static_assert(off[i] <= sizeof(IntType), "TBM offset is larger than T");
 	return off[i];
 }
 
@@ -234,6 +293,8 @@ template<size_t... NS> inline constexpr
 typename TypeBitMixture_T<T, IMPL>::IntType 
 TypeBitMixture_T<T, IMPL>::_addValue()
 {
+	using namespace nmsp;
+
 	constexpr size_t N	= s_kElementCount;
 	auto intSeq			= IntSeq_T<size_t, NS...>();
 	static_assert(intSeq.size() == N, "");
@@ -484,6 +545,9 @@ static constexpr auto makeTBMValue(const Tuple_T<ARGS...>& t)
 #endif // 0
 #endif // 0
 
+
+namespace nmsp
+{
 #if 0
 #pragma mark --- TestEnum-Impl ---
 #endif // 0
@@ -495,12 +559,12 @@ template<>
 struct TypeBitMixture_Impl<TestEnum>
 {
 	using Types							= Tuple_T<int, u8, u8>;
-	static constexpr size_t s_kSizes[3] =		 {  4,	2,	4};
+	static constexpr size_t s_kBitCounts[3] =		 {  4,	2,	4};
 };
 
 enum class TestEnum : int
 {
-	k1 = NMSP_TBM_MAKE(TestEnum, 1, (u8)1, (u8)1),
+	//k1 = NMSP_TBM_MAKE(TestEnum, 1, (u8)1, (u8)1),
 	k2 = 20,
 	k3 = TypeBitMixture_T<TestEnum>::_addValue<1, 1, 1>(),
 	k4 = TypeBitMixture_T<TestEnum>::_addValue<1, 1, 1>(),

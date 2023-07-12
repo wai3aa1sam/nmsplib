@@ -1,6 +1,8 @@
 #pragma once
 
-#include "fmt/format.h"
+NMSP_DISABLE_ALL_WARNINGS()
+#include <fmt/format.h>
+NMSP_RESTORE_ALL_WARNINGS()
 
 #include "nmsp_core_base/common/nmspDataType_Common.h"
 #include "nmsp_core_base/common/nmspTypeTraits_Common.h"
