@@ -222,7 +222,7 @@ typename TypeBitMixture_T<T, IMPL>::ElementType<I>
 TypeBitMixture_T<T, IMPL>::getElementValue(const ValueType& v)
 {
 	using namespace nmsp;
-	auto mask = BitUtil::setN(s_kBitCounts[I]);
+	auto mask = sCast<IntType>(BitUtil::setN(s_kBitCounts[I])) << offset<I>();
 	auto res = sCast<SizeType>(v) & mask;
 	return sCast<ElementType<I> >((res) >> offset<I>());
 }

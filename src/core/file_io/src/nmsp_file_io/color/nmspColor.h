@@ -276,6 +276,13 @@ public:
 
 };
 
+template<class T>
+void onFormat(fmt::format_context& ctx, const ColorRGBA_T<T>& v)
+{
+	formatTo(ctx, "Color4({}, {}, {}, {})", v.r, v.g, v.b, v.a);
+}
+NMSP_FORMATTER_T( NMSP_ARGS(class T), ColorRGBA_T<NMSP_ARGS(T)> );
+
 #endif
 
 #if 0
