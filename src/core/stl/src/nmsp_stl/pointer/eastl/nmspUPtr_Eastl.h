@@ -1,8 +1,7 @@
 #pragma once
 
+#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 #include "../nmspPointer_Common.h"
-
-#include <EASTL/unique_ptr.h>
 
 namespace nmsp {
 

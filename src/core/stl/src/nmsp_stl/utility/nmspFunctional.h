@@ -14,7 +14,7 @@
 
 #elif NMSP_STL_BUILD_CONTAINER_EASTL
 	
-	#include "EASTL/functional.h"
+	#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 
 	namespace nmsp {
 

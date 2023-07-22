@@ -60,7 +60,7 @@ public:
 
 	// Multi-thread Params
 	static constexpr int		s_kMainThreadLocalId		= 0;
-	static constexpr SizeType	s_kEstLogicalThreadCount	= 32;
+	static constexpr SizeType	s_kEstLogicalThreadCount	= 16;
 
 	static void		setThreadLocalId	(int id) { NMSP_ASSERT(!_internal_isSettedThreadLocalId && ((id >= 0 && id <= logicalThreadCount()) || id == s_kMainThreadLocalId), "threadLocalId should set only once"); _internal_threadLocalId = id; _internal_isSettedThreadLocalId = true; }
 	static void		resetThreadLocalId	()		 { _internal_threadLocalId = -1; _internal_isSettedThreadLocalId = false; }

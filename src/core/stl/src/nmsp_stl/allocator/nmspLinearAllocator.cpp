@@ -14,7 +14,12 @@ LinearAllocatorChunk_T::LinearAllocatorChunk_T(SizeType n)
 	_offset = 0;
 }
 
-void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align)
+void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align, SizeType offset)
+{
+	return alloc(n, align, offset, nullptr);
+}
+
+void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset)
 {
 	auto newOffset = _alignTo(_offset, align);
 	auto available = _buffer.size() - newOffset;
@@ -22,10 +27,12 @@ void* LinearAllocatorChunk_T::alloc(SizeType n, SizeType align)
 	{
 		return nullptr;
 	}
-
+	
+	*outOffset = newOffset;
 	_offset = newOffset + n;
 	return sCast<void*>(&_buffer[newOffset]);
 }
+
 
 void LinearAllocatorChunk_T::clear()
 {
@@ -40,6 +47,12 @@ LinearAllocator_T::LinearAllocator_T(const char* name)
 
 void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 {
+	SizeType outOffset;
+	return alloc(n, align, offset, &outOffset);
+}
+
+void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset)
+{
 	if (!_chunks.is_empty())
 	{
 		auto& curChunk = _chunks.back();
@@ -50,7 +63,7 @@ void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset)
 
 	_chunks.emplace_back(makeUPtr<Chunk>(_chunkSize));
 
-	auto* p = _chunks.back()->alloc(n, align);
+	auto* p = _chunks.back()->alloc(n, align, offset, outOffset);
 	NMSP_ASSERT(p, "{}: n is > ChunkSize", NMSP_SRCLOC);
 	return p;
 }

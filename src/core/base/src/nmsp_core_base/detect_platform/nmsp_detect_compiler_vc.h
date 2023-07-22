@@ -110,7 +110,7 @@ references:
 
 #define NMSP_DISABLE_ALL_WARNINGS() \
 	__pragma(warning(push, 0)) \
-	__pragma(warning(disable: 4172 4275)) \
+	__pragma(warning(disable: 4172 4275 4702)) \
 // ---
 
 #define NMSP_RESTORE_ALL_WARNINGS() \

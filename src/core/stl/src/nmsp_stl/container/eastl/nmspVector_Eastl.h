@@ -1,10 +1,7 @@
 #pragma once
 
-#include "../nmspContainer_Common.h"
+#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 #include "nmsp_stl/view/nmspSpan.h"
-
-#include <EASTL/vector.h>
-#include <EASTL/fixed_vector.h>
 
 namespace nmsp {
 

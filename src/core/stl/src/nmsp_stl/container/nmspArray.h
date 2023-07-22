@@ -37,8 +37,7 @@
 	
 #elif NMSP_STL_BUILD_CONTAINER_EASTL
 
-	//#include "eastl/nmspArray_Eastl.h"
-	#include <EASTL/array.h>
+	#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 
 	namespace nmsp {
 

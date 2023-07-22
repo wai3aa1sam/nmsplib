@@ -2,7 +2,7 @@
 
 #include "../nmspContainer_Common.h"
 
-#include <EASTL/list.h>
+#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 
 namespace nmsp {
 

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "nmsp_stl/common/nmsp_stl_common.h"
-
-#include <EASTL/span.h>
+#include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 
 namespace nmsp {
 
