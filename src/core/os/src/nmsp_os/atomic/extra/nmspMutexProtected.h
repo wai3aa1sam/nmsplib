@@ -26,6 +26,9 @@ public:
 	T* operator->();
 	T& operator* ();
 
+	const T* operator->() const;
+	const T& operator* () const;
+
 private:
 	Lock	_lock;			// should lock first
 	T*		_data = nullptr;
@@ -59,7 +62,8 @@ public:
 	using ULock = typename DATA::ULock;
 	using SLock = typename DATA::SLock;
 
-	NMSP_NODISCARD Locked_T<T, Mutex, ULock> scopedULock();
+	NMSP_NODISCARD Locked_T<T, Mutex, ULock>		scopedULock();
+	NMSP_NODISCARD Locked_T<const T, Mutex, ULock>	scopedULock() const;
 
 protected:
 	using DATA::_mutex;
@@ -214,6 +218,8 @@ T& Locked_T<T, MUTEX, LOCK>::operator*()
 	return *_data; 
 }
 
+template<class T, class MUTEX, class LOCK> inline const T* Locked_T<T, MUTEX, LOCK>::operator->() const { return _data; }
+template<class T, class MUTEX, class LOCK> inline const T& Locked_T<T, MUTEX, LOCK>::operator* () const { return *_data; }
 
 #endif
 

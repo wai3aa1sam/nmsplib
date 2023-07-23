@@ -44,14 +44,23 @@ template<bool COND, class IF_TRUE_T, class IF_FASLE_T> using Conditional    = ty
 template<class T> using DecayT = typename std::decay<T>;
 template<class T> using Decay  = typename DecayT<T>::type;
 
-template<class T> using RemoveRefT  = typename std::remove_reference<T>;
-template<class T> using RemoveRef   = typename RemoveRefT<T>::type;
+template<class T> using RemoveRefT      = typename std::remove_reference<T>;
+template<class T> using RemoveRef       = typename RemoveRefT<T>::type;
 
-template<class T> using RemovePtrT  = typename std::remove_pointer<T>;
-template<class T> using RemovePtr   = typename RemovePtrT<T>::type;
+template<class T> using RemoveConstT    = typename std::remove_const<T>;
+template<class T> using RemoveConst     = typename RemoveConstT<T>::type;
 
-template<class T> using RemoveArrT  = typename std::remove_extent<T>;
-template<class T> using RemoveArr   = typename RemoveArrT<T>::type;
+template<class T> using RemoveVolatileT = typename std::remove_volatile<T>;
+template<class T> using RemoveVolatile  = typename RemoveVolatileT<T>::type;
+
+template<class T> using RemoveCvT       = typename std::remove_cv<T>;
+template<class T> using RemoveCv        = typename RemoveCvT<T>::type;
+
+template<class T> using RemovePtrT      = typename std::remove_pointer<T>;
+template<class T> using RemovePtr       = typename RemovePtrT<T>::type;
+
+template<class T> using RemoveArrT      = typename std::remove_extent<T>;
+template<class T> using RemoveArr       = typename RemoveArrT<T>::type;
 
 #endif
 

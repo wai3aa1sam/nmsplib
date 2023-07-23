@@ -56,7 +56,7 @@ void* LinearAllocator_T::alloc(SizeType n, SizeType align, SizeType offset, Size
 	if (!_chunks.is_empty())
 	{
 		auto& curChunk = _chunks.back();
-		auto* p = curChunk->alloc(n, align);
+		auto* p = curChunk->alloc(n, align, offset, outOffset);
 		if (p)
 			return p;
 	}
