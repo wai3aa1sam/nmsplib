@@ -25,7 +25,7 @@ public:
 	SPtr_Nmsp(SPtr_Nmsp && r)		NMSP_NOEXCEPT	{ _p = r._p; r._p = nullptr; }
 
 	void operator=(T* p)				NMSP_NOEXCEPT	{ reset(p); }
-	void operator=(SPtr_Nmsp&  r)	NMSP_NOEXCEPT		{ reset(r.ptr()); }
+	void operator=(SPtr_Nmsp&  r)		NMSP_NOEXCEPT	{ reset(r.ptr()); }
 	void operator=(SPtr_Nmsp && r)		NMSP_NOEXCEPT	{ reset(nullptr); _p = r._p; r._p = nullptr; }
 
 	~SPtr_Nmsp() NMSP_NOEXCEPT { reset(nullptr); }

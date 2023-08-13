@@ -63,7 +63,7 @@ template<class T>	inline constexpr void	BitUtil::unsetBit	(T& value, int nth)		{
 
 template<class T>	constexpr	static BitUtil::SizeType	BitUtil::bitSize()			{ return sizeof(T) * 8; }
 template<class T>	constexpr	static T					BitUtil::bitSize(T bytes)	{ return bytes * 8; }
-template<class T>	constexpr	static T					BitUtil::toByte(T bits)		{ return bits / 8; }
+template<class T>	constexpr	static T					BitUtil::toByte(T bitSize)	{ return bitSize / 8; }
 
 template<class T>	constexpr	static T	BitUtil::setN(T n)
 {

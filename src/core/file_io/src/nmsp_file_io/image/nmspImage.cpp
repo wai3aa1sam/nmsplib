@@ -28,6 +28,8 @@ void Image_T::clear()
 
 void Image_T::load(StrViewA_T filename)
 {
+	_info.colorType = _info.colorType == ColorType::None ? ColorType::RGBAb : _info.colorType;
+
 	auto ext	= Path::extension(filename);
 	int ret		= 0;
 
@@ -48,7 +50,7 @@ void Image_T::loadPngFile(StrViewA_T filename)
 void Image_T::loadPngMem(ByteSpan_T data)
 {
 	ImageIO_png::Reader reader;
-	reader.load(*this, data);
+	reader.load(*this, data, colorType());
 }
 
 void Image_T::loadDdsFile(StrViewA_T filename)
@@ -61,7 +63,7 @@ void Image_T::loadDdsFile(StrViewA_T filename)
 void Image_T::loadDdsMem(ByteSpan_T data)
 {
 	ImageIO_dds::Reader reader;
-	reader.load(*this, data);
+	reader.load(*this, data, colorType());
 }
 
 void Image_T::create(const CreateDesc& cd)

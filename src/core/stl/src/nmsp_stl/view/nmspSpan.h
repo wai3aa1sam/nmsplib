@@ -50,7 +50,15 @@ template<class DST, class SRC> inline
 Span_T<DST> spanCast(Span_T<SRC> src)
 {
 	size_t srcBytes = src.size_bytes();
-	return Span<DST>(reinterpret_cast<DST>(src.data()), srcBytes / sizeof(DST));
+	return Span_T<DST>(reinCast<DST*>(src.data()), srcBytes / sizeof(DST));
 }
+
+template<class T> inline 
+ByteSpan_T 
+makeByteSpan(Span_T<T> sv)
+{
+	return spanCast<const u8>(sv);
+}
+
 
 }

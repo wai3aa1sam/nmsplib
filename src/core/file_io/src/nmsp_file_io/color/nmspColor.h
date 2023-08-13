@@ -498,9 +498,9 @@ using ColorRGBb_T 	= ColorRGB_T<u8>;
 using ColorRGBs_T 	= ColorRGB_T<u16>;
 using ColorRGBf_T 	= ColorRGB_T<float>;
 
-using ColorRGBAb_T 	= ColorRGB_T<u8>;
-using ColorRGBAs_T 	= ColorRGB_T<u16>;
-using ColorRGBAf_T 	= ColorRGB_T<float>;
+using ColorRGBAb_T 	= ColorRGBA_T<u8>;
+using ColorRGBAs_T 	= ColorRGBA_T<u16>;
+using ColorRGBAf_T 	= ColorRGBA_T<float>;
 
 using Color1b_T = ColorRb_T;
 using Color1s_T = ColorRs_T;

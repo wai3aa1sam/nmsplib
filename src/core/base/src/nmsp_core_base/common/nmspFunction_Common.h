@@ -33,6 +33,9 @@ template<class DST, class SRC> constexpr const DST reinCast(const SRC& v)	{ retu
 template<class DST, class SRC> constexpr DST* constCast(const SRC* v) { return const_cast<DST>(v); }
 template<class DST, class SRC> constexpr DST& constCast(const SRC& v) { return const_cast<DST>(v); }
 
+template<class SRC> constexpr RemoveConst<SRC>* constCast(const SRC* v) { return const_cast<RemoveConst<SRC>*>(v); }
+template<class SRC> constexpr RemoveConst<SRC>& constCast(const SRC& v) { return const_cast<RemoveConst<SRC>&>(v); }
+
 #endif
 
 template<class T> inline void swap(T& a, T& b) { T tmp = move(a); a = move(b); b = move(tmp); }

@@ -55,4 +55,10 @@ inline void throwIf(bool cond, const char* fmt, ARGS&&... args)
 	}
 }
 
+template<class... ARGS>
+inline void throwError(const char* fmt, ARGS&&... args)
+{
+	throw NMSP_ERROR(fmt, nmsp::forward<ARGS>(args)...);
+}
+
 }

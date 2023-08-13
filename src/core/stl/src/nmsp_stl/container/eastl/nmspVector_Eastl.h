@@ -28,6 +28,8 @@ class Vector_Eastl : public EASTL_Vector<T, N, !IsSame<FALLBACK_ALLOC, NoFallbac
 public:
 	using Base = typename EASTL_Vector<T, N, !IsSame<FALLBACK_ALLOC, NoFallbackAllocator_Policy>, FALLBACK_ALLOC>::Type;
 
+	using SizeType = StlTraits::SizeType;
+
 public:
 	using ValueType = typename Base::value_type;
 	using Allocator = FALLBACK_ALLOC;
@@ -47,12 +49,16 @@ public:
 
 	explicit Vector_Eastl(Allocator& allocator);
 	Vector_Eastl(std::initializer_list<ValueType> ilist, const Allocator& allocator = Allocator{});
+	template<class... ARGS> Vector_Eastl(SizeType n, ARGS&&... args);
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
 	bool is_empty() const NMSP_NOEXCEPT;
 
 	Span_T<      T> span();
 	Span_T<const T> span() const;
+
+	ByteSpan_T byteSpan() const;
+
 
 private:
 
@@ -79,6 +85,17 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(std::initializer_list<ValueType
 	: Base(ilist, allocator)
 {}
 
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<class... ARGS> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(SizeType n, ARGS&&... args)
+{
+	reserve(n);
+	for (size_t i = 0; i < n; i++)
+	{
+		emplace_back(nmsp::forward<ARGS>(args)...);
+	}
+}
+
 //template<class T, size_t N, class FALLBACK_ALLOC> inline
 //Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(ViewType view, const Allocator& allocator)
 //	: Base(view, allocator)
@@ -102,6 +119,13 @@ Span_T<const T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span() const
 {
 	return Span_T<const T>{begin(), end()};
 	//return CViewType{begin(), end()};
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+ByteSpan_T 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::byteSpan() const
+{
+	return makeByteSpan(span());
 }
 
 #endif

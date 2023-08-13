@@ -32,7 +32,7 @@ void ImageIO_png::Reader::load(Image_T& image, ByteSpan_T data, ColorType expect
 	int size			= sCast<int>(data.size());
 	int channel			= 0;
 	int reqChannel		= ColorUtil::getColorElementCount(expectType);
-
+	
 	stbi__context s;
 	stbi__start_mem(&s, data.data(), size);
 	stbi__result_info ri;
@@ -47,6 +47,8 @@ void ImageIO_png::Reader::load(Image_T& image, ByteSpan_T data, ColorType expect
 
 	NMSP_ASSERT(channel != 0, "");
 	NMSP_ASSERT(p, "");
+
+	channel = reqChannel;
 
 	ColorType			outColorType		= ColorType::None;
 	ColorElementType	outColorElementType = ColorElementType::None;
@@ -77,6 +79,10 @@ void ImageIO_png::Reader::load(Image_T& image, ByteSpan_T data, ColorType expect
 		}
 
 		outColorType = TBM<ColorType>::make(outColorModel, outColorElementType, ColorCompressType::None);
+	}
+	else
+	{
+		outColorType = expectType;
 	}
 
 	NMSP_ASSERT(ri.channel_order == STBI_ORDER_RGB, "png error: unsupported format order");
