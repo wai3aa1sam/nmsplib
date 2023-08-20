@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nmsp_core_base/marco/nmsp_core_base_marco.h"
+#include "nmspInclude_Common.h"
 #include "nmspTypeTraits_Common.h"
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
@@ -30,8 +31,8 @@ template<class DST, class SRC> constexpr 	   DST reinCast(	  SRC& v)	{ return re
 template<class DST, class SRC> constexpr const DST reinCast(const SRC* v)	{ return reinterpret_cast<const DST>(v); }
 template<class DST, class SRC> constexpr const DST reinCast(const SRC& v)	{ return reinterpret_cast<const DST>(v); }
 
-template<class DST, class SRC> constexpr DST* constCast(const SRC* v) { return const_cast<DST>(v); }
-template<class DST, class SRC> constexpr DST& constCast(const SRC& v) { return const_cast<DST>(v); }
+template<class DST, class SRC> constexpr DST constCast(const SRC* v) { return const_cast<DST>(v); }
+template<class DST, class SRC> constexpr DST constCast(const SRC& v) { return const_cast<DST>(v); }
 
 template<class SRC> constexpr RemoveConst<SRC>* constCast(const SRC* v) { return const_cast<RemoveConst<SRC>*>(v); }
 template<class SRC> constexpr RemoveConst<SRC>& constCast(const SRC& v) { return const_cast<RemoveConst<SRC>&>(v); }

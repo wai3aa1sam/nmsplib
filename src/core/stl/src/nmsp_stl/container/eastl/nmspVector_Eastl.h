@@ -57,7 +57,8 @@ public:
 	Span_T<      T> span();
 	Span_T<const T> span() const;
 
-	ByteSpan_T byteSpan() const;
+	SizeType	size_in_bytes() const;
+	ByteSpan_T	byteSpan() const;
 
 
 private:
@@ -119,6 +120,13 @@ Span_T<const T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span() const
 {
 	return Span_T<const T>{begin(), end()};
 	//return CViewType{begin(), end()};
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::SizeType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::size_in_bytes() const
+{
+	return size() * sizeof(T);
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline

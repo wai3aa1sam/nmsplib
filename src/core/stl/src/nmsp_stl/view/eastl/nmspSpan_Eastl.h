@@ -38,10 +38,7 @@ public:
 	NMSP_CONSTEXPR Span_Eastl() = default;
 	NMSP_CONSTEXPR Span_Eastl(const Span_Eastl& rhs) = default;
 	NMSP_CONSTEXPR Span_Eastl(T* s, IndexType count);
-	NMSP_CONSTEXPR Span_Eastl(T* s);
 	NMSP_CONSTEXPR Span_Eastl(T* begin, T* end);
-
-
 	// iterator support
 	NMSP_CONSTEXPR Iter		begin()		const NMSP_NOEXCEPT;
 	NMSP_CONSTEXPR Iter		end()		const NMSP_NOEXCEPT;
@@ -66,13 +63,6 @@ public:
 template<class T> inline NMSP_CONSTEXPR
 Span_Eastl<T>::Span_Eastl(T* s, IndexType count)
 	: Base (s, count)
-{
-
-}
-
-template<class T> inline NMSP_CONSTEXPR
-Span_Eastl<T>::Span_Eastl(T* s)
-	: Base (s)
 {
 
 }
