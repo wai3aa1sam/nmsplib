@@ -3,6 +3,8 @@
 
 #include "nmspWorkerThread.h"
 
+#include "nmsp_job_system/nmspJobSystem.h"
+
 namespace nmsp {
 
 #if 0
@@ -23,11 +25,11 @@ ThreadPool_T::~ThreadPool_T()
 void ThreadPool_T::create(const CreateDesc& desc)
 {
 	NMSP_ASSERT(desc.workerCount <= OsTraits::logicalThreadCount());
-	auto workerCount = (desc.workerCount == 0) ? OsTraits::logicalThreadCount() : desc.workerCount;
+	auto workerCount = math::clamp(desc.workerCount, sCast<SizeType>(1), OsTraits::logicalThreadCount() - 1);
 	//workerCount = ( OsTraits::logicalThreadCount() - 1) / 2;
 	//workerCount = 1;
 
-	_typedThreadCount = desc.typedThreadCount;
+	_typedThreadCount = sCast<int>(desc.typedThreadCount);
 
 	try
 	{
@@ -60,6 +62,9 @@ void ThreadPool_T::create(const CreateDesc& desc)
 
 void ThreadPool_T::destroy()
 {
+	if (_workers.is_empty())
+		return;
+
 	_isDone = true;
 	for (auto& t : _workers)
 	{
@@ -144,6 +149,7 @@ void ThreadPool_T::run()
 
 bool ThreadPool_T::tryGetJob(JobHandle& job)
 {
+	#if 0
 	for (int i = 0; i < _workers.size(); i++)
 	{
 		if (_workers[i]->queue().try_pop(job))
@@ -152,10 +158,31 @@ bool ThreadPool_T::tryGetJob(JobHandle& job)
 		}
 	}
 	return false;
+
+	#else
+
+	auto stealAttempt = 0;
+
+	//auto& rnd	= threadStroage().random();
+	auto& rnd	= JobSystem::instance()->threadStorage().random();
+
+	while (stealAttempt < _workers.size())
+	{
+		auto target = rnd.range<SizeType>(0, workerCount() - 1);
+		(target != workerId()) ? _workers[target]->queue().try_pop(job) : nullptr;
+		if (job)
+			return true;
+		stealAttempt++;
+	}
+	return false;
+
+	#endif // 0
 }
 
 bool ThreadPool_T::trySteal(WorkerThread* worker, JobHandle& job)
 {
+	#if 0
+
 	auto stealAttempt = 0;
 
 	auto& rnd	= threadStroage().random();
@@ -169,6 +196,12 @@ bool ThreadPool_T::trySteal(WorkerThread* worker, JobHandle& job)
 		stealAttempt++;
 	}
 	return false;
+
+	#else
+
+	return tryGetJob(job);
+
+	#endif // 0
 }
 
 void ThreadPool_T::complete(JobHandle job)
@@ -201,15 +234,18 @@ void ThreadPool_T::complete(JobHandle job)
 
 void ThreadPool_T::_submit(JobHandle job)
 {
-	_workers[_nextIndex]->submit(job);
 	_nextIndex = getNextIndex(_nextIndex);
+	_workers[_nextIndex]->submit(job);
 }
 
 int ThreadPool_T::getNextIndex(int i)
 {
-	i++;
+	/*i++;
 	if (i >= _workers.size() || i < 0)
-		i = 0;
+		i = 0;*/
+	// only JobSystem has all threadStorage, calling ThreadPool_T::threadStorage() will just get the worker's one
+	int nWorkers = sCast<int>(workerCount()) - 1; // math::clamp(sCast<int>(workerCount()) - 1, 0, nWorkers);
+	i = JobSystem::instance()->threadStorage().random().range(0, nWorkers);
 	return i;
 }
 

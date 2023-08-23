@@ -18,8 +18,8 @@ public:
 	using SizeType			= JobSystemTraits::SizeType;
 
 public:
-	SizeType threadTypeCount = 1;
-	SizeType workerCount = 0;
+	SizeType threadTypeCount	= 1;
+	SizeType workerCount		= JobSystemTraits::logicalThreadCount();
 };
 
 class JobSystem_T : public Singleton_T<JobSystem_T>

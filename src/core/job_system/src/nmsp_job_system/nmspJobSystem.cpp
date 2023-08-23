@@ -37,7 +37,7 @@ void JobSystem_T::create(const CreateDesc& cDesc)
 
 	auto total_thread = OsTraits::logicalThreadCount();
 	_typedThreadCount = threadTypeCount;
-	auto nWorkers = workerCount > 0 ? workerCount : total_thread - _typedThreadCount;
+	auto nWorkers = threadTypeCount > 1 ? total_thread - threadTypeCount : workerCount;
 	NMSP_ASSERT(nWorkers >= 0 && nWorkers<= OsTraits::logicalThreadCount(), "workerCount + threadTypeCount > logicalThreadCount");
 
 	if (!JobSystemTraits::isMainThread())
@@ -67,6 +67,11 @@ void JobSystem_T::destroy()
 
 void JobSystem_T::waitForComplete(JobHandle job)
 {
+	NMSP_PROFILE_SCOPED();
+
+	if (!job)
+		return;
+
 	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
 	auto* jsys = this;
 	auto& threadPool = this->_threadPool;
@@ -76,7 +81,7 @@ void JobSystem_T::waitForComplete(JobHandle job)
 	{
 		JobHandle tmp = nullptr;
 
-		if (threadPool.tryGetJob(tmp))
+		if (true && threadPool.tryGetJob(tmp))
 		{
 			threadPool.execute(tmp);
 		}
@@ -106,6 +111,8 @@ void JobSystem_T::submit(JobHandle job)
 
 void JobSystem_T::_internal_nextFrame()
 {
+	NMSP_PROFILE_SCOPED();
+
 	NMSP_ASSERT(JobSystemTraits::isMainThread());
 
 	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER

@@ -54,8 +54,15 @@ void* WorkerThread_T::onRoutine()
 
 		for (;;)
 		{
+			if (false)
+			{
+				sleep();
+				continue;
+			}
+
 			while (job)
 			{
+
 				wake();
 
 				debugLog("=== thread {} execute job", localId());
@@ -67,7 +74,7 @@ void* WorkerThread_T::onRoutine()
 
 			if (!_tryGetJob(job))
 			{
-				//	log("=== thread {} end, queue count {}", threadLocalId(), _jobs.size());
+				log("=== worker thread {} end", threadPool()->workerId());
 				break;
 			}
 		}
@@ -116,7 +123,7 @@ bool WorkerThread_T::_tryGetJob(JobHandle& job)
 
 	#endif // 0
 
-	if (_threadPool->_isDone && !_jobs.try_pop(job))
+	if (threadPool()->_isDone && !_jobs.try_pop(job))
 	{
 		return false;
 	}
@@ -128,6 +135,24 @@ WorkerThread_T::ThreadStorage&	WorkerThread_T::threadStorage()
 {
 	return _threadPool->threadStroages(JobSystemTraits::threadLocalId()); 
 }
+
+void WorkerThread_T::wake() { NMSP_PROFILE_SCOPED(); resetSleepCount(); }
+
+void WorkerThread_T::sleep()
+{
+	NMSP_PROFILE_SCOPED();
+
+	if (shouldSleep())
+	{
+		OsUtil::sleep_ms(JobSystemTraits::s_kIdleSleepTimeMS);
+	}
+	else
+	{
+		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
+		addSleepCount();
+	}
+}
+
 
 #endif
 

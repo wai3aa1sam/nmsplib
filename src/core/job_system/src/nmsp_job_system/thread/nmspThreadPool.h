@@ -55,7 +55,7 @@ public:
 	SizeType workerCount() const;
 	SizeType threadCount() const;
 
-	SizeType workerId(int threadLocalId = JobSystemTraits::threadLocalId()) const;
+	int workerId(int threadLocalId = JobSystemTraits::threadLocalId()) const;
 	ThreadStorage& threadStroages(int threadLocalId);
 	ThreadStorage& threadStroage();
 	
@@ -85,7 +85,7 @@ private:
 
 	int _nfsNextIndex = 0;
 
-	SizeType _typedThreadCount = 0;
+	int _typedThreadCount = 0;
 };
 
 #endif
@@ -97,15 +97,17 @@ private:
 #if 1
 
 inline
-ThreadPool_T::SizeType ThreadPool_T::workerId(int threadLocalId) const
+int 
+ThreadPool_T::workerId(int threadLocalId) const
 {
 	return threadLocalId - _typedThreadCount;
-	//return math::clamp(threadLocalId - _typedThreadCount, sCast<SizeType>(0), _threadStorages.size() - 1);
+	//return math::clamp(sCast<int>(threadLocalId - _typedThreadCount), 0, sCast<int>(_threadStorages.size() - 1));
 }
 
 inline
 ThreadPool_T::ThreadStorage& ThreadPool_T::threadStroage()
 {
+	NMSP_ASSERT(!JobSystemTraits::isMainThread());
 	return threadStroages(JobSystemTraits::threadLocalId());
 }
 

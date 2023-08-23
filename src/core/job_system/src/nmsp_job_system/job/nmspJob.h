@@ -74,9 +74,9 @@ public:
 	JobHandle setName(const char* name);
 	const char* name() const;
 
-protected:
 	void setParent(JobHandle parent);
 
+protected:
 	void	_runAfter(JobHandle job);
 	void	_runBefore(JobHandle job);
 	void*	_allocate(size_t n);

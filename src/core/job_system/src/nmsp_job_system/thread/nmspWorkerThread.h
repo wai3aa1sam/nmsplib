@@ -89,23 +89,6 @@ WorkerThread_T::CreateDesc WorkerThread_T::makeCDesc()
 	return CreateDesc{};
 }
 
-inline 
-void WorkerThread_T::wake() { resetSleepCount(); }
-
-inline
-void WorkerThread_T::sleep()
-{
-	if (shouldSleep())
-	{
-		OsUtil::sleep_ms(JobSystemTraits::s_kIdleSleepTimeMS);
-	}
-	else
-	{
-		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
-		addSleepCount();
-	}
-}
-
 inline WorkerThread_T::JobQueue& WorkerThread_T::queue() { return _jobs; }
 
 inline void WorkerThread_T::resetSleepCount()	{ _sleepCount = 0; }
