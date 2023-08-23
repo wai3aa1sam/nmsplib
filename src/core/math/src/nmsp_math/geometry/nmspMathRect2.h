@@ -21,8 +21,9 @@ struct Rect2_T
 {
 public:
 	using ElementType = T;
-	using Vec2 = Vec2_T<T>;
-    
+	using Vec2		= Vec2_T<T>;
+	using Tuple2	= Tuple2_T<T>;
+
 public:
 	static const size_t s_kElementCount = 4;
 
@@ -30,17 +31,17 @@ public:
 	union
 	{
 		struct { T x, y, w, h; };
-		struct { Vec2 pos, size; };
+		struct { Tuple2 pos, size; };
 		T data[s_kElementCount];
 	};
 
 public:
-	Rect2_T() = default;
+	Rect2_T() : pos(), size() {};
 	Rect2_T(T x_, T y_, T w_, T h_);
-	Rect2_T(const Vec2& pos_, const Vec2& size_);
+	Rect2_T(const Tuple2& pos_, const Tuple2& size_);
 
 	void set(T x_, T y_, T w_, T h_);
-	void set(const Vec2& pos_, const Vec2& size_);
+	void set(const Tuple2& pos_, const Tuple2& size_);
 
 	T xMin() const;
 	T yMin() const;
@@ -48,6 +49,42 @@ public:
 	T xMax() const;
 	T yMax() const;
 };
+
+template<class T> inline
+math::Rect2_T<T> toRect2_wh(const Vec2_T<T>& vec2)
+{
+	math::Rect2_T<T> o;
+	o.w = vec2.x;
+	o.h = vec2.y;
+	return o;
+}
+
+template<class T> inline
+math::Rect2_T<T> toRect2_wh(const Tuple2_T<T>& tuple2)
+{
+	math::Rect2_T<T> o;
+	o.w = tuple2.x;
+	o.h = tuple2.y;
+	return o;
+}
+
+template<class T> inline
+math::Rect2_T<T> toRect2_xy(const Vec2_T<T>& vec2)
+{
+	math::Rect2_T<T> o;
+	o.x = vec2.x;
+	o.y = vec2.y;
+	return o;
+}
+
+template<class T> inline
+math::Rect2_T<T> toRect2_xy(const Tuple2_T<T>& tuple2)
+{
+	math::Rect2_T<T> o;
+	o.x = tuple2.x;
+	o.y = tuple2.y;
+	return o;
+}
 
 #endif
 
@@ -64,7 +101,7 @@ Rect2_T<T>::Rect2_T(T x_, T y_, T w_, T h_)
 }
 
 template<class T> inline 
-Rect2_T<T>::Rect2_T(const Vec2& pos_, const Vec2& size_)
+Rect2_T<T>::Rect2_T(const Tuple2& pos_, const Tuple2& size_)
 {
 	set(pos_, size_);
 }
@@ -79,7 +116,7 @@ void Rect2_T<T>::set(T x_, T y_, T w_, T h_)
 }
 
 template<class T> inline 
-void Rect2_T<T>::set(const Vec2& pos_, const Vec2& size_)
+void Rect2_T<T>::set(const Tuple2& pos_, const Tuple2& size_)
 {
 	pos		= pos_;
 	size	= size_;

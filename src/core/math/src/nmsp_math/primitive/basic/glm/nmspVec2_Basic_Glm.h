@@ -73,7 +73,7 @@ public:
 	template<class T2, class DATA2> static Vec2 s_cast(const Vec2_T<T2, DATA2>& rhs);
 
 public:
-	Vec2() = default;
+	NMSP_INLINE Vec2() = default;
 	Vec2(T x_, T y_);
 	Vec2(const Tuple2& r);
 	template<class T2, class DATA2> explicit Vec2(const Vec2_T<T2, DATA2>& rhs);
@@ -99,6 +99,8 @@ public:
 	NMSP_NODISCARD Vec2		lerp	(const Vec2& b, T t)								const;
 	NMSP_NODISCARD Vec2		slerp	(const Vec2& b, T t)								const;
 	NMSP_NODISCARD Vec2		rotateTo(const Vec2& target, T maxRadDelta, T maxMagDelta)	const;
+
+	NMSP_NODISCARD Tuple2	toTuple2()	const;
 
 	T	operator[](IndexType i) const;
 	T&	operator[](IndexType i);
@@ -325,6 +327,13 @@ typename Vec2_Basic_Glm<T, DATA>::Vec2	Vec2_Basic_Glm<T, DATA>::rotateTo		(const
 {
 	_notYetSupported()
 		return {};
+}
+
+template<class T, class DATA> inline
+typename Vec2_Basic_Glm<T, DATA>::Tuple2
+Vec2_Basic_Glm<T, DATA>::toTuple2()	const
+{
+	return Tuple2{x, y};
 }
 
 template<class T, class DATA> inline

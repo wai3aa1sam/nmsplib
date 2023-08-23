@@ -23,8 +23,7 @@
 	#define GLM_FORCE_ALIGNED
 	#define GLM_FORCE_SSE2
 
-	#pragma warning( push )
-	#pragma warning( disable : 4324)
+	NMSP_DISABLE_ALL_WARNINGS();
 
 	#include <glm/glm.hpp>
 	#include <glm/gtc/matrix_transform.hpp>
@@ -37,6 +36,6 @@
 	#include <glm/gtc/matrix_transform.hpp>
 	#include <glm/gtc/type_ptr.hpp>
 
-	#pragma warning( pop )
+	NMSP_RESTORE_ALL_WARNINGS();
 
 #endif // 1

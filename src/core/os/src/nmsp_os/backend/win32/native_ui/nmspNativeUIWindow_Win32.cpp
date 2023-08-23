@@ -126,7 +126,7 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc_Base& cd)
 	if (cDesc.isCenterToScreen) 
 	{
 		auto screenSize = Vec2f((float)GetSystemMetrics(SM_CXSCREEN), (float)GetSystemMetrics(SM_CYSCREEN));
-		rect.pos = (screenSize - rect.size) / 2;
+		rect.pos = ((screenSize - rect.size) / 2).toTuple2();
 	}
 
 	_wndHnd = ::CreateWindowEx(dwExStyle, clsName, clsName, dwStyle,
