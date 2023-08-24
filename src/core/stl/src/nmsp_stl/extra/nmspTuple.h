@@ -32,6 +32,8 @@ struct TupleElementT
 };
 template<size_t I, class TUPLE> using TupleElement = typename TupleElementT<I, TUPLE>::Type;
 
+
+
 template<class... ARGS>
 class Tuple_T : public std::tuple<ARGS...>
 {
@@ -87,6 +89,11 @@ private:
 	}
 };
 
+template<class... ARGS_> constexpr
+Tuple_T<ARGS_...> makeTuple(ARGS_&&... args)
+{
+	return Tuple_T<ARGS_...>(nmsp::forward<ARGS_>(args)...);
+}
 
 //inline size_t tupleSize()
 
@@ -116,5 +123,13 @@ EnableIf<I < sizeof...(ARGS)> tupleLoop(FUNC func, Tuple_T<ARGS...>& t)
 
 
 #endif
+
+
+template<size_t I, class... ARGS>
+struct GetElementT
+{
+	using Type = typename std::tuple_element<I, typename Tuple_T<ARGS...> >::type;
+};
+template<size_t I, class... ARGS> using GetElement = typename GetElementT<I, ARGS...>::Type;
 
 }

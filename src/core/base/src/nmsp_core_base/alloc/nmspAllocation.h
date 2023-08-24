@@ -7,8 +7,6 @@
 #endif // 0
 #if 1
 
-#define NMSP_CUSTOM_ALLOC 1
-
 #define NMSP_ALLOC_ALIGNED(N, ALIGN)	::nmsp::nmsp_alloc(N, ALIGN)
 #define NMSP_FREE_ALIGNED(PTR, ...)		::nmsp::nmsp_free(PTR, __VA_ARGS__)
 
