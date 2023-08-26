@@ -27,7 +27,7 @@ public:
 	bool		try_steal	(T& o);
 
 	SizeType	size		() const;
-	bool		is_empty	() const;
+	bool		isEmpty		() const;
 
 private:
 	mutable Queue _queue;
@@ -66,9 +66,9 @@ AtmStealQueue_T<T, QUEUE>::size() const
 }
 
 template<class T, class QUEUE> inline
-bool AtmStealQueue_T<T, QUEUE>::is_empty() const
+bool AtmStealQueue_T<T, QUEUE>::isEmpty() const
 {
-	return _queue.is_empty();
+	return _queue.isEmpty();
 }
 
 #endif

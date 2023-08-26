@@ -20,7 +20,8 @@ public:
 	Util_Win32() = delete;
 
 public:
-	static Rect2f toRect2f(const ::RECT& rect);
+	static Rect2f	toRect2f(const ::RECT& rect);
+	static u64		toU64(const LARGE_INTEGER& v);
 
 	template<class... ARGS>
 	static void throwIf(bool cond, const char* fmt = "", ARGS&&... args);
@@ -46,7 +47,7 @@ void Util_Win32::throwIf(bool cond, const char* fmt, ARGS&&... args)
 	{
 		_NMSP_LOG(fmt, nmsp::forward<ARGS>(args)...);
 		auto msg = getLastErrorMsg();
-		_NMSP_LOG("--- Error: win32 - {}", msg);
+		_NMSP_LOG("--- Error: win32 - {}", msg); std::cout << std::flush;
 		//nmsp::throwIf(cond, fmt, nmsp::forward<ARGS>(args)...);
 	}
 }

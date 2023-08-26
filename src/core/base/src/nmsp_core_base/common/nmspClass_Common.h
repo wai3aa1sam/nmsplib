@@ -68,37 +68,43 @@ public:
 #endif // 0
 #if 1
 
-template<class FUNC_BEGIN, class FUNC_END>
+template<class BEGIN_FUNC, class END_FUNC>
 class ScopedAction : public NonCopyable
 {
 public:
-	ScopedAction(FUNC_BEGIN&& funcBeg, FUNC_END&& funcEnd)
+	using BeginFuncType = Decay<BEGIN_FUNC>;
+	using EndFuncType	= Decay<END_FUNC>;
+
+public:
+	ScopedAction(BEGIN_FUNC&& funcBeg, END_FUNC&& funcEnd)
+		: _end(forward<EndFuncType>(funcEnd))
 	{
-		_end = forward<FUNC_END>(funcEnd);
 		funcBeg();
 	}
 	~ScopedAction()
 	{
 		_end();
 	}
-	
+
 private:
-	FUNC_END	_end;
+	EndFuncType	_end;
 };
-template<class FUNC_BEGIN, class FUNC_END>
-NMSP_NODISCARD ScopedAction<FUNC_BEGIN, FUNC_END> makeScopedAction(FUNC_BEGIN&& funcBeg, FUNC_END&& funcEnd)
+
+template<class BEGIN_FUNC, class END_FUNC>
+NMSP_NODISCARD auto makeScopedAction(BEGIN_FUNC&& funcBeg, END_FUNC&& funcEnd)
 {
-	return ScopedAction{ funcBeg, funcEnd };
+	return ScopedAction { nmsp::forward<BEGIN_FUNC>(funcBeg), nmsp::forward<END_FUNC>(funcEnd) };
 }
 
-template<class FUNC_END>
+template<class END_FUNC>
 class LeaveScopeAction : public NonCopyable
 {
 public:
-	using FuncLeaveType = Decay<FUNC_END>;
+	using FuncLeaveType = Decay<END_FUNC>;
 
-	LeaveScopeAction(FUNC_END&& funcEnd)
-		: _end(funcEnd)
+public:
+	LeaveScopeAction(END_FUNC&& funcEnd)
+		: _end(forward<FuncLeaveType>(funcEnd))
 	{
 		//static_assert(IsFunction<FuncLeaveType>, "");
 	}
@@ -110,10 +116,11 @@ public:
 private:
 	FuncLeaveType _end;
 };
-template<class FUNC_END>
-NMSP_NODISCARD LeaveScopeAction<FUNC_END> makeLeaveScopeAction(FUNC_END&& funcEnd)
+
+template<class END_FUNC>
+NMSP_NODISCARD LeaveScopeAction<END_FUNC> makeLeaveScopeAction(END_FUNC&& funcEnd)
 {
-	return LeaveScopeAction{ forward<FUNC_END>(funcEnd) };
+	return LeaveScopeAction { nmsp::forward<END_FUNC>(funcEnd) };
 }
 
 #endif

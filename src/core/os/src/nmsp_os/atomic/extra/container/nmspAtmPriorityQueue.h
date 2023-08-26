@@ -21,6 +21,8 @@ public:
 	void push(const T& val, Priority pri = static_cast<Priority>(0) );
 	bool try_pop(T& o);
 
+	bool isEmpty() const;
+
 private:
 	QUEUE _queues[s_kPriorityCount];
 };
@@ -48,6 +50,17 @@ bool AtmPriorityQueue_T<T, N_PRIORITY, PRIORITY, QUEUE>::try_pop(T& o)
 			return true;
 	}
 	return false;
+}
+
+template<class T, size_t N_PRIORITY, class PRIORITY, class QUEUE> inline
+bool AtmPriorityQueue_T<T, N_PRIORITY, PRIORITY, QUEUE>::isEmpty() const
+{
+	for (size_t i = 0; i < s_kPriorityCount; i++)
+	{
+		if (!_queues[i].isEmpty())
+			return false;
+	}
+	return true;
 }
 
 #endif

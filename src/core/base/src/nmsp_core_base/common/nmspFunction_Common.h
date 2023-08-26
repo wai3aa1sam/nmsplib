@@ -99,7 +99,13 @@ inline void _log()
 template<class... ARGS> inline
 void _log(const char* format, ARGS&&... args)
 {
-	std::cout << fmtAs_T<std::string>(format, nmsp::forward<ARGS>(args)...) << "\n";
+	std::cout << fmtAs_T<std::string>(format, nmsp::forward<ARGS>(args)...) << "\n"/* << std::flush*/;
+}
+inline
+void 
+_flushLog()
+{
+	std::cout << std::flush;
 }
 
 #endif

@@ -28,6 +28,7 @@ Error_T::Error_T(const SrcLoc& loc, const char* msg)
 	: Base(loc)
 {
 	_NMSP_LOG("{}: {}", loc, msg);
+	_flushLog();
 }
 
 #endif

@@ -87,6 +87,11 @@ public:
 		return _ftr->operator()(std::forward<PARAMS>(params)...);
 	}
 
+	RET operator()(PARAMS&&... params) const
+	{
+		return _ftr->operator()(std::forward<PARAMS>(params)...);
+	}
+
 	explicit operator bool() const 
 	{
 		return _ftr != nullptr;

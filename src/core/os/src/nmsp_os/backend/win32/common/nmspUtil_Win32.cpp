@@ -14,6 +14,11 @@ typename Util_Win32::Rect2f Util_Win32::toRect2f(const ::RECT& rect)
 	return Rect2f{ sCast<T>(rect.left), sCast<T>(rect.top), sCast<T>(rect.right - rect.left), sCast<T>(rect.bottom - rect.top)};
 }
 
+u64 
+Util_Win32::toU64(const LARGE_INTEGER& v) 
+{
+	return sCast<u64>(v.HighPart) << 32 | v.LowPart;
+}
 
 StringT Util_Win32::getLastErrorMsg()
 {

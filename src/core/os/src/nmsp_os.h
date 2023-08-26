@@ -2,6 +2,8 @@
 
 #include "nmsp_os/common/nmsp_os_common.h"
 
+#include "nmsp_os/utlity/nmspHiResTimer.h"
+
 #include "nmsp_os/native_ui/nmspNativeUI.h"
 
 #include "nmsp_os/file/nmspPath.h"

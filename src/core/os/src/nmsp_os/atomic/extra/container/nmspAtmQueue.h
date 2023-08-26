@@ -83,8 +83,8 @@ public:
 	void push(const T& data);
 	bool try_pop(T& o);
 
-	SizeType	size	()	const;
-	bool		is_empty()	const;
+	SizeType	size   ()	const;
+	bool		isEmpty()	const;
 
 private:
 	Queue _queue;
@@ -119,7 +119,7 @@ AtmQueue_Mc<T, N, ALLOC, TRAITS>::size() const
 }
 
 template<class T, size_t N, class ALLOC, class TRAITS>  inline
-bool		AtmQueue_Mc<T, N, ALLOC, TRAITS>::is_empty() const
+bool		AtmQueue_Mc<T, N, ALLOC, TRAITS>::isEmpty() const
 {
 	return size() == 0;
 }
