@@ -12,6 +12,15 @@ namespace nmsp {
 
 JobSystem_T* Singleton_T<JobSystem_T>::s_instance = nullptr;
 
+JobSystem_T::JobSystem_T()
+{
+
+#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	_NMSP_LOG("Warning: should test performance when the job count is low, the sleep / wake will overlap when it has job but get steal by main thread");
+#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
+
+}
+
 JobSystem_T::~JobSystem_T()
 {
 	destroy();
@@ -40,10 +49,8 @@ void JobSystem_T::create(const CreateDesc& cDesc)
 	auto nWorkers = threadTypeCount > 1 ? total_thread - threadTypeCount : workerCount;
 	NMSP_ASSERT(nWorkers >= 0 && nWorkers<= OsTraits::logicalThreadCount(), "workerCount + threadTypeCount > logicalThreadCount");
 
-	if (!JobSystemTraits::isMainThread())
-	{
-		JobSystemTraits::setMainThread();
-	}
+	JobSystemTraits::resetThreadLocalId();
+	JobSystemTraits::setMainThread();
 
 	_createTypedThreads();
 

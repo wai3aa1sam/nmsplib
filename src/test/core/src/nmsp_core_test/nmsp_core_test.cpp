@@ -19,7 +19,7 @@ void run_temp_test()
 	//NMSP_RUN_TEST(test_Path);
 	//NMSP_RUN_TEST(test_Atomic);
 	//NMSP_RUN_TEST(test_Process);
-	NMSP_RUN_TEST(test_Lexer);
+	//NMSP_RUN_TEST(test_Lexer);
 
 	//NMSP_RUN_TEST(test_StrUtil);
 
@@ -28,6 +28,7 @@ void run_temp_test()
 	//NMSP_RUN_TEST(test_Json);
 
 	//NMSP_RUN_TEST(test_JobSystem);
+	NMSP_RUN_TEST(test_JobSystem_OnBegin);
 }
 
 // TODO: add a test manager class, then no need add to here

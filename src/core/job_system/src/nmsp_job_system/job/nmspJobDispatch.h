@@ -1,9 +1,12 @@
 #pragma once
 
 #include "nmsp_job_system/common/nmsp_job_system_common.h"
+#include "nmspJob.h"
 
+namespace nmsp 
+{
 
-namespace nmsp {
+class JobSystem_T;
 
 class Job_Base;			/* void execute(); */
 class JobFor_Base;		/* void execute(const JobArgs& args); */
@@ -17,7 +20,6 @@ class JobParFor_Base;	/* void execute(const JobArgs& args); */
 	E(_kCount,) \
 //---
 NMSP_ENUM_CLASS(JobDispatchType, u8);
-
 
 
 #if 0
@@ -34,9 +36,9 @@ public:
 public:
 	JobDispatcher();
 
-	template<bool IS_DELAY, class T, class... DEPEND_ON> static JobHandle _dispatch(T* obj, u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
+	template<bool IS_PREPARE, class T, class... DEPEND_ON> static JobHandle _dispatch(T* obj, u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
 	static JobHandle _dispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize);
-	template<class... DEPEND_ON> static JobHandle _delayDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
+	template<class... DEPEND_ON> static JobHandle _prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
 
 	template<class K> static void static_check();
 };
@@ -48,8 +50,29 @@ class JobDispatch_Base : public NonCopyable
 public:
 
 public:
-	JobDispatch_Base() = default;
+	JobDispatch_Base() 
+	{
+#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
+		_hasExecutedOnBegin = false;
+		_hasExecutedOnEnd	= false;
+#endif
+	};
 	virtual ~JobDispatch_Base() = default;
+
+#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
+	virtual void onBegin()	{ NMSP_ASSERT(!_hasExecutedOnBegin, "");	_hasExecutedOnBegin = true; };
+	virtual void onEnd()	{ NMSP_ASSERT(!_hasExecutedOnEnd, "");		_hasExecutedOnEnd	= true; };
+#else
+	virtual void onBegin()	{};
+	virtual void onEnd()	{};
+#endif
+	
+protected:
+
+#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
+	volatile bool _hasExecutedOnBegin;
+	volatile bool _hasExecutedOnEnd;
+#endif // NMSP_DEBUG
 
 };
 
@@ -57,6 +80,7 @@ class Job_Base : public JobDispatch_Base
 { 
 public:
 	using This = Job_Base;
+	using Base = JobDispatch_Base;
 
 	using JobHandle = JobHandle_T;
 	using JobSystem = JobSystem_T;
@@ -77,9 +101,9 @@ public:
 	}
 
 	template<class... DEPEND_ON>
-	JobHandle delayDispatch(JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	JobHandle prepareDispatch(JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		return delayDispatch(this, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return prepareDispatch(this, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 
 private:
@@ -89,7 +113,7 @@ private:
 	}
 
 	template<class... DEPEND_ON>
-	static JobHandle delayDispatch(This* obj, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	static JobHandle prepareDispatch(This* obj, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
 		return JobDispatcher::_dispatch<true>(obj, 1, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
@@ -99,6 +123,7 @@ class JobFor_Base : public JobDispatch_Base
 { 
 public:
 	using This = JobFor_Base;
+	using Base = JobDispatch_Base;
 
 	using JobHandle = JobHandle_T;
 	using JobSystem = JobSystem_T;
@@ -119,9 +144,9 @@ public:
 	}
 
 	template<class... DEPEND_ON>
-	JobHandle delayDispatch(u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	JobHandle prepareDispatch(u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		return delayDispatch(this, loopCount, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return prepareDispatch(this, loopCount, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 
 public:
@@ -131,7 +156,7 @@ public:
 	}
 
 	template<class... DEPEND_ON>
-	static JobHandle delayDispatch(This* obj, u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	static JobHandle prepareDispatch(This* obj, u32 loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
 		return JobDispatcher::_dispatch<true>(obj, loopCount, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
@@ -141,6 +166,7 @@ class JobParFor_Base : public JobDispatch_Base
 { 
 public:
 	using This = JobParFor_Base;
+	using Base = JobDispatch_Base;
 
 	using JobHandle = JobHandle_T;
 	using JobSystem = JobSystem_T;
@@ -158,9 +184,9 @@ public:
 	}
 
 	template<class... DEPEND_ON>
-	JobHandle delayDispatch(u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	JobHandle prepareDispatch(u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		return delayDispatch(this, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return prepareDispatch(this, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 
 public:
@@ -170,9 +196,9 @@ public:
 	}
 
 	template<class... DEPEND_ON>
-	static JobHandle delayDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	static JobHandle prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		return JobDispatcher::_delayDispatch(obj, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return JobDispatcher::_prepareDispatch(obj, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 };
 
@@ -190,7 +216,7 @@ JobDispatcher::JobDispatcher()
 	//NMSP_S_ASSERT(IsBaseOf<NMSP_ARGS(JobParFor_Base, T)>,	"T is not base of JobParFor_Base");	// TYPE 2
 }
 
-template<bool IS_DELAY, class T, class... DEPEND_ON> inline
+template<bool IS_PREPARE, class T, class... DEPEND_ON> inline
 typename JobDispatcher::JobHandle JobDispatcher::_dispatch(T* obj, u32 loopCount, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 {
 	//static_assert(IsBaseOf<Job_Base<T>, T> || IsBaseOf<JobFor_Base<T>, T>, "T is not base of Job_Base or JobFor_Base");
@@ -223,10 +249,10 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(T* obj, u32 loopCount
 		info.batchOffset = 0 * 0;
 		info.batchEnd	 = loopCount;
 
-		job->init(task, info, nullptr);
+		job->init(task, info, obj, nullptr);
 	}
 
-	if constexpr (!IS_DELAY)
+	if constexpr (!IS_PREPARE)
 	{
 		JobSystem::submit(job);
 	}
@@ -253,7 +279,9 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(JobParFor_Base* obj, 
 	JobFunction task = [obj](const JobArgs& args) { return obj->execute(args); };
 
 	JobInfo info;
-	JobHandle parent = nullptr;
+	JobHandle parent = JobSystem::allocateJob();
+	parent->setEmpty();
+	parent->setDispatchJob(obj);
 
 	for (u32 iBatchGroup = 0; iBatchGroup < nBatchGroup; iBatchGroup++)
 	{
@@ -263,18 +291,21 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(JobParFor_Base* obj, 
 		info.batchOffset = iBatchGroup * batchSize;
 		info.batchEnd	 = math::min(info.batchOffset + batchSize, loopCount);
 
-		job->init(task, info, parent);
+		job->init(task, info, obj, parent);
 
-		if (iBatchGroup == 0)
-			parent = job;
+		/*if (iBatchGroup == 0)
+			parent = job;*/
 
 		JobSystem::submit(job);
 	}
+
+	JobSystem::submit(parent);
+
 	return parent;
 }
 
 template<class... DEPEND_ON> inline
-typename JobDispatcher::JobHandle JobDispatcher::_delayDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn, DEPEND_ON&&... moreDeps)
+typename JobDispatcher::JobHandle JobDispatcher::_prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 {
 	if (loopCount == 0 || batchSize == 0)
 		return nullptr;
@@ -296,7 +327,7 @@ typename JobDispatcher::JobHandle JobDispatcher::_delayDispatch(JobParFor_Base* 
 			info.batchOffset = iBatchGroup * batchSize;
 			info.batchEnd	 = math::min(info.batchOffset + batchSize, loopCount);
 
-			job->init(task, info, spwanJob);
+			job->init(task, info, obj, spwanJob);
 
 			JobSystem::submit(job);
 		}
@@ -304,7 +335,7 @@ typename JobDispatcher::JobHandle JobDispatcher::_delayDispatch(JobParFor_Base* 
 	{
 		JobInfo info;
 		info.batchEnd = 1;
-		spwanJob->init(spwanTask, info);
+		spwanJob->init(spwanTask, info, obj, nullptr);
 	}
 
 	if (dependOn)

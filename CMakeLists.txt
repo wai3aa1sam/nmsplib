@@ -21,6 +21,7 @@ project(${project_name})
 my_set_opt(${project_namespace_marco}_ENABLE_PROFILER           1)
 my_set_opt(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER  0)
 my_set_opt(${project_namespace_marco}_ENABLE_SANITIZER          0)
+my_set_opt(${project_namespace_marco}_CUSTOM_ALLOC              0)
 
 my_only_one_opt_could_on_3( ${project_namespace_marco}_ENABLE_PROFILER
                             ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER

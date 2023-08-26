@@ -5,6 +5,8 @@
 
 #include "nmsp_job_system/nmspJobSystem.h"
 
+#include "nmsp_job_system/job/nmspJobDispatch.h"
+
 namespace nmsp {
 
 #if 0
@@ -127,6 +129,11 @@ void ThreadPool_T::execute(JobHandle job)
 	JobArgs args;
 	args.batchID = info.batchID;
 
+	if (!job->parent())
+	{
+		job->dispatchJob()->onBegin();
+	}
+
 	for (u32 i = info.batchOffset; i < info.batchEnd; ++i)
 	{
 		args.loopIndex  = i;
@@ -226,6 +233,11 @@ void ThreadPool_T::complete(JobHandle job)
 		if (parent)
 		{
 			complete(parent);
+		}
+		
+		if (!job->parent())
+		{
+			job->dispatchJob()->onEnd();
 		}
 
 		job->_storage.dep.runAfterThis_for_each_ifNoDeps(*this, &ThreadPool_T::submit);

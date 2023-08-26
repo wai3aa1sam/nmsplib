@@ -51,7 +51,7 @@ public:
 	static void submit(JobHandle job);
 
 public:
-	JobSystem_T() = default;
+	JobSystem_T();
 	~JobSystem_T();
 
 	void create(int workerCount, int threadTypeCount = 1);

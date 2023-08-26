@@ -6,7 +6,10 @@
 #include <nmsp_stl/allocator/nmspLinearAllocator.h>
 #include <nmsp_stl/extra/nmspPaddedData.h>
 
-namespace nmsp {
+namespace nmsp 
+{
+
+class JobDispatch_Base;
 
 #if 0
 #pragma mark --- Job_T-Decl ---
@@ -81,10 +84,16 @@ protected:
 	void	_runBefore(JobHandle job);
 	void*	_allocate(size_t n);
 
+	void setDispatchJob(JobDispatch_Base* dispatchJob);
+
+	JobHandle			parent();
+	JobDispatch_Base*	dispatchJob();
+
 private:
 	void clear();
 
 	void init(const Task& func, const Info& info, JobHandle parent = nullptr);
+	void init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent);
 
 	void _setInfo(const Info& info);
 
@@ -127,8 +136,9 @@ private:
 
 		// concept of parent and DepData::runAfterThis is a little bit different.
 		// parent may run before the child but DepData::runAfterThis must run after this job
-		JobHandle	_parent = nullptr;		
-		Atm_T<int>	_jobRemainCount = 1;
+		JobHandle			_parent			= nullptr;		
+		JobDispatch_Base*	_dispatchJob	= nullptr;
+		Atm_T<int>			_jobRemainCount = 1;
 
 		#if NMSP_JOB_SYSTEM_DEBUG_CHECK
 		Atm_T<bool>		_isAllowAddDeps = true;

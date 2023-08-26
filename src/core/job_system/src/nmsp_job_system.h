@@ -5,3 +5,4 @@
 #include "nmsp_job_system/nmspJobSystem.h"
 
 #include "nmsp_job_system/job/nmspJobDispatch.h"
+#include "nmsp_job_system/job/nmspJobFlow.h"

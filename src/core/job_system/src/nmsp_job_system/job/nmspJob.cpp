@@ -44,6 +44,13 @@ void Job_T::setParent(Job_T* parent)
 	_storage._parent = parent; 
 }
 
+void 
+Job_T::setDispatchJob(JobDispatch_Base* dispatchJob)
+{
+	NMSP_ASSERT(!_storage._dispatchJob, "");
+	_storage._dispatchJob = dispatchJob;
+}
+
 bool Job_T::isCompleted() const		{ return _storage._jobRemainCount.load() == 0 || _storage._task == nullptr; }
 int  Job_T::jobRemainCount() const	{ return _storage._jobRemainCount.load(); }
 
@@ -90,6 +97,16 @@ void* Job_T::_allocate(size_t n)
 	return nullptr /*this->_storage._localBuf.allocate(n)*/;
 }
 
+Job_T::JobHandle Job_T::parent()
+{
+	return _storage._parent;
+}
+
+JobDispatch_Base* Job_T::dispatchJob()
+{
+	return _storage._dispatchJob;
+}
+
 void Job_T::_setInfo(const Info& info)
 {
 	_storage._info = info;
@@ -115,6 +132,12 @@ void Job_T::init(const Task& func, const Info& info, Job_T* parent)
 	_setInfo(info);
 
 	setParent(parent);
+}
+
+void Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent)
+{
+	init(func, info, parent);
+	_storage._dispatchJob = dispatchJob;
 }
 
 void Job_T::addJobCount()				{ _storage._jobRemainCount++; }
