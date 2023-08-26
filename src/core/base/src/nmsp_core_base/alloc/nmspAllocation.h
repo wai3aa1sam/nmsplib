@@ -24,7 +24,7 @@ struct NmspAllocationCallback
 	nmspAllocCallback	allocCallback;
 	nmspFreeCallback	freeCallback;
 };
-extern NmspAllocationCallback _nmspAllocationCallback;
+extern NmspAllocationCallback* _nmspAllocationCallback;
 
 #endif
 
@@ -39,7 +39,24 @@ namespace nmsp
 void* nmsp_alloc(size_t size, size_t align = nmsp::CoreBaseTraits::s_kDefaultAlign, size_t offset = 0)		NMSP_NOEXCEPT;
 void  nmsp_free	(void* p, size_t size = 0)																	NMSP_NOEXCEPT;
 
-#if !NMSP_CUSTOM_ALLOC
+
+#if NMSP_CUSTOM_ALLOC
+
+inline
+void*	
+nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
+{
+	return _nmspAllocationCallback->allocCallback(size, align, offset);
+}
+
+inline
+void	
+nmsp_free(void* p, size_t size /*= 0*/) NMSP_NOEXCEPT
+{
+	_nmspAllocationCallback->freeCallback(p, size);
+}
+
+#else
 
 inline void* 
 nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT

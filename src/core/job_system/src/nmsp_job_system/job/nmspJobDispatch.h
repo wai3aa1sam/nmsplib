@@ -217,7 +217,7 @@ public:
 	template<class... DEPEND_ON>
 	static JobHandle prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
+		//NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
 		return JobDispatcher::_prepareDispatch(obj, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 };
@@ -327,7 +327,7 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(JobParFor_Base* obj, 
 template<class... DEPEND_ON> inline
 typename JobDispatcher::JobHandle JobDispatcher::_prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 {
-	NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
+	//NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
 
 	if (loopCount == 0 || batchSize == 0)
 		return nullptr;

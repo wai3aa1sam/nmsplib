@@ -22,10 +22,6 @@
 
 #endif // 
 
-#ifndef NMSP_ENABLE_CUSTOM_ALLOC
-	#define NMSP_ENABLE_CUSTOM_ALLOC		0
-#endif // 
-
 #if 0
 #ifndef NMSP_OVERRIDE_NEW_OP
 	#define NMSP_OVERRIDE_NEW_OP			1

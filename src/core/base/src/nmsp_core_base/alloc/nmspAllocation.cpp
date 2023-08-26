@@ -2,23 +2,7 @@
 
 #include "nmspAllocation.h"
 
-#if NMSP_CUSTOM_ALLOC
-NmspAllocationCallback  _nmspAllocationCallback;
-namespace nmsp
-{
-void*	
-nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
-{
-	return _nmspAllocationCallback.allocCallback(size, align, offset);
-}
-
-void	
-nmsp_free(void* p, size_t size /*= 0*/) NMSP_NOEXCEPT
-{
-	_nmspAllocationCallback.freeCallback(p, size);
-}
-}
-#endif // NMSP_CUSTOM_ALLOC
+NmspAllocationCallback*  _nmspAllocationCallback = nullptr;
 
 #if NMSP_OVERRIDE_NEW_OP
 

@@ -211,9 +211,10 @@ ThreadPool_T::_complete_onBeginEndSupported(JobHandle job)
 		}
 		else
 		{
-			NMSP_PROFILE_SECTION("Completed");
-
-			job->dispatchJob()->onEnd();
+			if (job->dispatchJob())
+			{
+				job->dispatchJob()->onEnd();
+			}
 			job->_storage._hasExecutedOnEnd = true;
 		}
 		
@@ -296,7 +297,7 @@ ThreadPool_T::_execute(JobHandle job)
 	JobArgs args;
 	args.batchID = info.batchID;
 
-	if (!job->parent())
+	if (!job->parent() && job->dispatchJob())
 	{
 		job->dispatchJob()->onBegin();
 	}

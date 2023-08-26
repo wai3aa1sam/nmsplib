@@ -78,9 +78,10 @@ public:
 
 	void setParent(JobHandle parent);
 
-protected:
 	template<class... JOB> void runAfter (JOB&&... job);
 	template<class... JOB> void runBefore(JOB&&... job);
+
+protected:
 
 	void	_runAfter(JobHandle job);
 	void	_runBefore(JobHandle job);
