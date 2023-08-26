@@ -136,11 +136,16 @@ WorkerThread_T::ThreadStorage&	WorkerThread_T::threadStorage()
 	return _threadPool->threadStroages(JobSystemTraits::threadLocalId()); 
 }
 
-void WorkerThread_T::wake() { NMSP_PROFILE_SCOPED(); resetSleepCount(); }
+void 
+WorkerThread_T::wake() 
+{ 
+	//NMSP_PROFILE_SCOPED(); 
+	resetSleepCount(); 
+}
 
 void WorkerThread_T::sleep()
 {
-	NMSP_PROFILE_SCOPED();
+	//NMSP_PROFILE_SCOPED();
 
 	if (shouldSleep())
 	{

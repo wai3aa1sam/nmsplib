@@ -26,10 +26,7 @@ void
 JobFlow_T::runAndWait()
 {
 	run();
-	for (auto& job : _waitForjobs)
-	{
-		_jsys->waitForComplete(job);
-	}
+	wait();
 }
 
 void 
@@ -44,7 +41,24 @@ JobFlow_T::run()
 		}
 
 		if (!job->dependencyCount())
-			_jsys->submit(job);
+		{
+			_submitJobs.emplace_back(job);
+		}
+	}
+
+	// store and submit here to prevent submitted twice
+	for (auto& e : _submitJobs)
+	{
+		_jsys->submit(e);
+	}
+}
+
+void 
+JobFlow_T::wait()
+{
+	for (auto& job : _waitForjobs)
+	{
+		_jsys->waitForComplete(job);
 	}
 }
 

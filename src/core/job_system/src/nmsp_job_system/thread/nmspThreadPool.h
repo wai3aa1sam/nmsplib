@@ -7,7 +7,8 @@
 #include "nmsp_job_system/thread/nmspThreadStorage.h"
 #include "nmspWorkerThread.h"
 
-namespace nmsp {
+namespace nmsp 
+{
 
 #if 0
 #pragma mark --- ThreadPool_T-Decl ---
@@ -72,6 +73,13 @@ protected:
 	int getNextIndex(int i);
 
 	bool isReadyToRun() const;
+
+	void preSubmitCheck (JobHandle job);
+	void preExecuteCheck(JobHandle job);
+
+	void _execute(JobHandle job);
+	void _complete(JobHandle job);
+	void _complete_onBeginEndSupported(JobHandle job);
 
 private:
 	Vector_T<UPtr_T<WorkerThread>,	JobSystemTraits::s_kJobSystemLogicalThreadCount> _workers;

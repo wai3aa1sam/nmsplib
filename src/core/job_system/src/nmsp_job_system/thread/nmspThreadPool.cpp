@@ -81,67 +81,14 @@ void ThreadPool_T::destroy()
 
 void ThreadPool_T::submit(JobHandle job)
 {
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
-	NMSP_ASSERT(!job->_storage._isSubmitted);
-	NMSP_ASSERT(!job->_storage._isExecuted);
-
-	job->_storage._isSubmitted.store(true);
-	job->_storage._isAllowAddDeps.store(false);
-	#endif // 0
-
-	#if NMSP_JOB_SYSTEM_ENABLE_SINGLE_THREAD_DEBUG
+	preSubmitCheck(job);
 	_submit(job);
-	#else
-
-	if (!job->_storage.dep.couldRun())
-	{
-		// rare case, maybe have some bug, all job should sumbit when dep count is 0
-		// 19/1/2023: no bug now, since _complete() are not reading and compare the copy, 
-		// when contex-switch, possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
-		// couldRun() would be compare negative number, since it is executed
-		NMSP_ASSERT(job->_storage.dep.couldRun());
-	}
-
-	_submit(job);
-
-	#endif
 }
 
 void ThreadPool_T::execute(JobHandle job)
 {
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
-	DependencyManager::jobExecute(job);
-	#endif // 0
-
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
-	NMSP_ASSERT(job->_storage._isSubmitted);
-	NMSP_ASSERT(!job->_storage._isExecuted);
-
-	job->_storage._isAllowAddDeps.store(false);
-	job->_storage._isExecuted.store(true);
-	#endif // 0
-
-	NMSP_ASSERT(job->dependencyCount() == 0, "");
-
-	auto& task  = job->_storage._task;
-	auto& info	= job->info();
-
-	JobArgs args;
-	args.batchID = info.batchID;
-
-	if (!job->parent())
-	{
-		job->dispatchJob()->onBegin();
-	}
-
-	for (u32 i = info.batchOffset; i < info.batchEnd; ++i)
-	{
-		args.loopIndex  = i;
-		args.batchIndex = i - info.batchOffset;
-		task(args);
-	}
-
-	complete(job);
+	preExecuteCheck(job);
+	_execute(job);
 }
 
 void ThreadPool_T::run()
@@ -213,12 +160,20 @@ bool ThreadPool_T::trySteal(WorkerThread* worker, JobHandle& job)
 
 void ThreadPool_T::complete(JobHandle job)
 {
+	return _complete_onBeginEndSupported(job);
+}
+
+void 
+ThreadPool_T::_complete(JobHandle job)
+{
+	throwIf(true, "ThreadPool_T::_complete original version, not support onBegin()/onEnd()");
+
 	auto& jobRemainCount	= job->_storage._jobRemainCount;
 	auto& parent			= job->_storage._parent;
 	//auto& depsOnThis		= job->_storage.dep._depsOnThis;
 
 	//atomicLog("=== task complete");
-	int ret = jobRemainCount.fetch_sub(1) - 1;
+	auto ret = jobRemainCount.fetch_sub(1) - 1;
 	// must be a copy, consider the jobRemainCount maybe 1, when contex-switch, 
 	// other thread is decr the jobRemainCount, both of them will trigger jobRemainCount == 0,
 	// possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
@@ -232,15 +187,38 @@ void ThreadPool_T::complete(JobHandle job)
 	{
 		if (parent)
 		{
-			complete(parent);
-		}
-		
-		if (!job->parent())
-		{
-			job->dispatchJob()->onEnd();
+			_complete(parent);
 		}
 
-		job->_storage.dep.runAfterThis_for_each_ifNoDeps(*this, &ThreadPool_T::submit);
+		//job->_storage.dep.runAfterThis_for_each_ifNoDeps(*this, &ThreadPool_T::submit);
+		job->_storage.dep.runAfterThis_for_each_ifNoDeps(&JobSystem::submit); // change to this just for compatible with single thread mode
+	}
+}
+
+void 
+ThreadPool_T::_complete_onBeginEndSupported(JobHandle job)
+{
+	auto& jobRemainCount	= job->_storage._jobRemainCount;
+	auto& parent			= job->_storage._parent;
+
+	auto ret = jobRemainCount.fetch_sub(1) - 1;
+
+	if (ret == 0)	// must compare
+	{
+		if (parent)
+		{
+			_complete_onBeginEndSupported(parent);
+		}
+		else
+		{
+			NMSP_PROFILE_SECTION("Completed");
+
+			job->dispatchJob()->onEnd();
+			job->_storage._hasExecutedOnEnd = true;
+		}
+		
+		//job->_storage.dep.runAfterThis_for_each_ifNoDeps(*this, &ThreadPool_T::submit);
+		job->_storage.dep.runAfterThis_for_each_ifNoDeps(&JobSystem::submit); // change to this just for compatible with single thread mode
 	}
 }
 
@@ -268,6 +246,71 @@ void ThreadPool_T::nextFrame()
 		ts->nextFrame();
 	}
 }
+
+void 
+ThreadPool_T::preSubmitCheck(JobHandle job)
+{
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	NMSP_ASSERT(!job->_storage._isSubmitted,	"job already submitted");
+	NMSP_ASSERT(!job->_storage._isExecuted,		"job already executed");
+
+	job->_storage._isSubmitted.store(true);
+	job->_storage._isAllowAddDeps.store(false);
+
+	if (!job->_storage.dep.couldRun())
+	{
+		// rare case, maybe have some bug, all job should sumbit when dep count is 0
+		// 19/1/2023: no bug now, since _complete() are not reading and compare the copy, 
+		// when contex-switch, possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
+		// couldRun() would be compare negative number, since it is executed
+		NMSP_ASSERT(job->_storage.dep.couldRun());
+	}
+
+	#endif // 0
+}
+
+void 
+ThreadPool_T::preExecuteCheck(JobHandle job)
+{
+	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
+	DependencyManager::jobExecute(job);
+	#endif // 0
+
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	NMSP_ASSERT(job->_storage._isSubmitted);
+	NMSP_ASSERT(!job->_storage._isExecuted);
+
+	job->_storage._isAllowAddDeps.store(false);
+	job->_storage._isExecuted.store(true);
+	#endif // 0
+
+	NMSP_ASSERT(job->dependencyCount() == 0, "");
+}
+
+void 
+ThreadPool_T::_execute(JobHandle job)
+{
+	auto& task  = job->_storage._task;
+	auto& info	= job->info();
+
+	JobArgs args;
+	args.batchID = info.batchID;
+
+	if (!job->parent())
+	{
+		job->dispatchJob()->onBegin();
+	}
+
+	for (u32 i = info.batchOffset; i < info.batchEnd; ++i)
+	{
+		args.loopIndex  = i;
+		args.batchIndex = i - info.batchOffset;
+		task(args);
+	}
+
+	complete(job);
+}
+
 
 #endif
 

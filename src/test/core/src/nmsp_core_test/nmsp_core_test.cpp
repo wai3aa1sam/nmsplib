@@ -2,6 +2,8 @@
 
 #include "nmsp_os/file/nmspPath.h"
 
+#include <nmsp_profiler.h>
+
 #if NMSP_TEST_ALL_MODULE
 	#include <nmsp_core.h>
 #endif // NMSP_TEST_ALL_MODULE
@@ -111,7 +113,7 @@ int main(int argc, char* argv[])
 
 	{
 		MemoryLeakReportScope reportScope;
-		_NMSP_PROFILE_FRAME();
+		NMSP_PROFILE_FRAME();
 		{
 			#if 1
 			run_temp_test();

@@ -2,6 +2,7 @@
 #include "nmspJob.h"
 
 #include "nmsp_job_system/nmspJobSystem.h"
+#include "nmsp_job_system/job/nmspJobDispatch.h"
 
 namespace nmsp {
 
@@ -20,19 +21,20 @@ void Job_T::clear()
 	_storage._task = nullptr;
 	_storage._info.clear();
 
-	_storage._jobRemainCount.store(1);
 	_storage._parent = nullptr;
+	_storage._jobRemainCount.store(1);
+	_storage._hasExecutedOnEnd = false;
 
 	_storage.setPriority(Job_T::Priority::Cirtical);
 
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	_storage._resetDebugCheck();
 	#endif // _DEBUG
 }
 
 void Job_T::setParent(Job_T* parent)		
 { 
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	NMSP_ASSERT(!_storage._isSubmitted);
 	NMSP_ASSERT(!_storage._isExecuted);
 	#endif // 0
@@ -51,12 +53,23 @@ Job_T::setDispatchJob(JobDispatch_Base* dispatchJob)
 	_storage._dispatchJob = dispatchJob;
 }
 
-bool Job_T::isCompleted() const		{ return _storage._jobRemainCount.load() == 0 || _storage._task == nullptr; }
+bool 
+Job_T::isCompleted() const		
+{
+	bool jobCompleted		= _storage._jobRemainCount.load() == 0 ;				NMSP_UNUSED(jobCompleted);
+	//bool normalCompleted	= jobCompleted && !dispatchJob();						NMSP_UNUSED(normalCompleted);
+	//bool isBypass			= this == nullptr || _storage._task == nullptr;			NMSP_UNUSED(isBypass);
+
+	bool correctCompleted	= jobCompleted && _storage._hasExecutedOnEnd;			NMSP_UNUSED(correctCompleted);
+
+	return correctCompleted;
+}
+
 int  Job_T::jobRemainCount() const	{ return _storage._jobRemainCount.load(); }
 
 void Job_T::_runAfter(Job_T* job)
 {
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	NMSP_ASSERT(job->_storage._isAllowAddDeps);
 	NMSP_ASSERT(_storage._isAllowAddDeps);
 	#endif // 0
@@ -75,7 +88,7 @@ void Job_T::_runAfter(Job_T* job)
 
 void Job_T::_runBefore(Job_T* job)
 {
-	#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	NMSP_ASSERT(job->_storage._isAllowAddDeps);
 	NMSP_ASSERT(_storage._isAllowAddDeps);
 	#endif // 0
@@ -94,6 +107,7 @@ void Job_T::_runBefore(Job_T* job)
 
 void* Job_T::_allocate(size_t n)
 {
+	_notYetSupported();
 	return nullptr /*this->_storage._localBuf.allocate(n)*/;
 }
 
@@ -106,6 +120,8 @@ JobDispatch_Base* Job_T::dispatchJob()
 {
 	return _storage._dispatchJob;
 }
+
+const JobDispatch_Base* Job_T::dispatchJob() const { return _storage._dispatchJob; }
 
 void Job_T::_setInfo(const Info& info)
 {

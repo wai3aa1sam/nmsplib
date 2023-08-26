@@ -36,6 +36,7 @@ public:
 	using ThreadStorage		= ThreadStorage_T;
 	using JobAllocator		= JobAllocator_T;
 	using FrameAllocator	= FrameAllocator_T<JobSystemTraits::s_kMaxFrameInFlightCount>;
+	using JobQueue			= JobQueue_T<>;
 
 	using SizeType			= JobSystemTraits::SizeType;
 
@@ -68,6 +69,9 @@ public:
 	SizeType	workerStartIdx()	const;
 	SizeType	workersEndIdx()		const;
 
+	void setSingleThreadMode(bool v);
+	bool isSingleThreadMode() const;
+
 public:
 	void _internal_nextFrame();
 
@@ -89,6 +93,7 @@ private:
 	void _checkError() const;
 	void _createTypedThreads();
 
+
 private:
 	ThreadPool _threadPool;
 
@@ -99,8 +104,25 @@ private:
 	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
 	DependencyManager _dependencyManager;
 	#endif // SGE_JOB_SYSTEM_DEBUG
-};
 
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+
+	struct SingleThreadMode
+	{
+		void waitComplete(JobHandle job);
+		void submit(JobHandle job);
+
+		//void keepExecuteIf(bool(*func)());
+		void keepExecuteIf(const Function_T<bool()>& func);
+
+		bool		isEnabled = false;
+		JobQueue	jobs;
+	};
+	SingleThreadMode _stMode;
+	
+	#endif // 0
+
+};
 
 #endif
 
@@ -121,7 +143,6 @@ JobSystem_T::JobHandle JobSystem_T::allocateJob()
 {
 	return instance()->_defaultAllocator().allocJob();
 }
-
 
 inline JobSystem_T::SizeType JobSystem_T::workerStartIdx()	const	{ return _typedThreadCount; }
 inline JobSystem_T::SizeType JobSystem_T::workersEndIdx()  const	{ return JobSystemTraits::s_kJobSystemLogicalThreadCount - 1; }

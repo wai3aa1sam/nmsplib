@@ -36,10 +36,12 @@ public:
 	~JobFlow_T();
 
 	template<class... JOB> auto emplace(JOB&&... job);
+	template<class... JOB> void xDependOnY(JobHandle x, JOB&&... y);
 
 	void runAndWait();
 
 	void run();
+	void wait();
 
 private:
 	JobHandle _emplace(JobHandle job);
@@ -49,6 +51,7 @@ private:
 
 	Vector_T<JobHandle, s_kLocalSize> _jobs;
 	Vector_T<JobHandle, s_kLocalSize> _waitForjobs;
+	Vector_T<JobHandle, s_kLocalSize> _submitJobs;
 };
 
 
@@ -57,6 +60,12 @@ auto JobFlow_T::emplace(JOB&&... job)
 {
 	//static_assert(IsSame<GetElement<sizeof...(JOB) - 1>, JobHandle>);
 	return std::make_tuple(_emplace(eastl::forward<JOB>(job))...);
+}
+
+template<class... JOB>
+void JobFlow_T::xDependOnY(JobHandle x, JOB&&... y)
+{
+	(x->runAfter(nmsp::forward<JOB>(y)), ...);
 }
 
 inline

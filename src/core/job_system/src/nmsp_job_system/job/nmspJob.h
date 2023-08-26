@@ -10,6 +10,7 @@ namespace nmsp
 {
 
 class JobDispatch_Base;
+class JobFlow_T;
 
 #if 0
 #pragma mark --- Job_T-Decl ---
@@ -39,6 +40,12 @@ using JobFunction = Function_T<void(const JobArgs&), 32, JobSystemTraits::s_kDef
 
 class Job_T : public NonCopyable
 {
+	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
+	friend class WorkerThread_T;
+	friend class ThreadPool_T;
+	friend class JobSystem_T;
+	friend class JobFlow_T;
+
 public:
 	using Priority			= JobPriority;
 	using Info				= JobInfo;
@@ -53,15 +60,7 @@ public:
 	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLineSize * 2;
 
 public:
-	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
-	friend class WorkerThread_T;
-	friend class ThreadPool_T;
-
-public:
 	~Job_T() = default;
-
-	template<class... JOB> void runAfter (JOB&&... job);
-	template<class... JOB> void runBefore(JOB&&... job);
 
 	void setEmpty();
 
@@ -80,6 +79,9 @@ public:
 	void setParent(JobHandle parent);
 
 protected:
+	template<class... JOB> void runAfter (JOB&&... job);
+	template<class... JOB> void runBefore(JOB&&... job);
+
 	void	_runAfter(JobHandle job);
 	void	_runBefore(JobHandle job);
 	void*	_allocate(size_t n);
@@ -87,7 +89,8 @@ protected:
 	void setDispatchJob(JobDispatch_Base* dispatchJob);
 
 	JobHandle			parent();
-	JobDispatch_Base*	dispatchJob();
+			JobDispatch_Base* dispatchJob();
+	const	JobDispatch_Base* dispatchJob() const;
 
 private:
 	void clear();
@@ -113,12 +116,12 @@ private:
 			:
 			_jobRemainCount(1), _priority(Priority::Cirtical)
 		{
-			#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+			#if NMSP_JOB_SYSTEM_DEVELOPMENT
 			_resetDebugCheck();
 			#endif // _DEBUG
 		}
 
-		#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+		#if NMSP_JOB_SYSTEM_DEVELOPMENT
 		void _resetDebugCheck()
 		{
 			_isAllowAddDeps.store(true);
@@ -136,11 +139,12 @@ private:
 
 		// concept of parent and DepData::runAfterThis is a little bit different.
 		// parent may run before the child but DepData::runAfterThis must run after this job
-		JobHandle			_parent			= nullptr;		
-		JobDispatch_Base*	_dispatchJob	= nullptr;
-		Atm_T<int>			_jobRemainCount = 1;
+		JobHandle			_parent				= nullptr;		
+		JobDispatch_Base*	_dispatchJob		= nullptr;
+		Atm_T<int>			_jobRemainCount		= 1;
+		Atm_T<bool>			_hasExecutedOnEnd	= false;
 
-		#if NMSP_JOB_SYSTEM_DEBUG_CHECK
+		#if NMSP_JOB_SYSTEM_DEVELOPMENT
 		Atm_T<bool>		_isAllowAddDeps = true;
 		Atm_T<bool>		_isExecuted		= false;
 		Atm_T<bool>		_isSubmitted	= false;
@@ -163,21 +167,38 @@ private:
 		DepData();
 
 		template<class T, class FUNC>
-		void runAfterThis_for_each_ifNoDeps(T& pool, const FUNC& func)
+		void runAfterThis_for_each_ifNoDeps(T& pool, FUNC&& func)
 		{
+			using Func = Decay<FUNC>;
+
 			for (auto& job : _runAfterThis)
 			{
 				int count = job->decrDependencyCount();
 				if (count == 0)
 				{
-					invoke(func, pool, job);
+					invoke(nmsp::forward<Func>(func), pool, job);
+				}
+			}
+		}
+
+		template<class FUNC>
+		void runAfterThis_for_each_ifNoDeps(FUNC&& func)
+		{
+			using Func = Decay<FUNC>;
+
+			for (auto& job : _runAfterThis)
+			{
+				int count = job->decrDependencyCount();
+				if (count == 0)
+				{
+					invoke(nmsp::forward<Func>(func), job);
 				}
 			}
 		}
 
 		int	decrDependencyCount()	
 		{ 
-			auto ret = --_dependencyCount; 
+			auto ret = _dependencyCount.fetch_sub(1) - 1; 
 			return ret;
 		}
 

@@ -6,6 +6,8 @@
 namespace nmsp 
 {
 
+class Job_T;
+class ThreadPool_T;
 class JobSystem_T;
 
 class Job_Base;			/* void execute(); */
@@ -47,32 +49,49 @@ public:
 
 class JobDispatch_Base : public NonCopyable
 {
-public:
+	friend class Job_T;
+	friend class ThreadPool_T;
 
 public:
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+
 	JobDispatch_Base() 
 	{
-#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
 		_hasExecutedOnBegin = false;
 		_hasExecutedOnEnd	= false;
-#endif
 	};
-	virtual ~JobDispatch_Base() = default;
 
-#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
-	virtual void onBegin()	{ NMSP_ASSERT(!_hasExecutedOnBegin, "");	_hasExecutedOnBegin = true; };
-	virtual void onEnd()	{ NMSP_ASSERT(!_hasExecutedOnEnd, "");		_hasExecutedOnEnd	= true; };
-#else
+	virtual void onBegin()	
+	{ 
+		NMSP_ASSERT(!_hasExecutedOnBegin, "onBegin() shd only execute once");	
+		_hasExecutedOnBegin = true; 
+	};
+
+	virtual void onEnd()	
+	{ 
+		NMSP_ASSERT(!_hasExecutedOnEnd, "onEnd() shd only execute once");	
+		_hasExecutedOnEnd = true; 
+
+	};
+	#else
+
+	JobDispatch_Base() 
+	{
+
+	};
+
 	virtual void onBegin()	{};
 	virtual void onEnd()	{};
-#endif
-	
-protected:
 
-#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
+	#endif
+
+	virtual ~JobDispatch_Base() = default;
+
+private:
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	volatile bool _hasExecutedOnBegin;
 	volatile bool _hasExecutedOnEnd;
-#endif // NMSP_DEBUG
+	#endif
 
 };
 
@@ -198,6 +217,7 @@ public:
 	template<class... DEPEND_ON>
 	static JobHandle prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
+		NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
 		return JobDispatcher::_prepareDispatch(obj, loopCount, batchSize, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 };
@@ -307,6 +327,8 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(JobParFor_Base* obj, 
 template<class... DEPEND_ON> inline
 typename JobDispatcher::JobHandle JobDispatcher::_prepareDispatch(JobParFor_Base* obj, u32 loopCount, u32 batchSize, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 {
+	NMSP_CORE_ASSERT(!dependOn, "use job flow to delcare job dependency");
+
 	if (loopCount == 0 || batchSize == 0)
 		return nullptr;
 

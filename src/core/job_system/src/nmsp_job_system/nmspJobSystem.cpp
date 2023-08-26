@@ -16,7 +16,7 @@ JobSystem_T::JobSystem_T()
 {
 
 #if NMSP_JOB_SYSTEM_DEVELOPMENT
-	_NMSP_LOG("Warning: should test performance when the job count is low, the sleep / wake will overlap when it has job but get steal by main thread");
+	_NMSP_LOG("JobSystem Warning: should test performance when the job count is low, the sleep / wake will overlap when it has job but get steal by main thread");
 #endif // NMSP_JOB_SYSTEM_DEVELOPMENT
 
 }
@@ -76,6 +76,11 @@ void JobSystem_T::waitForComplete(JobHandle job)
 {
 	NMSP_PROFILE_SCOPED();
 
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	if (instance()->isSingleThreadMode())
+		return instance()->_stMode.waitComplete(job);
+	#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
+
 	if (!job)
 		return;
 
@@ -88,7 +93,7 @@ void JobSystem_T::waitForComplete(JobHandle job)
 	{
 		JobHandle tmp = nullptr;
 
-		if (true && threadPool.tryGetJob(tmp))
+		if (threadPool.tryGetJob(tmp))
 		{
 			threadPool.execute(tmp);
 		}
@@ -101,6 +106,11 @@ void JobSystem_T::waitForComplete(JobHandle job)
 
 void JobSystem_T::submit(JobHandle job)
 {
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	if (instance()->isSingleThreadMode())
+		return instance()->_stMode.submit(job);
+	#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
+	
 	//NMSP_ASSERT(JobSystemTraits::isMainThread(), "only can submit job in main thread");
 	//throwIf(!JobSystemTraits::isMainThread(), "only can submit job in main thread");
 	/*
@@ -187,6 +197,81 @@ void JobSystem_T::_createTypedThreads()
 		_typedThreads.emplace_back(/*NMSP_NEW(WorkerThread)(workerCDesc)*/);
 	}
 }
+
+
+#if 0
+#pragma mark --- nmspJobSystem_T::SingleThreadMode-Impl ---
+#endif // 0
+#if 1
+
+void 
+JobSystem_T::setSingleThreadMode(bool v)
+{
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	_stMode.isEnabled = v;
+
+	if (!_stMode.isEnabled)
+	{
+		_stMode.waitComplete(nullptr);
+	}
+	#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
+}
+
+bool 
+JobSystem_T::isSingleThreadMode() const
+{
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	return _stMode.isEnabled;
+	#else
+	return false;
+	#endif
+}
+
+void 
+JobSystem_T::SingleThreadMode::waitComplete(JobHandle job)
+{
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
+
+	if (!job)
+	{
+		keepExecuteIf( [&]() { return isEnabled || !jobs.isEmpty(); } );
+		return;
+	}
+
+	keepExecuteIf( [&]() { return isEnabled && !job->isCompleted(); } );
+
+	#endif
+}
+
+void 
+JobSystem_T::SingleThreadMode::submit(JobHandle job)
+{
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+
+	instance()->_threadPool.preSubmitCheck(job);
+	jobs.push(job);
+
+	#endif
+}
+
+void
+JobSystem_T::SingleThreadMode::keepExecuteIf(const Function_T<bool()>& func)
+{
+	auto& threadPool = instance()->_threadPool;
+	
+	while (func())
+	{
+		JobHandle temp = nullptr;
+		if (jobs.try_pop(temp))
+		{
+			threadPool.preExecuteCheck(temp);
+			threadPool._execute(temp);
+		}
+	}
+}
+
+#endif
 
 #endif
 
