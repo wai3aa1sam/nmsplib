@@ -61,7 +61,7 @@ Job_T::isCompleted() const
 	//bool isBypass			= this == nullptr || _storage._task == nullptr;			NMSP_UNUSED(isBypass);
 
 	bool correctCompleted	= jobCompleted && _storage._hasExecutedOnEnd;			NMSP_UNUSED(correctCompleted);
-
+	
 	return correctCompleted;
 }
 
@@ -116,7 +116,7 @@ Job_T::JobHandle Job_T::parent()
 	return _storage._parent;
 }
 
-JobDispatch_Base* Job_T::dispatchJob()
+JobDispatch_Base* Job_T::_dispatchJob()
 {
 	return _storage._dispatchJob;
 }
@@ -150,14 +150,46 @@ void Job_T::init(const Task& func, const Info& info, Job_T* parent)
 	setParent(parent);
 }
 
-void Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent)
+void 
+Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent)
 {
 	init(func, info, parent);
 	_storage._dispatchJob = dispatchJob;
 }
 
+void 
+Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, bool forceBeginEnd, JobHandle parent)
+{
+	init(func, info, dispatchJob, parent);
+	_storage._isForceOnBeginEnd = forceBeginEnd;
+}
+
 void Job_T::addJobCount()				{ _storage._jobRemainCount++; }
 int	 Job_T::decrDependencyCount()		{ return _storage.dep.decrDependencyCount(); }
+
+void 
+Job_T::invokeOnEnd()
+{
+	if (dispatchJob())
+	{
+		_dispatchJob()->onEnd();
+	}
+	NMSP_CORE_ASSERT(!_storage._hasExecutedOnEnd, "should only invoke onEnd() once");
+	_storage._hasExecutedOnEnd = true;
+}
+
+void 
+Job_T::setIsForceOnBeginEnd(bool v)
+{
+	_storage._isForceOnBeginEnd = v;
+}
+
+bool 
+Job_T::isForceOnBeginEnd() const
+{
+	return _storage._isForceOnBeginEnd;
+}
+
 
 const Job_T::Info& Job_T::info() const
 {

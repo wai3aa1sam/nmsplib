@@ -14,11 +14,22 @@ JobSystem_T* Singleton_T<JobSystem_T>::s_instance = nullptr;
 
 JobSystem_T::JobSystem_T()
 {
-
 #if NMSP_JOB_SYSTEM_DEVELOPMENT
 	_NMSP_LOG("JobSystem Warning: should test performance when the job count is low, the sleep / wake will overlap when it has job but get steal by main thread");
 #endif // NMSP_JOB_SYSTEM_DEVELOPMENT
 
+	_NMSP_LOG("JobSystem TODO: add a re-submit");
+	/*
+	- the below implement when need resubmit job
+	- ThreadPool::execute(), make a helper for JobArgs calculate, move it original calculate to one JobXX_Base responsibity (impl in task lambda of each job)
+	- remove JobXX_Base onBegin / onEnd, only JobCluster_Base has onBegin/onEnd()
+	- after we moved all JobArgs to each JobXX_Base, we could call onBegin when in task (even in JobParFor_Base)
+	- since the JobCluster make n JobCluster_Base, the hasExecutedOnXX can store to the JobCluster_Base instead of JobHandle (since we do not need to check in each complete now)
+	- The JobCluster_Base<JobParFor_Base> should has extra overload only instead of all other type incur the overhead, 
+		after JobCluster_Base<JobParFor_Base> complete, we should make a extra job with highest priority call onEnd() which runAfter the dispatch, and wait for this job
+	- resubmit could make a new UploadJob base on cluster, after onBegin, check the resubmit condition, 
+		if yes, then reset the job handle (maybe only the debug params, except its parent and its dependency) and resubmit, the UploadJob could store the isByPassOnBegin,
+	*/
 }
 
 JobSystem_T::~JobSystem_T()
@@ -72,37 +83,6 @@ void JobSystem_T::destroy()
 	shutdown();
 }
 
-void JobSystem_T::waitForComplete(JobHandle job)
-{
-	NMSP_PROFILE_SCOPED();
-
-	#if NMSP_JOB_SYSTEM_DEVELOPMENT
-	if (instance()->isSingleThreadMode())
-		return instance()->_stMode.waitComplete(job);
-	#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
-
-	if (!job)
-		return;
-
-	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
-	auto* jsys = this;
-	auto& threadPool = this->_threadPool;
-	auto& storage = jsys->threadStorage(); (void)storage;
-
-	while (!job->isCompleted())
-	{
-		JobHandle tmp = nullptr;
-
-		if (threadPool.tryGetJob(tmp))
-		{
-			threadPool.execute(tmp);
-		}
-
-		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
-	}
-
-	//atomicLog("=== done waitForComplete()");
-}
 
 void JobSystem_T::submit(JobHandle job)
 {
@@ -125,6 +105,39 @@ void JobSystem_T::submit(JobHandle job)
 	auto& threadPool = instance()->_threadPool;
 	threadPool.submit(job);
 }
+
+void JobSystem_T::waitForComplete(JobHandle job)
+{
+	NMSP_PROFILE_SCOPED();
+
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT
+	if (instance()->isSingleThreadMode())
+		return instance()->_stMode.waitComplete(job);
+	#endif // NMSP_JOB_SYSTEM_DEVELOPMENT
+
+	if (!job)
+		return;
+
+	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
+	auto* jsys = instance();
+	auto& threadPool = jsys->_threadPool;
+	auto& storage = jsys->threadStorage(); (void)storage;
+
+	while (!job->isCompleted())
+	{
+		JobHandle tmp = nullptr;
+
+		if (threadPool.tryGetJob(tmp))
+		{
+			threadPool.execute(tmp);
+		}
+
+		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
+	}
+
+	//atomicLog("=== done waitForComplete()");
+}
+
 
 void JobSystem_T::_internal_nextFrame()
 {
@@ -239,7 +252,10 @@ JobSystem_T::SingleThreadMode::waitComplete(JobHandle job)
 		return;
 	}
 
-	keepExecuteIf( [&]() { return isEnabled && !job->isCompleted(); } );
+	keepExecuteIf( [&]() 
+		{ 
+			return isEnabled && !job->isCompleted();
+		} );
 
 	#endif
 }

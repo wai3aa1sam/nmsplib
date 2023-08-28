@@ -5,7 +5,10 @@
 #include "nmsp_job_system/thread/nmspThreadPool.h"
 #include <nmsp_stl/extra/nmspSingleton.h>
 
-namespace nmsp {
+namespace nmsp 
+{
+
+struct JobCluster;
 
 #if 0
 #pragma mark --- JobSystem_T-Decl ---
@@ -24,6 +27,12 @@ public:
 
 class JobSystem_T : public Singleton_T<JobSystem_T>
 {
+	friend class WorkerThread_T;
+	friend class ThreadPool_T;
+	friend class Job_T;
+	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
+	friend struct JobCluster;
+
 public:
 	using Base			= StackSingleton_T<JobSystem_T>;
 	using CreateDesc	= JobSystem_CreateDesc;
@@ -41,15 +50,9 @@ public:
 	using SizeType			= JobSystemTraits::SizeType;
 
 public:
-	friend class WorkerThread_T;
-	friend class ThreadPool_T;
-	friend class Job_T;
-	NMSP_JOB_SYSTEM_JOB_TYPE_FRIEND_CLASS_DECLARE();
-
-public:
-
 	static CreateDesc makeCDesc();
 	static void submit(JobHandle job);
+	static void waitForComplete(JobHandle job);
 
 public:
 	JobSystem_T();
@@ -58,8 +61,6 @@ public:
 	void create(int workerCount, int threadTypeCount = 1);
 	void create(const CreateDesc& cdesc);
 	void destroy();
-
-	void waitForComplete(JobHandle job);
 
 	JobHandle createEmptyJob();
 

@@ -19,21 +19,24 @@ class JobFlow_T;
 
 struct JobArgs
 {
-	using T = u32;
+	using Traits	= JobSystemTraits;
+	using JobSizeT	= Traits::JobSizeT;
 
-	T loopIndex		= 0;		// SV_DispatchThreadID
-	T batchID		= 0;		// SV_GroupID
-	T batchIndex	= 0;		// SV_GroupIndex
+	JobSizeT loopIndex		= 0;		// SV_DispatchThreadID
+	JobSizeT batchId		= 0;		// SV_GroupID
+	JobSizeT batchIndex	= 0;		// SV_GroupIndex
 };
 
 struct JobInfo
 {
-	using T = u32;
-	T batchID		= 0;
-	T batchOffset	= 0;
-	T batchEnd		= 0;
+	using Traits	= JobSystemTraits;
+	using JobSizeT	= Traits::JobSizeT;
 
-	void clear() { batchID = 0; batchOffset = 0; batchEnd = 0; }
+	JobSizeT batchId		= 0;
+	JobSizeT batchOffset	= 0;
+	JobSizeT batchEnd		= 0;
+
+	void clear() { batchId = 0; batchOffset = 0; batchEnd = 0; }
 };
 
 using JobFunction = Function_T<void(const JobArgs&), 32, JobSystemTraits::s_kDefaultAlign, NoFallbackAllocator_Policy>;
@@ -45,6 +48,7 @@ class Job_T : public NonCopyable
 	friend class ThreadPool_T;
 	friend class JobSystem_T;
 	friend class JobFlow_T;
+	friend struct JobCluster;
 
 public:
 	using Priority			= JobPriority;
@@ -55,6 +59,10 @@ public:
 	using SizeType	= JobSystemTraits::SizeType;
 
 	using  Task = JobFunction;
+
+	using JobCountType = int;
+
+public:
 	static Task s_emptyTask;
 
 	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLineSize * 2;
@@ -64,7 +72,7 @@ public:
 
 	void setEmpty();
 
-	bool		isCompleted		()const;
+	bool		isCompleted		() const;
 	int			jobRemainCount	() const;
 	int			dependencyCount	() const;
 	SizeType	runAfterCount	() const;
@@ -81,8 +89,9 @@ public:
 	template<class... JOB> void runAfter (JOB&&... job);
 	template<class... JOB> void runBefore(JOB&&... job);
 
-protected:
+	const JobDispatch_Base* dispatchJob() const;
 
+protected:
 	void	_runAfter(JobHandle job);
 	void	_runBefore(JobHandle job);
 	void*	_allocate(size_t n);
@@ -90,19 +99,24 @@ protected:
 	void setDispatchJob(JobDispatch_Base* dispatchJob);
 
 	JobHandle			parent();
-			JobDispatch_Base* dispatchJob();
-	const	JobDispatch_Base* dispatchJob() const;
+	JobDispatch_Base*	_dispatchJob();
 
 private:
 	void clear();
 
 	void init(const Task& func, const Info& info, JobHandle parent = nullptr);
 	void init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent);
+	void init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, bool forceBeginEnd, JobHandle parent);
 
 	void _setInfo(const Info& info);
 
 	void addJobCount();
 	int	decrDependencyCount();
+
+	void invokeOnEnd();
+
+	void setIsForceOnBeginEnd(bool v);
+	bool isForceOnBeginEnd() const;
 
 private:
 	#if 0
@@ -141,10 +155,15 @@ private:
 		// concept of parent and DepData::runAfterThis is a little bit different.
 		// parent may run before the child but DepData::runAfterThis must run after this job
 		JobHandle			_parent				= nullptr;		
-		JobDispatch_Base*	_dispatchJob		= nullptr;
-		Atm_T<int>			_jobRemainCount		= 1;
-		Atm_T<bool>			_hasExecutedOnEnd	= false;
+		Atm_T<JobCountType>	_jobRemainCount		= 1;
 
+		//void*				_jobExtension		= nullptr;
+
+		JobDispatch_Base*	_dispatchJob		= nullptr;
+		//Atm_T<bool>			_hasExecutedOnEnd	= false;
+		bool				_hasExecutedOnEnd	= false;
+		bool				_isForceOnBeginEnd	= false;
+		
 		#if NMSP_JOB_SYSTEM_DEVELOPMENT
 		Atm_T<bool>		_isAllowAddDeps = true;
 		Atm_T<bool>		_isExecuted		= false;
@@ -174,7 +193,7 @@ private:
 
 			for (auto& job : _runAfterThis)
 			{
-				int count = job->decrDependencyCount();
+				JobCountType count = job->decrDependencyCount();
 				if (count == 0)
 				{
 					invoke(nmsp::forward<Func>(func), pool, job);
@@ -189,7 +208,7 @@ private:
 
 			for (auto& job : _runAfterThis)
 			{
-				int count = job->decrDependencyCount();
+				JobCountType count = job->decrDependencyCount();
 				if (count == 0)
 				{
 					invoke(nmsp::forward<Func>(func), job);
@@ -197,7 +216,7 @@ private:
 			}
 		}
 
-		int	decrDependencyCount()	
+		JobCountType	decrDependencyCount()	
 		{ 
 			auto ret = _dependencyCount.fetch_sub(1) - 1; 
 			return ret;
@@ -206,7 +225,7 @@ private:
 		bool couldRun() const		{ return _dependencyCount.load() == 0; }
 
 	private:
-		Atm_T<int>	_dependencyCount = 0;	// this depends on others
+		Atm_T<JobCountType>	_dependencyCount = 0;	// this depends on others
 		DepList		_runAfterThis;
 	};
 	struct Data : public NormalData

@@ -13,6 +13,7 @@ namespace nmsp {
 struct JobSystemDefaultTraits_T : public OsTraits
 {
 	using SizeType = size_t;
+	using JobSizeT = u32;
 	
 	static constexpr int s_kIdleSleepTimeMS		= 1;
 	static constexpr int s_kBusySleepTimeMS		= 0;

@@ -205,17 +205,19 @@ ThreadPool_T::_complete_onBeginEndSupported(JobHandle job)
 
 	if (ret == 0)	// must compare
 	{
+
+		if (job->isForceOnBeginEnd() && !job->_storage._hasExecutedOnEnd)
+		{
+			job->invokeOnEnd();
+		}
+
 		if (parent)
 		{
 			_complete_onBeginEndSupported(parent);
 		}
 		else
 		{
-			if (job->dispatchJob())
-			{
-				job->dispatchJob()->onEnd();
-			}
-			job->_storage._hasExecutedOnEnd = true;
+			job->invokeOnEnd();
 		}
 		
 		//job->_storage.dep.runAfterThis_for_each_ifNoDeps(*this, &ThreadPool_T::submit);
@@ -295,11 +297,16 @@ ThreadPool_T::_execute(JobHandle job)
 	auto& info	= job->info();
 
 	JobArgs args;
-	args.batchID = info.batchID;
+	args.batchId = info.batchId;
 
 	if (!job->parent() && job->dispatchJob())
 	{
-		job->dispatchJob()->onBegin();
+		job->_dispatchJob()->onBegin();
+	}
+
+	if (job->isForceOnBeginEnd())
+	{
+		job->_dispatchJob()->onBegin();
 	}
 
 	for (u32 i = info.batchOffset; i < info.batchEnd; ++i)
