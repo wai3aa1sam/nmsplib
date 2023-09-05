@@ -1,5 +1,6 @@
 #pragma once
 
+#include "nmsp_core_base_traits.h"
 #include "nmspDataType_Common.h"
 
 namespace nmsp {
@@ -141,6 +142,31 @@ class _Internal_ScopedTimer
 };
 
 #endif // 1
+
+#if 0
+#pragma mark --- TypeIdGenerator-Impl ---
+#endif // 0
+#if 1
+
+class TypeIdGenerator
+{
+public:
+	using IdType = CoreBaseTraits::SizeType;
+
+public:
+	template<class U>
+	static IdType getId()
+	{
+		static const IdType idCounter = m_count++;
+		return idCounter;
+	}
+private:
+	static IdType _count;
+};
+
+#endif // 1
+
+
 
 #endif
 
