@@ -59,6 +59,8 @@ public:
 	operator ViewType() const NMSP_NOEXCEPT;
 
 	ViewType view() const;
+
+	bool is_empty() const;
 	
 private:
 
@@ -145,6 +147,12 @@ typename String_Eastl<T, N, FALLBACK_ALLOC>::ViewType String_Eastl<T, N, FALLBAC
 	return ViewType{ data(), size() };
 }
 
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+bool
+String_Eastl<T, N, FALLBACK_ALLOC>::is_empty() const
+{
+	return size() == 0;
+}
 
 #endif
 

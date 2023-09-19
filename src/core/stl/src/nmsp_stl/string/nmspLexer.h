@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../common/nmsp_stl_common.h"
-
 #include "nmspStrUtil.h"
 
 /*
@@ -35,6 +34,8 @@ public:
 	friend class Lexer_T;
 public:
 	using Type = Lexer_TokenType_T;
+
+	bool isNone			() const;
 
 	bool isIdentifier	() const;
 	bool isNumber		() const;
@@ -94,7 +95,7 @@ public:
 	template<class T>	void readEnum		(T& o);
 						void readBool		(bool& o);
 
-	void expected(TokenType type);
+	void expected(TokenType type, const char* cstr);
 
 	const Token&	token	() const;
 
@@ -112,9 +113,12 @@ protected:
 							void errorUnexpectedToken();
 							void _error(StrViewA_T msg);
 
+private:
 	void nextChar();
 	void _nextLine();
 	void _nextChar();
+
+	void _expected(TokenType type);
 
 	void ignoreSpace();
 
@@ -212,9 +216,17 @@ Lexer_T::keepSkipCharIf(FUNC&& func)
 }
 
 inline void 
-Lexer_T::expected(TokenType type)
+Lexer_T::_expected(TokenType type)
 {
 	errorIf(token().type() != type, "expected Type: {}, current: {}", type, token().type());
+}
+
+inline 
+void 
+Lexer_T::expected(TokenType type, const char* cstr)
+{
+	errorIf(token().type() != type && StrUtil::isSame(token().value().c_str(), cstr), "expected Type: {}, current: {}", type, token().type());
+	nextToken();
 }
 
 inline const Lexer_T::Token& 
@@ -267,7 +279,7 @@ template<class STR> inline
 void 
 Lexer_T::readIdentifier	(STR& o)
 {
-	expected(TokenType::Identifier);
+	_expected(TokenType::Identifier);
 	o = token().value();
 	nextToken();
 }
@@ -276,7 +288,7 @@ template<class STR> inline
 void 
 Lexer_T::readNumber		(STR& o)
 {
-	expected(TokenType::Number);
+	_expected(TokenType::Number);
 	o = token().value();
 	nextToken();
 }
@@ -285,7 +297,7 @@ template<class STR> inline
 void 
 Lexer_T::readString		(STR& o)
 {
-	expected(TokenType::String);
+	_expected(TokenType::String);
 	o = token().value();
 	nextToken();
 }
@@ -294,7 +306,7 @@ template<class STR> inline
 void 
 Lexer_T::readOperator	(STR& o)
 {
-	expected(TokenType::Operator);
+	_expected(TokenType::Operator);
 	o = token().value();
 	nextToken();
 }
@@ -303,7 +315,7 @@ template<class T> inline
 void 
 Lexer_T::readEnum		(T& o)
 {
-	expected(TokenType::Identifier);
+	_expected(TokenType::Identifier);
 	errorIf(enumTryParse(o, token().value()), "Error: readEnum()");
 	nextToken();
 }
@@ -311,7 +323,7 @@ Lexer_T::readEnum		(T& o)
 inline void 
 Lexer_T::readBool		(bool& o)
 {
-	expected(TokenType::Identifier);
+	_expected(TokenType::Identifier);
 	if (token().value() == "true")
 	{
 		o = true;
@@ -411,6 +423,7 @@ Lexer_Token_T::reset(Type type)
 inline Lexer_Token_T::Type	Lexer_Token_T::type()	const { return _type; }
 inline const StringT&		Lexer_Token_T::value()	const { return _value; }
 
+inline bool Lexer_Token_T::isNone		() const { return _type == Type::None; }
 inline bool Lexer_Token_T::isIdentifier	() const { return _type == Type::Identifier; }
 inline bool Lexer_Token_T::isNumber		() const { return _type == Type::Number; }
 inline bool Lexer_Token_T::isString		() const { return _type == Type::String; }

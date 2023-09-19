@@ -70,7 +70,7 @@ Path_Win32::getCurrentDirTo(STR& out)
 	auto ret = ::GetCurrentDirectory(MAX_PATH, temp);
 	Util::throwIf(!ret, "{}", NMSP_SRCLOC);
 
-	out = UtfUtil::toTempString(temp);
+	out = UtfUtil::toTempString(temp).c_str();
 }
 
 

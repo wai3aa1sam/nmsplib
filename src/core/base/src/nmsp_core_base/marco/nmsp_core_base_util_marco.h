@@ -58,7 +58,7 @@ references:
 
 	#define NMSP_DEBUG_CALL(FUNC) FUNC
 
-	#define NMSP_TODO(FMT, ...) _todo(NMSP_SRCLOC, FMT, __VA_ARGS__)
+	#define NMSP_TODO(FMT, ...) ::nmsp::_todo(NMSP_SRCLOC, FMT, __VA_ARGS__)
 
 #else
 	#define NMSP_SRCLOC	SrcLoc()

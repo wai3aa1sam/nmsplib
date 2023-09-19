@@ -96,6 +96,15 @@ bool Path::isRealpath(StrViewA_T path)
 	return false;
 }
 
+
+StringT 
+Path::relative(StrViewA_T path, StrViewA_T base)
+{
+	StringT o;
+	relativeTo(o, path, base);
+	return o;
+}
+
 #endif // 1
 
 

@@ -56,7 +56,10 @@ public:
 	static StrViewA_T	extension	(StrViewA_T path);
 	static StringT		realpath	(StrViewA_T path);
 
-	template<size_t N, class ALLOC = DefaultAllocator> static void	realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path);
+	template<size_t N, class ALLOC = DefaultAllocator> static void realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path);
+
+	template<class STR> static void relativeTo(STR& out, StrViewA_T path, StrViewA_T base);
+	StringT relative(StrViewA_T path, StrViewA_T base);
 
 	static bool isRealpath(StrViewA_T path);
 };
@@ -69,7 +72,8 @@ public:
 #if 1
 
 inline
-StringT Path::realpath(StrViewA_T path)
+StringT 
+Path::realpath(StrViewA_T path)
 {
 	StringT o;
 	realpathTo(o, path);
@@ -77,7 +81,8 @@ StringT Path::realpath(StrViewA_T path)
 }
 
 template<size_t N, class ALLOC> inline 
-void Path::realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path)
+void 
+Path::realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path)
 {
 	o.clear();
 
@@ -132,6 +137,26 @@ void Path::realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path)
 		p = s.second;
 	}
 }
+
+template<class STR> inline 
+void 
+Path::relativeTo(STR& out, StrViewA_T path, StrViewA_T base)
+{
+	NMSP_TODO("replace std::filesystem impl");
+
+	using FsPath = std::filesystem::path;
+	FsPath fspath;
+	fspath.assign(path.begin(), path.end());
+
+	FsPath fsbase;
+	fsbase.assign(base.begin(), base.end());
+
+	FsPath dst = std::filesystem::relative(fspath, fsbase);
+
+	out.clear();
+	UtfUtil::convert(out, toStrViewW(dst.wstring()));
+}
+
 
 #endif
 
