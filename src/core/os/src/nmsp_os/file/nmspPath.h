@@ -56,7 +56,7 @@ public:
 	static StrViewA_T	extension	(StrViewA_T path);
 	static StringT		realpath	(StrViewA_T path);
 
-	template<size_t N> static void	realpathTo(StringA_T<N>& o, StrViewA_T path);
+	template<size_t N, class ALLOC = DefaultAllocator> static void	realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path);
 
 	static bool isRealpath(StrViewA_T path);
 };
@@ -76,8 +76,8 @@ StringT Path::realpath(StrViewA_T path)
 	return o;
 }
 
-template<size_t N> inline 
-void Path::realpathTo(StringA_T<N>& o, StrViewA_T path)
+template<size_t N, class ALLOC> inline 
+void Path::realpathTo(StringA_T<N, ALLOC>& o, StrViewA_T path)
 {
 	o.clear();
 
@@ -100,7 +100,7 @@ void Path::realpathTo(StringA_T<N>& o, StrViewA_T path)
 	StrViewA_T p = path;
 	while (p.size()) 
 	{
-		auto s = StrUtil::splitByChar(p, "\\/");
+		auto s = StrUtil::splitByChar(p, toStrView("\\/"));
 		if (s.first == ".") 
 		{
 			//skip '.'
@@ -111,7 +111,7 @@ void Path::realpathTo(StringA_T<N>& o, StrViewA_T path)
 		}
 		else if (s.first == "..") 
 		{
-			auto* parent = StrUtil::findCharFromEnd(outStr, "\\/", false);
+			auto* parent = StrUtil::findCharFromEnd(outStr, toStrView("\\/"), false);
 			if (parent == nullptr) 
 			{
 				outStr.clear(); //no more parent folder

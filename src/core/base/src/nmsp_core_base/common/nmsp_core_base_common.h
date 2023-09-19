@@ -19,6 +19,7 @@
 #include "nmspTypeTraits_Common.h"
 #include "nmspClass_Common.h"
 #include "nmspEnum_Common.h"
+#include "nmspUtil_Common.h"
 
 #include "nmspError_Common.h"
 

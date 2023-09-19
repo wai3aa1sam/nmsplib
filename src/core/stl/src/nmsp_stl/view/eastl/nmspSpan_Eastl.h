@@ -13,7 +13,8 @@ template<class T>
 class Span_Eastl : public eastl::span<T>
 {
 public:
-	using Base = eastl::span<T>;
+	using Base			= eastl::span<T>;
+	using ElementType	= typename Base::element_type;
 	
 	using Iter		= typename Base::iterator;
 	using CIter		= typename Base::const_iterator;
@@ -21,12 +22,12 @@ public:
 	using CRevIter	= typename Base::const_reverse_iterator;
 
 public:
+	using SizeType	= StlTraits::SizeType;
 	using IndexType = typename Base::index_type;
 
 public:
 	using Base::data;
 	using Base::size;
-
 
 public:
 
@@ -39,6 +40,11 @@ public:
 	NMSP_CONSTEXPR Span_Eastl(const Span_Eastl& rhs) = default;
 	NMSP_CONSTEXPR Span_Eastl(T* s, IndexType count);
 	NMSP_CONSTEXPR Span_Eastl(T* begin, T* end);
+	NMSP_CONSTEXPR Span_Eastl(std::initializer_list<T> list);
+
+	bool		is_empty()		const;
+	SizeType	size_in_bytes() const;
+
 	// iterator support
 	NMSP_CONSTEXPR Iter		begin()		const NMSP_NOEXCEPT;
 	NMSP_CONSTEXPR Iter		end()		const NMSP_NOEXCEPT;
@@ -48,8 +54,6 @@ public:
 	NMSP_CONSTEXPR RevIter	rend()		const NMSP_NOEXCEPT;
 	NMSP_CONSTEXPR CRevIter	crbegin()	const NMSP_NOEXCEPT;
 	NMSP_CONSTEXPR CRevIter	crend()		const NMSP_NOEXCEPT;
-
-	bool is_empty() const;
 };
 
 #endif
@@ -74,10 +78,26 @@ Span_Eastl<T>::Span_Eastl(T* begin, T* end)
 
 }
 
+template<class T> inline NMSP_CONSTEXPR
+Span_Eastl<T>::Span_Eastl(std::initializer_list<T> list)
+	//: Base(constCast<T*>(list.begin()), list.size())
+	: Base(list.begin(), list.end())
+{
+
+}
+
 template<class T> inline 
-bool Span_Eastl<T>::is_empty() const
+bool 
+Span_Eastl<T>::is_empty() const
 {
 	return size() == 0;
+}
+
+template<class T> inline 
+typename Span_Eastl<T>::SizeType
+Span_Eastl<T>::size_in_bytes() const
+{
+	return size() * sizeof(T);
 }
 
 template<class T> inline NMSP_CONSTEXPR typename Span_Eastl<T>::Iter		Span_Eastl<T>::begin()		const NMSP_NOEXCEPT	{ return Base::begin();		}

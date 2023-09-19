@@ -12,12 +12,12 @@ namespace nmsp {
 
 Process_Win32::Process_Win32(const CreateDesc& cd)
 {
-	_notYetSupported();
+	NMSP_NOT_YET_SUPPORT();
 }
 
 Process_Win32::Process_Win32(StrViewA_T filename)
 {
-	_init(filename, "");
+	_init(filename, StrViewA_T{});
 }
 
 Process_Win32::Process_Win32(StrViewA_T filename, StrViewA_T args)

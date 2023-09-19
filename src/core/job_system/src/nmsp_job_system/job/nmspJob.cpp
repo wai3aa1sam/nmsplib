@@ -107,7 +107,7 @@ void Job_T::_runBefore(Job_T* job)
 
 void* Job_T::_allocate(size_t n)
 {
-	_notYetSupported();
+	NMSP_NOT_YET_SUPPORT();
 	return nullptr /*this->_storage._localBuf.allocate(n)*/;
 }
 

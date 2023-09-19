@@ -139,5 +139,11 @@ bool StrUtil::isSame(const char* a, const char* b)
 	return ::strcmp(a, b) == 0;
 }
 
+bool StrUtil::isDigit		(char ch)	{ return ch >= '0' && ch <= '9'; }
+bool StrUtil::isAlpha		(char ch)	{ return isLowerCase(ch) || isUpperCase(ch); }
+bool StrUtil::isLowerCase	(char ch)	{ return ch >= 'a' && ch <= 'z'; }
+bool StrUtil::isUpperCase	(char ch)	{ return ch >= 'A' && ch <= 'Z'; }
+
+
 
 }

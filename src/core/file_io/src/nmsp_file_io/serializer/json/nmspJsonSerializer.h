@@ -18,8 +18,9 @@ namespace nmsp {
 
 class JsonSerializer_T;
 
+// not used, fmt like design, but cannot use as typedef
 template<class T>
-struct JsonIO
+struct JsonIo
 {
 	template<class SE>
 	static void onJson(SE& se, T& v);
@@ -31,7 +32,7 @@ struct JsonSE_Helper
 	static void io(SE& se, T& v) 
 	{
 		se.io_beginObject();
-		JsonIO<T>::onJson(se, v);
+		v.onJsonIo(se);
 		se.io_endObject();
 	}
 };

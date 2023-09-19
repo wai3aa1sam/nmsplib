@@ -3,7 +3,8 @@
 #include "nmsp_stl/backend/eastl/common/nmspStl_Common_Eastl.h"
 #include "nmsp_stl/view/nmspSpan.h"
 
-namespace nmsp {
+namespace nmsp 
+{
 
 #if 0
 #pragma mark --- Vector_Eastl-Decl ---
@@ -37,6 +38,9 @@ public:
 	using ViewType 	= Span_T<T>;
 	using CViewType = Span_T<const T>;
 
+	using Iter	= typename Base::iterator;      
+	using CIter = typename Base::const_iterator;
+
 public:
 	using Base::data;
 	using Base::size;
@@ -52,14 +56,27 @@ public:
 	template<class... ARGS> Vector_Eastl(SizeType n, ARGS&&... args);
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
-	bool is_empty() const NMSP_NOEXCEPT;
+	void appendRange(const CViewType& r);
 
-	Span_T<      T> span();
-	Span_T<const T> span() const;
+	template<class PRED> Iter	findIf(PRED pred);
+	template<class PRED> CIter	findIf(PRED pred) const;
 
+	bool		is_empty()		const NMSP_NOEXCEPT;
 	SizeType	size_in_bytes() const;
-	ByteSpan_T	byteSpan() const;
 
+	ViewType	span();
+	CViewType	span() const;
+
+	operator ViewType ();
+	operator CViewType() const;
+
+	ViewType	subspan(SizeType offset, SizeType count);
+	CViewType	subspan(SizeType offset, SizeType count) const;
+
+	ViewType	subspan(SizeType offset);
+	CViewType	subspan(SizeType offset) const;
+
+	ByteSpan_T	byteSpan() const;
 
 private:
 
@@ -102,6 +119,30 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(SizeType n, ARGS&&... args)
 //	: Base(view, allocator)
 //{}
 
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::appendRange(const CViewType& r)
+{
+	Base::insert(end(), r.begin(), r.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<class PRED> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::Iter
+Vector_Eastl<T, N, FALLBACK_ALLOC>::findIf(PRED pred)
+{
+	return find_if(begin(), end(), pred);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC>
+template<class PRED> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CIter
+Vector_Eastl<T, N, FALLBACK_ALLOC>::findIf(PRED pred) const
+{
+	return find_if(begin(), end(), pred);
+}
+
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 bool Vector_Eastl<T, N, FALLBACK_ALLOC>::is_empty() const NMSP_NOEXCEPT
 {
@@ -109,24 +150,68 @@ bool Vector_Eastl<T, N, FALLBACK_ALLOC>::is_empty() const NMSP_NOEXCEPT
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
-Span_T<T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span()
-{
-	return Span_T<T>{begin(), end()};
-	//return ViewType{begin(), end()};
-}
-
-template<class T, size_t N, class FALLBACK_ALLOC> inline
-Span_T<const T> Vector_Eastl<T, N, FALLBACK_ALLOC>::span() const
-{
-	return Span_T<const T>{begin(), end()};
-	//return CViewType{begin(), end()};
-}
-
-template<class T, size_t N, class FALLBACK_ALLOC> inline
 typename Vector_Eastl<T, N, FALLBACK_ALLOC>::SizeType
 Vector_Eastl<T, N, FALLBACK_ALLOC>::size_in_bytes() const
 {
 	return size() * sizeof(T);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::ViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::span()
+{
+	//return Span_T<T>{begin(), end()};
+	return ViewType{begin(), end()};
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::span() const
+{
+	//return Span_T<const T>{begin(), end()};
+	return CViewType{begin(), end()};
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::operator ViewType()	
+{ 
+	return span(); 
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::operator CViewType() const	
+{ 
+	return span(); 
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::ViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::subspan(SizeType offset, SizeType count)			
+{ 
+	NMSP_CORE_ASSERT(size() > offset && count <= size() - offset, "overflow, invalid offset / count");
+	return ViewType(begin() + offset, count); 
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::subspan(SizeType offset, SizeType count) const	
+{ 
+	NMSP_CORE_ASSERT(size() > offset && count <= size() - offset, "overflow, invalid offset / count");
+	return CViewType(begin() + offset, count); 
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::ViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::subspan(SizeType offset)		
+{ 
+	return subspan(offset, size() - offset); 
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CViewType
+Vector_Eastl<T, N, FALLBACK_ALLOC>::subspan(SizeType offset) const	
+{
+	return subspan(offset, size() - offset); 
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline

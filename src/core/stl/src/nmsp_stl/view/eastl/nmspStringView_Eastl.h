@@ -16,7 +16,11 @@ public:
 	using Base = eastl::basic_string_view<T>;
 
 public:
-	using SizeType = typename Base::size_type;
+	using ValueT	= typename Base::value_type;
+	using SizeType	= typename Base::size_type;
+
+	using Iter		= typename Base::iterator;
+	using CIter		= typename Base::const_iterator;
 
 public:
 	using Base::data;

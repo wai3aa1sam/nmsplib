@@ -24,26 +24,35 @@ struct WCharUtil {
 
 
 #if 0
-#pragma mark --- UtfUtil-Decl ---
+#pragma mark --- UtfUtil_T-Decl ---
 #endif // 0
 #if 1
 
-struct UtfUtil {
-	UtfUtil() = delete;
+template<class ALLOC_T>
+struct UtfUtil_T 
+{
+	using StrView	= StrViewA_T;
+	using StrViewW	= StrViewW_T;
+	template<size_t N, class ALLOC = ALLOC_T>	using StringA		= StringA_T<N, ALLOC>;
+	template<size_t N, class ALLOC = ALLOC_T>	using StringW		= StringW_T<N, ALLOC>;
+	template<class ALLOC = ALLOC_T>				using TempStringA	= TempStringA_T<ALLOC>;
+	template<class ALLOC = ALLOC_T>				using TempStringW	= TempStringW_T<ALLOC>;
+
+	UtfUtil_T() = delete;
 
 	template<class DST, class SRC> static void convert(DST& dst, const SRC& src);
 
-	template<size_t N>	static void append(StringA_T<N>&  dst, StrViewA_T  view) { _append(dst, view); }
-	template<size_t N>	static void append(StringA_T<N>&  dst, StrViewW_T view)	 { _append(dst, view); }
+	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringA<N, ALLOC>&  dst, StrView  view) { _append(dst, view); }
+	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringA<N, ALLOC>&  dst, StrViewW view) { _append(dst, view); }
 
-	template<size_t N>	static void append(StringW_T<N>& dst, StrViewA_T  view)	 { _append(dst, view); }
-	template<size_t N>	static void append(StringW_T<N>& dst, StrViewW_T view)	 { _append(dst, view); }
+	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringW<N, ALLOC>& dst, StrView	view)	{ _append(dst, view); }
+	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringW<N, ALLOC>& dst, StrViewW view)	{ _append(dst, view); }
 
-	template<class SRC>	static StringT  toString (SRC& src) { StringT  o; convert(o, src); return o; }
-	template<class SRC>	static StringWT toStringW(SRC& src) { StringWT o; convert(o, src); return o; }
+	template<class SRC>	static StringA<0> toString (SRC& src) { StringA<0> o; convert(o, src); return o; }
+	template<class SRC>	static StringW<0> toStringW(SRC& src) { StringW<0> o; convert(o, src); return o; }
 
-	template<class SRC>	static TempStringA_T<> toTempString (SRC& src) { TempStringA_T<> o; convert(o, src); return o; }
-	template<class SRC>	static TempStringW_T<> toTempStringW(SRC& src) { TempStringA_T<> o; convert(o, src); return o; }
+	template<class SRC>	static TempStringA<> toTempString (SRC& src) { TempStringA<> o; convert(o, src); return o; }
+	template<class SRC>	static TempStringW<> toTempStringW(SRC& src) { TempStringW<> o; convert(o, src); return o; }
 
 private:
 	static uint32_t _decodeUtf(const char*&     src, const char*     end);
@@ -53,34 +62,33 @@ private:
 
 	template<class DST, class SRC> static void _append(DST& dst, SRC view);
 
-	template<size_t N>
-	static void _appendChar(StringA_T<N>&  dst, uint32_t  ch) { _appendCharA(dst, ch); }
-	static void _appendChar(StringT&       dst, uint32_t  ch) { _appendCharA(dst, ch); }
-
-	template<size_t N>
-	static void _appendChar(StringW_T<N>& dst, uint32_t  ch) { _appendCharW(dst, ch); }
-	static void _appendChar(StringWT&     dst, uint32_t  ch) { _appendCharW(dst, ch); }
+	template<size_t N, class ALLOC = ALLOC_T> static void _appendChar(StringA<N, ALLOC>& dst, uint32_t  ch) { _appendCharA(dst, ch); }
+	template<size_t N, class ALLOC = ALLOC_T> static void _appendChar(StringW<N, ALLOC>& dst, uint32_t  ch) { _appendCharW(dst, ch); }
 
 	template<class OUT_STR> static void _appendCharA(OUT_STR& dst, uint32_t  ch);
 	template<class OUT_STR> static void _appendCharW(OUT_STR& dst, uint32_t  ch);
 };
 
+using UtfUtil = UtfUtil_T<DefaultAllocator>;
 
 #endif
 
 #if 0
-#pragma mark --- UtfUtil-Impl ---
+#pragma mark --- UtfUtil_T-Impl ---
 #endif // 0
 #if 1
 
+template<class ALLOC_T>
 template<class DST, class SRC> inline
-void UtfUtil::convert(DST& dst, const SRC& src) {
+void UtfUtil_T<ALLOC_T>::convert(DST& dst, const SRC& src) 
+{
 	dst.clear();
 	append(dst, src);
 }
 
+template<class ALLOC_T>
 template<class DST, class SRC> inline
-void UtfUtil::_append(DST& dst, SRC view) {
+void UtfUtil_T<ALLOC_T>::_append(DST& dst, SRC view) {
 	const auto* p = view.data();
 	const auto* end = view.end();
 
@@ -90,8 +98,9 @@ void UtfUtil::_append(DST& dst, SRC view) {
 	}
 }
 
+template<class ALLOC_T>
 inline
-uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
+uint32_t UtfUtil_T<ALLOC_T>::_decodeUtf(const char* & src, const char* end ) {
 	auto v = static_cast<uint8_t>(*src);
 	uint32_t o = 0;
 	if (v < 0x80) {
@@ -150,8 +159,9 @@ uint32_t UtfUtil::_decodeUtf(const char* & src, const char* end ) {
 	}
 }
 
+template<class ALLOC_T>
 inline
-uint32_t UtfUtil::_decodeUtf(const char16_t*& src, const char16_t* end) {
+uint32_t UtfUtil_T<ALLOC_T>::_decodeUtf(const char16_t*& src, const char16_t* end) {
 	auto v = static_cast<uint16_t>(*src);
 
 	if (v >= 0xD800 && v < 0xDBFF) {
@@ -165,21 +175,24 @@ uint32_t UtfUtil::_decodeUtf(const char16_t*& src, const char16_t* end) {
 	return a;
 }
 
+template<class ALLOC_T>
 inline
-uint32_t UtfUtil::_decodeUtf(const char32_t*& src, const char32_t* end) {
+uint32_t UtfUtil_T<ALLOC_T>::_decodeUtf(const char32_t*& src, const char32_t* end) {
 	return *src++;
 }
 
+template<class ALLOC_T>
 inline
-uint32_t UtfUtil::_decodeUtf(const wchar_t*& src, const wchar_t* end) {
+uint32_t UtfUtil_T<ALLOC_T>::_decodeUtf(const wchar_t*& src, const wchar_t* end) {
 	using C = WCharUtil::Char;
 	const auto* & s = reinterpret_cast<const C* &>(src);
 	const auto*   e = reinterpret_cast<const C*  >(end);
 	return _decodeUtf(s, e);
 }
 
+template<class ALLOC_T>
 template<class OUT_STR> inline
-void UtfUtil::_appendCharA(OUT_STR& dst, uint32_t v) {
+void UtfUtil_T<ALLOC_T>::_appendCharA(OUT_STR& dst, uint32_t v) {
 	if( v <       0x80 ) {
 		dst += static_cast<char>(v);
 		return;
@@ -252,8 +265,9 @@ void UtfUtil::_appendCharA(OUT_STR& dst, uint32_t v) {
 	}
 }
 
+template<class ALLOC_T>
 template<class OUT_STR> inline
-void UtfUtil::_appendCharW(OUT_STR& dst, uint32_t v) {
+void UtfUtil_T<ALLOC_T>::_appendCharW(OUT_STR& dst, uint32_t v) {
 	if( v <  0x10000 ) {
 		dst += static_cast<wchar_t>(v);
 		return;

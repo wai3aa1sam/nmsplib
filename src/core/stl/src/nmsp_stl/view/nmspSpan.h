@@ -47,10 +47,19 @@ template<class T> using Span_T = Span_Impl<T>;
 using ByteSpan_T = Span_T<const u8>;
 
 template<class DST, class SRC> inline
-Span_T<DST> spanCast(Span_T<SRC> src)
+Span_T<DST> 
+spanCast(Span_T<SRC> src)
 {
-	size_t srcBytes = src.size_bytes();
+	size_t srcBytes = src.size_in_bytes();
 	return Span_T<DST>(reinCast<DST*>(src.data()), srcBytes / sizeof(DST));
+}
+
+template<class DST, class SRC> inline
+Span_T<DST> 
+spanConstCast(Span_T<SRC> src)
+{
+	size_t srcBytes = src.size_in_bytes();
+	return Span_T<DST>(constCast<DST*>(src.data()), srcBytes / sizeof(DST));
 }
 
 template<class T> inline 

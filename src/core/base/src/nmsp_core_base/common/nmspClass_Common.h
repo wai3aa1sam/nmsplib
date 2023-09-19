@@ -2,6 +2,7 @@
 
 #include "nmsp_core_base_traits.h"
 #include "nmspDataType_Common.h"
+#include "nmspTypeTraits_Common.h"
 
 namespace nmsp {
 

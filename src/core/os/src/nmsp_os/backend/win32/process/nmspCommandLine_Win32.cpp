@@ -13,7 +13,7 @@ namespace nmsp {
 
 CmdLine_Win32::CmdLine_Win32(const CreateDesc& cd)
 {
-	_notYetSupported();
+	NMSP_NOT_YET_SUPPORT();
 }
 
 CmdLine_Win32::CmdLine_Win32(StrViewA_T cmd, bool isCloseAfterExecute)

@@ -44,6 +44,7 @@ references:
 
 #define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
 
+
 #if NMSP_DEBUG || NMSP_ENABLE_ASSERT
 	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
 	#define NMSP_ASSERT(X, ...)			do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
@@ -57,10 +58,15 @@ references:
 
 	#define NMSP_DEBUG_CALL(FUNC) FUNC
 
+	#define NMSP_TODO(FMT, ...) _todo(NMSP_SRCLOC, FMT, __VA_ARGS__)
+
 #else
 	#define NMSP_SRCLOC	SrcLoc()
 
 	#define NMSP_DEBUG_CALL(FUNC) FUNC
+
+	#define NMSP_TODO(FMT, ...) 
+
 #endif
 
 #define NMSP_REP_0(X)

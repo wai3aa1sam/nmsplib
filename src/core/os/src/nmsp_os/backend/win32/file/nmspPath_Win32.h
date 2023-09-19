@@ -66,10 +66,11 @@ template<class STR> inline
 void		
 Path_Win32::getCurrentDirTo(STR& out)
 {
-	wchar_t tmp[MAX_PATH+1];
-	auto ret = ::GetCurrentDirectory(MAX_PATH, tmp);
+	wchar_t temp[MAX_PATH+1];
+	auto ret = ::GetCurrentDirectory(MAX_PATH, temp);
 	Util::throwIf(!ret, "{}", NMSP_SRCLOC);
-	out = UtfUtil::toTempString(tmp);
+
+	out = UtfUtil::toTempString(temp);
 }
 
 

@@ -59,7 +59,7 @@ DefaultAllocator::free(void* p, SizeType n)
 inline bool 
 DefaultAllocator::is_owning(void* p, SizeType n)
 {
-	_notYetSupported();
+	NMSP_NOT_YET_SUPPORT();
 	return false;
 }
 

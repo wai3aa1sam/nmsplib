@@ -37,6 +37,10 @@ struct StrUtil
 	static bool hasChar(StrViewA_T view, char ch);
 	static bool hasAny (StrViewA_T view, StrViewA_T charList);
 
+	template<class PRED>							void findIf(StrViewA_T view, PRED pred);
+	template<class PRED>							void findIf(StrViewW_T view, PRED pred);
+	template<class VIEW, class PRED> typename VIEW::Iter findIf_Impl(VIEW view, PRED pred);
+
 	static Pair_T<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, StrViewA_T seperators);
 	static Pair_T<StrViewA_T, StrViewA_T> splitByChar(StrViewA_T view, char seperator);
 
@@ -48,7 +52,11 @@ struct StrUtil
 	static int ignoreCaseCompare(StrViewA_T a, StrViewA_T b);
 	static int ignoreCaseCompare(char a, char b);
 
-	static bool isSame(const char* a, const char* b);
+	static bool isSame		(const char* a, const char* b);
+	static bool isDigit		(char ch);
+	static bool isAlpha		(char ch);
+	static bool isLowerCase	(char ch);
+	static bool isUpperCase	(char ch);
 
 
 	template<class T>			static StringT			toStr			(const T& val);
@@ -148,6 +156,35 @@ inline
 int StrUtil::ignoreCaseCompare(char a, char b) 
 { 
 	return tolower(a) - tolower(b); 
+}
+
+template<class PRED> inline
+void 
+StrUtil::findIf(StrViewA_T view, PRED pred)
+{
+	return findIf_Impl(view, pred);
+}
+
+template<class PRED> inline
+void 
+StrUtil::findIf(StrViewW_T view, PRED pred)
+{
+	return findIf_Impl(view, pred);
+}
+
+template<class VIEW, class PRED> inline
+typename VIEW::Iter 
+StrUtil::findIf_Impl(VIEW view, PRED pred)
+{
+	using Iter = typename VIEW::Iter;
+	for (Iter e : view)
+	{
+		if (pred(*e))
+		{
+			return e;
+		}
+	}
+	return view.end();
 }
 
 #if 0

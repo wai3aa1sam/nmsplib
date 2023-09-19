@@ -44,7 +44,7 @@ public:
 	~String_Eastl() = default;
 
 	String_Eastl(ViewType view);
-	explicit String_Eastl(ViewType sv, const Allocator& allocator = DefaultAllocator{});
+	explicit String_Eastl(ViewType sv, const Allocator& allocator);
 	String_Eastl(const T* cstr);
 
 	template<class STR> void operator= (STR&& rhs);

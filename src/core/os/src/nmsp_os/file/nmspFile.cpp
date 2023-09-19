@@ -40,17 +40,20 @@ char File::writeFile(StrViewA_T filename, ByteSpan_T data, bool createDir, bool 
 	if (Path::isExist(realPath))
 	{
 		ret = 'U';
-
-		auto dir = Path::dirname(realPath);
-		if (dir.size() > 0)
-		{
-			Path::create(dir);
-		}
 	}
 
 	if (logResult)
 	{
 		_NMSP_LOG("[{}] {}, size={}", ret, realPath, data.size());
+	}
+
+	if (createDir)
+	{
+		auto dir = Path::dirname(realPath);
+		if (!dir.is_empty())
+		{
+			Path::create(dir);
+		}
 	}
 	
 	writeBytes(filename, data);

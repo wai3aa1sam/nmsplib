@@ -57,4 +57,11 @@ namespace nmsp {
 template<class T, class ALLOC = DefaultAllocator>							using IVector_T	= IVector_Impl<T, ALLOC>;
 template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>	using Vector_T	= Vector_Impl<T, N, FALLBACK_ALLOC>;
 
+template<class DST, class SRC, size_t N, class ALLOC> inline
+Span_T<DST> 
+spanConstCast(Vector_T<SRC, N, ALLOC> src)
+{
+	return spanConstCast<DST>(src.span());
+}
+
 }
