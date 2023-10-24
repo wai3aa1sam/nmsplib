@@ -56,7 +56,8 @@ public:
 	template<class... ARGS> Vector_Eastl(SizeType n, ARGS&&... args);
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
-	void appendRange(const CViewType& r);
+	void	appendRange(const CViewType& r);
+	T		moveBack();
 
 	template<class PRED> Iter	findIf(PRED pred);
 	template<class PRED> CIter	findIf(PRED pred) const;
@@ -125,6 +126,17 @@ void
 Vector_Eastl<T, N, FALLBACK_ALLOC>::appendRange(const CViewType& r)
 {
 	Base::insert(end(), r.begin(), r.end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+T 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::moveBack()
+{
+	T out;
+	auto* pBack = &back();
+	out = nmsp::move(*pBack);
+	pop_back();
+	return out;
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC>

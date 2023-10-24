@@ -51,6 +51,21 @@ memberOffset(MEMBER OBJ::* member)
 	return reinCast<intptr_t>(m);
 }
 
+
+template<class T, size_t N>
+size_t 
+arraySize(T (&arr)[N])
+{
+	return N;
+}
+
+template<class CAST_TO, class T, size_t N>
+CAST_TO 
+arraySizeT(T (&arr)[N])
+{
+	return sCast<CAST_TO>(N);
+}
+
 #if 0
 #pragma mark --- nmsp_os_alloc-Impl ---
 #endif // 0
