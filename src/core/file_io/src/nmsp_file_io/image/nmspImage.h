@@ -38,12 +38,11 @@ public:
 	using SizeType	= FileIoTraits::SizeType;
 
 public:
-	ColorType colorType = ColorType::None;
-	int width;
-	int height;
-	int strideInBytes;
-	int mipmapCount = 1;
-	int dataSizeInBytes;
+	ColorType	colorType = ColorType::None;
+	int			width;
+	int			height;
+	int			strideInBytes;
+	int			mipmapCount = 1;
 };
 
 class Image_T : public NonCopyable
@@ -73,6 +72,10 @@ public:
 	void loadDdsMem	(ByteSpan_T data);
 
 	void create(const CreateDesc& cd);
+	void create(ColorType colorType, int width, int height);
+	void create(ColorType colorType, int width, int height, int strideInBytes);
+	void create(ColorType colorType, int width, int height, int strideInBytes, int mipmapCount, SizeType dataSizeInBytes);
+
 	template<class COLOR> void fill(const COLOR& v);
 
 	Span_T<		 u8>	data();
@@ -151,26 +154,26 @@ template<class COLOR> inline
 Span_T<		 	COLOR> Image_T::row(int y)
 {
 	_checkColorType(COLOR::s_kColorType);
-	return row_noCheck(y);
+	return row_noCheck<COLOR>(y);
 }
 
 template<class COLOR> inline
 Span_T<const 	COLOR> Image_T::row(int y) const
  {
 	_checkColorType(COLOR::s_kColorType);
-	return row_noCheck(y);
+	return row_noCheck<const COLOR>(y);
  }
 
 template<class COLOR> inline 		
 Span_T<		 	COLOR> Image_T::row_noCheck(int y)
 {
-	return Span_T<COLOR>{reinCast<COLOR*>(rowBytes(y)), width()};
+	return Span_T<COLOR>{reinCast<COLOR*>(rowBytes(y).data()), sCast<SizeType>(width())};
 }
 
 template<class COLOR> inline 
 Span_T<const 	COLOR> Image_T::row_noCheck(int y) const
 {
-	return Span_T<const COLOR>{reinCast<const COLOR*>(rowBytes(y)), width()};
+	return Span_T<const COLOR>{reinCast<const COLOR*>(rowBytes(y).data()), sCast<SizeType>(width())};
 }
 
 inline 

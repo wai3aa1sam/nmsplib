@@ -71,12 +71,35 @@ void Image_T::create(const CreateDesc& cd)
     _info.size.set(cd.width, cd.height);
     _info.colorType     = cd.colorType;
     _info.mipmapCount   = cd.mipmapCount;
-    _info.strideInBytes = cd.strideInBytes == 0 ? ColorUtil::pixelByteSize(cd.colorType) * cd.width : cd.dataSizeInBytes;
+    _info.strideInBytes = cd.strideInBytes == 0 ? ColorUtil::pixelByteSize(cd.colorType) * cd.width : cd.strideInBytes;
 
     _pixelData.clear();
     _pixelData.resize(totalByteSize());
 }
 
+void 
+Image_T::create(ColorType colorType, int width, int height)
+{
+	create(colorType, width, height, width * ColorUtil::getColorElementByteSize(colorType));
+}
+
+void 
+Image_T::create(ColorType colorType, int width, int height, int strideInBytes)
+{
+	create(colorType, width, height, strideInBytes, 1, height * strideInBytes);
+}
+
+void 
+Image_T::create(ColorType colorType, int width, int height, int strideInBytes, int mipmapCount, SizeType dataSizeInBytes)
+{
+	auto cDesc = makeCDesc();
+	cDesc.colorType			= colorType;
+	cDesc.width				= width;
+	cDesc.height			= height;
+	cDesc.strideInBytes		= strideInBytes;
+	cDesc.mipmapCount		= mipmapCount;
+	create(cDesc);
+}
 
 #endif
 

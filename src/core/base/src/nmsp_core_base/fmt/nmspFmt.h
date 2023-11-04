@@ -147,7 +147,7 @@ const wchar_t* makeStdStrView(const wchar_t* cs)
 template<class STR, class... ARGS> inline
 void fmtTo(STR& outStr, const char* fmt, ARGS&&... args)
 {
-	fmt::format_to(std::back_inserter(outStr), fmt::runtime(fmt), nmsp::forward<ARGS>(args)...);
+	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 template<class STR, class... ARGS> inline
@@ -161,7 +161,7 @@ STR fmtAs_T(const char* fmt, ARGS&&... args)
 template<class STR, class... ARGS> inline
 void fmtTo(STR& outStr, const wchar_t* fmt, ARGS&&... args)
 {
-	fmt::format_to(std::back_inserter(outStr), fmt::runtime(fmt), nmsp::forward<ARGS>(args)...);
+	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 template<class STR, class... ARGS> inline

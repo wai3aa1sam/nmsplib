@@ -47,7 +47,7 @@ void Util_Win32::throwIf(bool cond, const char* fmt, ARGS&&... args)
 	{
 		_NMSP_LOG(fmt, nmsp::forward<ARGS>(args)...);
 		auto msg = getLastErrorMsg();
-		_NMSP_LOG("--- Error: win32 - {}", msg); std::cout << std::flush;
+		_NMSP_LOG("--- Error: win32 - {}", msg);
 		//nmsp::throwIf(cond, fmt, nmsp::forward<ARGS>(args)...);
 	}
 }

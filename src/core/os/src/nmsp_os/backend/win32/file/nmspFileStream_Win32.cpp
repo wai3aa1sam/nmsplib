@@ -66,7 +66,7 @@ void FileStream_Win32::open(const CreateDesc& cd)
 	UtfUtil::convert(filenameW, cd.filename);
 
 	_fd = ::CreateFile(filenameW.c_str(), access_flags, share_flags, nullptr, create_flags, FILE_ATTRIBUTE_NORMAL, nullptr );
-	Util::throwIf(_fd == kInvalid());
+	Util::throwIf(_fd == kInvalid(), "filename: {}", cd.filename);
 }
 
 void FileStream_Win32::close()
