@@ -168,12 +168,12 @@ ThreadPool_T::_complete(JobHandle job)
 {
 	throwIf(true, "ThreadPool_T::_complete original version, not support onBegin()/onEnd()");
 
-	auto& jobRemainCount	= job->_storage._jobRemainCount;
+	//auto& jobRemainCount	= job->_storage._jobRemainCount;
 	auto& parent			= job->_storage._parent;
 	//auto& depsOnThis		= job->_storage.dep._depsOnThis;
 
 	//atomicLog("=== task complete");
-	auto ret = jobRemainCount.fetch_sub(1) - 1;
+	auto remain = job->decrRemainJobCount();
 	// must be a copy, consider the jobRemainCount maybe 1, when contex-switch, 
 	// other thread is decr the jobRemainCount, both of them will trigger jobRemainCount == 0,
 	// possibly call _complete() multiple times which causing calling multipy runAfterThisIffNoDeps(),
@@ -183,7 +183,7 @@ ThreadPool_T::_complete(JobHandle job)
 		DependencyManager::jobFinish(job);
 	#endif // 0
 
-	if (ret == 0)	// must compare
+	if (remain == 0)	// must compare
 	{
 		if (parent)
 		{
@@ -198,12 +198,11 @@ ThreadPool_T::_complete(JobHandle job)
 void 
 ThreadPool_T::_complete_onBeginEndSupported(JobHandle job)
 {
-	auto& jobRemainCount	= job->_storage._jobRemainCount;
 	auto& parent			= job->_storage._parent;
+	
+	auto remain = job->decrRemainJobCount();
 
-	auto ret = jobRemainCount.fetch_sub(1) - 1;
-
-	if (ret == 0)	// must compare
+	if (remain == 0)	// must compare
 	{
 
 		if (job->isForceOnBeginEnd() && !job->_storage._hasExecutedOnEnd)

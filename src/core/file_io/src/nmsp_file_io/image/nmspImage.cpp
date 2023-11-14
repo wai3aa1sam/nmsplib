@@ -21,6 +21,18 @@ Image_T::~Image_T()
 {
 }
 
+Image_T::Image_T(Image_T&& rhs)
+{
+	move(nmsp::move(rhs));
+}
+
+void 
+Image_T::operator=(Image_T&& rhs)
+{
+	NMSP_CORE_ASSERT(this != &rhs, "");
+	move(nmsp::move(rhs));
+}
+
 void Image_T::clear()
 {
 	_pixelData.clear();
@@ -99,6 +111,13 @@ Image_T::create(ColorType colorType, int width, int height, int strideInBytes, i
 	cDesc.strideInBytes		= strideInBytes;
 	cDesc.mipmapCount		= mipmapCount;
 	create(cDesc);
+}
+
+void 
+Image_T::move(Image_T&& rhs)
+{
+	_info		= rhs._info;
+	_pixelData	= nmsp::move(rhs._pixelData);
 }
 
 #endif

@@ -164,6 +164,13 @@ JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
 	return job;
 }
 
+JobSystem_T::JobHandle JobSystem_T::createParentJob()
+{
+	auto* job = JobSystem_T::allocateJob();
+	job->createParentJob();
+	return job;
+}
+
 void JobSystem_T::shutdown()
 {
 	for (auto& t : _typedThreads)

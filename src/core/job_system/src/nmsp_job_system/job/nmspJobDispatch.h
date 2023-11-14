@@ -40,7 +40,7 @@ public:
 public:
 	JobDispatcher();
 
-	template<bool IS_PREPARE, class T, class... DEPEND_ON> static JobHandle _dispatch(T* obj, JobSizeT loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
+	template<bool IS_PREPARE, class T, class... DEPEND_ON> static JobHandle _dispatch(T* obj, JobHandle parent, JobSizeT loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
 	static JobHandle _dispatch(JobParFor_Base* obj, JobSizeT loopCount, JobSizeT batchSize);
 	template<class... DEPEND_ON> static JobHandle _prepareDispatch(JobParFor_Base* obj, JobSizeT loopCount, JobSizeT batchSize, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps);
 
@@ -122,27 +122,27 @@ public:
 public:
 	virtual void execute() = 0;
 
-	JobHandle dispatch()
+	JobHandle dispatch(JobHandle parent = {})
 	{
-		return dispatch(this);
+		return dispatch(this, parent);
 	}
 
 	template<class... DEPEND_ON>
-	JobHandle prepareDispatch(JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	JobHandle prepareDispatch(JobHandle parent, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 	{
-		return prepareDispatch(this, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return prepareDispatch(this, parent, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 
 private:
-	static JobHandle dispatch(This* obj)
+	static JobHandle dispatch(This* obj, JobHandle parent = {})
 	{
-		return JobDispatcher::_dispatch<false>(obj, 1, nullptr);
+		return JobDispatcher::_dispatch<false>(obj, parent, 1, nullptr);
 	}
 
 	template<class... DEPEND_ON>
-	static JobHandle prepareDispatch(This* obj, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
+	static JobHandle prepareDispatch(This* obj, JobHandle parent, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 	{
-		return JobDispatcher::_dispatch<true>(obj, 1, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return JobDispatcher::_dispatch<true>(obj, parent, 1, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 };
 
@@ -167,9 +167,9 @@ public:
 public:
 	virtual void execute(const JobArgs& args) = 0;
 
-	JobHandle dispatch(JobSizeT loopCount)
+	JobHandle dispatch(JobSizeT loopCount, JobHandle parent = {})
 	{
-		return dispatch(this, loopCount);
+		return dispatch(this, parent, loopCount);
 	}
 
 	template<class... DEPEND_ON>
@@ -179,15 +179,15 @@ public:
 	}
 
 public:
-	static JobHandle dispatch(This* obj, JobSizeT loopCount)
+	static JobHandle dispatch(This* obj, JobHandle parent, JobSizeT loopCount)
 	{
-		return JobDispatcher::_dispatch<false>(obj, loopCount, nullptr);
+		return JobDispatcher::_dispatch<false>(obj, parent, loopCount, nullptr);
 	}
 
 	template<class... DEPEND_ON>
 	static JobHandle prepareDispatch(This* obj, JobSizeT loopCount, JobHandle dependOn = nullptr, DEPEND_ON&&... moreDeps)
 	{
-		return JobDispatcher::_dispatch<true>(obj, loopCount, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
+		return JobDispatcher::_dispatch<true>(obj, nullptr, loopCount, dependOn, nmsp::forward<DEPEND_ON>(moreDeps)...);
 	}
 };
 
@@ -249,7 +249,7 @@ JobDispatcher::JobDispatcher()
 }
 
 template<bool IS_PREPARE, class T, class... DEPEND_ON> inline
-typename JobDispatcher::JobHandle JobDispatcher::_dispatch(T* obj, JobSizeT loopCount, JobHandle dependOn, DEPEND_ON&&... moreDeps)
+typename JobDispatcher::JobHandle JobDispatcher::_dispatch(T* obj, JobHandle parent, JobSizeT loopCount, JobHandle dependOn, DEPEND_ON&&... moreDeps)
 {
 	//static_assert(IsBaseOf<Job_Base<T>, T> || IsBaseOf<JobFor_Base<T>, T>, "T is not base of Job_Base or JobFor_Base");
 	if (loopCount == 0)
@@ -281,7 +281,7 @@ typename JobDispatcher::JobHandle JobDispatcher::_dispatch(T* obj, JobSizeT loop
 		info.batchOffset = 0 * 0;
 		info.batchEnd	 = loopCount;
 
-		job->init(task, info, obj, nullptr);
+		job->init(task, info, obj, parent);
 	}
 
 	if constexpr (!IS_PREPARE)

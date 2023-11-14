@@ -249,7 +249,7 @@ JobCluster::_prepareDispatch(T* jobCluster, JobSizeT batchSize)
 {
 	if constexpr(T::s_kType == JobDispatchType::Job_Base)
 	{
-		return jobCluster->prepareDispatch();
+		return jobCluster->prepareDispatch(nullptr, nullptr);
 	}
 	else if constexpr(T::s_kType == JobDispatchType::JobFor_Base)
 	{

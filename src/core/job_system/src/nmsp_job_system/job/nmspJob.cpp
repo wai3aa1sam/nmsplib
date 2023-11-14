@@ -13,6 +13,16 @@ namespace nmsp {
 
 Job_T::Task Job_T::s_emptyTask = [](const JobArgs& args) {};
 
+Job_T::Job_T()
+{
+	NMSP_TODO("make bool member data to 1 bit");
+}
+
+Job_T::~Job_T()
+{
+
+}
+
 void Job_T::clear()
 {
 	_storage.dep._dependencyCount.store(0);
@@ -53,6 +63,13 @@ Job_T::setDispatchJob(JobDispatch_Base* dispatchJob)
 	_storage._dispatchJob = dispatchJob;
 }
 
+Job_T::JobCountType 
+Job_T::decrRemainJobCount()
+{
+	auto ret = _storage._jobRemainCount.fetch_sub(1); // i--
+	return ret - 1;
+}
+
 bool 
 Job_T::isCompleted() const		
 {
@@ -60,12 +77,17 @@ Job_T::isCompleted() const
 	//bool normalCompleted	= jobCompleted && !dispatchJob();						NMSP_UNUSED(normalCompleted);
 	//bool isBypass			= this == nullptr || _storage._task == nullptr;			NMSP_UNUSED(isBypass);
 
-	bool correctCompleted	= jobCompleted && _storage._hasExecutedOnEnd;			NMSP_UNUSED(correctCompleted);
+	bool correctCompleted	= (jobCompleted && _storage._hasExecutedOnEnd)
+								|| (jobCompleted && !_storage._dispatchJob);			NMSP_UNUSED(correctCompleted);
 	
 	return correctCompleted;
 }
 
-int  Job_T::jobRemainCount() const	{ return _storage._jobRemainCount.load(); }
+Job_T::JobCountType  
+Job_T::jobRemainCount() const	
+{ 
+	return _storage._jobRemainCount.load(); 
+}
 
 void Job_T::_runAfter(Job_T* job)
 {
@@ -121,15 +143,29 @@ JobDispatch_Base* Job_T::_dispatchJob()
 	return _storage._dispatchJob;
 }
 
-const JobDispatch_Base* Job_T::dispatchJob() const { return _storage._dispatchJob; }
+const JobDispatch_Base* 
+Job_T::dispatchJob() const 
+{ 
+	return _storage._dispatchJob; 
+}
 
-void Job_T::_setInfo(const Info& info)
+void 
+Job_T::_setInfo(const Info& info)
 {
 	_storage._info = info;
 }
 
-int		Job_T::dependencyCount() const		{ return _storage.dep._dependencyCount.load(); }
-size_t	Job_T::runAfterCount() const		{ return _storage.dep._runAfterThis.size(); }
+Job_T::JobCountType	
+Job_T::dependencyCount() const		
+{ 
+	return _storage.dep._dependencyCount.load(); 
+}
+
+size_t 
+Job_T::runAfterCount() const		
+{ 
+	return _storage.dep._runAfterThis.size(); 
+}
 
 void Job_T::print() const
 {
@@ -137,12 +173,12 @@ void Job_T::print() const
 	//atomicLog("job -> dependencyCount: {}", dependencyCount());
 }
 
-void Job_T::init(const Task& func, const Info& info, Job_T* parent)
+void Job_T::init(const Task& func, const Info& info, Job_T* parent, JobCountType remainCount)
 {
 	clear();
 	new (&_storage.dep) Job_T::DepData();
 
-	_storage._jobRemainCount.store(1);
+	_storage._jobRemainCount.store(remainCount);
 	_storage._task = func;
 
 	_setInfo(info);
@@ -154,7 +190,7 @@ void
 Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent)
 {
 	init(func, info, parent);
-	_storage._dispatchJob = dispatchJob;
+	setDispatchJob(dispatchJob);
 }
 
 void 
@@ -164,8 +200,17 @@ Job_T::init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, b
 	_storage._isForceOnBeginEnd = forceBeginEnd;
 }
 
-void Job_T::addJobCount()				{ _storage._jobRemainCount++; }
-int	 Job_T::decrDependencyCount()		{ return _storage.dep.decrDependencyCount(); }
+void 
+Job_T::addJobCount()				
+{ 
+	_storage._jobRemainCount++; 
+}
+
+Job_T::JobCountType		
+Job_T::decrDependencyCount()
+{ 
+	return _storage.dep.decrDependencyCount(); 
+}
 
 void 
 Job_T::invokeOnEnd()
@@ -174,7 +219,7 @@ Job_T::invokeOnEnd()
 	{
 		_dispatchJob()->onEnd();
 	}
-	NMSP_CORE_ASSERT(!_storage._hasExecutedOnEnd, "should only invoke onEnd() once");
+	NMSP_CORE_ASSERT(!_storage._hasExecutedOnEnd || !dispatchJob(), "should only invoke onEnd() once");
 	_storage._hasExecutedOnEnd = true;
 }
 
@@ -198,7 +243,7 @@ const Job_T::Info& Job_T::info() const
 
 Job_T* Job_T::setName(const char* name) 
 {
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT || NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
 	_name = name;
 	#endif // NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
 
@@ -207,18 +252,24 @@ Job_T* Job_T::setName(const char* name)
 
 void Job_T::setEmpty()
 {
-	init(s_emptyTask, JobInfo(), nullptr);
+	init(s_emptyTask, JobInfo{}, nullptr);
+}
+
+void 
+Job_T::createParentJob()
+{
+	init(Job_T::s_emptyTask, JobInfo{}, nullptr, 0);
 }
 
 const char* Job_T::name() const
 {
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT || NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
 	return _name.c_str();
 	#else
-	return nullptr;
+	return "";
 	#endif // NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
-
 }
+
 #endif
 
 

@@ -48,8 +48,8 @@ public:
 class Image_T : public NonCopyable
 {
 public:
-	using CreateDesc = Image_CreateDesc;
-	using Info = ImageInfo;
+	using CreateDesc	= Image_CreateDesc;
+	using Info			= ImageInfo;
 
 	using SizeType	= Info::SizeType;
 	using Vec2i		= Info::Vec2i;
@@ -60,6 +60,9 @@ public:
 public:
 	Image_T() = default;
 	~Image_T();
+
+	Image_T(Image_T&& rhs);
+	void operator=(Image_T&& rhs);
 
 	void clear();
 
@@ -104,6 +107,9 @@ public:
 	int					strideInBytes	() const;
 	ColorType			colorType		() const;
 	const ImageInfo&	info			() const;
+
+protected:
+	void move(Image_T&& rhs);
 
 private:
 	void _checkColorType(ColorType v) const;
@@ -241,7 +247,8 @@ const ImageInfo& Image_T::info() const
 }
 
 inline
-void Image_T::_checkColorType(ColorType v) const
+void 
+Image_T::_checkColorType(ColorType v) const
 {
 	throwIf(v != colorType(), "{}", NMSP_SRCLOC);
 }

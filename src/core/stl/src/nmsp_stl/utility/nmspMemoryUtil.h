@@ -259,8 +259,9 @@ void memory_set(T* dst, size_t n, int val = 0);
 template<typename T> inline
 void memory_copy(T* dst, const T* src, size_t n)
 {
-	if (n < 0)
-		return;
+	NMSP_CORE_ASSERT(n > 0);
+	/*if (n < 0)
+		return;*/
 
 	if constexpr(IsTrivial<T>)
 	{
@@ -280,8 +281,9 @@ void memory_copy(T* dst, const T* src, size_t n)
 template<typename T> inline // const T* will trigger copy intead of move
 void memory_move(T* dst, /*const*/ T* src, size_t n)
 {
-	if (n < 0)
-		return;
+	NMSP_CORE_ASSERT(n > 0);
+	/*if (n < 0)
+		return;*/
 
 	if constexpr (IsTrivial<T>)
 	{
@@ -344,11 +346,13 @@ struct MemSetHelper<UINT, void /*EnableIf< sizeof(UINT) >= sizeof(u64) >*/ >
 template<typename T> inline
 void memory_set(T* dst, size_t n, int val)
 {
+	NMSP_CORE_ASSERT(n > 0);
+	/*
 	if (n < 0)
 		return;
 	
 	static_assert(IsTrivial<T>, "memory_set() must be Trivial Type");
-
+	*/
 	size_t bytes = sizeof(T) * n;
 	if (bytes > StlTraits::s_kThresholdToCallDMA)
 	{

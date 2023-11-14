@@ -63,6 +63,7 @@ public:
 	void destroy();
 
 	JobHandle createEmptyJob();
+	JobHandle createParentJob();
 
 	SizeType	workerCount()		const;
 	SizeType	threadCount()		const;

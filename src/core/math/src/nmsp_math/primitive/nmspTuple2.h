@@ -5,9 +5,10 @@
 namespace nmsp {
 
 template<class T> struct Tuple2_T;
-using Tuple2i_T = Tuple2_T<i32>;
 using Tuple2f_T = Tuple2_T<f32>;
 using Tuple2d_T = Tuple2_T<f64>;
+using Tuple2i_T = Tuple2_T<i32>;
+using Tuple2u_T = Tuple2_T<u32>;
 
 #if 0
 #pragma mark --- Tuple2-Decl ---
@@ -33,9 +34,9 @@ public:
 	};
 public:
 	Tuple2_T();
-	Tuple2_T(T x, T y);
+	Tuple2_T(T x_, T y_);
 
-	void set	(T x, T y);
+	void set	(T x_, T y_);
 	void setAll	(T val);
 
 	T	operator[](SizeType i) const;
@@ -69,17 +70,17 @@ Tuple2_T<T>::Tuple2_T()
 
 
 template<class T> inline
-Tuple2_T<T>::Tuple2_T(T x, T y)
-	: x(x), y(y)
+Tuple2_T<T>::Tuple2_T(T x_, T y_)
+	: x(x_), y(y_)
 {
 
 }
 
 template<class T> inline
-void Tuple2_T<T>::set(T x, T y)
+void Tuple2_T<T>::set(T x_, T y_)
 {
-	this->x = x;
-	this->y = y;
+	this->x = x_;
+	this->y = y_;
 }
 
 template<class T> inline

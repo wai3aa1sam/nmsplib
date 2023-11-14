@@ -68,14 +68,16 @@ public:
 	static constexpr SizeType s_kTargetSize = JobSystemTraits::s_kCacheLineSize * 2;
 
 public:
-	~Job_T() = default;
+	Job_T();
+	~Job_T();
 
 	void setEmpty();
+	void createParentJob();
 
-	bool		isCompleted		() const;
-	int			jobRemainCount	() const;
-	int			dependencyCount	() const;
-	SizeType	runAfterCount	() const;
+	bool			isCompleted		() const;
+	JobCountType	jobRemainCount	() const;
+	JobCountType	dependencyCount	() const;
+	SizeType		runAfterCount	() const;
 
 	const Info& info() const;
 	void print() const;
@@ -96,6 +98,8 @@ protected:
 	void	_runBefore(JobHandle job);
 	void*	_allocate(size_t n);
 
+	JobCountType decrRemainJobCount();
+
 	void setDispatchJob(JobDispatch_Base* dispatchJob);
 
 	JobHandle			parent();
@@ -104,14 +108,14 @@ protected:
 private:
 	void clear();
 
-	void init(const Task& func, const Info& info, JobHandle parent = nullptr);
+	void init(const Task& func, const Info& info, JobHandle parent = nullptr, JobCountType remainCount = 1);
 	void init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, JobHandle parent);
 	void init(const Task& func, const Info& info, JobDispatch_Base* dispatchJob, bool forceBeginEnd, JobHandle parent);
 
 	void _setInfo(const Info& info);
 
-	void addJobCount();
-	int	decrDependencyCount();
+	void			addJobCount();
+	JobCountType	decrDependencyCount();
 
 	void invokeOnEnd();
 
@@ -245,7 +249,7 @@ private:
 private:
 	Storage _storage;
 
-	#if NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
+	#if NMSP_JOB_SYSTEM_DEVELOPMENT || NMSP_JOB_SYSTEM_ENABLE_DEPENDENCY_MANAGER
 	StringT _name;
 	#endif // SGE_JOB_SYSTEM_DEBUG
 };
