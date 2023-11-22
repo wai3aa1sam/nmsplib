@@ -18,7 +18,7 @@ set(project_namespace_marco NMSP)
 
 project(${project_name})
 
-my_set_opt(${project_namespace_marco}_ENABLE_PROFILER           0)
+my_set_opt(${project_namespace_marco}_ENABLE_PROFILER           1)
 my_set_opt(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER  0)
 my_set_opt(${project_namespace_marco}_ENABLE_SANITIZER          0)
 

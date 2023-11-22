@@ -7,8 +7,6 @@
 namespace nmsp 
 {
 
-class SrcLoc;
-
 #if 0
 #pragma mark --- nmspCast-Impl ---
 #endif // 0

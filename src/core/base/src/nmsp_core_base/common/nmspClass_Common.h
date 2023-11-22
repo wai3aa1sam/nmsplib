@@ -42,9 +42,15 @@ public:
 
 public:
 	u32			line = 0;
-	const char* file = nullptr;
-	const char* func = nullptr;
+	const char* file = "";
+	const char* func = "";
 };
+
+template<> inline
+void onFormat(fmt::format_context& ctx, const SrcLoc& v)
+{
+	formatTo(ctx, "SrcLoc({}:{}: {})", v.file, v.line, v.func);
+}
 
 #endif
 
@@ -171,6 +177,6 @@ private:
 
 #endif
 
-
-
 }
+
+NMSP_FORMATTER( SrcLoc );

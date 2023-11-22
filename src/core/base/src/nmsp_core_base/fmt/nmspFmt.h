@@ -151,17 +151,23 @@ void fmtTo(STR& outStr, const char* fmt, ARGS&&... args)
 }
 
 template<class STR, class... ARGS> inline
+void fmtTo(STR& outStr, const wchar_t* fmt, ARGS&&... args)
+{
+	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
+}
+
+template<class STR> inline
+void fmtTo(STR& outStr)
+{
+	
+}
+
+template<class STR, class... ARGS> inline
 STR fmtAs_T(const char* fmt, ARGS&&... args)
 {
 	STR out;
 	fmtTo(out, fmt, std::forward<ARGS>(args)...);
 	return out;
-}
-
-template<class STR, class... ARGS> inline
-void fmtTo(STR& outStr, const wchar_t* fmt, ARGS&&... args)
-{
-	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
 }
 
 template<class STR, class... ARGS> inline
@@ -172,18 +178,31 @@ STR fmtAs_T(const wchar_t* fmt, ARGS&&... args)
 	return out;
 }
 
+template<class STR> inline
+STR fmtAs_T()
+{
+	STR out;
+	return out;
+}
+
 #endif
 
 }
 
 
-namespace nmsp{
-
-template<> inline
-void onFormat(fmt::format_context& ctx, const SrcLoc& v)
+namespace nmsp
 {
-	formatTo(ctx, "SrcLoc({}:{}: {})", v.file, v.line, v.func);
+
+inline 
+void _logFmt()
+{
+
+}
+
+template<class... ARGS> inline
+void _logFmt(const char* format, ARGS&&... args)
+{
+	std::cout << fmtAs_T<std::string>(format, nmsp::forward<ARGS>(args)...) << "\n"/* << std::flush*/;
 }
 
 }
-NMSP_FORMATTER( SrcLoc );

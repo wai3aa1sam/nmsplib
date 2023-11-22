@@ -25,6 +25,7 @@ references:
 #define NMSP_CALL(M, ARGS) NMSP_IDENTITY( M(ARGS) )
 
 #define NMSP_CONCAT(X, ...)		X ## __VA_ARGS__
+#define NMSP_CONCAT_TO_STR(A, B) NMSP_STRINGIFY(A) NMSP_STRINGIFY(B)
 
 #define NMSP_CALL_ARGS(X, ...)	NMSP_IDENTITY( X(__VA_ARGS__) )
 #define NMSP_ANGLE_BRACKET(...) NMSP_IDENTITY( <__VA_ARGS__> )
@@ -44,16 +45,17 @@ references:
 
 #define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
 
+#define NMSP_CALL_ONCE(...) do { static RDS_UNIQUE_VAR(bool) = false; if (!RDS_UNIQUE_VAR_NAME(bool)) { __VA_ARGS__; RDS_UNIQUE_VAR_NAME(bool) = true; } } while(false)
 
-#if NMSP_DEBUG || NMSP_ENABLE_ASSERT
-	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
-	#define NMSP_ASSERT(X, ...)			do{ if(!(X)) { ::nmsp::_log(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
+#if NMSP_DEBUG || NMSP_ENABLE_ASSERT || NMSP_DEVELOPMENT
+	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_logFmt(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
+	#define NMSP_ASSERT(X, ...)			do{ if(!(X)) { ::nmsp::_logFmt(__VA_ARGS__); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)
 #else
 	#define NMSP_CORE_ASSERT(X, ...)
 	#define NMSP_ASSERT(X, ...)	
 #endif // NMSP_ENABLE_ASSERT
 
-#if NMSP_DEBUG
+#if NMSP_DEBUG || NMSP_DEVELOPMENT
 	#define NMSP_SRCLOC	SrcLoc(NMSP_FILE, NMSP_LINE, NMSP_FUNC_NAME_SZ)
 
 	#define NMSP_DEBUG_CALL(FUNC) FUNC

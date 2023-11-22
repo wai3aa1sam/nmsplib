@@ -16,13 +16,12 @@
 #define NMSP_NEW(T)				new(NMSP_ALLOC_ALIGNED(sizeof(T), NMSP_ALIGN_OF(T))) T
 #define NMSP_DELETE(PTR)		::nmsp::nmsp_delete(PTR)
 
-
 using nmspAllocCallback = void* (*)(size_t n, size_t align, size_t offset);
 using nmspFreeCallback	= void  (*)(void* p, size_t n);
 struct NmspAllocationCallback
 {
-	nmspAllocCallback	allocCallback;
-	nmspFreeCallback	freeCallback;
+	nmspAllocCallback	allocCallback	= nullptr;
+	nmspFreeCallback	freeCallback	= nullptr;
 };
 extern NmspAllocationCallback* _nmspAllocationCallback;
 
@@ -39,13 +38,13 @@ namespace nmsp
 void* nmsp_alloc(size_t size, size_t align = nmsp::CoreBaseTraits::s_kDefaultAlign, size_t offset = 0)		NMSP_NOEXCEPT;
 void  nmsp_free	(void* p, size_t size = 0)																	NMSP_NOEXCEPT;
 
-
 #if NMSP_CUSTOM_ALLOC
 
 inline
 void*	
 nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
 {
+	NMSP_CORE_ASSERT(_nmspAllocationCallback->allocCallback, "NMSP_CUSTOM_ALLOC == 1 but NmspAllocationCallback is not yet set");
 	return _nmspAllocationCallback->allocCallback(size, align, offset);
 }
 
@@ -53,6 +52,7 @@ inline
 void	
 nmsp_free(void* p, size_t size /*= 0*/) NMSP_NOEXCEPT
 {
+	NMSP_CORE_ASSERT(_nmspAllocationCallback->freeCallback, "NMSP_CUSTOM_ALLOC == 1 but NmspAllocationCallback is not yet set");
 	_nmspAllocationCallback->freeCallback(p, size);
 }
 
@@ -62,6 +62,7 @@ inline void*
 nmsp_alloc(size_t size, size_t align /*= nmsp::CoreBaseTraits::s_kDefaultAlign*/, size_t offset /*= 0*/) NMSP_NOEXCEPT
 {
 	auto* p = nmsp::os_aligned_alloc(size, align);
+	NMSP_CORE_ASSERT(p, "allocate fail");
 	_NMSP_PROFILE_ALLOC(p, nmsp::_alignTo(size, align));
 	return p;
 }

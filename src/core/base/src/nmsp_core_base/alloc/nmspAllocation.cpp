@@ -1,8 +1,7 @@
 #include "nmsp_core_base-pch.h"
-
 #include "nmspAllocation.h"
 
-NmspAllocationCallback*  _nmspAllocationCallback = nullptr;
+NmspAllocationCallback* _nmspAllocationCallback = nullptr;
 
 #if NMSP_OVERRIDE_NEW_OP
 

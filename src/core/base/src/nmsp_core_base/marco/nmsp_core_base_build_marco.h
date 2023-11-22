@@ -11,6 +11,7 @@
 	#define NMSP_DEBUG 0
 #endif // _DEBUG
 
+#define NMSP_DEVELOPMENT 1
 
 #if NMSP_OS_WINDOWS
 	#ifdef NMSP_DYNAMIC_LINK
