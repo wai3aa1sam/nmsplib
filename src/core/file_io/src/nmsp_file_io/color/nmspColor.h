@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nmsp_file_io/common/nmsp_file_io_common.h"
+#include "nmsp_file_io/serializer/json/nmspJsonUtil.h"
 
 #include <nmsp_stl/extra/nmspTypeBitMixture.h>
 
@@ -164,6 +165,11 @@ public:
 		: r(r_) 
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, r);
+	}
 };
 
 #endif
@@ -200,6 +206,12 @@ public:
 		: r(r_), g(g_)
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, r);
+		NMSP_NAMED_FIXED_IO(se, g);
+	}
 };
 
 #endif
@@ -237,6 +249,13 @@ public:
 		: r(r_), g(g_), b(b_)
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, r);
+		NMSP_NAMED_FIXED_IO(se, g);
+		NMSP_NAMED_FIXED_IO(se, b);
+	}
 };
 
 #endif
@@ -274,6 +293,14 @@ public:
 		: r(r_), g(g_), b(b_), a(a_)
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, r);
+		NMSP_NAMED_FIXED_IO(se, g);
+		NMSP_NAMED_FIXED_IO(se, b);
+		NMSP_NAMED_FIXED_IO(se, a);
+	}
 };
 
 template<class T>
@@ -318,6 +345,11 @@ public:
 		: l(l_) 
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, l);
+	}
 };
 
 #endif
@@ -355,6 +387,12 @@ public:
 		: l(l_), a(a_)
 	{}
 
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, l);
+		NMSP_NAMED_FIXED_IO(se, a);
+	}
 };
 
 #endif

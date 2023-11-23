@@ -70,7 +70,7 @@ protected:
 	void fixed_io(f32& v);
 	void fixed_io(f64& v);
 
-	void fixed_io(bool v);
+	void fixed_io(bool& v);
 
 	void io_beginObject();
 	void io_endObject  ();
@@ -116,21 +116,21 @@ void JsonSerializer_T::fixed_io(T& v)
 	JsonSE_Helper<JsonSerializer_T, T>::io(*this, v);
 }
 
-inline void JsonSerializer_T::fixed_io(u8 & v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(u16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(u32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(u64& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(u8 & v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(u16& v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(u32& v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(u64& v)	{ toValue(v); }
 
-inline void JsonSerializer_T::fixed_io(i8 & v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(i16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(i32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(i64& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(i8 & v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(i16& v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(i32& v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(i64& v)	{ toValue(v); }
 
 //inline void JsonSerializer_T::fixed_io(f16& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(f32& v) { toValue(v); }
-inline void JsonSerializer_T::fixed_io(f64& v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(f32& v)	{ toValue(v); }
+inline void JsonSerializer_T::fixed_io(f64& v)	{ toValue(v); }
 
-inline void JsonSerializer_T::fixed_io(bool v) { toValue(v); }
+inline void JsonSerializer_T::fixed_io(bool& v) { toValue(v); }
 
 inline
 void JsonSerializer_T::io_beginObject()

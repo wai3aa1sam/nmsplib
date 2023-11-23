@@ -316,7 +316,7 @@ void
 Lexer_T::readEnum		(T& o)
 {
 	_expected(TokenType::Identifier);
-	errorIf(enumTryParse(o, token().value()), "Error: readEnum()");
+	errorIf(!enumTryParse(o, token().value()), "Error: readEnum()");
 	nextToken();
 }
 
