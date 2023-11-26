@@ -146,6 +146,12 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc_Base& cd)
 	}
 }
 
+void
+NativeUIWindow_Win32::onDestroy()
+{
+	Base::onDestroy();
+}
+
 void NativeUIWindow_Win32::onSetWindowTitle		(StrViewA_T title)
 {
 	Base::onSetWindowTitle(title);

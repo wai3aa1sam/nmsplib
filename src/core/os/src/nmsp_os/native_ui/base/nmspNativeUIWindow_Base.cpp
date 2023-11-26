@@ -29,6 +29,11 @@ void NativeUIWindow_Base::create			(const CreateDesc_Base& cd)
 	onCreate(cd);
 }
 
+void NativeUIWindow_Base::destroy()
+{
+	onDestroy();
+}
+
 void NativeUIWindow_Base::setWindowTitle	(StrViewA_T title)
 {
 	onSetWindowTitle(title);

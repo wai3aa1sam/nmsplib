@@ -76,12 +76,12 @@ int ColorUtil::getColorElementByteSize(ColorElementType v)
 	using EM = ColorElementType;
 	switch (v)
 	{
-		case EM::None:		{ return 0;  } break;
-		case EM::UNorm8:	{ return 8;  } break;
-		case EM::UNorm16:	{ return 16; } break;
-		case EM::Float16:	{ return 16; } break;
-		case EM::Float32:	{ return 32; } break;
-		case EM::Float64:	{ return 64; } break;
+		case EM::None:		{ return 0; } break;
+		case EM::UNorm8:	{ return 1; } break;
+		case EM::UNorm16:	{ return 2; } break;
+		case EM::Float16:	{ return 2; } break;
+		case EM::Float32:	{ return 4; } break;
+		case EM::Float64:	{ return 8; } break;
 	};
 
 	NMSP_ASSERT(false, "not supported ColorElementType");

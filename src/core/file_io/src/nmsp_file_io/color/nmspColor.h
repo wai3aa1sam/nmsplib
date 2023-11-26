@@ -276,7 +276,7 @@ public:
 public:
 	static constexpr SizeType			s_kElementCount			= 4;
 	static constexpr int				s_kAlphaBits			= sCast<int>(BitUtil::bitSize<T>());
-	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RGB, getColorElementType<ElementType>(), ColorCompressType::None);
+	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::RGBA, getColorElementType<ElementType>(), ColorCompressType::None);
 	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
 	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
 	static constexpr ColorCompressType	s_kColorCompressType	= TBM<ColorType>::getElementValue<2>(s_kColorType);

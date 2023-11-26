@@ -52,6 +52,7 @@ public:
 
 protected:
 	virtual void onCreate			(const CreateDesc_Base& cd)	override;
+	virtual void onDestroy			()							override;
 	virtual void onSetWindowTitle	(StrViewA_T title)			override;
 	virtual void onClientRectChanged(const Rect2f& rect)		override;
 	virtual void onDrawNeeded		()							override;

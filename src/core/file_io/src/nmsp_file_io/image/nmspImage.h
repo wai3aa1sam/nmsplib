@@ -79,6 +79,8 @@ public:
 	void create(ColorType colorType, int width, int height, int strideInBytes);
 	void create(ColorType colorType, int width, int height, int strideInBytes, int mipmapCount, SizeType dataSizeInBytes);
 
+	void copyToPixelData(ByteSpan_T src);
+
 	template<class COLOR> void fill(const COLOR& v);
 
 	Span_T<		 u8>	data();

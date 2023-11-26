@@ -83,7 +83,9 @@ public:
 
 	virtual ~NativeUIWindow_Base();
 
-	void create			(const CreateDesc_Base& cd);
+	void create	(const CreateDesc_Base& cd);
+	void destroy();
+
 	void setWindowTitle	(StrViewA_T title);
 
 	void drawNeeded();
@@ -102,6 +104,7 @@ public:
 
 protected:
 	virtual void onCreate			(const CreateDesc_Base& cd)	{};
+	virtual void onDestroy			()							{};
 	virtual void onSetWindowTitle	(StrViewA_T title)			{};
 	virtual void onClientRectChanged(const Rect2f& rect)		  ;
 	virtual void onDrawNeeded		()							{};

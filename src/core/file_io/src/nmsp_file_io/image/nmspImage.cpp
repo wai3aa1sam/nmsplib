@@ -92,7 +92,7 @@ void Image_T::create(const CreateDesc& cd)
 void 
 Image_T::create(ColorType colorType, int width, int height)
 {
-	create(colorType, width, height, width * ColorUtil::getColorElementByteSize(colorType));
+	create(colorType, width, height, width * ColorUtil::pixelByteSize(colorType));
 }
 
 void 
@@ -111,6 +111,12 @@ Image_T::create(ColorType colorType, int width, int height, int strideInBytes, i
 	cDesc.strideInBytes		= strideInBytes;
 	cDesc.mipmapCount		= mipmapCount;
 	create(cDesc);
+}
+
+void 
+Image_T::copyToPixelData(ByteSpan_T src) 
+{ 
+	_pixelData.assign(src.begin(), src.end()); 
 }
 
 void 

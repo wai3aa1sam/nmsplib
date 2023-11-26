@@ -39,9 +39,11 @@ public:
 	Rect2_T() : pos(), size() {};
 	Rect2_T(T x_, T y_, T w_, T h_);
 	Rect2_T(const Tuple2& pos_, const Tuple2& size_);
+	Rect2_T(const Vec2&   pos_, const Vec2&   size_);
 
 	void set(T x_, T y_, T w_, T h_);
 	void set(const Tuple2& pos_, const Tuple2& size_);
+	void set(const Vec2&   pos_, const Vec2&   size_);
 
 	T xMin() const;
 	T yMin() const;
@@ -107,6 +109,12 @@ Rect2_T<T>::Rect2_T(const Tuple2& pos_, const Tuple2& size_)
 }
 
 template<class T> inline 
+Rect2_T<T>::Rect2_T(const Vec2& pos_, const Vec2& size_)
+{
+	set(pos_, size_);
+}
+
+template<class T> inline 
 void Rect2_T<T>::set(T x_, T y_, T w_, T h_)
 {
 	x = x_;
@@ -120,6 +128,13 @@ void Rect2_T<T>::set(const Tuple2& pos_, const Tuple2& size_)
 {
 	pos		= pos_;
 	size	= size_;
+}
+
+template<class T> inline 
+void Rect2_T<T>::set(const Vec2& pos_, const Vec2& size_)
+{
+	pos		=  pos_.toTuple2();
+	size	= size_.toTuple2();
 }
 
 template<class T> inline 
