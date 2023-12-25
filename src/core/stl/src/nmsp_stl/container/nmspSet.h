@@ -33,7 +33,8 @@
 
 	namespace nmsp {
 
-	template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator> using Set_Impl = Set_Eastl<KEY, PRED, ALLOC>;
+	template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>								using Set_Impl			= Set_Eastl<KEY, PRED, ALLOC>;
+	template<class KEY, class HASH = Hash<KEY>, class PRED = EqualTo<KEY>, class ALLOC = DefaultAllocator>	using UnorderedSet_Impl	= UnorderedSet_Eastl<KEY, HASH, PRED, ALLOC>;
 
 	}
 
@@ -45,6 +46,8 @@
 
 namespace nmsp {
 
-template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>	using Set_T	= Set_Impl<KEY, PRED, ALLOC>;
+template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>								using Set_T			 = Set_Impl<KEY, PRED, ALLOC>;
+template<class KEY, class HASH = Hash<KEY>, class PRED = EqualTo<KEY>, class ALLOC = DefaultAllocator>	using UnorderedSet_T = UnorderedSet_Impl<KEY, HASH, PRED, ALLOC>;
+
 
 }

@@ -178,19 +178,19 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerDeg(co
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerX	(T rad)
 {
-	T s, c; Math::sincos(rad * T(0.5), s, c); return Quat4(s,0,0,c);
+	T s, c; math::sincos(rad * T(0.5), s, c); return Quat4(s,0,0,c);
 }
 
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerY	(T rad)
 {
-	T s, c; Math::sincos(rad * T(0.5), s, c); return Quat4(0,s,0,c);
+	T s, c; math::sincos(rad * T(0.5), s, c); return Quat4(0,s,0,c);
 }
 
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_eulerZ	(T rad)
 {
-	T s, c; Math::sincos(rad * T(0.5), s, c); return Quat4(0,0,s,c);
+	T s, c; math::sincos(rad * T(0.5), s, c); return Quat4(0,0,s,c);
 }
 
 template<class T, class DATA> inline

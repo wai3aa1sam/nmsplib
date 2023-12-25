@@ -25,8 +25,8 @@
 	#define NMSP_PROFILE_LOG(TEXT)				TracyMessage(TEXT, ::strlen(TEXT))
 	#define NMSP_PROFILE_VALUE(TEXT, VALUE)		TracyPlot(TEXT, VALUE)	
 
-	#define NMSP_PROFILE_ALLOC(PTR, SIZE)		TracyCAllocS(PTR, SIZE, 12)    
-	#define NMSP_PROFILE_FREE(PTR, SIZE)		TracyCFreeS(PTR, 12)		    
+	#define NMSP_PROFILE_ALLOC(PTR, SIZE)		TracyCAllocS(PTR, SIZE, 32)    
+	#define NMSP_PROFILE_FREE(PTR, SIZE)		TracyCFreeS(PTR, 32)		    
 
 	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)	::tracy::SetThreadName(NAME)
 

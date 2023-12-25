@@ -45,6 +45,12 @@ IN_ITER find_if(IN_ITER first, IN_ITER last, PRED pred)
 	return eastl::find_if(first, last, nmsp::move(pred));
 }
 
+template<class BI_DIR_ITER>
+void reverse(BI_DIR_ITER first, BI_DIR_ITER last)
+{
+	return eastl::reverse(first, last);
+}
+
 #else
 	#error "nmspAlgorithm.h should have backend switch"
 #endif // NMSP_STL_BUILD_CONTAINER_EASTL

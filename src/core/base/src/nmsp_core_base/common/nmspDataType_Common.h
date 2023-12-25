@@ -29,6 +29,8 @@ using f32	= float;
 using f64	= double;
 using f128	= long double;
 
+using iptr = intptr_t;
+
 #endif
 
 }

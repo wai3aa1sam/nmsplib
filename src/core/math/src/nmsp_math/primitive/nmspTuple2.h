@@ -33,6 +33,11 @@ public:
 		T data[s_kElementCount];
 	};
 public:
+	static constexpr Tuple2_T s_zero();
+
+	template<class T2> static constexpr Tuple2_T s_cast(const Tuple2_T<T2>& rhs);
+
+public:
 	Tuple2_T();
 	Tuple2_T(T x_, T y_);
 
@@ -60,6 +65,16 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple2_T<NMSP_ARGS(T)> );
 #pragma mark --- Tuple2-Impl ---
 #endif // 0
 #if 1
+
+
+template<class T> inline constexpr Tuple2_T<T> Tuple2_T<T>::s_zero() { return { sCast<T>(0), sCast<T>(0) }; }
+
+template<class T> 
+template<class T2> inline constexpr
+typename Tuple2_T<T> Tuple2_T<T>::s_cast(const Tuple2_T<T2>& rhs)
+{
+	return Tuple2_T{ T(rhs.x), T(rhs.y) };
+}
 
 template<class T> inline
 Tuple2_T<T>::Tuple2_T()

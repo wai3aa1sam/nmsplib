@@ -30,7 +30,8 @@ template<class SRC> constexpr RemoveConst<SRC>& constCast(const SRC& v) { return
 
 #endif
 
-template<class T> inline void swap(T& a, T& b) { T tmp = move(a); a = move(b); b = move(tmp); }
+template<class T> inline void swap(T& a,	 T& b) { T  tmp = move(a); a = move(b); b = move(tmp); }
+template<class T> inline void swap(T*& a,	T*& b) { T* tmp = move(a); a = move(b); b = move(tmp); }
 
 template<class T>
 static constexpr T _alignTo(T n, T a)

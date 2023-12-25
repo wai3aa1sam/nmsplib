@@ -56,6 +56,24 @@ constexpr T divideTo(T n, T divisor)
 	return (n + divisor - 1) / divisor;
 }
 
+NMSP_INLINE  
+void hashCombine(size_t& seed, size_t hash)
+{
+	glm::detail::hash_combine(seed, hash);
+}
+
+template<size_t SEED = 0> NMSP_INLINE
+size_t hashCombine(size_t hash)
+{
+	/*  
+	references:
+	~ [glm::detail::hash_combine]
+	*/
+	hash += 0x9e3779b9 + (SEED << 6) + (SEED >> 2);
+	return SEED ^ hash;
+}
+
+
 //--------
 template< class T > constexpr T		NaN		() { return std::numeric_limits<T>::quiet_NaN(); }
 template< class T > constexpr bool	isNaN	( const T& v )	{ return std::isnan(v); }

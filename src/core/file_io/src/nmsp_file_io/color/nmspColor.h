@@ -27,6 +27,7 @@ namespace nmsp {
 	E(LA,) /* Luminance Alpha */ \
 	E(HSV,) \
 	E(BlockCompression,) \
+	E(Depth,) \
 	E(_kCount,) \
 //---
 NMSP_ENUM_CLASS(ColorModel, u8);
@@ -125,6 +126,8 @@ struct TypeBitMixture_Impl<ColorType>
 	E(BC5,		= TBM<ColorType>::makeInt(ColorModel::BlockCompression, ColorElementType::None,	ColorCompressType::BC5)) \
 	E(BC6h,		= TBM<ColorType>::makeInt(ColorModel::BlockCompression, ColorElementType::None,	ColorCompressType::BC6h)) \
 	E(BC7,		= TBM<ColorType>::makeInt(ColorModel::BlockCompression, ColorElementType::None,	ColorCompressType::BC7)) \
+	\
+	E(Depth,	= TBM<ColorType>::makeInt(ColorModel::Depth, ColorElementType::None,	ColorCompressType::None)) \
 	\
 	E(_kCount,) \
 //---

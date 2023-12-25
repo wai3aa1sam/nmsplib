@@ -34,9 +34,9 @@ public:
 	};
 public:
 	Tuple3_T();
-	Tuple3_T(T x, T y, T z);
+	Tuple3_T(T x_, T y_, T z_);
 
-	void set	(T x, T y, T z);
+	void set	(T x_, T y_, T z_);
 	void setAll	(T val);
 
 	T	operator[](SizeType i) const;
@@ -71,18 +71,18 @@ Tuple3_T<T>::Tuple3_T()
 
 
 template<class T> inline
-Tuple3_T<T>::Tuple3_T(T x, T y, T z)
-	: x(x), y(y), z(z)
+Tuple3_T<T>::Tuple3_T(T x_, T y_, T z_)
+	: x(x_), y(y_), z(z_)
 {
 
 }
 
 template<class T> inline
-void Tuple3_T<T>::set(T x, T y, T z)
+void Tuple3_T<T>::set(T x_, T y_, T z_)
 {
-	this->x = x;
-	this->y = y;
-	this->z = z;
+	this->x = x_;
+	this->y = y_;
+	this->z = z_;
 }
 
 template<class T> inline

@@ -2,6 +2,7 @@
 
 #include "nmspMathGeometry_Common.h"
 
+
 namespace nmsp {
 namespace math {
 

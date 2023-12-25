@@ -101,7 +101,10 @@ public:
 			u8* dataPtr();
 	const 	u8* dataPtr() const;
 	
-	SizeType totalByteSize() const;
+	SizeType	totalByteSize() const;
+	bool		isValid()		const;
+	bool		hasData()		const;
+	bool		isValidSize()	const;
 
 	int					width			() const;
 	int					height			() const;
@@ -129,9 +132,31 @@ private:
 #if 1
 
 inline 
-typename Image_T::SizeType Image_T::totalByteSize() const
+typename Image_T::SizeType 
+Image_T::totalByteSize() const
 {
 	return width() * height() * pixelByteSize();
+}
+
+inline 
+bool
+Image_T::isValid() const
+{
+	return hasData() && isValidSize();
+}
+
+inline 
+bool
+Image_T::hasData() const
+{
+	return !_pixelData.is_empty();
+}
+
+inline 
+bool
+Image_T::isValidSize() const
+{
+	return width() > 0 && height() > 0;
 }
 
 inline 

@@ -6,6 +6,8 @@
 #include "nmsp_math/primitive/nmspVec4.h"
 #include "nmsp_math/primitive/nmspQuat4.h"
 
+#include "nmsp_math/geometry/nmspMathRect2.h"
+
 #if NMSP_MATH_BACKEND_GLM
 
 namespace nmsp {
@@ -53,7 +55,7 @@ public:
 	using Vec3		= Vec3_T<T>;
 	using Quat4		= Quat4_T<T>;
 
-	using Rect2		= /*Rect2_T<T>*/int;
+	using Rect2		= math::Rect2_T<T>;
 
 	template<class T2> using Vec4_T		= Vec4_T<T2>;
 

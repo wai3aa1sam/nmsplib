@@ -62,6 +62,8 @@ public:
 	template<class PRED> Iter	findIf(PRED pred);
 	template<class PRED> CIter	findIf(PRED pred) const;
 
+	void reverse();
+
 	bool		is_empty()		const NMSP_NOEXCEPT;
 	SizeType	size_in_bytes() const;
 
@@ -144,7 +146,7 @@ template<class PRED> inline
 typename Vector_Eastl<T, N, FALLBACK_ALLOC>::Iter
 Vector_Eastl<T, N, FALLBACK_ALLOC>::findIf(PRED pred)
 {
-	return find_if(begin(), end(), pred);
+	return nmsp::find_if(begin(), end(), pred);
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC>
@@ -152,7 +154,13 @@ template<class PRED> inline
 typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CIter
 Vector_Eastl<T, N, FALLBACK_ALLOC>::findIf(PRED pred) const
 {
-	return find_if(begin(), end(), pred);
+	return nmsp::find_if(begin(), end(), pred);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void Vector_Eastl<T, N, FALLBACK_ALLOC>::reverse()
+{
+	return nmsp::reverse(begin(), end());
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
