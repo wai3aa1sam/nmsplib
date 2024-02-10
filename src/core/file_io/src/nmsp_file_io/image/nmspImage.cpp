@@ -4,6 +4,7 @@
 
 #include "nmspImageIO_png.h"
 #include "nmspImageIO_dds.h"
+#include "nmspImageIO_hdr.h"
 
 namespace nmsp {
 
@@ -50,6 +51,9 @@ void Image_T::load(StrViewA_T filename)
 
 	ret = StrUtil::ignoreCaseCompare(ext, "dds");
 	if (ret == 0) { return loadDdsFile(filename); }
+
+	ret = StrUtil::ignoreCaseCompare(ext, "hdr");
+	if (ret == 0) { return loadHdrFile(filename); }
 }
 
 void Image_T::loadPngFile(StrViewA_T filename)
@@ -75,6 +79,19 @@ void Image_T::loadDdsFile(StrViewA_T filename)
 void Image_T::loadDdsMem(ByteSpan_T data)
 {
 	ImageIO_dds::Reader reader;
+	reader.load(*this, data, colorType());
+}
+
+void Image_T::loadHdrFile(StrViewA_T filename)
+{
+	MemMapFile_T mmf;
+	mmf.open(filename);
+	return loadHdrMem(mmf.span());
+}
+
+void Image_T::loadHdrMem(ByteSpan_T data)
+{
+	ImageIO_hdr::Reader reader;
 	reader.load(*this, data, colorType());
 }
 

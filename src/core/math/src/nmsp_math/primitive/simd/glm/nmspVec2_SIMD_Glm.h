@@ -13,7 +13,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Vec2_SIMD_T = glm::vec<2, T, glm::aligned_lowp>;
+template<class T> using Glm_Vec2_SIMD_T = glm::vec<2, T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T> 
 struct Vec2_SIMD_Data_Glm : public Glm_Vec2_SIMD_T<T>

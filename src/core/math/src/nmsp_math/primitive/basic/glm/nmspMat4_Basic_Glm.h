@@ -16,7 +16,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Mat4_T = glm::mat<4, 4, T, glm::lowp>;
+template<class T> using Glm_Mat4_T = glm::mat<4, 4, T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T> 
 struct Mat4_Basic_Data_Glm : public Glm_Mat4_T<T>
@@ -567,13 +567,19 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator-(const 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator*(const Mat4& rhs)	const
 {
-	return toGlm() * rhs.toGlm();
+	//Glm_Mat4 l = *this;
+	//Glm_Mat4 r = rhs;
+	//return Base::Base::operator*(rhs);
+	//return l * r;
+	return glm::operator*(*this, rhs);
+	//return toGlm() * rhs.toGlm();		// this will crash in release mode, but the address is aligned
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::operator/(const Mat4& rhs)	const
 {
-	return toGlm() / rhs.toGlm();
+	return glm::operator/(*this, rhs);
+	//return toGlm() / rhs.toGlm();		// this will crash in release mode, but the address is aligned
 }
 
 template<class T, class DATA> inline
@@ -631,12 +637,16 @@ Mat4_Basic_Glm<T, DATA>::Mat4_Basic_Glm(const Glm_Mat4& rhs) // for glm only
 template<class T, class DATA> inline
 const typename Mat4_Basic_Glm<T, DATA>::Data&	Mat4_Basic_Glm<T, DATA>::toData() const
 {
+	//_NMSP_DUMP_VAR((void*)this, (void*)&sCast<const Data&>(*this));
+	throwIf(true, "this will crash in release mode, but the address is aligned");
 	return sCast<const Data&>(*this);
 }
 
 template<class T, class DATA> inline
 const typename Mat4_Basic_Glm<T, DATA>::Glm_Mat4& Mat4_Basic_Glm<T, DATA>::toGlm() const
 {
+	//_NMSP_DUMP_VAR((void*)this, (void*)&sCast<const Glm_Mat4&>(*this));
+	throwIf(true, "this will crash in release mode, but the address is aligned");
 	return sCast<const Glm_Mat4&>(*this);
 }
 

@@ -12,7 +12,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Quat4_T = glm::qua<T, glm::lowp>;
+template<class T> using Glm_Quat4_T = glm::qua<T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T>
 struct Quat4_Basic_Data_Glm : public Glm_Quat4_T<T>

@@ -74,6 +74,9 @@ public:
 	void loadDdsFile(StrViewA_T filename);
 	void loadDdsMem	(ByteSpan_T data);
 
+	void loadHdrFile(StrViewA_T filename);
+	void loadHdrMem	(ByteSpan_T data);
+
 	void create(const CreateDesc& cd);
 	void create(ColorType colorType, int width, int height);
 	void create(ColorType colorType, int width, int height, int strideInBytes);

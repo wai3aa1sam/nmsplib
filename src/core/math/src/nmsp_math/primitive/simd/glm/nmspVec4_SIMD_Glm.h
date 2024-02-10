@@ -14,7 +14,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Vec4_SIMD_T = glm::vec<4, T, glm::aligned_lowp>;
+template<class T> using Glm_Vec4_SIMD_T = glm::vec<4, T, RDS_MATH_GLM_QUALIFIER>;	// aligned_lowp
 
 template<class T> 
 struct Vec4_SIMD_Data_Glm : public Glm_Vec4_SIMD_T<T>

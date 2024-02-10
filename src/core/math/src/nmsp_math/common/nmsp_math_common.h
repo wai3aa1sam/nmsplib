@@ -37,6 +37,8 @@
 	#include <glm/gtc/type_ptr.hpp>
 
 	#include <glm/gtx/hash.hpp>
+	
+	#define RDS_MATH_GLM_QUALIFIER glm::lowp
 
 	NMSP_RESTORE_ALL_WARNINGS();
 

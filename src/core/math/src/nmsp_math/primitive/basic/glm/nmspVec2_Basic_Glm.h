@@ -12,7 +12,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Vec2_T = glm::vec<2, T, glm::lowp>;
+template<class T> using Glm_Vec2_T = glm::vec<2, T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T> 
 struct Vec2_Basic_Data_Glm : public Glm_Vec2_T<T>
@@ -77,6 +77,8 @@ public:
 	Vec2(T x_, T y_);
 	Vec2(const Tuple2& r);
 	template<class T2, class DATA2> explicit Vec2(const Vec2_T<T2, DATA2>& rhs);
+
+	operator Tuple2() const;
 
 	void	set				(T x_, T y_);
 	void	set				(const Tuple2& rhs);
@@ -218,6 +220,12 @@ template<class T2, class DATA2>  inline
 Vec2_Basic_Glm<T, DATA>::Vec2_Basic_Glm(const Vec2_T<T2, DATA2>& rhs)
 {
 	set(sCast<T>(rhs.x), sCast<T>(rhs.y));
+}
+
+template<class T, class DATA> inline
+Vec2_Basic_Glm<T, DATA>::operator Tuple2() const 
+{
+	return toTuple2(); 
 }
 
 template<class T, class DATA> inline

@@ -40,6 +40,8 @@ public:
 public:
 	Tuple2_T();
 	Tuple2_T(T x_, T y_);
+	template<class U> Tuple2_T(U x_, U y_);
+
 
 	void set	(T x_, T y_);
 	void setAll	(T val);
@@ -87,6 +89,14 @@ Tuple2_T<T>::Tuple2_T()
 template<class T> inline
 Tuple2_T<T>::Tuple2_T(T x_, T y_)
 	: x(x_), y(y_)
+{
+
+}
+
+template<class T> 
+template<class U> inline
+Tuple2_T<T>::Tuple2_T(U x_, U y_)
+	: x(sCast<T>(x_)), y(sCast<T>(y_))
 {
 
 }

@@ -14,7 +14,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Vec3_T = glm::vec<3, T, glm::lowp>;
+template<class T> using Glm_Vec3_T = glm::vec<3, T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T> 
 struct Vec3_Basic_Data_Glm : public Glm_Vec3_T<T>
@@ -84,6 +84,8 @@ public:
 	Vec3(const Tuple3& r);
 	Vec3(const Vec2& r, T z_);
 	template<class T2, class DATA2> explicit Vec3(const Vec3_T<T2, DATA2>& rhs);
+
+	operator Tuple3() const;
 
 	void	set				(T x_, T y_, T z_);
 	void	set				(const Tuple3& rhs);
@@ -248,6 +250,12 @@ Vec3_Basic_Glm<T, DATA>::Vec3_Basic_Glm(const Vec3_T<T2, DATA2>& rhs)
 }
 
 template<class T, class DATA> inline
+Vec3_Basic_Glm<T, DATA>::operator Tuple3() const 
+{
+	return toTuple3(); 
+}
+
+template<class T, class DATA> inline
 void Vec3_Basic_Glm<T, DATA>::set				(T x_, T y_, T z_)
 {
 	this->x = x_;
@@ -317,7 +325,7 @@ template<class T, class DATA> inline
 typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::orthogonal	()						const
 {
 	_notYetSupported()
-		return {};
+	return {};
 }
 
 template<class T, class DATA> inline
@@ -367,7 +375,7 @@ template<class T, class DATA> inline
 typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::rotateTo		(const Vec3& target, T maxRadDelta, T maxMagDelta)	const
 {
 	_notYetSupported()
-		return {};
+	return {};
 }
 
 template<class T, class DATA> inline

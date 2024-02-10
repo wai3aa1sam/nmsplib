@@ -14,7 +14,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Quat4_SIMD_T = glm::qua<T, glm::aligned_lowp>;
+template<class T> using Glm_Quat4_SIMD_T = glm::qua<T, glm::lowp>;
 
 template<class T> 
 struct Quat4_SIMD_Data_Glm : public Glm_Quat4_SIMD_T<T>

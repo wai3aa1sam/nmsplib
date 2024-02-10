@@ -14,7 +14,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-template<class T> using Glm_Mat3_T = glm::mat<4, 4, T, glm::lowp>;
+template<class T> using Glm_Mat3_T = glm::mat<3, 3, T, RDS_MATH_GLM_QUALIFIER>;
 
 template<class T> 
 struct Mat3_Basic_Data_Glm : public Glm_Mat3_T<T>
@@ -29,10 +29,9 @@ public:
 
 public:
 	Mat3_Basic_Data_Glm()
-		: Base(	  Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) } )
+		: Base(	  Vec3{ T(0.0), T(0.0), T(0.0), T(0.0) }
+				, Vec3{ T(0.0), T(0.0), T(0.0), T(0.0) }
+				, Vec3{ T(0.0), T(0.0), T(0.0), T(0.0) } )
 	{
 	}
 

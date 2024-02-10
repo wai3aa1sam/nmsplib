@@ -137,6 +137,7 @@ private:
 		if (rhs)
 		{
 			auto* buf	= _allocator.alloc(rhs._ftr->size());
+			NMSP_CORE_ASSERT(buf, "alloc {} bytes failed", rhs._ftr->size());
 			pfunc		= rhs._ftr->clone(buf);
 		}
 		_reset(pfunc);
@@ -144,16 +145,20 @@ private:
 
 	void _move(Function_T&& rhs)
 	{
+		//_NMSP_LOG("=============== {}", NMSP_SRCLOC);
+
 		if (this == &rhs) 
 			return;
+
 		IFunctor* pfunc = nullptr;
 		if (rhs)
 		{
 			auto* buf	= _allocator.alloc(rhs._ftr->size());
+			//_NMSP_LOG("=============== {}, {} bytes, {}", NMSP_SRCLOC, rhs._ftr->size(), (void*)buf);
+			NMSP_CORE_ASSERT(buf, "alloc {} bytes failed", rhs._ftr->size());
 			pfunc		= rhs._ftr->clone(buf);
 		}
 		_reset(pfunc);
-
 		rhs._free();
 	}
 
@@ -191,14 +196,9 @@ private:
 		using Func		= Decay<FUNC>;
 
 	public:
-		template<typename FUNCTOR>
-		Functor(FUNCTOR&& func)
-			: _func(nmsp::forward<FUNCTOR>(func))
+		Functor(Func func)
+			: _func(nmsp::move(func))
 		{}
-
-		~Functor()
-		{
-		}
 
 		//virtual RET operator()(PARAMS&&... params) const override { return _func(std::forward<PARAMS>(params)...); }
 		virtual RET operator()(PARAMS&&... params) const override	{ return std::invoke(_func, nmsp::forward<PARAMS>(params)...); }
@@ -206,7 +206,7 @@ private:
 		virtual IFunctor* clone(void* buf) const override 
 		{
 			staticCheck<Functor>();
-			return new(buf) Functor(_func); 
+			return new(buf) Functor<Func>(_func); 
 		};
 
 		virtual SizeType size() const 
@@ -215,7 +215,7 @@ private:
 		}
 
 	private:
-		FUNC _func;
+		Func _func;
 	};
 
 private:
