@@ -163,6 +163,26 @@ void fmtTo(STR& outStr)
 }
 
 template<class STR, class... ARGS> inline
+void fmtToNew(STR& outStr, const char* fmt, ARGS&&... args)
+{
+	outStr.clear();
+	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
+}
+
+template<class STR, class... ARGS> inline
+void fmtToNew(STR& outStr, const wchar_t* fmt, ARGS&&... args)
+{
+	outStr.clear();
+	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
+}
+
+template<class STR> inline
+void fmtToNew(STR& outStr)
+{
+
+}
+
+template<class STR, class... ARGS> inline
 STR fmtAs_T(const char* fmt, ARGS&&... args)
 {
 	STR out;
