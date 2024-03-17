@@ -2,6 +2,7 @@
 
 NMSP_DISABLE_ALL_WARNINGS()
 #include <fmt/format.h>
+#include <fmt/xchar.h>
 NMSP_RESTORE_ALL_WARNINGS()
 
 #include "nmsp_core_base/common/nmspDataType_Common.h"
@@ -153,6 +154,7 @@ void fmtTo(STR& outStr, const char* fmt, ARGS&&... args)
 template<class STR, class... ARGS> inline
 void fmtTo(STR& outStr, const wchar_t* fmt, ARGS&&... args)
 {
+	_notYetSupported();
 	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
 }
 
@@ -172,6 +174,7 @@ void fmtToNew(STR& outStr, const char* fmt, ARGS&&... args)
 template<class STR, class... ARGS> inline
 void fmtToNew(STR& outStr, const wchar_t* fmt, ARGS&&... args)
 {
+	_notYetSupported();
 	outStr.clear();
 	fmt::format_to(std::back_inserter(outStr), fmt, nmsp::forward<ARGS>(args)...);
 }
@@ -193,6 +196,7 @@ STR fmtAs_T(const char* fmt, ARGS&&... args)
 template<class STR, class... ARGS> inline
 STR fmtAs_T(const wchar_t* fmt, ARGS&&... args)
 {
+	_notYetSupported();
 	STR out;
 	fmtTo(out, fmt, std::forward<ARGS>(args)...);
 	return out;

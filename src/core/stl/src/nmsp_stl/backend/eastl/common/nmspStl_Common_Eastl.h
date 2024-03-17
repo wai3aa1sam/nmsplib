@@ -22,6 +22,7 @@ NMSP_DISABLE_ALL_WARNINGS();
 
 #include <EASTL/string_map.h>
 #include <EASTL/vector_map.h>
+#include <EASTL/vector_set.h>
 #include <EASTL/unordered_map.h>
 #include <EASTL/unordered_set.h>
 

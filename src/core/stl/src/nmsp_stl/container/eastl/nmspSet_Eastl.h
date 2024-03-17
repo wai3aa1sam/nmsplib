@@ -25,6 +25,8 @@ private:
 template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>								using Set_Eastl				= eastl::set<KEY, PRED, ALLOC>;
 template<class KEY, class HASH = Hash<KEY>, class PRED = EqualTo<KEY>, class ALLOC = DefaultAllocator>	using UnorderedSet_Eastl	= eastl::unordered_set<KEY, HASH, PRED, ALLOC>;
 
+template<class KEY, class PRED = Less<KEY>, class ALLOC = DefaultAllocator>								using VectorSet_Eastl		= eastl::vector_set<KEY, PRED, ALLOC>;
+
 
 #endif
 

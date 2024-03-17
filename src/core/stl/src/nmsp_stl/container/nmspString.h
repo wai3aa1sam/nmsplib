@@ -76,6 +76,19 @@ template<class T, size_t N, class ALLOC>
 void onFormat(fmt::format_context& ctx, const String_T<T, N, ALLOC>& v)
 {
 	formatTo(ctx, "{}", v.view());
+
+	/*if constexpr (IsSame<T, char>)
+	{
+		formatTo(ctx, "{}", v.view());
+	}
+	else if constexpr (IsSame<T, wchar_t>)
+	{
+		formatTo(ctx, L"{}", v.view());
+	}
+	else
+	{
+		throw "invalid char type";
+	}*/
 }
 NMSP_FORMATTER_T(NMSP_ARGS(class T, size_t N, class ALLOC), String_T<NMSP_ARGS(T, N, ALLOC)> );
 

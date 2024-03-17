@@ -52,6 +52,15 @@ struct StrUtil
 	static int ignoreCaseCompare(StrViewA_T a, StrViewA_T b);
 	static int ignoreCaseCompare(char a, char b);
 
+	static int toLowerCase	(int ch);
+	static int toUpperCase	(int ch);
+
+	template<class STR> static void toLowerCase(STR& dst, const char* src, size_t maxSize = NumLimit<u32>::max());
+	template<class STR> static void toUpperCase(STR& dst, const char* src, size_t maxSize = NumLimit<u32>::max());
+
+	template<class STR> static void toLowerCase(STR& dst, StrViewA_T src);
+	template<class STR> static void toUpperCase(STR& dst, StrViewA_T src);
+
 	static bool isSame		(const char* a, const char* b);
 	static bool isDigit		(char ch);
 	static bool isAlpha		(char ch);
@@ -86,26 +95,30 @@ private:
 #if 1
 
 inline
-size_t StrUtil::len(const char* str)
+size_t 
+StrUtil::len(const char* str)
 {
 	return ::strlen(str);
 }
 
 inline
-void StrUtil::binToHex(StringT& result, Span_T<u8> data) 
+void 
+StrUtil::binToHex(StringT& result, Span_T<u8> data) 
 {
 	result.clear();
 	appendBinToHex(result, makeByteSpan(data));
 }
 
 inline
-bool StrUtil::hasChar(StrViewA_T view, char ch) 
+bool 
+StrUtil::hasChar(StrViewA_T view, char ch) 
 { 
 	return StrViewA_T::npos != view.find(ch); 
 }
 
 inline
-bool StrUtil::hasAny(StrViewA_T view, StrViewA_T charList)
+bool 
+StrUtil::hasAny(StrViewA_T view, StrViewA_T charList)
 {
 	for (auto ch : charList)
 	{
@@ -118,7 +131,8 @@ bool StrUtil::hasAny(StrViewA_T view, StrViewA_T charList)
 }
 
 inline 
-Pair_T<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, StrViewA_T seperators)
+Pair_T<StrViewA_T, StrViewA_T> 
+StrUtil::splitByChar(StrViewA_T view, StrViewA_T seperators)
 {
 	auto* s = view.begin();
 	auto* e = view.end();
@@ -133,13 +147,15 @@ Pair_T<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, StrViewA_T 
 }
 
 inline 
-Pair_T<StrViewA_T, StrViewA_T> StrUtil::splitByChar(StrViewA_T view, char seperator)
+Pair_T<StrViewA_T, StrViewA_T> 
+StrUtil::splitByChar(StrViewA_T view, char seperator)
 {
 	return splitByChar(view, StrViewA_T{&seperator, 1});
 }
 
 inline
-StrViewA_T StrUtil::trimChar(StrViewA_T view, StrViewA_T charList) 
+StrViewA_T 
+StrUtil::trimChar(StrViewA_T view, StrViewA_T charList) 
 {
 	auto* p = view.begin();
 	auto* e = view.end();
@@ -153,9 +169,57 @@ StrViewA_T StrUtil::trimChar(StrViewA_T view, StrViewA_T charList)
 
 
 inline
-int StrUtil::ignoreCaseCompare(char a, char b) 
+int 
+StrUtil::ignoreCaseCompare(char a, char b) 
 { 
 	return tolower(a) - tolower(b); 
+}
+
+inline int StrUtil::toLowerCase(int ch) { return tolower(ch); }
+inline int StrUtil::toUpperCase(int ch) { return toupper(ch); }
+
+template<class STR> inline
+void 
+StrUtil::toLowerCase(STR& dst, const char* src, size_t maxSize)
+{
+	NMSP_CORE_ASSERT(StrUtil::len(src) <= maxSize, "overflow");
+	for (const auto& ch : src)
+	{
+		dst += sCast<char>(toLowerCase(ch));
+	}
+}
+
+template<class STR> inline
+void 
+StrUtil::toUpperCase(STR& dst, const char* src, size_t maxSize)
+{
+	NMSP_CORE_ASSERT(StrUtil::len(src) <= maxSize, "overflow");
+	for (const auto& ch : src)
+	{
+		dst += sCast<char>(toUpperCase(ch));
+	}
+}
+
+template<class STR> inline
+void 
+StrUtil::toLowerCase(STR& dst, StrViewA_T src)
+{
+	dst.reserve(src.size());
+	for (const auto& ch : src)
+	{
+		dst += sCast<char>(toLowerCase(ch));
+	}
+}
+
+template<class STR> inline
+void 
+StrUtil::toUpperCase(STR& dst, StrViewA_T src)
+{
+	dst.reserve(src.size());
+	for (const auto& ch : src)
+	{
+		dst += sCast<char>(toUpperCase(ch));
+	}
 }
 
 template<class PRED> inline
@@ -269,7 +333,8 @@ struct StrUtil_ParseHelper<T, EnableIf<IsFloat<T> > >
 };
 
 template<class T> 
-bool StrUtil::tryParse(StrViewA_T view, T& outValue)
+bool 
+StrUtil::tryParse(StrViewA_T view, T& outValue)
 {
 	static_assert(IsUInt<T> || IsInt<T> || IsFloat<T>, "tryParse()");
 	if constexpr (IsUInt<T>)

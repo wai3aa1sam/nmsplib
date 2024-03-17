@@ -48,11 +48,11 @@ struct UtfUtil_T
 	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringW<N, ALLOC>& dst, StrView	view)	{ _append(dst, view); }
 	template<size_t N, class ALLOC = ALLOC_T>	static void append(StringW<N, ALLOC>& dst, StrViewW view)	{ _append(dst, view); }
 
-	template<class SRC>	static StringA<0> toString (SRC& src) { StringA<0> o; convert(o, src); return o; }
-	template<class SRC>	static StringW<0> toStringW(SRC& src) { StringW<0> o; convert(o, src); return o; }
+	template<class SRC>	static StringA<0> toString (const SRC& src) { StringA<0> o; convert(o, src); return o; }
+	template<class SRC>	static StringW<0> toStringW(const SRC& src) { StringW<0> o; convert(o, src); return o; }
 
-	template<class SRC>	static TempStringA<> toTempString (SRC& src) { TempStringA<> o; convert(o, src); return o; }
-	template<class SRC>	static TempStringW<> toTempStringW(SRC& src) { TempStringW<> o; convert(o, src); return o; }
+	template<class SRC>	static TempStringA<> toTempString (const SRC& src) { TempStringA<> o; convert(o, src); return o; }
+	template<class SRC>	static TempStringW<> toTempStringW(const SRC& src) { TempStringW<> o; convert(o, src); return o; }
 
 private:
 	static uint32_t _decodeUtf(const char*&     src, const char*     end);

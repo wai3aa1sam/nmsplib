@@ -1,6 +1,7 @@
 #include "nmsp_os-pch.h"
 
 #include "nmspFileStream_Win32.h"
+#include "nmsp_os/file/nmspPath.h"
 
 #if NMSP_OS_WINDOWS
 
@@ -66,7 +67,7 @@ void FileStream_Win32::open(const CreateDesc& cd)
 	UtfUtil::convert(filenameW, cd.filename);
 
 	_fd = ::CreateFile(filenameW.c_str(), access_flags, share_flags, nullptr, create_flags, FILE_ATTRIBUTE_NORMAL, nullptr );
-	Util::throwIf(_fd == kInvalid(), "filename: {}", cd.filename);
+	Util::throwIf(_fd == kInvalid(), "filename: {}", Path::realpath(cd.filename));
 }
 
 void FileStream_Win32::close()
