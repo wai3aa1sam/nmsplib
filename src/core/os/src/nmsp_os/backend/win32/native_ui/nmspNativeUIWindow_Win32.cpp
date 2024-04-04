@@ -266,18 +266,18 @@ NativeUIWindow_Win32::This* NativeUIWindow_Win32::s_getThis(WndHnd hwnd)
 LRESULT NativeUIWindow_Win32::_handleNativeEvent		(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (_handleNativeUIKeyEvent(hwnd, msg, wParam, lParam))		return 0;
-	if (_handleNativeUIMouseEvent(hwnd, msg, wParam, lParam))	return 0;
+	if (_handleNativeUiMouseEvent(hwnd, msg, wParam, lParam))	return 0;
 	return ::DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-bool	NativeUIWindow_Win32::_handleNativeUIMouseEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+bool	NativeUIWindow_Win32::_handleNativeUiMouseEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	UIMouseEvent ev;
+	UiMouseEvent ev;
 
 	ev.modifier = _getWin32Modifier();
 
-	using Button = UIMouseEventButton;
-	using Type   = UIMouseEventType;
+	using Button = UiMouseEventButton;
+	using Type   = UiMouseEventType;
 
 	POINT curPos;
 	::GetCursorPos(&curPos);
@@ -324,16 +324,16 @@ bool	NativeUIWindow_Win32::_handleNativeUIMouseEvent	(HWND hwnd, UINT msg, WPARA
 		case Type::Up:		::ReleaseCapture(); break;
 	}
 
-	onUINativeMouseEvent(ev);
+	onUiNativeMouseEvent(ev);
 	return true;
 }
 
 bool	NativeUIWindow_Win32::_handleNativeUIKeyEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	UIKeyboardEvent ev;
+	UiKeyboardEvent ev;
 
-	using Button = UIKeyboardEventButton;
-	using Type   = UIKeyboardEventType;
+	using Button = UiKeyboardEventButton;
+	using Type   = UiKeyboardEventType;
 
 	ev.modifier = _getWin32Modifier();
 
@@ -364,19 +364,19 @@ bool	NativeUIWindow_Win32::_handleNativeUIKeyEvent	(HWND hwnd, UINT msg, WPARAM 
 			return false;
 	}
 
-	onUINativeKeyboardEvent(ev);
+	onUiNativeKeyboardEvent(ev);
 	return true;
 }
 
-UIEventModifier NativeUIWindow_Win32::_getWin32Modifier()
+UiEventModifier NativeUIWindow_Win32::_getWin32Modifier()
 {
-	auto o = UIEventModifier::None;
-	if (::GetAsyncKeyState(VK_CONTROL)) { o |= UIEventModifier::Ctrl;	}
-	if (::GetAsyncKeyState(VK_SHIFT  )) { o |= UIEventModifier::Shift;	}
-	if (::GetAsyncKeyState(VK_MENU   )) { o |= UIEventModifier::Atl;	}
+	auto o = UiEventModifier::None;
+	if (::GetAsyncKeyState(VK_CONTROL)) { o |= UiEventModifier::Ctrl;	}
+	if (::GetAsyncKeyState(VK_SHIFT  )) { o |= UiEventModifier::Shift;	}
+	if (::GetAsyncKeyState(VK_MENU   )) { o |= UiEventModifier::Atl;	}
 	if (::GetAsyncKeyState(VK_LWIN) || ::GetAsyncKeyState(VK_RWIN)) 
 	{
-		o |= UIEventModifier::Cmd;
+		o |= UiEventModifier::Cmd;
 	}
 	return o;
 }

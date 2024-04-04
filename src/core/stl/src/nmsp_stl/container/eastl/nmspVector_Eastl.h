@@ -64,6 +64,9 @@ public:
 
 	void reverse();
 
+	Iter remove(const T& value);
+
+public:
 	bool		is_empty()		const NMSP_NOEXCEPT;
 	SizeType	size_in_bytes() const;
 
@@ -161,6 +164,13 @@ template<class T, size_t N, class FALLBACK_ALLOC> inline
 void Vector_Eastl<T, N, FALLBACK_ALLOC>::reverse()
 {
 	return nmsp::reverse(begin(), end());
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::Iter
+Vector_Eastl<T, N, FALLBACK_ALLOC>::remove(const T& v)
+{
+	return nmsp::remove(begin(), end(), v);
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline

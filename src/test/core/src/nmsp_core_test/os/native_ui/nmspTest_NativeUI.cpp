@@ -19,7 +19,7 @@ public:
 			{
 			public:
 
-				virtual void onUIMouseEvent(UIMouseEvent& ev) override
+				virtual void onUiMouseEvent(UiMouseEvent& ev) override
 				{
 					#define NMSP_TEST_MOUSE(func) func ? _log(#func) : nullptr;
 
@@ -32,14 +32,14 @@ public:
 
 				}
 
-				virtual void onUIKeyboardEvent(UIKeyboardEvent& ev) override
+				virtual void onUiKeyboardEvent(UiKeyboardEvent& ev) override
 				{
 					#define NMSP_TEST_MOUSE(func) func ? _log(#func) : nullptr;
 
 					auto& keyEv = ev;
-					NMSP_TEST_MOUSE(keyEv.isUp(UIKeyboardEventButton::A));
-					NMSP_TEST_MOUSE(keyEv.isDown(UIKeyboardEventButton::A));
-					NMSP_TEST_MOUSE(keyEv.isHold(UIKeyboardEventButton::A));
+					NMSP_TEST_MOUSE(keyEv.isUp(UiKeyboardEventButton::A));
+					NMSP_TEST_MOUSE(keyEv.isDown(UiKeyboardEventButton::A));
+					NMSP_TEST_MOUSE(keyEv.isHold(UiKeyboardEventButton::A));
 
 				}
 

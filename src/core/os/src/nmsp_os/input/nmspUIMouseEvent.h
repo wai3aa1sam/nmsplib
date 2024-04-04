@@ -4,7 +4,7 @@
 
 #include "nmsp_core_base/common/nmspBitUtil.h"
 
-#include "nmspUIEvent.h"
+#include "nmspUiEvent.h"
 
 /*
 references:
@@ -13,7 +13,7 @@ references:
 
 namespace nmsp {
 
-enum class UIMouseEventType 
+enum class UiMouseEventType 
 {
 	None,
 	Up,
@@ -21,9 +21,9 @@ enum class UIMouseEventType
 	Move,
 	Scroll,
 };
-NMSP_ENUM_ALL_OPERATOR(UIMouseEventType)
+NMSP_ENUM_ALL_OPERATOR(UiMouseEventType)
 
-enum class UIMouseEventButton 
+enum class UiMouseEventButton 
 {
 	None,
 	Left	= BitUtil::bit(0),
@@ -32,20 +32,20 @@ enum class UIMouseEventButton
 	Button4 = BitUtil::bit(3),
 	Button5 = BitUtil::bit(4),
 };
-NMSP_ENUM_ALL_OPERATOR(UIMouseEventButton)
+NMSP_ENUM_ALL_OPERATOR(UiMouseEventButton)
 
 
 #if 0
-#pragma mark --- UIMouseEvent-Decl ---
+#pragma mark --- UiMouseEvent-Decl ---
 #endif // 0
 #if 1
 
-struct UIMouseEvent 
+struct UiMouseEvent 
 {
 public:
-	using Type		= UIMouseEventType;
-	using Modifier	= UIEventModifier;
-	using Button	= UIMouseEventButton;
+	using Type		= UiMouseEventType;
+	using Modifier	= UiEventModifier;
+	using Button	= UiMouseEventButton;
 	using Vec2f		= OsTraits::Vec2f;
 
 public:
@@ -72,18 +72,18 @@ public:
 #endif
 
 #if 0
-#pragma mark --- UIMouseEvent-Impl ---
+#pragma mark --- UiMouseEvent-Impl ---
 #endif // 0
 #if 1
 
-inline bool UIMouseEvent::isUp()		const	{ return type == Type::Up; }
-inline bool UIMouseEvent::isDown()		const	{ return type == Type::Down; }
-inline bool UIMouseEvent::isMove()		const	{ return type == Type::Move; }
-inline bool UIMouseEvent::isScroll()	const	{ return type == Type::Scroll; }
+inline bool UiMouseEvent::isUp()		const	{ return type == Type::Up; }
+inline bool UiMouseEvent::isDown()		const	{ return type == Type::Down; }
+inline bool UiMouseEvent::isMove()		const	{ return type == Type::Move; }
+inline bool UiMouseEvent::isScroll()	const	{ return type == Type::Scroll; }
 
-inline bool UIMouseEvent::isDragging() const	{ return type == Type::Move && pressedButtons != Button::None; }
+inline bool UiMouseEvent::isDragging() const	{ return type == Type::Move && pressedButtons != Button::None; }
 
-inline bool UIMouseEvent::isDown(Button but) const
+inline bool UiMouseEvent::isDown(Button but) const
 {
 	return pressedButtons == but;
 }

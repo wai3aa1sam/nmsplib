@@ -19,7 +19,7 @@ namespace nmsp
 #elif NMSP_STL_BUILD_CONTAINER_NMSP
 
 
-template<class T>
+template<class T> inline
 T min(const T& a_, const T& b_)
 {
 	return b_ < a_ ? b_ : a_;
@@ -39,16 +39,22 @@ ITER find(ITER beg, ITER end, const T& v)
 
 #elif NMSP_STL_BUILD_CONTAINER_EASTL
 
-template<class IN_ITER, class PRED>
+template<class IN_ITER, class PRED> inline
 IN_ITER find_if(IN_ITER first, IN_ITER last, PRED pred)
 {
 	return eastl::find_if(first, last, nmsp::move(pred));
 }
 
-template<class BI_DIR_ITER>
+template<class BI_DIR_ITER> inline
 void reverse(BI_DIR_ITER first, BI_DIR_ITER last)
 {
 	return eastl::reverse(first, last);
+}
+
+template<class FORWARD_ITER, class T> inline
+void remove(FORWARD_ITER first, FORWARD_ITER last, const T& v)
+{
+	eastl::remove(first, last, v);
 }
 
 #else

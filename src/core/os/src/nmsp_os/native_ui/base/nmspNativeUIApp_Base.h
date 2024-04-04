@@ -3,6 +3,8 @@
 #include "nmsp_os/common/nmsp_os_common.h"
 #include "nmsp_os/app/AppBase.h"
 
+#include "nmsp_stl/view/nmspStringView.h"
+
 /*
 references:
 - src/core/native_ui/NativeUIApp_Base.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
@@ -21,6 +23,8 @@ struct NativeUIApp_CreateDesc_Base
 public:
 	using CreateDesc = NativeUIApp_CreateDesc_Base;
 
+public:
+	StrViewA_T title;
 };
 
 // interface only class

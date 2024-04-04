@@ -11,7 +11,7 @@
 
 	namespace nmsp {
 
-	enum class UIKeyboardEventButton
+	enum class UiKeyboardEventButton
 	{
 		None					= 0x00,
 		LButton					= 0x01,								/* Left mouse button */

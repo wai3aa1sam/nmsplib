@@ -62,10 +62,10 @@ private:
 	static This* s_getThis(WndHnd hwnd);
 
 	LRESULT _handleNativeEvent			(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	bool	_handleNativeUIMouseEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	bool	_handleNativeUiMouseEvent	(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	bool	_handleNativeUIKeyEvent		(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	UIEventModifier _getWin32Modifier();
+	UiEventModifier _getWin32Modifier();
 
 private:
 	WndHnd _wndHnd;

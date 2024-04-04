@@ -36,6 +36,7 @@ void NativeUIWindow_Base::destroy()
 
 void NativeUIWindow_Base::setWindowTitle	(StrViewA_T title)
 {
+	_title = title;
 	onSetWindowTitle(title);
 }
 
@@ -45,10 +46,10 @@ const NativeUIWindow_Base::Rect2f& NativeUIWindow_Base::clientRect() const
 	return _clientRect;
 }
 
-void NativeUIWindow_Base::onUINativeMouseEvent(UIMouseEvent& ev)
+void NativeUIWindow_Base::onUiNativeMouseEvent(UiMouseEvent& ev)
 {
-	using Button = UIMouseEventButton;
-	using Type   = UIMouseEventType;
+	using Button = UiMouseEventButton;
+	using Type   = UiMouseEventType;
 
 	switch (ev.type) 
 	{
@@ -61,15 +62,15 @@ void NativeUIWindow_Base::onUINativeMouseEvent(UIMouseEvent& ev)
 	ev.deltaPos = ev.pos - _mousePos;
 	_mousePos	= ev.pos;
 
-	onUIMouseEvent(ev);
+	onUiMouseEvent(ev);
 }
 
-void NativeUIWindow_Base::onUINativeKeyboardEvent(UIKeyboardEvent& ev)
+void NativeUIWindow_Base::onUiNativeKeyboardEvent(UiKeyboardEvent& ev)
 {
-	using Button = UIKeyboardEventButton;
-	using Type   = UIKeyboardEventType;
+	using Button = UiKeyboardEventButton;
+	using Type   = UiKeyboardEventType;
 
-	onUIKeyboardEvent(ev);
+	onUiKeyboardEvent(ev);
 }
 
 #endif

@@ -4,6 +4,8 @@
 
 #include "nmsp_os/input/nmspUIInput.h"
 
+#include "nmsp_stl/container/nmspString.h"
+
 /*
 references:
 - src/core/native_ui/NativeUIWindow_Base.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
@@ -96,11 +98,14 @@ public:
 
 	const Rect2f& clientRect() const;
 
-	virtual void onUIMouseEvent(UIMouseEvent& ev)		{};
-	virtual void onUIKeyboardEvent(UIKeyboardEvent& ev) {};
+	virtual void onUiMouseEvent(UiMouseEvent& ev)		{};
+	virtual void onUiKeyboardEvent(UiKeyboardEvent& ev) {};
 
-	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UIKeyboardEventType::Down || _keys[enumInt(button_)] == UIKeyboardEventType::Hold; }
-	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UIKeyboardEventType::Up; }
+	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UiKeyboardEventType::Down || _keys[enumInt(button_)] == UiKeyboardEventType::Hold; }
+	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UiKeyboardEventType::Up; }
+
+public:
+	const StringT& title() const;
 
 protected:
 	virtual void onCreate			(const CreateDesc_Base& cd)	{};
@@ -109,17 +114,22 @@ protected:
 	virtual void onClientRectChanged(const Rect2f& rect)		  ;
 	virtual void onDrawNeeded		()							{};
 
-	virtual void onUINativeMouseEvent(UIMouseEvent& ev);
-	virtual void onUINativeKeyboardEvent(UIKeyboardEvent& ev);
+	virtual void onUiNativeMouseEvent(UiMouseEvent& ev);
+	virtual void onUiNativeKeyboardEvent(UiKeyboardEvent& ev);
 
 protected:
 	Rect2f	_clientRect {0, 0, 0, 0};
 
-	UIMouseEventButton	_pressedMouseButtons = UIMouseEventButton::None;
+	UiMouseEventButton	_pressedMouseButtons = UiMouseEventButton::None;
 	Vec2f				_mousePos{0,0};
+
+	StringT _title;
 };
 
 inline void NativeUIWindow_Base::onClientRectChanged(const Rect2f& rect)		{ _clientRect = rect; };
+
+inline const StringT& NativeUIWindow_Base::title() const { return _title; }
+
 
 #endif
 

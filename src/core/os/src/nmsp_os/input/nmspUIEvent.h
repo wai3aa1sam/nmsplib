@@ -5,7 +5,7 @@
 
 namespace nmsp {
 
-enum class UIEventModifier 
+enum class UiEventModifier 
 {
 	None,
 	Shift	= BitUtil::bit(0),
@@ -14,7 +14,7 @@ enum class UIEventModifier
 	Cmd		= BitUtil::bit(3),
 	Fn		= BitUtil::bit(4),
 };
-NMSP_ENUM_ALL_OPERATOR(UIEventModifier)
+NMSP_ENUM_ALL_OPERATOR(UiEventModifier)
 
 
 }
