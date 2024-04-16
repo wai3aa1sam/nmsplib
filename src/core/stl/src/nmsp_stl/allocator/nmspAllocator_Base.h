@@ -28,6 +28,10 @@ public:
 	void free(void* p, SizeType n = 0);
 	void free_all();
 
+	template<class T, class... ARGS> T*		newT(	ARGS&&...	args);
+	template<class T>				 void	deleteT(T*			p);
+
+public:
 	bool is_owning(void* p, SizeType n);
 
 	const char* name() const;
@@ -64,6 +68,25 @@ template<class ALLOC> inline
 void*	AllocatorBase_Nmsp<ALLOC>::alloc_all(SizeType n)
 {
 	return static_cast<ALLOC&>(*this).alloc_all(n);
+}
+
+template<class ALLOC> 
+template<class T, class... ARGS> inline
+T* 
+AllocatorBase_Nmsp<ALLOC>::newT(ARGS&&... args)
+{
+	auto* buf = alloc(sizeof(T));
+	auto* obj = new(buf) T(nmsp::forward<ARGS>(args)...);
+	return obj;
+}
+
+template<class ALLOC> 
+template<class T> inline
+void
+AllocatorBase_Nmsp<ALLOC>::deleteT(T* p)
+{
+	p->~T();
+	free(p);
 }
 
 template<class ALLOC> inline

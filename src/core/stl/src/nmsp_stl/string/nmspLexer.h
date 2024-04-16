@@ -107,14 +107,18 @@ public:
 	StrViewA_T		filename() const;
 	StrViewA_T		getLastNLines(SizeType n) const;
 
+	char			curChar()  const;
+
 protected:
 	template<class... ARGS> void errorIf(bool cond, const char* fmt = "", ARGS&&... args);
 	template<class... ARGS> void error (const char* fmt = "", ARGS&&... args);
 							void errorUnexpectedToken();
 							void _error(StrViewA_T msg);
 
-private:
+protected:
 	void nextChar();
+
+private:
 	void _nextLine();
 	void _nextChar();
 
@@ -160,7 +164,7 @@ private:
 
 	SizeType _line = 0;
 	SizeType _col = 0;
-	char _ch = 0;
+	char	 _ch = 0;
 };
 
 #endif // 0
@@ -274,6 +278,8 @@ inline StrViewA_T Lexer_T::filename() const
 {
 	return _filename;
 }
+
+inline char Lexer_T::curChar()  const { return _ch; }
 
 template<class STR> inline 
 void 

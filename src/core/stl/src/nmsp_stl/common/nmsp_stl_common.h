@@ -32,3 +32,73 @@
 	#endif
 
 #endif // 0
+
+		#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
+
+#if NMSP_STL_BUILD_CONTAINER_STD
+
+	namespace nmsp {
+
+	}
+
+#elif NMSP_STL_BUILD_CONTAINER_NMSP
+
+	namespace nmsp {
+
+	}
+
+#elif NMSP_STL_BUILD_CONTAINER_EASTL
+
+
+	namespace nmsp {
+	
+	template <class T>
+	class InitList_Nmsp : public std::initializer_list<T>
+	{
+	public:
+		using value_type      = T;
+		using reference       = const T&;
+		using const_reference = const T&;
+		using size_type       = size_t;
+
+		using iterator       = const T*;
+		using const_iterator = const T*;
+
+		using Base = std::initializer_list<T>;
+
+	public:
+		constexpr InitList_Nmsp() noexcept : Base() {}
+
+		constexpr InitList_Nmsp(const Base& stdInitList) noexcept
+			: Base(stdInitList)
+		{}
+
+	public:
+		// std::initializer_list only has const ref
+		//		value_type& operator[](std::size_t i)			{ checkBoundary(i); return *(begin() + i); }
+		const	value_type& operator[](std::size_t i) const		{ checkBoundary(i); return *(begin() + i); }
+
+	protected:
+		void checkBoundary(std::size_t i) const
+		{
+			NMSP_CORE_ASSERT(i < size());
+		}
+	};
+	
+	template<class T>	using InitList_Impl = InitList_Nmsp<T>;
+
+	}
+
+#else
+	#error "--- error: nmsp_stl unsupported build container"
+#endif // 0
+
+#endif
+    
+namespace nmsp
+{
+	template<class T> using InitList_T = InitList_Impl<T>;
+}

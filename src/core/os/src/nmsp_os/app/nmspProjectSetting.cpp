@@ -1,6 +1,6 @@
 #include "nmsp_os-pch.h"
 
-#include "ProjectSetting.h"
+#include "nmspProjectSetting.h"
 
 #include "nmsp_os/file/nmspPath.h"
 
@@ -13,7 +13,7 @@ namespace nmsp {
 
 //ProjectSetting_T* ProjectSetting_T::s_instance = nullptr;
 
-ProjectSetting_T* ProjectSetting_T::s_instance = nullptr;
+//ProjectSetting_T* ProjectSetting_T::s_instance = nullptr;
 
 ProjectSetting_T::ProjectSetting_T()
 {
@@ -27,8 +27,11 @@ ProjectSetting_T::~ProjectSetting_T()
 
 void ProjectSetting_T::setProjectRoot(StrViewA_T path)
 {
-	Path::setCurrentDir(path);
+	if (path.is_empty())
+		return;
+
 	_projectRoot = Path::realpath(path);
+	Path::setCurrentDir(path);
 }
 
 #endif

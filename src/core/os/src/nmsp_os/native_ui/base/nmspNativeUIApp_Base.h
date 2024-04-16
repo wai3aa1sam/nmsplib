@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nmsp_os/common/nmsp_os_common.h"
-#include "nmsp_os/app/AppBase.h"
+#include "nmsp_os/app/nmspAppBase.h"
 
 #include "nmsp_stl/view/nmspStringView.h"
 

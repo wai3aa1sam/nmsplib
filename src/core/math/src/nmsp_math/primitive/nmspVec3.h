@@ -40,8 +40,8 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec3_T<NMSP_ARGS(T)> );
 namespace math {
 
 
-template<class T> NMSP_INLINE Vec3_T<T>	radians(Vec3_T<T> deg) { constexpr f = (PI<T>() / static_cast<T>(180)); return {deg.x * f, deg.y * f, deg.z * f}; }
-template<class T> NMSP_INLINE Vec3_T<T>	degrees(Vec3_T<T> rad) { constexpr f = (static_cast<T>(180) / PI<T>()); return {rad.x * f, rad.y * f, rad.z * f}; }
+template<class T> NMSP_INLINE Vec3_T<T>	radians(Vec3_T<T> deg) { const T f = T(PI<T>() / sCast<T>(180)); return {deg.x * f, deg.y * f, deg.z * f}; }
+template<class T> NMSP_INLINE Vec3_T<T>	degrees(Vec3_T<T> rad) { const T f = T(sCast<T>(180) / PI<T>()); return {rad.x * f, rad.y * f, rad.z * f}; }
 
 
 }

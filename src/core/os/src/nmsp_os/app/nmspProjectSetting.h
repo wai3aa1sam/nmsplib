@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nmsp_os/common/nmsp_os_common.h"
-#include "AppBase.h"
+#include "nmspAppBase.h"
 
 #include <nmsp_stl/extra/nmspSingleton.h>
 
@@ -17,7 +17,7 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-struct ProjectSetting_T : public Singleton_T<ProjectSetting_T>
+class ProjectSetting_T : public NonCopyable
 {
 public:
 	ProjectSetting_T();
@@ -25,6 +25,7 @@ public:
 	
 	void setProjectRoot(StrViewA_T path);
 
+public:
 	const StringT& projectRoot() const;
 
 private:

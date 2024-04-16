@@ -89,7 +89,7 @@ char File::writeFileIfChanged(StrViewA_T filename, ByteSpan_T data, bool createD
 
 	if (logResult)
 	{
-		if (ret != '=' || logNoChange)
+		if (ret != '=' && logNoChange)
 		{
 			_NMSP_LOG("[{}] {}, size={}", ret, realPath, data.size());
 		}
