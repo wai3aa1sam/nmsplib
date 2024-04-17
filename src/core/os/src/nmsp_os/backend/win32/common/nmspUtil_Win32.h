@@ -30,6 +30,8 @@ public:
 	template<class T> static POINT		castPoint	(const Vec2_T<T>& v);
 	template<class T> static Vec2_T<T>	castVec2	(const POINT& pt);
 
+	template<class T> static void getLowHighDwordTo(DWORD& oLow, DWORD& oHigh, T v);
+
 	static StringT getLastErrorMsg();
 
 };
@@ -72,6 +74,15 @@ template<class T> inline
 Util_Win32::Vec2_T<T> Util_Win32::castVec2(const POINT& pt)
 {
 	return Vec2_T<T>{sCast<T>(pt.x), sCast<T>(pt.y)};
+}
+
+template<class T> inline 
+void 
+Util_Win32::getLowHighDwordTo(DWORD& oLow, DWORD& oHigh, T v)
+{
+	u64 value = v;
+	oHigh = sCast<DWORD>(value >> 32);
+	oLow  = sCast<DWORD>(value);
 }
 
 #endif

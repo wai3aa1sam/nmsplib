@@ -38,4 +38,11 @@ void FileStream_T::openWrite(StrViewA_T filename, bool truncate)
 	}
 }
 
+ScopedFileStreamLock_T 
+FileStream_T::scopedLock()
+{
+	return ScopedFileStreamLock_T(this);
+}
+
+
 }

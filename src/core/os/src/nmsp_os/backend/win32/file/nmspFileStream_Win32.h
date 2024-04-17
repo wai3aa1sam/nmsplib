@@ -67,6 +67,30 @@ private:
 	NativeFd	_fd = kInvalid();
 };
 
+#if 0
+#pragma mark --- ScopedFileStreamLock_Win32-Decl ---
+#endif // 0
+#if 1
+
+/*
+	TODO: temporary
+*/
+class ScopedFileStreamLock_Win32 : public NonCopyable
+{
+public:
+	using Util		= Util_Win32;
+	using FileSize	= FileStream_Win32::FileSize;
+
+public:
+	ScopedFileStreamLock_Win32(FileStream_Win32* fs_);
+	~ScopedFileStreamLock_Win32();
+
+private:
+	FileStream_Win32*	_fs = nullptr;
+	FileSize			_size = 0;
+};
+
+#endif
 
 #endif
 

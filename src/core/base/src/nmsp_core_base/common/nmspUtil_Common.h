@@ -4,6 +4,8 @@
 #include "nmspInclude_Common.h"
 #include "nmspClass_Common.h"
 
+#if NMSP_DEVELOPMENT
+
 #define NMSP_NOT_YET_SUPPORT() _notYetSupported(NMSP_SRCLOC)
 
 #define _NMSP_LOG(...) do{ ::nmsp::_log(__VA_ARGS__); } while(false)
@@ -16,6 +18,22 @@
 #define _NMSP_DUMP_VAR_SELECT(COUNT) _NMSP_DUMP_VAR_##COUNT
 #define _NMSP_DUMP_VAR(...) NMSP_IDENTITY(NMSP_CALL(_NMSP_DUMP_VAR_SELECT, NMSP_VA_ARGS_COUNT(__VA_ARGS__) (__VA_ARGS__)))
 
+#else
+
+#define NMSP_NOT_YET_SUPPORT()
+
+#define _NMSP_LOG(...)
+
+#define _NMSP_DUMP_VAR_1(v0)				
+#define _NMSP_DUMP_VAR_2(v0, v1)			
+#define _NMSP_DUMP_VAR_3(v0, v1, v2)		
+#define _NMSP_DUMP_VAR_4(v0, v1, v2, v3)	
+
+#define _NMSP_DUMP_VAR_SELECT(COUNT)
+#define _NMSP_DUMP_VAR(...)
+
+
+#endif
 
 namespace nmsp 
 {

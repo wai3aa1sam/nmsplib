@@ -190,6 +190,39 @@ void FileStream_Win32::_checkFd()
 
 #endif
 
+#if 0
+#pragma mark --- ScopedFileStreamLock_Win32-Impl ---
+#endif // 0
+#if 1
+
+ScopedFileStreamLock_Win32::ScopedFileStreamLock_Win32(FileStream_Win32* fs_)
+{
+	NMSP_TODO("This is temporary, must be modified later");
+	_fs = fs_;
+	auto& fs = *fs_;
+
+	_size = fs.fileSize();
+
+	DWORD sizeHigh = 0;
+	DWORD sizeLow  = 0;
+	Util::getLowHighDwordTo(sizeLow, sizeHigh, _size);
+
+	::LockFile(fs.nativeFd(), 0, 0, sizeLow, sizeHigh);
+}
+
+ScopedFileStreamLock_Win32::~ScopedFileStreamLock_Win32()
+{
+	auto& fs = *_fs;
+
+	DWORD sizeHigh = 0;
+	DWORD sizeLow  = 0;
+	Util::getLowHighDwordTo(sizeLow, sizeHigh, _size);
+
+	::UnlockFile(fs.nativeFd(), 0, 0, sizeLow, sizeHigh);
+}
+
+#endif
+
 }
 
 #endif // 0

@@ -27,7 +27,7 @@ ThreadPool_T::~ThreadPool_T()
 void ThreadPool_T::create(const CreateDesc& desc)
 {
 	NMSP_ASSERT(desc.workerCount <= OsTraits::logicalThreadCount());
-	auto workerCount = math::clamp(desc.workerCount, sCast<SizeType>(1), OsTraits::logicalThreadCount() - 1);
+	auto workerCount = math::clamp(desc.workerCount, sCast<SizeType>(0), OsTraits::logicalThreadCount() - 1);
 	//workerCount = ( OsTraits::logicalThreadCount() - 1) / 2;
 	//workerCount = 1;
 

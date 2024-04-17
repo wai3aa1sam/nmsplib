@@ -35,6 +35,7 @@ JobSystem_T::JobSystem_T()
 JobSystem_T::~JobSystem_T()
 {
 	destroy();
+	_NMSP_LOG("~JobSystem_T()");
 }
 
 void JobSystem_T::create(int workerCount, int threadTypeCount)

@@ -48,7 +48,9 @@ void		NativeThread_Win32::join				()
 		#if NMSP_DEBUG
 		_isJoined = true;
 		#endif // NMSP_DEBUG
+		//_NMSP_LOG("thread-{}-{} {}: begin join",	localId(), threadId(), name());
 		::WaitForSingleObject(_hnd, INFINITE);
+		//_NMSP_LOG("thread-{}-{} {}: end join",		localId(), threadId(), name());
 		_hnd = 0;
 	}
 }

@@ -2,13 +2,15 @@
 
 #include "nmspPath_Win32.h"
 
+#include "nmsp_os/file/nmspPath.h"
+
 namespace nmsp {
 
 void Path_Win32::setCurrentDir(StrViewA_T dir)
 {
 	TempStringW_T<> tmp = UtfUtil::toStringW(dir);
 	auto ret = ::SetCurrentDirectory(tmp.c_str());
-	Util::throwIf(!ret, "setCurrentDir: {}", dir);
+	Util::throwIf(!ret, "currentDir: {} \n dir: {}", Path_Win32::getCurrentDir(), Path::realpath(dir));
 }
 
 StringT Path_Win32::getCurrentDir()
@@ -70,7 +72,7 @@ void Path_Win32::_create(StrViewA_T path)
 	TempStringW_T<> pathW;
 	UtfUtil::convert(pathW, path);
 	auto ret = ::CreateDirectory(pathW.c_str(), nullptr);
-	throwIf(!ret, "create directory {}", pathW);
+	Util::throwIf(!ret, "ret: {}, create directory {}", ret, pathW);
 }
 
 

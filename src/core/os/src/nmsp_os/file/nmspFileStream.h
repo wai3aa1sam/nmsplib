@@ -15,7 +15,7 @@
 
 	using FileStream_CreateDesc_Impl	= FileStream_CreateDesc_Win32;
 	using FileStream_Impl				= FileStream_Win32;
-
+	using ScopedFileStreamLock_Impl		= ScopedFileStreamLock_Win32;
 	}
 
 #elif NMSP_OS_LINUX
@@ -42,6 +42,8 @@ namespace nmsp {
 #endif // 0
 #if 1
 
+using ScopedFileStreamLock_T = ScopedFileStreamLock_Impl;
+
 using FileStream_CreateDesc = FileStream_CreateDesc_Impl;
 class FileStream_T : public FileStream_Impl
 {
@@ -52,6 +54,8 @@ public:
 	void openRead	(StrViewA_T filename);
 	void openAppend	(StrViewA_T filename);
 	void openWrite	(StrViewA_T filename, bool truncate);
+
+	NMSP_NODISCARD ScopedFileStreamLock_T scopedLock();
 
 protected:
 };
