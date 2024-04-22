@@ -17,41 +17,52 @@ Process_Win32::Process_Win32(const CreateDesc& cd)
 
 Process_Win32::Process_Win32(StrViewA_T filename)
 {
-	_init(filename, StrViewA_T{});
+	_execute(filename, StrViewA_T{});
 }
 
 Process_Win32::Process_Win32(StrViewA_T filename, StrViewA_T args)
 {
-	_init(filename, args);
+	_execute(filename, args);
 }
-
 
 Process_Win32::~Process_Win32()
 {
-	clear();
+	wait(INFINITE);
+	kill();
 }
 
-void Process_Win32::create(StrViewA_T filename, StrViewA_T args)
+void Process_Win32::execute(StrViewA_T filename, StrViewA_T args)
 {
-	_init(filename, args);
+	_execute(filename, args);
 }
 
-void Process_Win32::clear()
+void Process_Win32::wait(u64 timeoutMs)
 {
-	WaitForSingleObject(_procInfo.hProcess, INFINITE);
+	auto hnd = _procInfo.hProcess;
+	if (hnd)
+	{
+		WaitForSingleObject(hnd, sCast<DWORD>(timeoutMs));
+	}
+}
 
+void Process_Win32::kill()
+{
 	// Close process and thread handles. 
-	CloseHandle(_procInfo.hProcess);
-	CloseHandle(_procInfo.hThread);
+	if (_procInfo.hProcess)
+	{
+		CloseHandle(_procInfo.hProcess);
+	}
+	if (_procInfo.hThread)
+	{
+		CloseHandle(_procInfo.hThread);
+	}
 
 	_startupInfo	= { 0 };
 	_procInfo		= { 0 };
 }
 
-void Process_Win32::_init(StrViewA_T filename, StrViewA_T args)
+void Process_Win32::_execute(StrViewA_T filename, StrViewA_T args)
 {
-	clear();
-
 	TempStringW_T<> filenameW;
 
 	if (Path::isRealpath(filename))

@@ -32,12 +32,13 @@ public:
 	//template<size_t N_CLI_ARGS>
 	//Process(StrViewA_T filename, StrViewA_T(&args)[N_CLI_ARGS]);
 
-	void create(StrViewA_T filename, StrViewA_T args);
+	void execute(StrViewA_T filename, StrViewA_T args);
+	void wait(u64 timeoutMs);
+	void kill();
 
 private:
-	void _init(StrViewA_T filename, StrViewA_T args);
+	void _execute(StrViewA_T filename, StrViewA_T args);
 
-	void clear();
 
 private:
 	STARTUPINFO			_startupInfo	= { 0 };

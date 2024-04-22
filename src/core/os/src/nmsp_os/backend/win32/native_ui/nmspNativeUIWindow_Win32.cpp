@@ -158,8 +158,8 @@ void NativeUIWindow_Win32::onSetWindowTitle		(StrViewA_T title)
 
 	if (!_wndHnd) 
 		return;
-	TempStringW_T<> tmp = UtfUtil::toStringW(title);
-	::SetWindowText(_wndHnd, tmp.c_str());
+	auto titleW = UtfUtil::toTempStringW(title);
+	::SetWindowText(_wndHnd, titleW.c_str());
 }
 
 void NativeUIWindow_Win32::onClientRectChanged	(const Rect2f& rect)

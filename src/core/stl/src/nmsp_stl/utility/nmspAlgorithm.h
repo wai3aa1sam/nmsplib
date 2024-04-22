@@ -39,20 +39,30 @@ ITER find(ITER beg, ITER end, const T& v)
 
 #elif NMSP_STL_BUILD_CONTAINER_EASTL
 
+template<class IN_ITER, class T> inline
+IN_ITER 
+find(IN_ITER first, IN_ITER last, const T& v)
+{
+	return eastl::find(first, last, v);
+}
+
 template<class IN_ITER, class PRED> inline
-IN_ITER find_if(IN_ITER first, IN_ITER last, PRED pred)
+IN_ITER 
+find_if(IN_ITER first, IN_ITER last, PRED pred)
 {
 	return eastl::find_if(first, last, nmsp::move(pred));
 }
 
 template<class BI_DIR_ITER> inline
-void reverse(BI_DIR_ITER first, BI_DIR_ITER last)
+void 
+reverse(BI_DIR_ITER first, BI_DIR_ITER last)
 {
 	return eastl::reverse(first, last);
 }
 
 template<class FORWARD_ITER, class T> inline
-void remove(FORWARD_ITER first, FORWARD_ITER last, const T& v)
+void 
+remove(FORWARD_ITER first, FORWARD_ITER last, const T& v)
 {
 	eastl::remove(first, last, v);
 }

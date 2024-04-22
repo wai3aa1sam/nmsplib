@@ -45,7 +45,11 @@ public:
 
 	using Vec4		= Vec4_Basic_Glm;
 	using Tuple4	= Tuple4_T<T>;
+
+	using Tuple2	= Tuple2_T<T>;
 	using Vec2		= Vec2_T<T>;
+
+	using Tuple3	= Tuple3_T<T>;
 	using Vec3		= Vec3_T<T>;
 
 	template<class T2, class DATA2> using Vec4_T = Vec4_Basic_Glm<T2, DATA2>;
@@ -84,6 +88,7 @@ public:
 	Vec4(const Tuple4& r);
 	Vec4(const Vec3& r, T w_);
 	Vec4(const Vec2& r, T z_, T w_);
+	Vec4(const Tuple2& a, const Tuple2& b);
 	template<class T2, class DATA2> explicit Vec4(const Vec4_T<T2, DATA2>& rhs);
 
 	operator Tuple4() const;
@@ -92,6 +97,7 @@ public:
 	void	set(const Tuple4& rhs);
 	void	set(const Vec3& rhs, T w_);
 	void	set(const Vec2& rhs, T z_, T w_);
+	void	set(const Tuple2& a, const Tuple2& b);
 	void	setAll(T val);
 
 	bool	equals(const Vec4& rhs, const T& epsilon = math::epsilon<T>()) const;
@@ -252,6 +258,12 @@ Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec2& rhs, T z_, T w_)
 	set(rhs, w_, z_);
 }
 
+template<class T, class DATA> inline
+Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Tuple2& a, const Tuple2& b)
+{
+	set(a, b);
+}
+
 template<class T, class DATA>
 template<class T2, class DATA2>  inline
 Vec4_Basic_Glm<T, DATA>::Vec4_Basic_Glm(const Vec4_T<T2, DATA2>& rhs)
@@ -299,6 +311,15 @@ void Vec4_Basic_Glm<T, DATA>::set(const Vec2& rhs, T z_, T w_)
 	this->y = rhs.y;
 	this->z = z_;
 	this->w = w_;
+}
+
+template<class T, class DATA> inline
+void Vec4_Basic_Glm<T, DATA>::set(const Tuple2& a, const Tuple2& b)
+{
+	this->x = a.x;
+	this->y = a.y;
+	this->z = b.x;
+	this->w = b.y;
 }
 
 template<class T, class DATA> inline

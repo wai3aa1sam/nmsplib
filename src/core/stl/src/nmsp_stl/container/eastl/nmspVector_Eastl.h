@@ -59,6 +59,9 @@ public:
 	void	appendRange(const CViewType& r);
 	T		moveBack();
 
+						Iter	find(const T& v);
+						CIter	find(const T& v) const;
+
 	template<class PRED> Iter	findIf(PRED pred);
 	template<class PRED> CIter	findIf(PRED pred) const;
 
@@ -142,6 +145,20 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::moveBack()
 	out = nmsp::move(*pBack);
 	pop_back();
 	return out;
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::Iter
+Vector_Eastl<T, N, FALLBACK_ALLOC>::find(const T& v)
+{
+	return nmsp::find(begin(), end(), v);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+typename Vector_Eastl<T, N, FALLBACK_ALLOC>::CIter
+Vector_Eastl<T, N, FALLBACK_ALLOC>::find(const T& v) const
+{
+	return nmsp::find(cbegin(), cend(), v);
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC>

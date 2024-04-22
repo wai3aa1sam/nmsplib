@@ -26,7 +26,7 @@ void CmdLine_Win32::execute(StrViewA_T cmd, bool isCloseAfterExecute)
 	StringT tmp;
 	tmp += isCloseAfterExecute ? "/c " : "/k ";
 	tmp += cmd;
-	_proc.create(OsTraits::s_cmdExePath, tmp);
+	_proc.execute(OsTraits::s_cmdExePath, tmp);
 }
 
 CmdLine_Win32::~CmdLine_Win32()

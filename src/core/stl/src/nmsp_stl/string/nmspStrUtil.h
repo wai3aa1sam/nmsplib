@@ -62,20 +62,21 @@ struct StrUtil
 	template<class STR> static void toUpperCase(STR& dst, StrViewA_T src);
 
 	static bool isSame		(const char* a, const char* b);
+	static bool isSame		(StrViewA_T  a, StrViewA_T  b);
 	static bool isDigit		(char ch);
 	static bool isAlpha		(char ch);
 	static bool isLowerCase	(char ch);
 	static bool isUpperCase	(char ch);
 
 
-	template<class T>			static StringT			toStr			(const T& val);
-	template<class T>			static StringWT			toStrW			(const T& val);
-	template<size_t N, class T> static StringA_T<N>		toStr_N			(const T& val);
-	template<size_t N, class T> static StringW_T<N>		toStrW_N		(const T& val);
-	template<class T>			static TempStringA_T<>	toTempStr		(const T& val);
-	template<class T>			static TempStringW_T<>	toTempStrW		(const T& val);
-	template<class T, size_t N> static bool				convertToStr	(StringA_T<N>& o, const T& val);
-	template<class T, size_t N> static bool				convertToStrW	(StringW_T<N>& o, const T& val);
+	template<class T>											static StringT			toStr			(const T& val);
+	template<class T>											static StringWT			toStrW			(const T& val);
+	template<size_t N, class T>									static StringA_T<N>		toStr_N			(const T& val);
+	template<size_t N, class T>									static StringW_T<N>		toStrW_N		(const T& val);
+	template<class T>											static TempStringA_T<>	toTempStr		(const T& val);
+	template<class T>											static TempStringW_T<>	toTempStrW		(const T& val);
+	template<class T, size_t N, class ALLOC = DefaultAllocator> static bool				convertToStr	(StringA_T<N, ALLOC>& o, const T& val);
+	template<class T, size_t N, class ALLOC = DefaultAllocator>	static bool				convertToStrW	(StringW_T<N, ALLOC>& o, const T& val);
 
 	template<class T> static bool tryParse(StrViewA_T view, T& outValue);
 
@@ -265,8 +266,8 @@ template<size_t N, class T> inline StringW_T<N> StrUtil::toStrW_N(const T& val)	
 template<class T>			inline TempStringA_T<> StrUtil::toTempStr (const T& val)			{ return toStr_T <TempStringA_T<> >(val); }
 template<class T>			inline TempStringW_T<> StrUtil::toTempStrW(const T& val)			{ return toStrW_T<TempStringW_T<> >(val); }
 
-template<class T, size_t N> inline bool StrUtil::convertToStr (StringA_T<N>& o, const T& val)	{ return convertToStr_T (o, val); }
-template<class T, size_t N> inline bool StrUtil::convertToStrW(StringW_T<N>& o, const T& val)	{ return convertToStrW_T(o, val); }
+template<class T, size_t N, class ALLOC> inline bool StrUtil::convertToStr (StringA_T<N, ALLOC>& o, const T& val)	{ return convertToStr_T (o, val); }
+template<class T, size_t N, class ALLOC> inline bool StrUtil::convertToStrW(StringW_T<N, ALLOC>& o, const T& val)	{ return convertToStrW_T(o, val); }
 
 template<class STR, class T> inline 
 STR StrUtil::toStr_T(const T& val)
@@ -311,6 +312,7 @@ bool StrUtil::convertToStrW_T(STR& dst, const T& val)
 #pragma mark --- StrUtil::tryParse()-Impl ---
 #endif // 0
 #if 1
+
 template<class T, class ENABLE = void>
 struct StrUtil_ParseHelper;
 

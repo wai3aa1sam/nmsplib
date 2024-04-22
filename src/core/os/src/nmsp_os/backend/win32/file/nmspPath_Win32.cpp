@@ -8,8 +8,8 @@ namespace nmsp {
 
 void Path_Win32::setCurrentDir(StrViewA_T dir)
 {
-	TempStringW_T<> tmp = UtfUtil::toStringW(dir);
-	auto ret = ::SetCurrentDirectory(tmp.c_str());
+	auto dirW = UtfUtil::toTempStringW(dir);
+	auto ret = ::SetCurrentDirectory(dirW.c_str());
 	Util::throwIf(!ret, "currentDir: {} \n dir: {}", Path_Win32::getCurrentDir(), Path::realpath(dir));
 }
 

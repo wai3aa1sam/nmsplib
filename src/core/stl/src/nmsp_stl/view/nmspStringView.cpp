@@ -18,7 +18,7 @@ void onFormat(fmt::format_context& ctx, const StrViewA_T& v)
 
 void onFormat(fmt::format_context& ctx, const StrViewW_T& v)
 {
-	TempStringA_T<> tmp = nmsp::UtfUtil::toString(v);
+	TempStringA_T<> tmp = nmsp::UtfUtil::toTempString(v);
 	formatTo(ctx, "{}", tmp);
 }
 

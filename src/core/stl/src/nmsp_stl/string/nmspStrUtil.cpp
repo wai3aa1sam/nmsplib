@@ -134,6 +134,11 @@ int StrUtil::ignoreCaseCompare(StrViewA_T a, StrViewA_T b)
 	return 0;
 }
 
+bool StrUtil::isSame(StrViewA_T  a, StrViewA_T  b)
+{
+	return a.size() == b.size() && isSame(a.data(), b.data());
+}
+
 bool StrUtil::isSame(const char* a, const char* b)
 {
 	return ::strcmp(a, b) == 0;

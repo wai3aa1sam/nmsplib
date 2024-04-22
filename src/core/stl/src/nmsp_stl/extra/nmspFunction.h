@@ -82,12 +82,15 @@ public:
 		_free();
 	}
 
-	RET operator()(PARAMS&&... params)
+	/*
+	* using PARAMS&& will make the args only accept r-value
+	*/
+	RET operator()(PARAMS... params)
 	{
 		return _ftr->operator()(std::forward<PARAMS>(params)...);
 	}
 
-	RET operator()(PARAMS&&... params) const
+	RET operator()(PARAMS... params) const
 	{
 		return _ftr->operator()(std::forward<PARAMS>(params)...);
 	}
