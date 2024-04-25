@@ -45,16 +45,22 @@ struct Camera3_T
 	void setAim(T x, T y, T z)	{ setAim(Vec3(x,y,z)); }
 	void setUp (T x, T y, T z)	{ setUp (Vec3(x,y,z)); }
 
+	void setNearClip(T v)	{ _nearClip = v; }
+	void setFarClip( T v)	{ _farClip	= v; }
+
 	void setPos(const Vec3& pos)	{ _pos = pos; }
 	void setAim(const Vec3& aim)	{ _aim = aim; }
 	void setUp (const Vec3& up)		{ _up  = up;  }
 
 	void setFov(const T& fov)		{ _fov = fov; }
 
-	const Vec3& pos() const { return _pos; }
-	const Vec3& aim() const { return _aim; }
-	const Vec3& up () const { return _up;  }
-	const T&	fov() const { return _fov; }
+	const Vec3& pos() const		 { return _pos; }
+	const Vec3& aim() const		 { return _aim; }
+	const Vec3& up () const		 { return _up;  }
+	const T&	fov() const		 { return _fov; }
+
+	const T&	nearClip() const { return _nearClip; }
+	const T&	farClip()  const { return _farClip; }
 
 	void setViewport(const Rect2& v) { _viewport = v; }
 	const Rect2& viewport() const { return _viewport; }
