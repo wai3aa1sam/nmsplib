@@ -12,6 +12,10 @@ references:
 	#error
 #endif
 
+#if _MSVC_LANG > 0L
+	#define NMSP_LANG_CPP		1
+#endif
+
 #if _MSVC_LANG >= 199711L
 	#define NMSP_CPLUSPLUS_03	1
 #endif
@@ -31,6 +35,7 @@ references:
 #if _MSVC_LANG >= 202002L
 	#define NMSP_CPLUSPLUS_20	1
 #endif
+
 
 #define NMSP_TYPE_HAS_SIZE_T	0
 #define NMSP_TYPE_HAS_SSIZE_T	0

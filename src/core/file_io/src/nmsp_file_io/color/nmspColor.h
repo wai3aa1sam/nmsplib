@@ -43,6 +43,8 @@ NMSP_ENUM_CLASS(ColorModel, u8);
 	E(None, = 0) \
 	E(UNorm8,) \
 	E(UNorm16,) \
+	E(UNorm32,) \
+	E(UNorm64,) \
 	E(Float16,) \
 	E(Float32,) \
 	E(Float64,) \
@@ -54,6 +56,8 @@ template<class T> inline constexpr ColorElementType getColorElementType();
 template<> constexpr ColorElementType getColorElementType<void>()	{ return ColorElementType::None; }
 template<> constexpr ColorElementType getColorElementType<u8 >()	{ return ColorElementType::UNorm8; }
 template<> constexpr ColorElementType getColorElementType<u16>()	{ return ColorElementType::UNorm16; }
+template<> constexpr ColorElementType getColorElementType<u32>()	{ return ColorElementType::UNorm32; }
+template<> constexpr ColorElementType getColorElementType<u64>()	{ return ColorElementType::UNorm64; }
 //template<> constexpr ColorElementType getColorElementType<f16>()	{ return ColorElementType::Float16; }
 template<> constexpr ColorElementType getColorElementType<f32>()	{ return ColorElementType::Float32; }
 template<> constexpr ColorElementType getColorElementType<f64>()	{ return ColorElementType::Float64; }
@@ -91,31 +95,37 @@ struct TypeBitMixture_Impl<ColorType>
 	E(None, = 0) \
 	E(Rb,		= TBM<ColorType>::makeInt(ColorModel::R,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(Rs,		= TBM<ColorType>::makeInt(ColorModel::R,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(Ru,		= TBM<ColorType>::makeInt(ColorModel::R,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(Rh,		= TBM<ColorType>::makeInt(ColorModel::R,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(Rf,		= TBM<ColorType>::makeInt(ColorModel::R,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(RGb,		= TBM<ColorType>::makeInt(ColorModel::RG,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(RGs,		= TBM<ColorType>::makeInt(ColorModel::RG,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(RGu,		= TBM<ColorType>::makeInt(ColorModel::RG,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(RGh,		= TBM<ColorType>::makeInt(ColorModel::RG,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(RGf,		= TBM<ColorType>::makeInt(ColorModel::RG,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(RGBb,		= TBM<ColorType>::makeInt(ColorModel::RGB,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(RGBs,		= TBM<ColorType>::makeInt(ColorModel::RGB,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(RGBu,		= TBM<ColorType>::makeInt(ColorModel::RGB,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(RGBh,		= TBM<ColorType>::makeInt(ColorModel::RGB,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(RGBf,		= TBM<ColorType>::makeInt(ColorModel::RGB,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(RGBAb,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(RGBAs,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(RGBAu,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(RGBAh,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(RGBAf,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(Lb,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(Ls,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(Lu,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(Lh,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(Lf,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(LAb,		= TBM<ColorType>::makeInt(ColorModel::LA,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(LAs,		= TBM<ColorType>::makeInt(ColorModel::LA,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(LAu,		= TBM<ColorType>::makeInt(ColorModel::LA,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(LAh,		= TBM<ColorType>::makeInt(ColorModel::LA,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(LAf,		= TBM<ColorType>::makeInt(ColorModel::LA,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
@@ -275,6 +285,7 @@ public:
 	using ElementType	= T;
 	using SizeType		= FileIoTraits::SizeType;
 	using IndexType		= FileIoTraits::IndexType;
+	using Tuple4		= Tuple4_T<T>;
 
 public:
 	static constexpr SizeType			s_kElementCount			= 4;
@@ -294,6 +305,9 @@ public:
 	ColorRGBA_T() = default;
 	ColorRGBA_T(const T& r_, const T& g_, const T& b_, const T& a_)
 		: r(r_), g(g_), b(b_), a(a_)
+	{}
+	ColorRGBA_T(const Tuple4& v)
+		: r(v.x), g(v.y), b(v.z), a(v.w)
 	{}
 
 	template<class SE>
@@ -529,42 +543,52 @@ public:
 
 using ColorRb_T 	= ColorR_T<u8>;
 using ColorRs_T 	= ColorR_T<u16>;
+using ColorRu_T 	= ColorR_T<u32>;
 using ColorRf_T 	= ColorR_T<float>;
 
 using ColorRGb_T 	= ColorRG_T<u8>;
 using ColorRGs_T 	= ColorRG_T<u16>;
+using ColorRGu_T 	= ColorRG_T<u32>;
 using ColorRGf_T 	= ColorRG_T<float>;
 
 using ColorRGBb_T 	= ColorRGB_T<u8>;
 using ColorRGBs_T 	= ColorRGB_T<u16>;
+using ColorRGBu_T 	= ColorRGB_T<u32>;
 using ColorRGBf_T 	= ColorRGB_T<float>;
 
 using ColorRGBAb_T 	= ColorRGBA_T<u8>;
 using ColorRGBAs_T 	= ColorRGBA_T<u16>;
+using ColorRGBAu_T 	= ColorRGBA_T<u32>;
 using ColorRGBAf_T 	= ColorRGBA_T<float>;
 
 using Color1b_T = ColorRb_T;
 using Color1s_T = ColorRs_T;
+using Color1u_T = ColorRu_T;
 using Color1f_T = ColorRf_T;
 
 using Color2b_T = ColorRGb_T;
 using Color2s_T = ColorRGs_T;
+using Color2u_T = ColorRGu_T;
 using Color2f_T = ColorRGf_T;
 
 using Color3b_T = ColorRGBb_T;
 using Color3s_T = ColorRGBs_T;
+using Color3u_T = ColorRGBu_T;
 using Color3f_T = ColorRGBf_T;
 
 using Color4b_T = ColorRGBAb_T;
 using Color4s_T = ColorRGBAs_T;
+using Color4u_T = ColorRGBAu_T;
 using Color4f_T = ColorRGBAf_T;
 
 using ColorLb_T = ColorL_T<u8>;
 using ColorLs_T = ColorL_T<u16>;
+using ColorLu_T = ColorL_T<u32>;
 using ColorLf_T = ColorL_T<float>;
 
 using ColorLAb_T = ColorLA_T<u8>;
 using ColorLAs_T = ColorLA_T<u16>;
+using ColorLAu_T = ColorLA_T<u32>;
 using ColorLAf_T = ColorLA_T<float>;
 
 

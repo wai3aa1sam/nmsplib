@@ -175,7 +175,7 @@ typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_zero()
 template<class T, class DATA> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec4	Vec4_Basic_Glm<T, DATA>::s_one()
 {
-	return Vec4{ T(1), T(1), T(1), T(0) };
+	return Vec4{ T(1), T(1), T(1), T(1) };
 }
 
 template<class T, class DATA> inline

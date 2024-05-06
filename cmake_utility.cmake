@@ -57,8 +57,13 @@ function(my_add_library target_name src_path)
   target_precompile_headers(${target_name} PUBLIC src/${target_name}-pch.h)
   target_include_directories(${target_name} PUBLIC src)
   my_set_target_warning_level(${target_name})
-  my_set_target_unity_build_mode(${target_name})
+  #my_set_target_unity_build_mode(${target_name})
   my_set_multi_core_compile(${target_name})
+
+  if(${${project_namespace_marco}_ENABLE_SANITIZER})
+    my_enable_sanitizer(${target_name})
+  endif()
+
 endfunction()
 
 function(my_add_executable target_name src_path)
@@ -71,7 +76,7 @@ function(my_add_executable target_name src_path)
   target_precompile_headers(${target_name} PUBLIC src/${target_name}-pch.h)
   target_include_directories(${target_name} PUBLIC src)
   my_set_target_warning_level(${target_name})	
-  my_set_target_unity_build_mode(${target_name})
+  #my_set_target_unity_build_mode(${target_name})
   my_set_multi_core_compile(${target_name})
 
   if(${${project_namespace_marco}_ENABLE_SANITIZER})
@@ -120,6 +125,7 @@ function(my_enable_sanitizer target_name)
     #set_property(TARGET ${target_name}     PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     target_compile_options(${target_name}  
       PRIVATE 
+              "$<$<CONFIG:DEBUG>:/fsanitize=address>"
               "$<$<CONFIG:DEBUG>:/fsanitize=fuzzer>"
               "$<$<CONFIG:DEBUG>:/Zi>"
     )
