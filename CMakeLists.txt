@@ -22,12 +22,14 @@ my_set_opt(${project_namespace_marco}_ENABLE_PROFILER           0)
 my_set_opt(${project_namespace_marco}_ENABLE_INTERNAL_PROFILER  0)
 my_set_opt(${project_namespace_marco}_ENABLE_SANITIZER          0)
 
-my_set_opt(${project_namespace_marco}_JOB_SYSTEM_DEVELOPMENT    1)
-
 my_only_one_opt_could_on_3( ${project_namespace_marco}_ENABLE_PROFILER
                             ${project_namespace_marco}_ENABLE_INTERNAL_PROFILER
                             ${project_namespace_marco}_ENABLE_SANITIZER
                         )
+
+ProjectUtil_addMarco(${project_namespace_marco}_JOB_SYSTEM_DEVELOPMENT                  1)
+ProjectUtil_addMarco(${project_namespace_marco}_JOB_SYSTEM_MAX_FRAME_IN_FLIGHT_COUNT    4)
+ProjectUtil_addMarco(${project_namespace_marco}_JOB_SYSTEM_LOGICAL_THREAD_COUNT         ${OsTraits_kThreadCount})
 
 find_package(fmt                        CONFIG REQUIRED)
 find_package(benchmark                  CONFIG REQUIRED)
