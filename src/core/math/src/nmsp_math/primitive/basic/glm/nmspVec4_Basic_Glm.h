@@ -97,7 +97,7 @@ public:
 	void	set(const Tuple4& rhs);
 	void	set(const Vec3& rhs, T w_);
 	void	set(const Vec2& rhs, T z_, T w_);
-	void	set(const Tuple2& a, const Tuple2& b);
+	void	set(const Tuple2& a_, const Tuple2& b_);
 	void	setAll(T val);
 
 	bool	equals(const Vec4& rhs, const T& epsilon = math::epsilon<T>()) const;
@@ -314,12 +314,12 @@ void Vec4_Basic_Glm<T, DATA>::set(const Vec2& rhs, T z_, T w_)
 }
 
 template<class T, class DATA> inline
-void Vec4_Basic_Glm<T, DATA>::set(const Tuple2& a, const Tuple2& b)
+void Vec4_Basic_Glm<T, DATA>::set(const Tuple2& a_, const Tuple2& b_)
 {
-	this->x = a.x;
-	this->y = a.y;
-	this->z = b.x;
-	this->w = b.y;
+	this->x = a_.x;
+	this->y = a_.y;
+	this->z = b_.x;
+	this->w = b_.y;
 }
 
 template<class T, class DATA> inline
