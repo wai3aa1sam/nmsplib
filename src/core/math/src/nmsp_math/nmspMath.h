@@ -100,7 +100,7 @@ template<class T, class U> constexpr T modPow2Val(T x, U pow2Value) { NMSP_ASSER
 
 template<class T> T pow(const T& left, const T& right) { return std::pow(left, right); }
 
-template<class T> constexpr T pow2(T v_)				{ return (T(0x01) << v_); }
+template<class T> constexpr T pow2(T v_)				{ return sCast<T>(u64(0x01) << u64(v_)); }
 
 template<typename T> constexpr T log2 (T val) {
 	//static_assert(std::is_unsigned_v<T>());

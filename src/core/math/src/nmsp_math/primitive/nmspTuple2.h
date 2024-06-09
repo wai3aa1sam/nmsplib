@@ -34,6 +34,7 @@ public:
 	};
 public:
 	static constexpr Tuple2_T s_zero();
+	static constexpr Tuple2_T s_one();
 
 	template<class T2> static constexpr Tuple2_T s_cast(const Tuple2_T<T2>& rhs);
 
@@ -69,7 +70,8 @@ NMSP_FORMATTER_T( NMSP_ARGS(class T), Tuple2_T<NMSP_ARGS(T)> );
 #if 1
 
 
-template<class T> inline constexpr Tuple2_T<T> Tuple2_T<T>::s_zero() { return { sCast<T>(0), sCast<T>(0) }; }
+template<class T> inline constexpr Tuple2_T<T> Tuple2_T<T>::s_zero()	{ return { sCast<T>(0), sCast<T>(0) }; }
+template<class T> inline constexpr Tuple2_T<T> Tuple2_T<T>::s_one()		{ return { sCast<T>(1), sCast<T>(1) }; }
 
 template<class T> 
 template<class T2> inline constexpr

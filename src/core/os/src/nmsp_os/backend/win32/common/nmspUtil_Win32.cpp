@@ -20,10 +20,29 @@ Util_Win32::toU64(const LARGE_INTEGER& v)
 	return sCast<u64>(v.HighPart) << 32 | v.LowPart;
 }
 
-StringT Util_Win32::getLastErrorMsg()
+void 
+Util_Win32::closeHandleAndSetNull(Handle& hnd)
+{
+	if (hnd)
+	{
+		CloseHandle(hnd);
+		hnd = NULL;
+	}
+}
+
+DWORD		
+Util_Win32::getLastErrorCode()
 {
 	DWORD err = ::GetLastError();
-	switch( err ) 
+	return err;
+}
+
+StringT Util_Win32::getLastErrorMsg()
+{
+	StringT o;
+
+	DWORD err = getLastErrorCode();
+	/*switch( err ) 
 	{
 		case ERROR_FILE_NOT_FOUND:		{ NMSP_THROW("file not found");			} break;
 		case ERROR_PATH_NOT_FOUND:		{ NMSP_THROW("path not found");			} break;
@@ -35,7 +54,22 @@ StringT Util_Win32::getLastErrorMsg()
 		case ERROR_LOCK_VIOLATION:		{ NMSP_THROW("file lock violation");	} break;
 
 		default:						{ NMSP_THROW("GetLastError(): Code: {}", err); }
-	}
+	}*/
+
+	StringW_T<512> bufW;
+	bufW.resize(512);
+	DWORD   dwChars;  // Number of chars returned.
+	// Try to get the message from the system errors.
+	dwChars = FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		err,
+		0,
+		bufW.data(),
+		sCast<DWORD>(bufW.size()),
+		NULL);
+	o.reserve(bufW.size());
+	UtfUtil::convert(o, bufW);
+	return o;
 }
 
 

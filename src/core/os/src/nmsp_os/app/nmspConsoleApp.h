@@ -13,10 +13,10 @@ namespace nmsp {
 class ConsoleApp_T : public AppBase_T
 {
 public:
-	void run() { onRun(); }
+	int run() { int exitcode = 0;  exitcode = onRun(); return exitcode; }
 
 protected:
-	virtual void onRun() = 0;
+	virtual int onRun() = 0;
 };
 
 }

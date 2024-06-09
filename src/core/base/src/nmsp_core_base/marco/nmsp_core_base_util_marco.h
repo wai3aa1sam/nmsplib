@@ -19,7 +19,8 @@ references:
 #define NMSP_COMMA ,
 #define NMSP_EMPTY
 #define NMSP_ARGS(...) __VA_ARGS__
-#define NMSP_STRINGIFY(...)	#__VA_ARGS__
+#define NMSP_STRINGIFY_IMPL(...)	#__VA_ARGS__
+#define NMSP_STRINGIFY(...)			NMSP_STRINGIFY_IMPL(__VA_ARGS__)
 
 #define NMSP_IDENTITY(X) X
 #define NMSP_CALL(M, ARGS) NMSP_IDENTITY( M(ARGS) )

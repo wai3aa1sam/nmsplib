@@ -16,6 +16,8 @@ public:
 	using Base::Vec2_T;
 	using Base::Rect2f;
 
+	using Handle = ::HANDLE;
+
 public:
 	Util_Win32() = delete;
 
@@ -30,9 +32,13 @@ public:
 	template<class T> static POINT		castPoint	(const Vec2_T<T>& v);
 	template<class T> static Vec2_T<T>	castVec2	(const POINT& pt);
 
+	static void closeHandleAndSetNull(Handle& hnd);
+
 	template<class T> static void getLowHighDwordTo(DWORD& oLow, DWORD& oHigh, T v);
 
-	static StringT getLastErrorMsg();
+	static DWORD	getLastErrorCode();
+	static StringT	getLastErrorMsg();
+
 
 };
 #endif
@@ -48,9 +54,10 @@ void Util_Win32::throwIf(bool cond, const char* fmt, ARGS&&... args)
 	if (cond)
 	{
 		_NMSP_LOG(fmt, nmsp::forward<ARGS>(args)...);
+		auto err = getLastErrorCode();
 		auto msg = getLastErrorMsg();
-		_NMSP_LOG("--- Error: win32 - {}", msg);
-		//nmsp::throwIf(cond, fmt, nmsp::forward<ARGS>(args)...);
+		_NMSP_LOG("--- Error: win32 - err: {} - {}", err, msg);
+		NMSP_THROW();
 	}
 }
 

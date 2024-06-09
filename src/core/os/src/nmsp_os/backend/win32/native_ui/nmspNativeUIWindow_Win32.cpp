@@ -130,10 +130,10 @@ void NativeUIWindow_Win32::onCreate				(const CreateDesc_Base& cd)
 	}
 
 	_wndHnd = ::CreateWindowEx(dwExStyle, clsName, clsName, dwStyle,
-		(int)cDesc.rect.x,
-		(int)cDesc.rect.y,
-		(int)cDesc.rect.w,
-		(int)cDesc.rect.h,
+		(int)rect.x,
+		(int)rect.y,
+		(int)rect.w,
+		(int)rect.h,
 		nullptr, nullptr, hInstance, this);
 	if (!_wndHnd) 
 	{

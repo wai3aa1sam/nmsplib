@@ -11,7 +11,8 @@ namespace nmsp {
 
 struct Process_CreateDesc_Base
 {
-
+	bool isCreateStdout = false;
+	bool isCreateStdin	= false;
 };
 
 class Process_Base : public NonCopyable

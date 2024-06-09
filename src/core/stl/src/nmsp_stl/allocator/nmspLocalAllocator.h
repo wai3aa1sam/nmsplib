@@ -7,7 +7,7 @@
 
 /*
 references:
-- CppCon 2015: Andrei Alexandrescu “std::allocator...” - YouTube (https://www.youtube.com/watch?v=LIb3L4vKZ7U)
+- CppCon 2015: Andrei Alexandrescu [std::allocator] - YouTube (https://www.youtube.com/watch?v=LIb3L4vKZ7U)
 
 */
 

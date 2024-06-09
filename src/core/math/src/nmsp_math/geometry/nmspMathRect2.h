@@ -34,6 +34,10 @@ public:
 		struct { Tuple2 pos, size; };
 		T data[s_kElementCount];
 	};
+public:
+	static constexpr Rect2_T s_zero();
+	static constexpr Rect2_T s_one();
+	static constexpr Rect2_T s_posZero_sizeOne();
 
 public:
 	Rect2_T() : pos(), size() {};
@@ -95,6 +99,9 @@ math::Rect2_T<T> toRect2_xy(const Tuple2_T<T>& tuple2)
 #endif // 0
 #if 1
 
+template<class T> inline constexpr Rect2_T<T> Rect2_T<T>::s_zero()					{ return Rect2_T<T>{ sCast<T>(0), sCast<T>(0), sCast<T>(0), sCast<T>(0) }; }
+template<class T> inline constexpr Rect2_T<T> Rect2_T<T>::s_one()					{ return Rect2_T<T>{ sCast<T>(1), sCast<T>(1), sCast<T>(1), sCast<T>(1) }; }
+template<class T> inline constexpr Rect2_T<T> Rect2_T<T>::s_posZero_sizeOne()		{ return Rect2_T<T>{ sCast<T>(0), sCast<T>(0), sCast<T>(1), sCast<T>(1) }; }		
 
 template<class T> inline 
 Rect2_T<T>::Rect2_T(T x_, T y_, T w_, T h_)

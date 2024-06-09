@@ -37,8 +37,8 @@ public:
 	void* alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset);
 	void  clear();
 
-	template<class T> void destruct();
-	template<class T> void destructAndClear();
+	template<class T> void destruct(		SizeType align);
+	template<class T> void destructAndClear(SizeType align);
 
 	const u8*	data()			const;
 	SizeType	size()			const;
@@ -74,8 +74,8 @@ public:
 
 	Span_T<const UPtr_T<Chunk> > chunks() const;
 
-	template<class T> void destruct();
-	template<class T> void destructAndClear();
+	template<class T> void destruct(		SizeType align);
+	template<class T> void destructAndClear(SizeType align);
 
 private:
 	Vector_T<UPtr_T<Chunk> > _chunks;
@@ -110,18 +110,19 @@ inline LinearAllocatorChunk_T::SizeType LinearAllocatorChunk_T::remainSize()	con
 inline LinearAllocatorChunk_T::SizeType LinearAllocatorChunk_T::capacity()		const { return _buffer.size(); }
 
 template<class T> inline 
-void LinearAllocatorChunk_T::destruct()
+void LinearAllocatorChunk_T::destruct(SizeType align)
 {
-	for (size_t i = 0; i < _offset; i += sizeof(T))
+	auto alignedSize = _alignTo(sizeof(T), align);
+	for (size_t i = 0; i < _offset; i += alignedSize)
 	{
 		reinCast<T*>(&_buffer[i])->~T();
 	}
 }
 
 template<class T> inline 
-void LinearAllocatorChunk_T::destructAndClear()
+void LinearAllocatorChunk_T::destructAndClear(SizeType align)
 {
-	destruct<T>();
+	destruct<T>(align);
 	clear();
 }
 
@@ -143,20 +144,20 @@ inline
 void LinearAllocator_T::setChunkSize(SizeType n)	{ _chunkSize = n; }
 
 template<class T> inline 
-void LinearAllocator_T::destruct()
+void LinearAllocator_T::destruct(SizeType align)
 {
 	for (auto& chunk : _chunks)
 	{
-		chunk.destruct<T>();
+		chunk->destruct<T>(align);
 	}
 }
 
 template<class T> inline 
-void LinearAllocator_T::destructAndClear()
+void LinearAllocator_T::destructAndClear(SizeType align)
 {
 	for (auto& chunk : _chunks)
 	{
-		chunk.destructAndClear<T>();
+		chunk->destructAndClear<T>(align);
 	}
 }
 
