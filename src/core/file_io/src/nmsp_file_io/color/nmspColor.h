@@ -310,6 +310,7 @@ public:
 		: r(v.x), g(v.y), b(v.z), a(v.w)
 	{}
 
+public:
 	template<class SE>
 	void onJsonIo(SE& se) 
 	{
@@ -318,6 +319,8 @@ public:
 		NMSP_NAMED_FIXED_IO(se, b);
 		NMSP_NAMED_FIXED_IO(se, a);
 	}
+
+	ColorRGBA_T<u8> toColorRGBAb() const;
 };
 
 template<class T>
@@ -326,6 +329,16 @@ void onFormat(fmt::format_context& ctx, const ColorRGBA_T<T>& v)
 	formatTo(ctx, "Color4({}, {}, {}, {})", v.r, v.g, v.b, v.a);
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), ColorRGBA_T<NMSP_ARGS(T)> );
+
+template<class T>
+ColorRGBA_T<u8> 
+ColorRGBA_T<T>::toColorRGBAb() const
+{
+	using U = u8;
+	T factor = sCast<T>(255.0);
+	auto o = ColorRGBA_T<U>{ sCast<U>(r * factor), sCast<U>(g * factor), sCast<U>(b * factor), sCast<U>(a * factor) };;
+	return o;
+}
 
 #endif
 

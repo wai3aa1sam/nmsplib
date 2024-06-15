@@ -437,7 +437,7 @@ typename Vec4_Basic_Glm<T, DATA>::Vec2		Vec4_Basic_Glm<T, DATA>::toVec2()	const
 template<class T, class DATA> inline
 typename Vec4_Basic_Glm<T, DATA>::Vec3		Vec4_Basic_Glm<T, DATA>::toVec3()	const
 {
-	return Vec3{ x, y, z };
+	return Vec3{ x, y, z } / w;
 }
 
 template<class T, class DATA> inline

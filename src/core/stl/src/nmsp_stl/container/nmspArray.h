@@ -53,14 +53,7 @@
 
 namespace nmsp {
 
-template<class T, size_t N = 0>
-class Array_T : public Array_Impl<T, N>
-{
-	template<T... VALS>
-	constexpr Array_T()
-	{
-		//Array_T 
-	}
-};
+template<class T, size_t N = 0> using Array_T	= Array_Impl<T, N>;
+
 
 }

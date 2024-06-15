@@ -32,7 +32,7 @@ struct Camera3_T
 	using Quat4		= Quat4_T<T>;
 	using Rect2		= Rect2_T<T>;
 	using Ray3		= Ray3_T<T>;
-	//using Frustum3	= Frustum3_T<T>;
+	using Frustum3	= Frustum3_T<T>;
 
 	void pan	(T x, T y);
 	void orbit	(T x, T y);
@@ -71,7 +71,7 @@ struct Camera3_T
 	Mat4	projMatrix() const;
 	Mat4	viewProjMatrix() const { return projMatrix() * viewMatrix(); }
 
-	//Frustum3 frustum() const { Frustum3 o; o.setByViewProjMatrix(viewProjMatrix()); return o; };
+	Frustum3 frustum() const { Frustum3 o; o.setByViewProjMatrix(viewProjMatrix()); return o; };
 
 private:	
 	T		_fov		= T(50.0);

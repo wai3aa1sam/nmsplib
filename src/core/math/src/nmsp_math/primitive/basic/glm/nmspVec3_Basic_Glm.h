@@ -539,6 +539,65 @@ const typename Vec3_Basic_Glm<T, DATA>::Glm_Vec3& Vec3_Basic_Glm<T, DATA>::toGlm
 
 #endif
 
+#if 0
+#pragma mark --- Vec3_Basic_Glm-Impl ---
+#endif // 0
+#if 1
+
+namespace math 
+{
+
+template<class T, class DATA> inline
+void 
+sincos(const Vec3_Basic_Glm<T, DATA>& th, Vec3_Basic_Glm<T, DATA>& outSin, Vec3_Basic_Glm<T, DATA>& outCos) 
+{
+	math::sincos(th.x, outSin.x, outCos.x);
+	math::sincos(th.y, outSin.y, outCos.y);
+	math::sincos(th.z, outSin.z, outCos.z);
+}
+
+template<class T, class DATA> inline
+Vec3_Basic_Glm<T, DATA>
+min(const Vec3_Basic_Glm<T, DATA>& a, const Vec3_Basic_Glm<T, DATA>& b) 
+{
+	return Vec3_Basic_Glm<T, DATA>( math::min(a.x, b.x),
+									math::min(a.y, b.y),
+									math::min(a.z, b.z));
+}
+
+template<class T, class DATA> inline
+Vec3_Basic_Glm<T, DATA>
+max(const Vec3_Basic_Glm<T, DATA>& a, const Vec3_Basic_Glm<T, DATA>& b) 
+{
+	return Vec3_Basic_Glm<T, DATA>( math::max(a.x, b.x),
+									math::max(a.y, b.y),
+									math::max(a.z, b.z));
+}
+
+template<class T, class DATA> inline constexpr
+Vec3_Basic_Glm<T, DATA> 
+clamp(const Vec3_Basic_Glm<T, DATA>& v, const Vec3_Basic_Glm<T, DATA>& a, const Vec3_Basic_Glm<T, DATA>& b) 
+{
+	return Vec3_Basic_Glm<T, DATA>(	math::clamp(v.x, a.x, b.x),
+									math::clamp(v.y, a.y, b.y),
+									math::clamp(v.z, a.z, b.z));
+}
+
+template<class T, class DATA, class W> inline
+Vec3_Basic_Glm<T, DATA> 
+lerp(const Vec3_Basic_Glm<T, DATA>& a, const Vec3_Basic_Glm<T, DATA>& b, const W& weight) 
+{
+	return Vec3_Basic_Glm<T, DATA>(
+		lerp(a.x, b.x, weight),
+		lerp(a.y, b.y, weight),
+		lerp(a.z, b.z, weight)
+	);
+}
+
+}
+
+#endif
+
 }
 
 #endif // NMSP_MATH_BACKEND_GLM

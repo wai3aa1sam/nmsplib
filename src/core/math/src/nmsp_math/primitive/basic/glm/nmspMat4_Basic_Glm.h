@@ -324,19 +324,55 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TS (const Vec3
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_perspective	(T fovy_rad, T aspect, T zNear, T zFar)
 {
-	return glm::perspective(fovy_rad, aspect, zNear, zFar);
+	if (math::equals0(aspect)) 
+	{
+		return s_identity();
+	}
+
+	T deltaZ = zFar - zNear;
+	T tf = math::tan(fovy_rad / T(2));
+
+	return Mat4(
+		{1 / (aspect * tf), 0,      0,                           0},
+		{0,                 1 / tf, 0,                           0},
+		{0,                 0,      -(zFar + zNear) / deltaZ,   -1},
+		{0,                 0,      -2 * zNear * zFar / deltaZ,  0}
+	);
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_ortho		(T left, T right, T bottom, T top, T zNear, T zFar)
 {
-	return glm::ortho(left, right, bottom, top, zNear, zFar);
+	T w = right - left;
+	T h = top - bottom;
+	T d = zFar - zNear;
+
+	if( w == 0 || h == 0 || d == 0 ) 
+	{
+		return s_identity();
+	}
+
+	return Mat4(
+		{2/w, 0,    0,   0},
+		{0,   2/h,  0,   0},
+		{0,   0,   -2/d, 0},
+		{-(right+left) / w, -(top+bottom) / h, -(zFar+zNear) / d, 1}
+	);
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_lookAt		(const Vec3 & eye, const Vec3 & aim, const Vec3 & up)
 {
-	return glm::lookAt(eye, aim, up);
+	auto f = (aim - eye).normalize();
+	auto s = f.cross(up).normalize();
+	auto u = s.cross(f);
+
+	return Mat4(
+		{s.x,  u.x, -f.x, 0},
+		{s.y,  u.y, -f.y, 0},
+		{s.z,  u.z, -f.z, 0},
+		{-s.dot(eye), -u.dot(eye), f.dot(eye), 1}
+	);
 }
 
 template<class T, class DATA> inline
@@ -436,7 +472,7 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse3x3Transp
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Vec4	Mat4_Basic_Glm<T, DATA>::mulPoint		(const Vec4& v) const
 {
-	return sCast<Vec4>(*this * v);
+	return Vec4{ col(0) * v.x + col(1) * v.y + col(2) * v.z + col(3) * v.w };
 }
 
 template<class T, class DATA> inline
