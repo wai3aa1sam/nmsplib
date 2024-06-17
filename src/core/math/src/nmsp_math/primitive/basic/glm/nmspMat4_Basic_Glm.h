@@ -478,13 +478,13 @@ typename Mat4_Basic_Glm<T, DATA>::Vec4	Mat4_Basic_Glm<T, DATA>::mulPoint		(const
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Vec3	Mat4_Basic_Glm<T, DATA>::mulPoint4x3	(const Vec3& v) const
 {
-	return mulPoint(Vec4{ v, 1.0 }).toVec3();
+	return mulPoint(Vec4{ v, 1.0 }).xyz();
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Vec3	Mat4_Basic_Glm<T, DATA>::mulVector		(const Vec3& v) const
 {
-	return Vec3{ (*this)[0].toVec3() * v.x + (*this)[1].toVec3()* v.y + (*this)[2].toVec3()* v.z };
+	return Vec3{ (*this)[0].xyz() * v.x + (*this)[1].xyz()* v.y + (*this)[2].xyz()* v.z };
 }
 
 template<class T, class DATA> inline

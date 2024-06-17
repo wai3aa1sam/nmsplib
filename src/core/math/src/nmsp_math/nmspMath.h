@@ -32,9 +32,13 @@ template<class T> constexpr T clamp		(const T& v, const T& a, const T& b) { retu
 template<class T> constexpr T clamp01	(const T& v) { return clamp(v, T(0), T(1)); }
 template<class T> constexpr T saturate	(const T& v) { return clamp01(v); }
 
-template<class T> constexpr T byteToK(const T& v) { return v / 1024; }
-template<class T> constexpr T byteToM(const T& v) { return v / (1024 * 1024); }
-template<class T> constexpr T byteToG(const T& v) { return v / (1024 * 1024 * 1024); }
+template<class T> constexpr T byteToKB(const T& v) { return v / 1024; }
+template<class T> constexpr T byteToMB(const T& v) { return v / (1024 * 1024); }
+template<class T> constexpr T byteToGB(const T& v) { return v / (1024 * 1024 * 1024); }
+
+template<class T> constexpr T KBToByte(const T& v) { return v * 1024; }
+template<class T> constexpr T MBToByte(const T& v) { return v * (1024 * 1024); }
+template<class T> constexpr T GBToByte(const T& v) { return v * (1024 * 1024 * 1024); }
 
 struct _Helper {
 	template<class T>
