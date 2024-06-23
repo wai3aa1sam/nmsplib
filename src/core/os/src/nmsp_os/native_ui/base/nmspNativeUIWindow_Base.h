@@ -85,50 +85,49 @@ public:
 
 	virtual ~NativeUIWindow_Base();
 
-	void create	(const CreateDesc_Base& cd);
+	void create( const CreateDesc_Base& cd);
 	void destroy();
 
-	void setWindowTitle	(StrViewA_T title);
+	void setWindowTitle(StrViewA_T title);
 
 	void drawNeeded();
 
-	virtual void onCloseButton	() {};
-	virtual void onActive		(bool isActive) {};
-	virtual void onDraw			() {};
-
-	const Rect2f& clientRect() const;
+	virtual void onCloseButton()			{};
+	virtual void onActive(bool isActive)	{};
+	virtual void onDraw()					{};
 
 	virtual void onUiMouseEvent(UiMouseEvent& ev)		{};
 	virtual void onUiKeyboardEvent(UiKeyboardEvent& ev) {};
 
-	//bool isKeyDown(UIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UiKeyboardEventType::Down || _keys[enumInt(button_)] == UiKeyboardEventType::Hold; }
+	//bool isKeyDown(xUIKeyEventButton button_)	{ return _keys[enumInt(button_)] == UiKeyboardEventType::Down || _keys[enumInt(button_)] == UiKeyboardEventType::Hold; }
 	//bool isKeyUp(UIKeyEventButton button_)		{ return _keys[enumInt(button_)] == UiKeyboardEventType::Up; }
 
 public:
-	const StringT& title() const;
+	const Rect2f&	clientRect()	const;
+	const StringT&	title()			const;
+	const UiInput&	uiInput()		const;
 
 protected:
-	virtual void onCreate			(const CreateDesc_Base& cd)	{};
-	virtual void onDestroy			()							{};
-	virtual void onSetWindowTitle	(StrViewA_T title)			{};
-	virtual void onClientRectChanged(const Rect2f& rect)		  ;
-	virtual void onDrawNeeded		()							{};
+	virtual void onCreate(const CreateDesc_Base& cd)		{};
+	virtual void onDestroy()								{};
+	virtual void onSetWindowTitle(StrViewA_T title)			{};
+	virtual void onClientRectChanged(const Rect2f& rect);
+	virtual void onDrawNeeded()								{};
 
 	virtual void onUiNativeMouseEvent(UiMouseEvent& ev);
 	virtual void onUiNativeKeyboardEvent(UiKeyboardEvent& ev);
 
 protected:
 	Rect2f	_clientRect {0, 0, 0, 0};
-
-	UiMouseEventButton	_pressedMouseButtons = UiMouseEventButton::None;
-	Vec2f				_mousePos{0,0};
-
-	StringT _title;
+	StringT	_title;
+	UiInput	_uiInput;
 };
 
 inline void NativeUIWindow_Base::onClientRectChanged(const Rect2f& rect)		{ _clientRect = rect; };
 
-inline const StringT& NativeUIWindow_Base::title() const { return _title; }
+inline const NativeUIWindow_Base::Rect2f&	NativeUIWindow_Base::clientRect()	const { return _clientRect; }
+inline const StringT&						NativeUIWindow_Base::title()		const { return _title; }
+inline const UiInput&						NativeUIWindow_Base::uiInput()		const { return _uiInput; }
 
 
 #endif

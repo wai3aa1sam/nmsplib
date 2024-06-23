@@ -42,9 +42,23 @@ public:
 	T	operator[](SizeType i) const;
 	T&	operator[](SizeType i);
 
+public:
+	template<class JSON_SE> void onJsonIo(JSON_SE& se);
+
 private:
 
 };
+
+template<class T> 
+template<class JSON_SE> inline
+void 
+Tuple4_T<T>::onJsonIo(JSON_SE& se)
+{
+	NMSP_NAMED_FIXED_IO(se, x);
+	NMSP_NAMED_FIXED_IO(se, y);
+	NMSP_NAMED_FIXED_IO(se, z);
+	NMSP_NAMED_FIXED_IO(se, w);
+}
 
 template<class T>
 void onFormat(fmt::format_context& ctx, const Tuple4_T<T>& v)

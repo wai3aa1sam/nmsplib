@@ -29,6 +29,9 @@ public:
 	using SizeType = StlTraits::SizeType;
 
 public:
+	static constexpr SizeType s_kDefaultAlign = StlTraits::s_kDefaultAlign;
+
+public:
 	LinearAllocatorChunk_T(SizeType n);
 
 	//void operator=(This&& rhs);
@@ -60,12 +63,15 @@ public:
 	using SizeType = Chunk::SizeType;
 
 public:
+	static constexpr SizeType s_kDefaultAlign = LinearAllocatorChunk_T::s_kDefaultAlign;
+
+public:
 	LinearAllocator_T(const char* name = "LinearAllocator_T");
 	//void operator=(This&& rhs);
 
 	void setChunkSize(SizeType n);
 
-	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
+	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);
 	void* alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset);
 	void  free(void* p, SizeType n = 0) {}
 	void  clear();

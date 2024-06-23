@@ -153,7 +153,10 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_identity()
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_angleAxis(T rad, const Vec3& axis)
 {
-	return glm::angleAxis(rad, axis);
+	T s, c;
+	math::sincos(rad * T(0.5), s, c);
+	return Quat4(axis.x * s, axis.y * s, axis.z * s, c);
+	//return glm::angleAxis(rad, axis);
 }
 
 template<class T, class DATA> inline
@@ -409,13 +412,21 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator-() c
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::operator*(const Quat4& r) const
 {
-	return toGlm() * r.toGlm();
+	return Quat4(x * r.w +  w * r.x + z * r.y - y * r.z,
+				 y * r.w +  w * r.y + x * r.z - z * r.x,
+				 z * r.w +  w * r.z + y * r.x - x * r.y,
+				 w * r.w -  x * r.x - y * r.y - z * r.z);
+	//return toGlm() * r.toGlm();
 }
 
 template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Vec3		Quat4_Basic_Glm<T, DATA>::operator*(const Vec3& v)  const
 {
-	return toGlm() * v.toData();
+	Vec3 qv(x, y, z);
+	auto uv  = qv.cross(v);
+	auto uuv = qv.cross(uv);
+	return v + (uv * w + uuv) * T(2);
+	//return toGlm() * v.toData();
 }
 
 template<class T, class DATA> inline

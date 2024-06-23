@@ -163,6 +163,8 @@ NMSP_INLINE int	floorTo_Int	( double a )	{ return static_cast<int>( floor(a) ); 
 NMSP_INLINE int	ceilToInt	( float  a )	{ return static_cast<int>( ceil (a) ); }
 NMSP_INLINE int	ceilToInt	( double a )	{ return static_cast<int>( ceil (a) ); }
 
+template<class T> NMSP_INLINE T ceilingDvision(T x, T n) { return (x + n - 1) / n; }
+
 //----------
 
 #if 0

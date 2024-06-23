@@ -10,8 +10,11 @@ references:
 - src/core/serializer/json/JsonUtil.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
 */
 
+/*
+* defined in nmsp_core_base_marco.h
+*/
 //#define NMSP_NAMED_FIXED_IO(SE, OBJ, MEMBER) SE.named_fixed_io(OBJ.MEMBER, #MEMBER)
-#define NMSP_NAMED_FIXED_IO(SE, MEMBER) SE.named_fixed_io(this->MEMBER, #MEMBER)
+//#define NMSP_NAMED_FIXED_IO(SE, MEMBER) SE.named_fixed_io(this->MEMBER, #MEMBER)
 
 namespace nmsp {
 

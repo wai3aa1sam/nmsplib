@@ -165,18 +165,22 @@ private:
 		rhs._free();
 	}
 
-	void _free()
+	void _free(IFunctor* p = nullptr)
 	{
-		if (_ftr && !_allocator.isUsingLocalBuf(_ftr))
+		if (_ftr)
 		{
-			_allocator.free(_ftr);
+			_ftr->~IFunctor();
+			if (_allocator.isUsingLocalBuf(_ftr))
+			{
+				_allocator.free(_ftr);
+			}
 		}
-		_reset();
+		_ftr = p;
 	}
 
 	void _reset(IFunctor* p = nullptr)
 	{
-		_ftr = p;
+		_free(p);
 	}
 
 private:
@@ -202,6 +206,8 @@ private:
 		Functor(Func func)
 			: _func(nmsp::move(func))
 		{}
+
+		virtual ~Functor() = default;
 
 		//virtual RET operator()(PARAMS&&... params) const override { return _func(std::forward<PARAMS>(params)...); }
 		virtual RET operator()(PARAMS&&... params) const override	{ return std::invoke(_func, nmsp::forward<PARAMS>(params)...); }

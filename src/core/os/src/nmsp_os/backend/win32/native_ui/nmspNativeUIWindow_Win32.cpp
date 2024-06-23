@@ -348,17 +348,17 @@ bool	NativeUIWindow_Win32::_handleNativeUIKeyEvent	(HWND hwnd, UINT msg, WPARAM 
 
 			// check if is repeat
 			if ((lParam & (0x1 << 30)) && ev.type == Type::Down)
-				ev.type = Type::Hold;
+				ev.type = Type::HoldDown;
 
 			ev.button = sCast<Button>(keycode);
 		}break;
 
-		case WM_CHAR:
+		/*case WM_CHAR:
 		case WM_SYSCHAR:
 		case WM_UNICHAR:
 		{
 
-		} break;
+		} break;*/
 
 		default:
 			return false;

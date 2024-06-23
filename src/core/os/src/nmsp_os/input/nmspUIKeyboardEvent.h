@@ -12,7 +12,7 @@ enum class UiKeyboardEventType : u8
 	None,
 	Up,
 	Down,
-	Hold,
+	HoldDown,
 };
 NMSP_ENUM_ALL_OPERATOR(UiKeyboardEventType)
 
@@ -27,13 +27,15 @@ struct UiKeyboardEvent
 	using Modifier	= UiEventModifier;
 	using Button	= UiKeyboardEventButton;
 
-	bool isUp	()	const;
-	bool isDown	()	const;
-	bool isHold	()	const;
+	bool isUp()			const;
+	bool isDown()		const;
+	bool isHoldDown()	const;
+	bool isPressed()	const;
 
-	bool isUp	(Button key_)	const;
-	bool isDown	(Button key_)	const;
-	bool isHold	(Button key_)	const;
+	bool isUp(		Button key_)	const;
+	bool isDown(	Button key_)	const;
+	bool isHoldDown(Button key_)	const;
+	bool isPressed( Button key_)	const;
 
 public:
 	Type		type		= Type::None;
@@ -48,14 +50,15 @@ public:
 #endif // 0
 #if 1
 
-inline bool UiKeyboardEvent::isUp	() const { return type == Type::Up; }
-inline bool UiKeyboardEvent::isDown	() const { return type == Type::Down; }
-inline bool UiKeyboardEvent::isHold	() const { return type == Type::Hold; }
+inline bool UiKeyboardEvent::isUp()			const { return type == Type::Up; }
+inline bool UiKeyboardEvent::isDown()		const { return type == Type::Down; }
+inline bool UiKeyboardEvent::isHoldDown()	const { return type == Type::HoldDown; }
+inline bool UiKeyboardEvent::isPressed()	const { return isDown() || isHoldDown(); }
 
-inline bool UiKeyboardEvent::isUp	(Button key_) const { return button == key_ && type == Type::Up; }
-inline bool UiKeyboardEvent::isDown	(Button key_) const { return button == key_ && type == Type::Down; }
-inline bool UiKeyboardEvent::isHold	(Button key_) const { return button == key_ && type == Type::Hold; }
-
+inline bool UiKeyboardEvent::isUp(		Button key_) const { return button == key_ && type == Type::Up; }
+inline bool UiKeyboardEvent::isDown(	Button key_) const { return button == key_ && type == Type::Down; }
+inline bool UiKeyboardEvent::isHoldDown(Button key_) const { return button == key_ && type == Type::HoldDown; }
+inline bool UiKeyboardEvent::isPressed( Button key_) const { return isDown(key_) || isHoldDown(key_); }
 
 #endif
 
