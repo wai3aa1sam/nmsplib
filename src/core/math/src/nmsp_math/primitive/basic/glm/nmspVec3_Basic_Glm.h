@@ -65,16 +65,20 @@ public:
 	static constexpr size_t s_kElementCount = 3;
 
 public:
-	static Vec3 s_zero		();
-	static Vec3 s_one		();
-	static Vec3 s_forward	();
-	static Vec3 s_up		();
-	static Vec3 s_right		();
-	static Vec3 s_back		();
-	static Vec3 s_down		();
-	static Vec3 s_left		();
-	static Vec3 s_inf		();
-	static Vec3 s_negInf	();
+	static Vec3 s_zero();
+	static Vec3 s_one();
+	static Vec3 s_forward();
+	static Vec3 s_up();
+	static Vec3 s_right();
+	static Vec3 s_back();
+	static Vec3 s_down();
+	static Vec3 s_left();
+	static Vec3 s_inf();
+	static Vec3 s_negInf();
+
+	static Vec3 s_xAxis();
+	static Vec3 s_yAxis();
+	static Vec3 s_zAxis();
 
 	template<class T2, class DATA2> static Vec3 s_cast(const Vec3_T<T2, DATA2>& rhs);
 
@@ -157,65 +161,69 @@ private:
 #if 1
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_zero		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_zero()
 {
-	return Vec3{ T(0), T(0), T(0)};
+	return Vec3{ T(0), T(0), T(0) };
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_one		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_one()
 {
 	return Vec3{ T(1), T(1), T(1)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_forward	()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_forward()
 {
 	return Vec3{ T(0), T(0), T(1)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_up		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_up()
 {
 	return Vec3{ T(0), T(1), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_right	()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_right()
 {
 	return Vec3{ T(1), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_back		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_back()
 {
 	return Vec3{ T(0), T(0), -T(1)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_down		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_down()
 {
 	return Vec3{ T(0), -T(1), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_left		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_left()
 {
 	return Vec3{ -T(1), T(0), T(0)};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_inf		()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_inf()
 {
 	auto f = math::inf<T>();
 	return Vec3{ f, f, f};
 }
 
 template<class T, class DATA> inline
-typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_negInf	()
+typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_negInf()
 {
 	return -s_inf();
 }
+
+template<class T, class DATA> inline typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_xAxis() { return Vec3{ 1.0, 0.0, 0.0 }; }
+template<class T, class DATA> inline typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_yAxis() { return Vec3{ 0.0, 1.0, 0.0 }; }
+template<class T, class DATA> inline typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::s_zAxis() { return Vec3{ 0.0, 0.0, 1.0 }; }
 
 template<class T, class DATA> 
 template<class T2, class DATA2> inline
@@ -324,8 +332,12 @@ typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::reflect	(const V
 template<class T, class DATA> inline
 typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::orthogonal	()						const
 {
-	_notYetSupported()
-	return {};
+	T x0 = math::abs(this->x);
+	T y0 = math::abs(this->y);
+	T z0 = math::abs(this->z);
+
+	Vec3 other = x0 < y0 ? (x0 < z0 ? s_xAxis() : s_zAxis()) : (y0 < z0 ? s_yAxis() : s_zAxis());
+	return this->cross(other);
 }
 
 template<class T, class DATA> inline

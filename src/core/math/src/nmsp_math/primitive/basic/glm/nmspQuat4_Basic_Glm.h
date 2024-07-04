@@ -225,17 +225,17 @@ typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_fromAToB(co
 	
 	const f32 cos_theta = u.dot(v);
 
-	if (m::equals(cos_theta, T(1.0))) // both are same
+	if (math::equals(cos_theta, T(1.0))) // both are same
 	{
 		return s_identity();
 	}
-	else if (m::equals(cos_theta, T(-1.0))) // exactly opposite
+	else if (math::equals(cos_theta, T(-1.0))) // exactly opposite
 	{
 		auto orth = u.orthogonal();
 		return Quat4(orth.x, orth.y, orth.z, 0);
 	}
 	
-	T offset	= m::sqrt(from.sqrMagnitude() * to.sqrMagnitude());
+	T offset	= math::sqrt(from.sqrMagnitude() * to.sqrMagnitude());
 	Vec3 dir	= u.cross(v);
 	Quat4 ret	= Quat4{ dir.x, dir.y, dir.z, cos_theta + offset };
 	return ret.normalize();

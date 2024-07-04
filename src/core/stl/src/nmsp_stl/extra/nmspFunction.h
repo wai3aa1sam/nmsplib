@@ -170,7 +170,7 @@ private:
 		if (_ftr)
 		{
 			_ftr->~IFunctor();
-			if (_allocator.isUsingLocalBuf(_ftr))
+			if (!_allocator.isUsingLocalBuf(_ftr))
 			{
 				_allocator.free(_ftr);
 			}
@@ -203,8 +203,12 @@ private:
 		using Func		= Decay<FUNC>;
 
 	public:
-		Functor(Func func)
+		Functor(Func&& func)
 			: _func(nmsp::move(func))
+		{}
+
+		Functor(const Func& func)
+			: _func(func)
 		{}
 
 		virtual ~Functor() = default;

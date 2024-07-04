@@ -10,6 +10,18 @@ namespace math {
 #if 1
 
 template<class T>
+Camera3_T<T>::Camera3_T()
+{
+	//setUp(Vec3::s_down());
+}
+
+template<class T>
+Camera3_T<T>::~Camera3_T()
+{
+
+}
+
+template<class T>
 void Camera3_T<T>::pan(T x, T y) {
 	auto v = _aim - _pos;
 	auto right = _up.cross(v).normalize();
@@ -66,8 +78,10 @@ typename Camera3_T<T>::Mat4 Camera3_T<T>::viewMatrix() const {
 
 template<class T>
 typename Camera3_T<T>::Mat4 Camera3_T<T>::projMatrix() const {
-	T aspect = _viewport.h != 0 ? _viewport.w / _viewport.h : T(0);
-	return Mat4::s_perspective(math::radians(_fov), aspect, _nearClip, _farClip);
+	T aspect = aspectRatio();
+	//auto matrix = Mat4::s_perspective(math::radians(_fov), aspect, _nearClip, _farClip);		// perspectiveFovRH_NO
+	auto matrix = glm::perspectiveRH_ZO(math::radians(_fov), aspect, _nearClip, _farClip);
+	return matrix;
 }
 
 template struct Camera3_T<float>;

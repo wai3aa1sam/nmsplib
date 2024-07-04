@@ -25,6 +25,7 @@ using Camera3d_T = Camera3_T<double>;
 template<class T>
 struct Camera3_T
 {
+public:
 	using Vec2		= Vec2_T<T>;
 	using Vec3		= Vec3_T<T>;
 	using Vec4		= Vec4_T<T>;
@@ -34,6 +35,11 @@ struct Camera3_T
 	using Ray3		= Ray3_T<T>;
 	using Frustum3	= Frustum3_T<T>;
 
+public:
+	Camera3_T();
+	~Camera3_T();
+
+public:
 	void pan	(T x, T y);
 	void orbit	(T x, T y);
 	void move	(T x, T y, T z);
@@ -51,25 +57,25 @@ struct Camera3_T
 	void setPos(const Vec3& pos)	{ _pos = pos; }
 	void setAim(const Vec3& aim)	{ _aim = aim; }
 	void setUp (const Vec3& up)		{ _up  = up;  }
-
 	void setFov(const T& fov)		{ _fov = fov; }
+	void setViewport(const Rect2& v) { _viewport = v; }
+
+public:
+	Mat4	viewMatrix() const;
+	Mat4	projMatrix() const;
+	Mat4	viewProjMatrix() const { return projMatrix() * viewMatrix(); }
 
 	const Vec3& pos() const		 { return _pos; }
 	const Vec3& aim() const		 { return _aim; }
 	const Vec3& up () const		 { return _up;  }
 	const T&	fov() const		 { return _fov; }
 
-	const T&	nearClip() const { return _nearClip; }
-	const T&	farClip()  const { return _farClip; }
-
-	void setViewport(const Rect2& v) { _viewport = v; }
-	const Rect2& viewport() const { return _viewport; }
+	const T&		nearClip()		const { return _nearClip; }
+	const T&		farClip()		const { return _farClip; }
+	const Rect2&	viewport()		const { return _viewport; }
+	T				aspectRatio()	const { return _viewport.h != 0 ? _viewport.w / _viewport.h : T(0); }
 
 	Ray3	getRay(const Vec2& screenPos) const;
-
-	Mat4	viewMatrix() const;
-	Mat4	projMatrix() const;
-	Mat4	viewProjMatrix() const { return projMatrix() * viewMatrix(); }
 
 	Frustum3 frustum() const { Frustum3 o; o.setByViewProjMatrix(viewProjMatrix()); return o; };
 
