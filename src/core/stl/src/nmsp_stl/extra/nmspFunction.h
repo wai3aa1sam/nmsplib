@@ -190,6 +190,7 @@ private:
 	{
 	public:
 		virtual ~IFunctor()							= default;
+		virtual RET operator()(PARAMS&&...) 		= 0;
 		virtual RET operator()(PARAMS&&...) const	= 0;
 		virtual IFunctor* clone(void* buf) const	= 0;
 
@@ -214,6 +215,7 @@ private:
 		virtual ~Functor() = default;
 
 		//virtual RET operator()(PARAMS&&... params) const override { return _func(std::forward<PARAMS>(params)...); }
+		virtual RET operator()(PARAMS&&... params)		 override	{ return std::invoke(_func, nmsp::forward<PARAMS>(params)...); }
 		virtual RET operator()(PARAMS&&... params) const override	{ return std::invoke(_func, nmsp::forward<PARAMS>(params)...); }
 
 		virtual IFunctor* clone(void* buf) const override 

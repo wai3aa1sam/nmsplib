@@ -163,7 +163,7 @@ template<class T, class DATA> inline
 typename Quat4_Basic_Glm<T, DATA>::Quat4	Quat4_Basic_Glm<T, DATA>::s_euler(const Vec3& rad)
 {
 	Vec3 s, c;
-	Math::sincos(r * T(0.5), s, c);
+	math::sincos(rad * T(0.5), s, c);
 	return Quat4{
 		s.x * c.y * c.z - c.x * s.y * s.z,
 		c.x * s.y * c.z + s.x * c.y * s.z,

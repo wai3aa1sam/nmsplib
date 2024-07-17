@@ -59,7 +59,7 @@ template<class T, size_t N = 0, class FALLBACK_ALLOC = DefaultAllocator>	using V
 
 template<class DST, class SRC, size_t N, class ALLOC> inline
 Span_T<DST> 
-spanConstCast(Vector_T<SRC, N, ALLOC> src)
+spanConstCast(const Vector_T<SRC, N, ALLOC>& src)
 {
 	return spanConstCast<DST>(src.span());
 }
