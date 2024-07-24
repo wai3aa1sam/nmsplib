@@ -11,7 +11,7 @@ target_link_libraries(${sub_project_name}
             #${project_namespace}_log
     )
 target_link_libraries(${sub_project_name} 
-    PRIVATE glm::glm
+    PUBLIC glm::glm
     )
 
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)

@@ -12,7 +12,6 @@ target_link_libraries(${sub_project_name}
             ${project_namespace}_math
             ${project_namespace}_os
             ${project_namespace}_log
-            ${project_namespace}_profiler
             ${project_namespace}_file_io
             ${project_namespace}_job_system
     )

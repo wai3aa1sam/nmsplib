@@ -12,6 +12,14 @@ target_link_libraries(${sub_project_name}
             ${project_namespace}_os
     )
 
+
+
+
+ProjectUtil_addMarco(${sub_project_name} ${project_namespace_marco}_JOB_SYSTEM_LOGICAL_THREAD_COUNT ${OsTraits_kThreadCount})
+
+ProjectUtil_addMarcoIfPresent(${sub_project_name} ${project_namespace_marco}_JOB_SYSTEM_DEVELOPMENT                 JobSystem_isDevelopment)
+ProjectUtil_addMarcoIfPresent(${sub_project_name} ${project_namespace_marco}_JOB_SYSTEM_MAX_FRAME_IN_FLIGHT_COUNT   JobSystem_kMaxFrameInFlight)
+
 #target_link_libraries(${sub_project_name} PUBLIC fmt::fmt)
 
 #function(my_link_sub_module target_name sub_module_project_name sub_module_namespace sub_module_section proj_root)

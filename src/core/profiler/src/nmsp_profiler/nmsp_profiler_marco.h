@@ -12,23 +12,24 @@
 
 #endif // 0
 
-#include <tracy/Tracy.hpp>
-#include <tracy/TracyC.h>
-#include <common/TracySystem.hpp>
 
 #if NMSP_ENABLE_PROFILER
 
-	#define NMSP_PROFILE_SCOPED()				ZoneScoped				
-	#define NMSP_PROFILE_FRAME()				FrameMark			
-	#define NMSP_PROFILE_SECTION(NAME)			ZoneScopedN(NAME)		
-	#define NMSP_PROFILE_TAG(STR)				ZoneText(STR, ::strlen(STR))
-	#define NMSP_PROFILE_LOG(TEXT)				TracyMessage(TEXT, ::strlen(TEXT))
-	#define NMSP_PROFILE_VALUE(TEXT, VALUE)		TracyPlot(TEXT, VALUE)	
+	#include <tracy/Tracy.hpp>
+	#include <tracy/TracyC.h>
+	#include <common/TracySystem.hpp>
 
-	#define NMSP_PROFILE_ALLOC(PTR, SIZE)		TracyCAllocS(PTR, SIZE, 32)    
-	#define NMSP_PROFILE_FREE(PTR, SIZE)		TracyCFreeS(PTR, 32)		    
+	#define NMSP_PROFILE_SCOPED()					ZoneScoped				
+	#define NMSP_PROFILE_FRAME()					FrameMark			
+	#define NMSP_PROFILE_SECTION(NAME)				ZoneScopedN(NAME)		
+	#define NMSP_PROFILE_TAG(STR)					ZoneText(STR, ::strlen(STR))
+	#define NMSP_PROFILE_LOG(TEXT)					TracyMessage(TEXT, ::strlen(TEXT))
+	#define NMSP_PROFILE_VALUE(TEXT, VALUE)			TracyPlot(TEXT, VALUE)	
 
-	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)	::tracy::SetThreadName(NAME)
+	#define NMSP_PROFILE_ALLOC(PTR, SIZE)			TracyCAllocS(PTR, SIZE, 32)    
+	#define NMSP_PROFILE_FREE(PTR, SIZE)			TracyCFreeS(PTR, 32)		    
+
+	#define NMSP_PROFILE_SET_THREAD_NAME(NAME)		::tracy::SetThreadName(NAME)
 
 #else
 
@@ -48,7 +49,5 @@
 
 namespace nmsp
 {
-
-using PColor = ::tracy::Color::ColorType;
 
 }
