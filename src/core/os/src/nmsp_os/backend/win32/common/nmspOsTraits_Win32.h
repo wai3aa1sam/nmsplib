@@ -15,7 +15,7 @@ struct Util_Win32;
 
 struct OsDefaultTraits_Win32 : public OsDefaultTraits_Base
 {
-	static constexpr const char* s_cmdExePath = "c:\\windows\\system32\\cmd.exe";
+	static constexpr const char* s_cmdExePathEnvVar = "CompSpec";
 
 	static constexpr OsPlatform				platform();
 	static constexpr EnumInt<OsPlatform>	platformInt();

@@ -22,6 +22,8 @@ public:
 	static void sleep_ms(int ms);
 	static void sleep(int sec);
 
+
+	static const char* getEnvironmentVariable(const char* name);
 };
 #endif
 
@@ -31,13 +33,15 @@ public:
 #if 1
 
 inline
-void OsUtil_Win32::sleep_ms(int ms)
+void 
+OsUtil_Win32::sleep_ms(int ms)
 {
 	::Sleep(ms);
 }
 
 inline
-void OsUtil_Win32::sleep(int sec)
+void 
+OsUtil_Win32::sleep(int sec)
 {
 	sleep_ms(sec * 1000);
 }
