@@ -7,14 +7,6 @@
 
 #if NMSP_ENABLE_PROFILER
 
-//#define TRACY_ENABLE 1	// set in cmake
-#define TRACY_CALLSTACK 1
-
-#endif // 0
-
-
-#if NMSP_ENABLE_PROFILER
-
 	#include <tracy/Tracy.hpp>
 	#include <tracy/TracyC.h>
 	#include <common/TracySystem.hpp>
@@ -25,8 +17,8 @@
 
 	#define NMSP_PROFILE_SCOPED()					ZoneScopedS(NMSP_PROFILE_CALLSTACK_DEPTH)			
 	#define NMSP_PROFILE_SECTION(NAME)				ZoneScopedNS(NAME, NMSP_PROFILE_CALLSTACK_DEPTH)
-	#define NMSP_PROFILE_TRANSIENT_SCOPED()			ZoneTransientS( ___tracy_scoped_zone, NMSP_PROFILE_CALLSTACK_DEPTH, true)			
-	#define NMSP_PROFILE_TRANSIENT_SECTION(NAME)	ZoneTransientNS(___tracy_scoped_zone, NAME, NMSP_PROFILE_CALLSTACK_DEPTH, true)
+	#define NMSP_PROFILE_DYNAMIC_SCOPED()			ZoneTransientS( ___tracy_scoped_zone, NMSP_PROFILE_CALLSTACK_DEPTH, true)			
+	#define NMSP_PROFILE_DYNAMIC_SECTION(NAME)		ZoneTransientNS(___tracy_scoped_zone, NAME, NMSP_PROFILE_CALLSTACK_DEPTH, true)
 
 	#define NMSP_PROFILE_TAG(STR)					ZoneText(STR, ::strlen(STR))
 	#define NMSP_PROFILE_LOG(TEXT)					TracyMessage(TEXT, ::strlen(TEXT))
@@ -45,8 +37,8 @@
 
 	#define NMSP_PROFILE_SCOPED()					_NMSP_PROFILE_SCOPED()
 	#define NMSP_PROFILE_SECTION(NAME)				_NMSP_PROFILE_SECTION(NAME)
-	#define NMSP_PROFILE_TRANSIENT_SCOPED()		
-	#define NMSP_PROFILE_TRANSIENT_SECTION(NAME)
+	#define NMSP_PROFILE_DYNAMIC_SCOPED()		
+	#define NMSP_PROFILE_DYNAMIC_SECTION(NAME)
 
 	#define NMSP_PROFILE_TAG(STR)					_NMSP_PROFILE_TAG(STR)
 	#define NMSP_PROFILE_LOG(TEXT)					_NMSP_PROFILE_LOG(TEXT)

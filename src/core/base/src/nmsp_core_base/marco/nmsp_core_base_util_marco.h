@@ -25,8 +25,10 @@ references:
 #define NMSP_IDENTITY(X) X
 #define NMSP_CALL(M, ARGS) NMSP_IDENTITY( M(ARGS) )
 
-#define NMSP_CONCAT(X, ...)		X ## __VA_ARGS__
-#define NMSP_CONCAT_TO_STR(A, B) NMSP_STRINGIFY(A) NMSP_STRINGIFY(B)
+#define NMSP_CONCAT(X, ...)			X ## __VA_ARGS__
+#define NMSP_CONCAT_TO_STR(A, B)	NMSP_STRINGIFY(A) NMSP_STRINGIFY(B)
+
+#define NMSP_VAR_NAME(NAME)			NMSP_CONCAT(NMSP_CONCAT(_temp_, NAME), NMSP_LINE)
 
 #define NMSP_CALL_ARGS(X, ...)	NMSP_IDENTITY( X(__VA_ARGS__) )
 #define NMSP_ANGLE_BRACKET(...) NMSP_IDENTITY( <__VA_ARGS__> )
@@ -46,7 +48,7 @@ references:
 
 #define NMSP_S_ASSERT(COND, ...) static_assert(COND, NMSP_FUNC_NAME_SZ ## "() " "--- " #COND ## " --- " ## __VA_ARGS__)
 
-#define NMSP_CALL_ONCE(...) do { static NMSP_UNIQUE_VAR(bool) = false; if (!NMSP_UNIQUE_VAR_NAME(bool)) { __VA_ARGS__; RDS_UNIQUE_VAR_NAME(bool) = true; } } while(false)
+#define NMSP_CALL_ONCE(...)	do { static bool NMSP_VAR_NAME(_isFirst) = false; if (!NMSP_VAR_NAME(_isFirst)) { __VA_ARGS__; NMSP_VAR_NAME(_isFirst) = true; } } while(false)
 
 #if NMSP_DEBUG || NMSP_ENABLE_ASSERT || NMSP_DEVELOPMENT
 	#define NMSP_CORE_ASSERT(X, ...)	do{ if(!(X)) { ::nmsp::_logFmt("{} - [{}]", ::nmsp::SrcLoc(NMSP_FILE, NMSP_LINE, NMSP_FUNC_NAME_SZ), ::nmsp::fmtAs_T<std::string>(__VA_ARGS__)); NMSP_DEBUG_BREAK(); assert(X);  } } while(false)

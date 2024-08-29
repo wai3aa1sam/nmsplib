@@ -17,6 +17,7 @@ target_link_libraries(${sub_project_name}
 if(${Profiler_enableProfiler})
     target_link_libraries(${sub_project_name} PUBLIC Tracy::TracyClient)
     ProjectUtil_addMarco( ${sub_project_name} TRACY_ENABLE                               1)
+    ProjectUtil_addMarco( ${sub_project_name} TRACY_CALLSTACK                            1)
     ProjectUtil_addMarco( ${sub_project_name} ${project_namespace_marco}_ENABLE_PROFILER 1)
 endif()
 
