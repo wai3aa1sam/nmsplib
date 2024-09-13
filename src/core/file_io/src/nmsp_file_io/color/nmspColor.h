@@ -23,6 +23,7 @@ namespace nmsp {
 	E(RG,) \
 	E(RGB,) \
 	E(RGBA,) \
+	E(BGRA,) \
 	E(L,)  /* Luminance */ \
 	E(LA,) /* Luminance Alpha */ \
 	E(HSV,) \
@@ -116,6 +117,12 @@ struct TypeBitMixture_Impl<ColorType>
 	E(RGBAu,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::UNorm32, ColorCompressType::None)) \
 	E(RGBAh,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::Float16, ColorCompressType::None)) \
 	E(RGBAf,	= TBM<ColorType>::makeInt(ColorModel::RGBA,	ColorElementType::Float32, ColorCompressType::None)) \
+	\
+	E(BGRAb,	= TBM<ColorType>::makeInt(ColorModel::BGRA,	ColorElementType::UNorm8 , ColorCompressType::None)) \
+	E(BGRAs,	= TBM<ColorType>::makeInt(ColorModel::BGRA,	ColorElementType::UNorm16, ColorCompressType::None)) \
+	E(BGRAu,	= TBM<ColorType>::makeInt(ColorModel::BGRA,	ColorElementType::UNorm32, ColorCompressType::None)) \
+	E(BGRAh,	= TBM<ColorType>::makeInt(ColorModel::BGRA,	ColorElementType::Float16, ColorCompressType::None)) \
+	E(BGRAf,	= TBM<ColorType>::makeInt(ColorModel::BGRA,	ColorElementType::Float32, ColorCompressType::None)) \
 	\
 	E(Lb,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::UNorm8 , ColorCompressType::None)) \
 	E(Ls,		= TBM<ColorType>::makeInt(ColorModel::L,	ColorElementType::UNorm16, ColorCompressType::None)) \
@@ -337,6 +344,75 @@ ColorRGBA_T<T>::toColorRGBAb() const
 	using U = u8;
 	T factor = sCast<T>(255.0);
 	auto o = ColorRGBA_T<U>{ sCast<U>(r * factor), sCast<U>(g * factor), sCast<U>(b * factor), sCast<U>(a * factor) };;
+	return o;
+}
+
+#endif
+
+#if 0
+#pragma mark --- ColorBGRA_T-Impl ---
+#endif // 0
+#if 1
+
+template<class T>
+class ColorBGRA_T
+{
+public:
+	using ElementType	= T;
+	using SizeType		= FileIoTraits::SizeType;
+	using IndexType		= FileIoTraits::IndexType;
+	using Tuple4		= Tuple4_T<T>;
+
+public:
+	static constexpr SizeType			s_kElementCount			= 4;
+	static constexpr int				s_kAlphaBits			= sCast<int>(BitUtil::bitSize<T>());
+	static constexpr ColorType			s_kColorType			= TBM<ColorType>::make(ColorModel::BGRA, getColorElementType<ElementType>(), ColorCompressType::None);
+	static constexpr ColorModel			s_kColorModel			= TBM<ColorType>::getElementValue<0>(s_kColorType);
+	static constexpr ColorElementType	s_kColorElementType		= TBM<ColorType>::getElementValue<1>(s_kColorType);
+	static constexpr ColorCompressType	s_kColorCompressType	= TBM<ColorType>::getElementValue<2>(s_kColorType);
+
+public:
+	union 
+	{
+		struct { T b, g, r, a; };
+		T data[s_kElementCount];
+	};
+
+	ColorBGRA_T() = default;
+	ColorBGRA_T(const T& b_, const T& g_, const T& r_, const T& a_)
+		: b(b_), g(g_), r(r_), a(a_)
+	{}
+	ColorBGRA_T(const Tuple4& v)
+		: b(b_), g(g_), r(r_), a(a_)
+	{}
+
+public:
+	template<class SE>
+	void onJsonIo(SE& se) 
+	{
+		NMSP_NAMED_FIXED_IO(se, b);
+		NMSP_NAMED_FIXED_IO(se, g);
+		NMSP_NAMED_FIXED_IO(se, r);
+		NMSP_NAMED_FIXED_IO(se, a);
+	}
+
+	ColorBGRA_T<u8> toColorBGRAb() const;
+};
+
+template<class T>
+void onFormat(fmt::format_context& ctx, const ColorBGRA_T<T>& v)
+{
+	formatTo(ctx, "Color4({}, {}, {}, {})", v.b, v.g, v.r, v.a);
+}
+NMSP_FORMATTER_T( NMSP_ARGS(class T), ColorBGRA_T<NMSP_ARGS(T)> );
+
+template<class T>
+ColorBGRA_T<u8> 
+ColorBGRA_T<T>::toColorBGRAb() const
+{
+	using U = u8;
+	T factor = sCast<T>(255.0);
+	auto o = ColorBGRA_T<U>{ sCast<U>(b * factor), sCast<U>(g * factor), sCast<U>(r * factor), sCast<U>(a * factor) };;
 	return o;
 }
 
@@ -573,6 +649,11 @@ using ColorRGBAb_T 	= ColorRGBA_T<u8>;
 using ColorRGBAs_T 	= ColorRGBA_T<u16>;
 using ColorRGBAu_T 	= ColorRGBA_T<u32>;
 using ColorRGBAf_T 	= ColorRGBA_T<float>;
+
+using ColorBGRAb_T 	= ColorBGRA_T<u8>;
+using ColorBGRAs_T 	= ColorBGRA_T<u16>;
+using ColorBGRAu_T 	= ColorBGRA_T<u32>;
+using ColorBGRAf_T 	= ColorBGRA_T<float>;
 
 using Color1b_T = ColorRb_T;
 using Color1s_T = ColorRs_T;
