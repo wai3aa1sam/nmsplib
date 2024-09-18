@@ -65,6 +65,7 @@ public:
 	JobHandle createEmptyJob();
 	JobHandle createParentJob();
 
+public:
 	SizeType	workerCount()		const;
 	SizeType	threadCount()		const;
 	StrViewA_T	threadName()		const;
@@ -75,7 +76,8 @@ public:
 	bool isSingleThreadMode() const;
 
 public:
-	void _internal_nextFrame();
+	void		_internal_nextFrame();
+	ThreadPool* _internal_threadPool();
 
 protected:
 	void shutdown();

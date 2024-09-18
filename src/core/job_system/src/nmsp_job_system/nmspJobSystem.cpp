@@ -38,7 +38,8 @@ JobSystem_T::~JobSystem_T()
 	_NMSP_LOG("~JobSystem_T()");
 }
 
-void JobSystem_T::create(int workerCount, int threadTypeCount)
+void 
+JobSystem_T::create(int workerCount, int threadTypeCount)
 {
 	auto cDesc = makeCDesc();
 	cDesc.workerCount = workerCount;
@@ -46,7 +47,8 @@ void JobSystem_T::create(int workerCount, int threadTypeCount)
 	create(cDesc);
 }
 
-void JobSystem_T::create(const CreateDesc& cDesc)
+void 
+JobSystem_T::create(const CreateDesc& cDesc)
 {
 	destroy();
 
@@ -72,7 +74,8 @@ void JobSystem_T::create(const CreateDesc& cDesc)
 	_threadPool.create(desc);
 }
 
-void JobSystem_T::destroy()
+void 
+JobSystem_T::destroy()
 {
 	if (!s_instance)
 	{
@@ -84,8 +87,8 @@ void JobSystem_T::destroy()
 	shutdown();
 }
 
-
-void JobSystem_T::submit(JobHandle job)
+void 
+JobSystem_T::submit(JobHandle job)
 {
 	#if NMSP_JOB_SYSTEM_DEVELOPMENT
 	if (instance()->isSingleThreadMode())
@@ -107,7 +110,8 @@ void JobSystem_T::submit(JobHandle job)
 	threadPool.submit(job);
 }
 
-void JobSystem_T::waitForComplete(JobHandle job)
+void 
+JobSystem_T::waitForComplete(JobHandle job)
 {
 	NMSP_PROFILE_SCOPED();
 
@@ -119,7 +123,7 @@ void JobSystem_T::waitForComplete(JobHandle job)
 	if (!job)
 		return;
 
-	NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
+	//NMSP_ASSERT(JobSystemTraits::isMainThread(), "");
 	auto* jsys = instance();
 	auto& threadPool = jsys->_threadPool;
 	auto& storage = jsys->threadStorage(); (void)storage;
@@ -140,7 +144,8 @@ void JobSystem_T::waitForComplete(JobHandle job)
 }
 
 
-void JobSystem_T::_internal_nextFrame()
+void 
+JobSystem_T::_internal_nextFrame()
 {
 	NMSP_PROFILE_SCOPED();
 
@@ -158,21 +163,24 @@ void JobSystem_T::_internal_nextFrame()
 }
 
 
-JobSystem_T::JobHandle JobSystem_T::createEmptyJob()
+JobSystem_T::JobHandle 
+JobSystem_T::createEmptyJob()
 {
 	auto* job = JobSystem_T::allocateJob();
 	job->setEmpty();
 	return job;
 }
 
-JobSystem_T::JobHandle JobSystem_T::createParentJob()
+JobSystem_T::JobHandle 
+JobSystem_T::createParentJob()
 {
 	auto* job = JobSystem_T::allocateJob();
 	job->createParentJob();
 	return job;
 }
 
-void JobSystem_T::shutdown()
+void 
+JobSystem_T::shutdown()
 {
 	for (auto& t : _typedThreads)
 	{
@@ -184,7 +192,8 @@ void JobSystem_T::shutdown()
 	_typedThreads.clear();
 }
 
-JobSystem_T::FrameAllocator& JobSystem_T::_defaultAllocator()
+JobSystem_T::FrameAllocator& 
+JobSystem_T::_defaultAllocator()
 {
 	auto* jsys = JobSystem_T::instance();
 	jsys->_checkError();
@@ -193,7 +202,8 @@ JobSystem_T::FrameAllocator& JobSystem_T::_defaultAllocator()
 	return frameAlloc;
 }
 
-void JobSystem_T::_checkError() const
+void 
+JobSystem_T::_checkError() const
 {
 	//if (!(JobSystemTraits::threadLocalId() >= 0 && JobSystemTraits::threadLocalId() < _threadPool.threadCount()))
 	{
@@ -203,7 +213,8 @@ void JobSystem_T::_checkError() const
 	//NMSP_ASSERT(JobSystemTraits::threadLocalId() >= 0 && JobSystemTraits::threadLocalId() < _threadPool.threadCount());
 }
 
-void JobSystem_T::_createTypedThreads()
+void
+JobSystem_T::_createTypedThreads()
 {
 	_typedThreads.reserve(_typedThreadCount);
 	_typedThreadStorages.reserve(_typedThreadCount);
@@ -218,6 +229,8 @@ void JobSystem_T::_createTypedThreads()
 		_typedThreads.emplace_back(/*NMSP_NEW(WorkerThread)(workerCDesc)*/);
 	}
 }
+
+JobSystem_T::ThreadPool* JobSystem_T::_internal_threadPool() { return &_threadPool; }
 
 
 #if 0

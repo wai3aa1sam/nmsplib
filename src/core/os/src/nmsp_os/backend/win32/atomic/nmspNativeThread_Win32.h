@@ -39,8 +39,8 @@ public:
 	void		setName(StrViewA_T name);
 
 protected:
-	static DWORD WINAPI _routine(void* args);
-	static DWORD WINAPI _basicRoutine(void* basicCreateDesc);
+	static DWORD WINAPI _proceed(void* args);
+	static DWORD WINAPI _basicProceed(void* basicCreateDesc);
 
 
 protected:

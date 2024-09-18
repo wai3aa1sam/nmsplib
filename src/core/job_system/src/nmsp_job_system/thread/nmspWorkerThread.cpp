@@ -12,15 +12,13 @@ namespace nmsp {
 #endif // 0
 #if 1
 
-WorkerThread_T::WorkerThread_T(const CreateDesc& cdesc)
+WorkerThread_T::WorkerThread_T()
 {
-	_threadPool = cdesc.threadPool;
-	Base::create(cdesc);
+	
 }
 
 WorkerThread_T::~WorkerThread_T()
 {
-	debugLog("thread {} ~WorkerThread_T()", localId());
 	destroy();
 }
 
@@ -30,61 +28,52 @@ void WorkerThread_T::submit(JobHandle task)
 	//debugLog("thread {} submit(), current task size: {}", localId(), _jobs.size());
 }
 
-void WorkerThread_T::destroy()
+void 
+WorkerThread_T::onCreate(const CreateDesc_Base& cDescBase)
 {
-	join();
+	const auto& cDesc = sCast<const CreateDesc&>(cDescBase);
+	Base::onCreate(cDesc);
 }
 
-void* WorkerThread_T::onRoutine()
+void 
+WorkerThread_T::onDestroy()
 {
-	JobSystemTraits::setThreadLocalId(Base::localId());
-	NMSP_PROFILE_SET_THREAD_NAME(name().c_str());
 
-	std::exception_ptr ptr = nullptr;
-	//debugLog("=== threadLocalId {}, localId {} onProc()", threadLocalId(), localId());
 
-	while (!threadPool()->isReadyToRun())
+	Base::onDestroy();
+}
+
+void* 
+WorkerThread_T::onRoutine()
+{
+	JobHandle job = nullptr;
+
+	for (;;)
 	{
-		sleep();
-	}
-
-	try
-	{
-		JobHandle job = nullptr;
-
-		for (;;)
+		if (false)
 		{
-			if (false)
-			{
-				sleep();
-				continue;
-			}
+			sleep();
+			continue;
+		}
 
-			while (job)
-			{
+		while (job)
+		{
 
-				wake();
+			wake();
 
-				debugLog("=== thread {} execute job", localId());
-				threadPool()->execute(job);
-				
-				job = nullptr;
-				_jobs.try_pop(job);
-			}
+			debugLog("=== thread {} execute job", localId());
+			threadPool()->execute(job);
 
-			if (!_tryGetJob(job))
-			{
-				log("=== worker thread {} end", threadPool()->workerId());
-				break;
-			}
+			job = nullptr;
+			_jobs.try_pop(job);
+		}
+
+		if (!_tryGetJob(job))
+		{
+			log("=== worker thread {} end", threadPool()->workerId());
+			break;
 		}
 	}
-	catch(...)
-	{
-		ptr = std::current_exception();
-	}
-
-	JobSystemTraits::resetThreadLocalId();
 
 	return nullptr;
 }
@@ -99,7 +88,7 @@ bool WorkerThread_T::_tryGetJob(JobHandle& job)
 		return true;
 	}
 
-	if (_threadPool->trySteal(this, job))
+	if (_threadPool->trySteal(job))
 	{
 		debugLog("=== thread {} trysteal()", JobSystemTraits::threadLocalId());
 		return true;
@@ -129,33 +118,6 @@ bool WorkerThread_T::_tryGetJob(JobHandle& job)
 	}
 
 	return true;
-}
-
-WorkerThread_T::ThreadStorage&	WorkerThread_T::threadStorage()	
-{
-	return _threadPool->threadStroages(JobSystemTraits::threadLocalId()); 
-}
-
-void 
-WorkerThread_T::wake() 
-{ 
-	//NMSP_PROFILE_SCOPED(); 
-	resetSleepCount(); 
-}
-
-void WorkerThread_T::sleep()
-{
-	//NMSP_PROFILE_SCOPED();
-
-	if (shouldSleep())
-	{
-		OsUtil::sleep_ms(JobSystemTraits::s_kIdleSleepTimeMS);
-	}
-	else
-	{
-		OsUtil::sleep_ms(JobSystemTraits::s_kBusySleepTimeMS);
-		addSleepCount();
-	}
 }
 
 

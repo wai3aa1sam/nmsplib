@@ -30,12 +30,14 @@ public:
 	using JobQueue		= JobQueue_T<>;
 	using JobHandle		= JobHandle_T;
 	using ThreadStorage	= ThreadStorage_T;
+	using TypeThread	= TypeThread_T;
 	using WorkerThread	= WorkerThread_T;
 	using JobSystem		= JobSystem_T;
 
 	using SizeType		= JobSystemTraits::SizeType;
 
 public:
+	friend class TypeThread_T;
 	friend class WorkerThread;
 	friend class JobSystem;
 
@@ -53,6 +55,9 @@ public:
 	void run();	// useless now, maybe have a pending sumbit and then call run to execute those jobs
 	void nextFrame();
 
+	bool trySteal(JobHandle& job);
+
+public:
 	SizeType workerCount() const;
 	SizeType threadCount() const;
 
@@ -67,7 +72,6 @@ public:
 
 protected:
 	bool tryGetJob(JobHandle& job);
-	bool trySteal(WorkerThread* worker, JobHandle& job);
 	void complete(JobHandle job);
 	void _submit(JobHandle job);
 	int getNextIndex(int i);

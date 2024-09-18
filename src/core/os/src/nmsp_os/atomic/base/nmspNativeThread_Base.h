@@ -10,7 +10,7 @@ using ThreadHnd = HANDLE;
 #error "unknow thread handle"
 #endif
 
-using ThreadRountine = void* (*)(void*);
+using ThreadProcedure = void* (*)(void*);
 
 #if 0
 #pragma mark --- NativeThread_Base_CreateDesc-Decl ---
@@ -22,7 +22,7 @@ struct BasicThread_CreateDesc
 	StrViewA_T		name;
 	int				affinityIdx = -1;
 	int				localId		= -1;
-	ThreadRountine	routine = nullptr;
+	ThreadProcedure	procdure = nullptr;
 	void* args = nullptr;
 };
 
@@ -81,21 +81,24 @@ public:
 	using CreateDesc		= NativeThread_CreateDesc;
 
 public:
+	NMSP_NODISCARD static CreateDesc makeCDesc();
+
+public:
 	NativeThread_Base();
 	virtual ~NativeThread_Base() = default;
 
-	NMSP_NODISCARD static CreateDesc makeCDesc();
+public:
+	void	create(const CreateDesc_Base& cDescBase);
+	void*	proceed();
 
-	void create(const CreateDesc_Base& bcd);
-
-	virtual void* onRoutine() = 0;
-
+protected:
+	virtual void* onProceed() = 0;
 };
 
 #endif
 
 #if 0
-#pragma mark --- NativeThread_Base-Impl ---
+#pragma mark --- nmspThread_Base-Impl ---
 #endif // 0
 #if 1
 
@@ -116,7 +119,8 @@ Thread_Base::~Thread_Base()
 }
 
 inline
-void			Thread_Base::create(const CreateDesc_Base& bcd)
+void
+Thread_Base::create(const CreateDesc_Base& bcd)
 {
 	_localId	= bcd.localId;
 	_affinity	= bcd.affinityIdx;
@@ -124,15 +128,30 @@ void			Thread_Base::create(const CreateDesc_Base& bcd)
 }
 
 inline
-int				Thread_Base::localId() const
+int
+Thread_Base::localId() const
 {
 	return _localId;
 }
 
 inline
-const StringT&	Thread_Base::name() const
+const StringT&
+Thread_Base::name() const
 {
 	return _name;
+}
+
+#endif
+
+#if 0
+#pragma mark --- nmspNativeThread_Base-Impl ---
+#endif // 0
+#if 1
+
+inline
+NativeThread_Base::CreateDesc NativeThread_Base::makeCDesc()
+{
+	return NativeThread_Base::CreateDesc{};
 }
 
 inline
@@ -143,18 +162,21 @@ NativeThread_Base::NativeThread_Base()
 }
 
 inline
-void NativeThread_Base::create(const CreateDesc_Base& cd)
+void 
+NativeThread_Base::create(const CreateDesc_Base& cDescBase)
 {
-	auto cDesc = sCast<const CreateDesc&>(cd);
+	auto cDesc = sCast<const CreateDesc&>(cDescBase);
 	Base::create(cDesc);
 }
 
 inline
-NativeThread_Base::CreateDesc NativeThread_Base::makeCDesc()
+void* 
+NativeThread_Base::proceed()
 {
-	return NativeThread_Base::CreateDesc{};
+	void* ret = nullptr;
+	ret = onProceed();
+	return ret;
 }
-
 
 #endif
 

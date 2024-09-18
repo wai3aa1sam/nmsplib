@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 	UnitTestManager unitTestManager;
 	unitTestManager.create();
 
-	setDirTest000();
+	//setDirTest000();
 
 	{
 		MemoryLeakReportScope reportScope;

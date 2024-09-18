@@ -80,7 +80,9 @@ public:
 	AtmQueue_Mc() = default;
 	~AtmQueue_Mc() = default;
 
-	void push(const T& data);
+	void push(const T&	data);
+	void push(		T&& data);
+
 	bool try_pop(T& o);
 
 	SizeType	size   ()	const;
@@ -99,14 +101,23 @@ private:
 #endif // 0
 #if 1
 
-template<class T, size_t N, class ALLOC, class TRAITS >  inline
-void		AtmQueue_Mc<T, N, ALLOC, TRAITS>::push(const T& data)
+template<class T, size_t N, class ALLOC, class TRAITS > inline
+void 
+AtmQueue_Mc<T, N, ALLOC, TRAITS>::push(const T& data)
 {
 	_queue.enqueue(data);
 }
 
-template<class T, size_t N, class ALLOC, class TRAITS>  inline
-bool		AtmQueue_Mc<T, N, ALLOC, TRAITS>::try_pop(T& o)
+template<class T, size_t N, class ALLOC, class TRAITS > inline
+void 
+AtmQueue_Mc<T, N, ALLOC, TRAITS>::push(T&& data)
+{
+	_queue.enqueue(nmsp::move(data));
+}
+
+template<class T, size_t N, class ALLOC, class TRAITS> inline
+bool 
+AtmQueue_Mc<T, N, ALLOC, TRAITS>::try_pop(T& o)
 {
 	return _queue.try_dequeue(o);
 }
@@ -118,8 +129,9 @@ AtmQueue_Mc<T, N, ALLOC, TRAITS>::size() const
 	return _queue.size_approx();
 }
 
-template<class T, size_t N, class ALLOC, class TRAITS>  inline
-bool		AtmQueue_Mc<T, N, ALLOC, TRAITS>::isEmpty() const
+template<class T, size_t N, class ALLOC, class TRAITS> inline
+bool
+AtmQueue_Mc<T, N, ALLOC, TRAITS>::isEmpty() const
 {
 	return size() == 0;
 }

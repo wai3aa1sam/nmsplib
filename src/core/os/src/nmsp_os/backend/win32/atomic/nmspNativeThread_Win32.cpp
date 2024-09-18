@@ -8,7 +8,8 @@
 #pragma mark --- NativeThread_Win32-Impl ---
 #endif // 0
 #if 1
-namespace nmsp {
+namespace nmsp 
+{
 
 NativeThread_Win32::~NativeThread_Win32()
 {
@@ -18,7 +19,8 @@ NativeThread_Win32::~NativeThread_Win32()
 	NMSP_ASSERT(!_hnd,		"must call join() on derived class, also should be awaked");
 }
 
-void NativeThread_Win32::create(const CreateDesc_Base& cd)
+void 
+NativeThread_Win32::create(const CreateDesc_Base& cd)
 {
 	auto cDesc = sCast<const CreateDesc&>(cd);
 
@@ -30,7 +32,7 @@ void NativeThread_Win32::create(const CreateDesc_Base& cd)
 		_name += StrUtil::toTempStr(cd.localId);
 	}
 
-	_hnd = ::CreateThread(nullptr, 0, &_routine, (LPVOID)this, 0, (LPDWORD)&_threadId);
+	_hnd = ::CreateThread(nullptr, 0, &_proceed, (LPVOID)this, 0, (LPDWORD)&_threadId);
 	throwIf(!_hnd, "");
 
 	setName(_name);
@@ -41,7 +43,8 @@ void NativeThread_Win32::create(const CreateDesc_Base& cd)
 	#endif // NMSP_DEBUG
 }
 
-void		NativeThread_Win32::join				()
+void
+NativeThread_Win32::join()
 {
 	if (_hnd)
 	{
@@ -55,7 +58,8 @@ void		NativeThread_Win32::join				()
 	}
 }
 
-void		NativeThread_Win32::setAffinity		(int k_th_bit)
+void
+NativeThread_Win32::setAffinity(int k_th_bit)
 {
 	if (k_th_bit == -1 || k_th_bit == 0)
 		return;
@@ -64,17 +68,20 @@ void		NativeThread_Win32::setAffinity		(int k_th_bit)
 	::SetThreadAffinityMask(_hnd, 1LL << k_th_bit);
 }
 
-size_t		NativeThread_Win32::threadId			()
+size_t
+NativeThread_Win32::threadId()
 {
 	return _threadId;
 }
 
-ThreadHnd	NativeThread_Win32::nativeHnd			()
+ThreadHnd
+NativeThread_Win32::nativeHnd()
 {
 	return _hnd;
 }
 
-void		NativeThread_Win32::setName(StrViewA_T name)
+void
+NativeThread_Win32::setName(StrViewA_T name)
 {
 	NMSP_ASSERT(_hnd, "");
 
@@ -86,22 +93,26 @@ void		NativeThread_Win32::setName(StrViewA_T name)
 	_NMSP_PROFILE_SET_THREAD_NAME(_name.c_str());
 }
 
-DWORD NativeThread_Win32::_routine(void* args)
+DWORD
+NativeThread_Win32::_proceed(void* args)
 {
 	auto* nt = sCast<NativeThread_Win32*>(args);
 	//OsTraits::setThreadLocalId(nt->localId());
-	auto ret = nt->onRoutine(); NMSP_UNUSED(ret);
-	return 0;
+	void* ret = nullptr;
+	ret = nt->proceed();
+	return ret ? reinCast<DWORD>(ret) : 0;
 }
 
-DWORD WINAPI NativeThread_Win32::_basicRoutine(void* cDescBase)
+DWORD WINAPI 
+NativeThread_Win32::_basicProceed(void* cDescBase)
 {
 	auto* bcd = reinCast<CreateDesc_Base*>(cDescBase);
 	OsTraits::setThreadLocalId(bcd->affinityIdx);
 
-	NMSP_ASSERT(bcd->routine, "CreateDesc_Base::routine is nullptr");
-	auto ret = bcd->routine(bcd->args); NMSP_UNUSED(ret);
-	return 0;
+	NMSP_ASSERT(bcd->procdure, "CreateDesc_Base::procdure is nullptr");
+	void* ret = nullptr;
+	ret = bcd->procdure(bcd->args);
+	return ret ? reinCast<DWORD>(ret) : 0;
 }
 
 }

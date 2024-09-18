@@ -24,7 +24,8 @@ ThreadPool_T::~ThreadPool_T()
 	destroy();
 }
 
-void ThreadPool_T::create(const CreateDesc& desc)
+void
+ThreadPool_T::create(const CreateDesc& desc)
 {
 	NMSP_ASSERT(desc.workerCount <= OsTraits::logicalThreadCount());
 	auto workerCount = math::clamp(desc.workerCount, sCast<SizeType>(0), OsTraits::logicalThreadCount() - 1);
@@ -44,12 +45,13 @@ void ThreadPool_T::create(const CreateDesc& desc)
 		for (int i = 0; i < workerCount; i++)
 		{
 			auto localId = sCast<int>(desc.typedThreadCount) + i;
-			workerCDesc.affinityIdx = localId - 1;
+			workerCDesc.affinityIdx = localId; // = localId - 1;
 			workerCDesc.localId		= localId;
 			workerCDesc.name		= fmtAs_T<TempStringA_T<> >("Worker_{}", workerCDesc.affinityIdx);	// must not share TempBuffer, buffer will be race condition
 
 			_threadStorages.emplace_back(NMSP_NEW(ThreadStorage)());
-			_workers.emplace_back(NMSP_NEW(WorkerThread)(workerCDesc));
+			auto& worker = _workers.emplace_back(NMSP_NEW(WorkerThread)());
+			worker->create(workerCDesc);
 		}
 
 		_isReadyToRun.store(true);
@@ -62,7 +64,8 @@ void ThreadPool_T::create(const CreateDesc& desc)
 	}
 }
 
-void ThreadPool_T::destroy()
+void 
+ThreadPool_T::destroy()
 {
 	if (_workers.is_empty())
 		return;
@@ -79,19 +82,22 @@ void ThreadPool_T::destroy()
 	_workers.clear();
 }
 
-void ThreadPool_T::submit(JobHandle job)
+void 
+ThreadPool_T::submit(JobHandle job)
 {
 	preSubmitCheck(job);
 	_submit(job);
 }
 
-void ThreadPool_T::execute(JobHandle job)
+void 
+ThreadPool_T::execute(JobHandle job)
 {
 	preExecuteCheck(job);
 	_execute(job);
 }
 
-void ThreadPool_T::run()
+void 
+ThreadPool_T::run()
 {
 	JobHandle job = nullptr;
 	while (_queue.try_pop(job))
@@ -101,7 +107,8 @@ void ThreadPool_T::run()
 	}
 }
 
-bool ThreadPool_T::tryGetJob(JobHandle& job)
+bool 
+ThreadPool_T::tryGetJob(JobHandle& job)
 {
 	#if 0
 	for (int i = 0; i < _workers.size(); i++)
@@ -133,7 +140,8 @@ bool ThreadPool_T::tryGetJob(JobHandle& job)
 	#endif // 0
 }
 
-bool ThreadPool_T::trySteal(WorkerThread* worker, JobHandle& job)
+bool 
+ThreadPool_T::trySteal(JobHandle& job)
 {
 	#if 0
 
@@ -158,7 +166,8 @@ bool ThreadPool_T::trySteal(WorkerThread* worker, JobHandle& job)
 	#endif // 0
 }
 
-void ThreadPool_T::complete(JobHandle job)
+void 
+ThreadPool_T::complete(JobHandle job)
 {
 	return _complete_onBeginEndSupported(job);
 }
