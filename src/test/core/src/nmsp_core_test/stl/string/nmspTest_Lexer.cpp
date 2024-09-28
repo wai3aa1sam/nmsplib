@@ -119,7 +119,7 @@ public:
 				}
 			}
 			{
-				auto up = makeUPtr<int>(5);
+				auto up = makeUPtr_T<int>(5);
 
 				_NMSP_DUMP_VAR(sizeof(Tes0));
 				_NMSP_DUMP_VAR(sizeof(Tes1));

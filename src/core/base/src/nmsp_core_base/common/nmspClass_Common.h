@@ -63,9 +63,9 @@ class RefCount_Base : public NonCopyable
 {
 public:
 	std::atomic_int	_refCount = 0;
+
 public:
-	RefCount_Base()		= default;
-	~RefCount_Base()	= default;
+	bool isRefCount0() const { return _refCount == 0; }
 };
 
 #endif

@@ -47,7 +47,7 @@ TypeThread_T::routine()
 	void*				ret = nullptr;
 	//debugLog("=== threadLocalId {}, localId {} onProc()", threadLocalId(), localId());
 
-	while (!threadPool()->isReadyToRun())
+	while (!threadPool() || !threadPool()->isReadyToRun())
 	{
 		sleep();
 	}

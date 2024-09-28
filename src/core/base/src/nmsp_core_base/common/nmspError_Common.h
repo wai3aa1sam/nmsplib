@@ -46,17 +46,19 @@ private:
 
 #endif
 
-template<class... ARGS>
-inline void throwIf(bool cond, const char* fmt, ARGS&&... args)
+template<class... ARGS> inline 
+void 
+throwIf(bool cond, const char* fmt, ARGS&&... args)
 {
 	if (cond)
 	{
-		throw NMSP_ERROR(fmt, nmsp::forward<ARGS>(args)...);
+		throwError(fmt, nmsp::forward<ARGS>(args)...);
 	}
 }
 
-template<class... ARGS>
-inline void throwError(const char* fmt, ARGS&&... args)
+template<class... ARGS> inline 
+void 
+throwError(const char* fmt, ARGS&&... args)
 {
 	throw NMSP_ERROR(fmt, nmsp::forward<ARGS>(args)...);
 }

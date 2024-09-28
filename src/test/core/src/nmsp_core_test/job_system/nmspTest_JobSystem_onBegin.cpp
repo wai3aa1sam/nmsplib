@@ -80,14 +80,14 @@ public:
 	auto emplace(JOB&&... job)
 	{
 		auto tuple = _jf.emplace(nmsp::forward<JOB>(job)...);
-		(_jobValids.emplace_back(makeUPtr<CheckJobValid>(nmsp::forward<JOB>(job), _jobValids.size())), ...);
+		(_jobValids.emplace_back(makeUPtr_T<CheckJobValid>(nmsp::forward<JOB>(job), _jobValids.size())), ...);
 		return tuple;
 	}
 
 	template<class... JOB> 
 	auto bypassSubmitEmplace(JOB&&... job)
 	{
-		(_jobValids.emplace_back(makeUPtr<CheckJobValid>(nmsp::forward<JOB>(job), _jobValids.size())), ...);
+		(_jobValids.emplace_back(makeUPtr_T<CheckJobValid>(nmsp::forward<JOB>(job), _jobValids.size())), ...);
 	}
 
 	template<class... JOB>
@@ -390,7 +390,7 @@ void testOnBeginEnd(size_t testCount = s_kTestCount)
 
 			for (size_t i = 0; i < s_kJobCount; i++)
 			{
-				auto& e = parForJobs.emplace_back(makeUPtr<JobType>());
+				auto& e = parForJobs.emplace_back(makeUPtr_T<JobType>());
 				auto& jh = jobHandles.emplace_back(e->prepareDispatch(100, 64));
 				jf.emplace(jh);
 				e->setup(i, &jf);
@@ -478,7 +478,7 @@ void testJobCluster(size_t testCount = s_kTestCount)
 
 			for (size_t i = 0; i < s_kJobCount; i++)
 			{
-				auto& e = parForJobs.emplace_back(makeUPtr<JobType>());
+				auto& e = parForJobs.emplace_back(makeUPtr_T<JobType>());
 				auto& jh = jobHandles.emplace_back(e->prepareDispatch(100, 32));
 				jf.emplace(jh);
 				e->setup(i, &jf);

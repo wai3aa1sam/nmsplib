@@ -46,7 +46,8 @@ namespace nmsp {
 
 template<class T, class DELETER = DefaultDeleter<T> > using SPtr_T = SPtr_Impl<T, DELETER>;
 template<class T, class... ARGS> inline
-SPtr_T<T> makeSPtr(ARGS&&... args)
+SPtr_T<T> 
+makeSPtr_T(ARGS&&... args)
 {
 	T* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);
 	return SPtr_T<T>{p};
@@ -54,7 +55,8 @@ SPtr_T<T> makeSPtr(ARGS&&... args)
 
 template<class T> using SharedPtr_T = std::shared_ptr<T>;
 template<class T, class... ARGS> inline
-SharedPtr_T<T> makeShared(ARGS&&... args)
+SharedPtr_T<T> 
+makeSharedPtr_T(ARGS&&... args)
 {
 	return std::make_shared<T>(nmsp::forward<ARGS>(args)...);
 	/*T* p = NMSP_NEW(T)(nmsp::forward<ARGS>(args)...);

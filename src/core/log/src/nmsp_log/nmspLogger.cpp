@@ -101,7 +101,7 @@ void Logger_T::_create(SharedPtr_T<LoggerType>& o, StrViewA_T name, StrViewA_T o
 	TempStringA_T<> temp;
 	Vector_T<spdlog::sink_ptr, 4> sinks;
 
-	auto console_sink = makeShared<spdlog::sinks::stdout_color_sink_mt>();
+	auto console_sink = makeSharedPtr_T<spdlog::sinks::stdout_color_sink_mt>();
 	console_sink->set_level(spdlog::level::trace);
 
 	//console_sink->set_pattern(toPattern(temp, name, "%^[%T] %n: %v%$").c_str());
@@ -114,13 +114,13 @@ void Logger_T::_create(SharedPtr_T<LoggerType>& o, StrViewA_T name, StrViewA_T o
 	if (!outputFilepath.is_empty())
 	{
 		temp = outputFilepath;
-		file_sink = makeShared<spdlog::sinks::basic_file_sink_mt>(temp.c_str(), true);
+		file_sink = makeSharedPtr_T<spdlog::sinks::basic_file_sink_mt>(temp.c_str(), true);
 		file_sink->set_level(spdlog::level::trace);
 		sinks.emplace_back(file_sink);
 	}
 
 	temp = name;
-	o = makeShared<LoggerType>(temp.c_str(), sinks.begin(), sinks.end());
+	o = makeSharedPtr_T<LoggerType>(temp.c_str(), sinks.begin(), sinks.end());
 	//o = makeShared<LoggerType>(temp.c_str(), sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
 	o->set_level(spdlog::level::trace);
 }

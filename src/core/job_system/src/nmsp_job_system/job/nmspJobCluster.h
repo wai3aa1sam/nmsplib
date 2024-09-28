@@ -176,7 +176,7 @@ JobCluster::dispatch(Vector_T<UPtr_T<T>, N, ALLOC>& outJobClusters, JobSizeT loo
 	for (JobSizeT iBatchGroup = 0; iBatchGroup < clusterCount; iBatchGroup++)
 	{
 		auto& jobCluster = outJobClusters[iBatchGroup];
-		jobCluster = makeUPtr<T>(nmsp::forward<ARGS>(ctor_args)...);
+		jobCluster = makeUPtr_T<T>(nmsp::forward<ARGS>(ctor_args)...);
 
 		JobHandle jobHnd = _makeJobHnd(jobCluster.ptr(), remain, iBatchGroup, batchSizePerThread, parent);
 		JobSystem::submit(jobHnd);
@@ -204,7 +204,7 @@ JobCluster::prepare(Vector_T<UPtr_T<T>, N, ALLOC>& outJobClusters, JobSizeT loop
 	for (JobSizeT iBatchGroup = 0; iBatchGroup < clusterCount; iBatchGroup++)
 	{
 		auto& jobCluster = outJobClusters[iBatchGroup];
-		jobCluster = makeUPtr<T>(nmsp::forward<ARGS>(ctor_args)...);
+		jobCluster = makeUPtr_T<T>(nmsp::forward<ARGS>(ctor_args)...);
 	}
 
 	JobHandle spawnJobHnd = JobSystem::allocateJob();

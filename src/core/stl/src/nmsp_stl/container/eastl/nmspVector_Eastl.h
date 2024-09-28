@@ -28,6 +28,7 @@ class Vector_Eastl : public EASTL_Vector<T, N, !IsSame<FALLBACK_ALLOC, NoFallbac
 {
 public:
 	using Base = typename EASTL_Vector<T, N, !IsSame<FALLBACK_ALLOC, NoFallbackAllocator_Policy>, FALLBACK_ALLOC>::Type;
+	using This = typename Vector_Eastl<T, N, FALLBACK_ALLOC>;
 
 	using SizeType = StlTraits::SizeType;
 
@@ -51,11 +52,18 @@ public:
 	Vector_Eastl() = default;
 	~Vector_Eastl() = default;
 
+	Vector_Eastl(const	This&	v);
+	Vector_Eastl(		This&&	v);
+
 	explicit Vector_Eastl(Allocator& allocator);
 	Vector_Eastl(std::initializer_list<ValueType> ilist, const Allocator& allocator = Allocator{});
 	template<class... ARGS> Vector_Eastl(SizeType n, ARGS&&... args);
 	//explicit Vector_Eastl(ViewType view, const Allocator& allocator = Allocator{});
 
+	void operator=(const	This&	v);
+	void operator=(			This&&	v);
+
+public:
 	void	appendRange(const CViewType& r);
 	T		moveBack();
 
@@ -101,6 +109,20 @@ private:
 #if 1
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(const This& v)
+	: Base(v)
+{
+
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(This&&	v)
+	: Base(nmsp::move(v))
+{
+
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
 Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(Allocator& allocator)
 	: Base(allocator)
 {
@@ -128,6 +150,19 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::Vector_Eastl(SizeType n, ARGS&&... args)
 //	: Base(view, allocator)
 //{}
 
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::operator=(const This& v)
+{
+	Base::operator=(v);
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+void 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::operator=(This&& v)
+{
+	Base::operator=(nmsp::move(v));
+}
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 void 

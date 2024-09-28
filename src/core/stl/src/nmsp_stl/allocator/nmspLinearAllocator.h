@@ -34,10 +34,8 @@ public:
 public:
 	LinearAllocatorChunk_T(SizeType n);
 
-	//void operator=(This&& rhs);
-
-	void* alloc(SizeType n, SizeType align = StlTraits::s_kDefaultAlign, SizeType offset = 0);
-	void* alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset);
+	void* alloc(SizeType* outChunkOffset, SizeType n, SizeType align, SizeType offset);
+	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);
 	void  clear();
 
 	template<class T> void destruct(		SizeType align);
@@ -68,25 +66,46 @@ public:
 public:
 	LinearAllocator_T(const char* name = "LinearAllocator_T");
 	//void operator=(This&& rhs);
+	LinearAllocator_T(const This&	rhs) = delete;
+	LinearAllocator_T(		This&&	rhs);
+	void operator=(const	This&	rhs) = delete;
+	void operator=(			This&&	rhs);
 
+public:
 	void setChunkSize(SizeType n);
 
+	void* alloc(SizeType* outChunkId, SizeType* outChunkOffset, SizeType n, SizeType align, SizeType offset);
 	void* alloc(SizeType n, SizeType align = s_kDefaultAlign, SizeType offset = 0);
-	void* alloc(SizeType n, SizeType align, SizeType offset, SizeType* outOffset);
+	void* alloc(SizeType* outChunkId, SizeType* outChunkOffset, SizeType n);
+
 	void  free(void* p, SizeType n = 0) {}
+
+	/*
+	* reset all chunk to 0 offset and start from first chunk, but this need to rewrite current alloc
+	*/
 	void  clear();
 
-	SizeType chuckCount() const { return _chunks.size(); }
-
-	Span_T<const UPtr_T<Chunk> > chunks() const;
+	/*
+	* free all chunks
+	*/
+	// void destroy();
 
 	template<class T> void destruct(		SizeType align);
 	template<class T> void destructAndClear(SizeType align);
+
+public:
+	SizeType						chuckCount()	const;
+	Span_T<const UPtr_T<Chunk> >	chunks()		const;
+
+protected:
+	void move(This&& rhs);
 
 private:
 	Vector_T<UPtr_T<Chunk> > _chunks;
 	SizeType _chunkSize = 16 * 1024;
 };
+
+inline LinearAllocator_T::SizeType LinearAllocator_T::chuckCount() const { return _chunks.size(); }
 
 inline
 Span_T<const UPtr_T<LinearAllocator_T::Chunk> > 
