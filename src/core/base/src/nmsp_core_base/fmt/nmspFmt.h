@@ -13,7 +13,7 @@ NMSP_RESTORE_ALL_WARNINGS()
 	template<TEMPLATE_ARGS> \
 	struct fmt::formatter<nmsp::CLASS> { \
 		auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); } \
-		auto format(const nmsp::CLASS& v, fmt::format_context& ctx) { \
+		auto format(const nmsp::CLASS& v, fmt::format_context& ctx) const { \
 			nmsp::onFormat(ctx, v); \
 			return ctx.out(); \
 		} \
