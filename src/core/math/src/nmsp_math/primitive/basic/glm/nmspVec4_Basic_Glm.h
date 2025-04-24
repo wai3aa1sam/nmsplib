@@ -112,7 +112,7 @@ public:
 	NMSP_NODISCARD T		sqrDistance	(const Vec4& rhs)	const;
 	NMSP_NODISCARD T		magnitude	()					const;
 	NMSP_NODISCARD T		sqrMagnitude()					const;
-	NMSP_NODISCARD T		normalize	()					const;
+	NMSP_NODISCARD Vec4		normalize()						const;
 
 	NMSP_NODISCARD Vec4		lerp	(const Vec4& b, T t)								const;
 	NMSP_NODISCARD Vec4		slerp	(const Vec4& b, T t)								const;
@@ -406,7 +406,8 @@ T Vec4_Basic_Glm<T, DATA>::sqrMagnitude()	const
 }
 
 template<class T, class DATA> inline
-T Vec4_Basic_Glm<T, DATA>::normalize()	const
+typename Vec4_Basic_Glm<T, DATA>::Vec4
+Vec4_Basic_Glm<T, DATA>::normalize() const
 {
 	return glm::normalize(toGlm());
 }

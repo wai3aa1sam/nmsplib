@@ -175,6 +175,7 @@ template<class T, size_t N, class FALLBACK_ALLOC> inline
 T 
 Vector_Eastl<T, N, FALLBACK_ALLOC>::moveBack()
 {
+	NMSP_CORE_ASSERT(!is_empty(), "failed, vector is empty");
 	T out;
 	auto* pBack = &back();
 	out = nmsp::move(*pBack);
