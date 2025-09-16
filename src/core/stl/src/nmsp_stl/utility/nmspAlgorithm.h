@@ -4,10 +4,28 @@
 
 
 #if 0
-#pragma mark --- stl_container_backend_switch-Impl ---
+#pragma mark --- stl_container_backend_switch_incl-Impl ---
 #endif // 0
 #if 1
 
+#if NMSP_STL_BUILD_CONTAINER_STD
+
+#elif NMSP_STL_BUILD_CONTAINER_NMSP
+
+#elif NMSP_STL_BUILD_CONTAINER_EASTL
+
+#include "EASTL/sort.h"
+
+#else
+#error "nmspAlgorithm.h should have backend switch"
+#endif // NMSP_STL_BUILD_CONTAINER_EASTL
+
+#endif
+
+#if 0
+#pragma mark --- stl_container_backend_switch-Impl ---
+#endif // 0
+#if 1
 
 namespace nmsp 
 {
@@ -65,6 +83,20 @@ void
 remove(FORWARD_ITER first, FORWARD_ITER last, const T& v)
 {
 	eastl::remove(first, last, v);
+}
+
+template<class TRndAccessIter> inline
+void 
+sort(TRndAccessIter first, TRndAccessIter last)
+{
+	eastl::sort(first, last);
+}
+
+template<class TRndAccessIter, class TComparePred> inline
+void 
+sort(TRndAccessIter first, TRndAccessIter last, TComparePred compare)
+{
+	eastl::sort(first, last, compare);
 }
 
 #else

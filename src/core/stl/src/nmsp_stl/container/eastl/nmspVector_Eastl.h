@@ -65,7 +65,10 @@ public:
 
 public:
 	void	appendRange(const CViewType& r);
+	T		moveFront();
 	T		moveBack();
+
+	T		moveFront_Unsorted();
 
 						Iter	find(const T& v);
 						CIter	find(const T& v) const;
@@ -173,6 +176,24 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::appendRange(const CViewType& r)
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
 T 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::moveFront()
+{
+	NMSP_CORE_ASSERT(!is_empty(), "failed, vector is empty");
+	T out;
+	auto* pFront = &front();
+	out = nmsp::move(*pFront);
+	
+	auto newSize = size() - 1;
+	for (SizeType i = 0; i < newSize; i++)
+	{
+		at(i) = nmsp::move(at(i + 1));
+	}
+	resize(newSize);
+	return out;
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+T 
 Vector_Eastl<T, N, FALLBACK_ALLOC>::moveBack()
 {
 	NMSP_CORE_ASSERT(!is_empty(), "failed, vector is empty");
@@ -180,6 +201,23 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::moveBack()
 	auto* pBack = &back();
 	out = nmsp::move(*pBack);
 	pop_back();
+	return out;
+}
+
+template<class T, size_t N, class FALLBACK_ALLOC> inline
+T 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::moveFront_Unsorted()
+{
+	NMSP_CORE_ASSERT(!is_empty(), "failed, vector is empty");
+	T out;
+	auto* pFront = &front();
+	out = nmsp::move(*pFront);
+	if (size() > 1)
+	{
+		auto newSize = size() - 1;
+		*begin() = nmsp::move(back());
+		resize(newSize);
+	}
 	return out;
 }
 

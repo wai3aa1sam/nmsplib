@@ -33,7 +33,7 @@ void onFormat(fmt::format_context& ctx, const Vec4_T<T>& v)
 }
 NMSP_FORMATTER_T( NMSP_ARGS(class T), Vec4_T<NMSP_ARGS(T)> );
 
-
+template<class T> inline void swap(Vec4_T<T>& lhs, Vec4_T<T>& rhs) noexcept { nmsp::swap<Vec4_T<T> >(lhs, rhs); }
 
 
 

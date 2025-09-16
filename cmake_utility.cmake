@@ -15,6 +15,7 @@ function(OsUtil_getThreadCountTo var)
 endfunction()
 set(OsTraits_kThreadCount 0)
 ProcessorCount(OsTraits_kThreadCount)
+my_print_var(OsTraits_kThreadCount)
 
 # --- Vulkan-Impl-begin
 

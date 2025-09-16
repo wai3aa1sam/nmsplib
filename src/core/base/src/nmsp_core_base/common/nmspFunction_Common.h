@@ -30,6 +30,11 @@ template<class SRC> constexpr RemoveConst<SRC>& constCast(const SRC& v) { return
 
 #endif
 
+/*
+* if swap() has compiler due to Argument-Dependent Lookup (ADL)
+* just define a explicit version to fix this error
+* eg. template<class T> inline void swap(Vec2_T<T>& lhs, Vec2_T<T>& rhs) noexcept { rds::swap<Vec2_T<T> >(lhs, rhs); }
+*/
 template<class T> inline void swap(T& a,	 T& b) { T  tmp = move(a); a = move(b); b = move(tmp); }
 template<class T> inline void swap(T*& a,	T*& b) { T* tmp = move(a); a = move(b); b = move(tmp); }
 

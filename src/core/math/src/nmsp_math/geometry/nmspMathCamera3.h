@@ -4,7 +4,6 @@
 #include "nmspMathRay3.h"
 #include "nmspMathFrustum3.h"
 #include "nmspMathRect2.h"
-
 /*
 references:
 ~ MathCamera3.h in https://github.com/SimpleTalkCpp/SimpleGameEngine
@@ -60,6 +59,9 @@ public:
 	void setFov(const T& fov)		{ _fov = fov; }
 	void setViewport(const Rect2& v) { _viewport = v; }
 
+	void setPerspective();
+	void setOrthographic(const T& orthScale = T(1.0));
+
 public:
 	Mat4	viewMatrix() const;
 	Mat4	projMatrix() const;
@@ -74,15 +76,20 @@ public:
 	const T&		farClip()		const { return _farClip; }
 	const Rect2&	viewport()		const { return _viewport; }
 	T				aspectRatio()	const { return _viewport.h != 0 ? _viewport.w / _viewport.h : T(0); }
-
+	T				orthoScale()	const { return _orthoScale; }
+	
 	Ray3	getRay(const Vec2& screenPos) const;
 
 	Frustum3 frustum() const { Frustum3 o; o.setByViewProjMatrix(viewProjMatrix()); return o; };
+
+	static T	invalidOrthographicScale()			{ return NumLimit<T>::lowest(); }
+	bool		isOrthgraphicMode()			const	{ return !math::equals(_orthoScale, invalidOrthographicScale()); }
 
 private:	
 	T		_fov		= T(50.0);
 	T		_nearClip	= T(0.1);
 	T		_farClip	= T(10000.0);
+	T		_orthoScale	= invalidOrthographicScale();
 	Rect2	_viewport;
 	Vec3	_pos {150, 150, 200};
 	Vec3	_aim {0,0,0};
