@@ -180,11 +180,11 @@ public:
 		T data[s_kElementCount];
 	};
 
+public:
 	ColorR_T() = default;
-	ColorR_T(const T& r_)
-		: r(r_) 
-	{}
+	constexpr ColorR_T(const T& r_) : r(r_) {}
 
+public:
 	template<class SE>
 	void onJsonIo(SE& se) 
 	{
@@ -206,6 +206,7 @@ public:
 	using ElementType	= T;
 	using SizeType		= FileIoTraits::SizeType;
 	using IndexType		= FileIoTraits::IndexType;
+	using Tuple2		= Tuple2_T<T>;
 
 public:
 	static constexpr SizeType			s_kElementCount			= 2;
@@ -221,11 +222,12 @@ public:
 		T data[s_kElementCount];
 	};
 
+public:
 	ColorRG_T() = default;
-	ColorRG_T(const T& r_, const T& g_)
-		: r(r_), g(g_)
-	{}
+	constexpr ColorRG_T(const T& r_, const T& g_)	: r(r_), g(g_) {}
+	constexpr ColorRG_T(const Tuple2& v)			: ColorRGB_T(v.x, v.y) {}
 
+public:
 	template<class SE>
 	void onJsonIo(SE& se) 
 	{
@@ -248,6 +250,7 @@ public:
 	using ElementType	= T;
 	using SizeType		= FileIoTraits::SizeType;
 	using IndexType		= FileIoTraits::IndexType;
+	using Tuple3		= Tuple3_T<T>;
 
 public:
 	static constexpr SizeType			s_kElementCount			= 3;
@@ -264,11 +267,12 @@ public:
 		T data[s_kElementCount];
 	};
 
+public:
 	ColorRGB_T() = default;
-	ColorRGB_T(const T& r_, const T& g_, const T& b_)
-		: r(r_), g(g_), b(b_)
-	{}
-
+	constexpr ColorRGB_T(const T& r_, const T& g_, const T& b_) : r(r_), g(g_), b(b_) {}
+	constexpr ColorRGB_T(const Tuple3& v)						: ColorRGB_T(v.x, v.y, v.z) {}
+	
+public:
 	template<class SE>
 	void onJsonIo(SE& se) 
 	{
@@ -309,13 +313,10 @@ public:
 		T data[s_kElementCount];
 	};
 
+public:
 	ColorRGBA_T() = default;
-	ColorRGBA_T(const T& r_, const T& g_, const T& b_, const T& a_)
-		: r(r_), g(g_), b(b_), a(a_)
-	{}
-	ColorRGBA_T(const Tuple4& v)
-		: r(v.x), g(v.y), b(v.z), a(v.w)
-	{}
+	constexpr ColorRGBA_T(const T& r_, const T& g_, const T& b_, const T& a_)	: r(r_), g(g_), b(b_), a(a_) {}
+	constexpr ColorRGBA_T(const Tuple4& v)										: ColorRGBA_T(v.x, v.y, v.z, v.w) {}
 
 public:
 	template<class SE>
