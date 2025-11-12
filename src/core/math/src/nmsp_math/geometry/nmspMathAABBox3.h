@@ -6,6 +6,7 @@ references:
 */
 
 #include "nmspMathGeometry_Common.h"
+#include "nmspMathRect2.h"
 
 namespace nmsp {
 namespace math {
@@ -22,6 +23,7 @@ public:
 	using SizeType	= MathTraits::SizeType;
 	using Vec3		= Vec3_T<T>;
 	using Mat4		= Mat4_T<T>;
+	using Rect2		= Rect2_T<T>;
 
 public:
 	static constexpr SizeType s_kVertexCount = 8;
@@ -54,6 +56,12 @@ public:
 
 	bool isOverlapped(const AABBox3_T&	b) const;
 	bool isInside(	  const Vec3&		pt) const;
+
+public:
+	Vec3	center()	const;
+	Vec3	size()		const;
+	Vec3	halfSize()	const;
+	Rect2	toRect2()	const;
 };
 
 #endif
@@ -214,6 +222,36 @@ AABBox3_T<T>::isInside(const Vec3& pt) const
 	return (   (pt.x >= min.x && pt.x <= max.x)
             && (pt.y >= min.y && pt.y <= max.y)
             && (pt.z >= min.z && pt.z <= max.z));
+}
+
+template<class T> inline 
+typename AABBox3_T<T>::Vec3
+AABBox3_T<T>::center() const
+{ 
+	return (Vec3{ max } + Vec3{ min }) / sCast<T>(2.0); 
+}
+
+template<class T> inline 
+typename AABBox3_T<T>::Vec3
+AABBox3_T<T>::size() const
+{ 
+	return (Vec3{ max } - Vec3{ min }); 
+}
+
+template<class T> inline
+typename AABBox3_T<T>::Vec3
+AABBox3_T<T>::halfSize() const
+{ 
+	return size() / sCast<T>(2.0); 
+}
+
+template<class T> inline 
+typename AABBox3_T<T>::Rect2
+AABBox3_T<T>::toRect2() const
+{ 
+	Rect2 o; 
+	o.set(min.toVec2(), size().toVec2()); 
+	return o; 
 }
 
 #endif

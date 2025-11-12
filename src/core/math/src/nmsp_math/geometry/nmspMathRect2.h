@@ -54,6 +54,9 @@ public:
 
 	T xMax() const;
 	T yMax() const;
+
+	Vec2 center()	const;
+	Vec2 halfSize() const;
 };
 
 template<class T> inline
@@ -122,7 +125,8 @@ Rect2_T<T>::Rect2_T(const Vec2& pos_, const Vec2& size_)
 }
 
 template<class T> inline 
-void Rect2_T<T>::set(T x_, T y_, T w_, T h_)
+void 
+Rect2_T<T>::set(T x_, T y_, T w_, T h_)
 {
 	x = x_;
 	y = y_;
@@ -131,41 +135,61 @@ void Rect2_T<T>::set(T x_, T y_, T w_, T h_)
 }
 
 template<class T> inline 
-void Rect2_T<T>::set(const Tuple2& pos_, const Tuple2& size_)
+void 
+Rect2_T<T>::set(const Tuple2& pos_, const Tuple2& size_)
 {
 	pos		= pos_;
 	size	= size_;
 }
 
 template<class T> inline 
-void Rect2_T<T>::set(const Vec2& pos_, const Vec2& size_)
+void 
+Rect2_T<T>::set(const Vec2& pos_, const Vec2& size_)
 {
 	pos		=  pos_.toTuple2();
 	size	= size_.toTuple2();
 }
 
 template<class T> inline 
-T Rect2_T<T>::xMin() const
+T 
+Rect2_T<T>::xMin() const
 {
 	return x;
 }
 
 template<class T> inline 
-T Rect2_T<T>::yMin() const
+T 
+Rect2_T<T>::yMin() const
 {
 	return y;
 }
 
 template<class T> inline 
-T Rect2_T<T>::xMax() const
+T 
+Rect2_T<T>::xMax() const
 {
 	return x + w;
 }
 
 template<class T> inline 
-T Rect2_T<T>::yMax() const
+T 
+Rect2_T<T>::yMax() const
 {
 	return y + h;
+}
+
+template<class T> inline 
+typename Rect2_T<T>::Vec2	
+Rect2_T<T>::center() const
+{ 
+	return Vec2{ pos } + halfSize(); 
+}
+
+template<class T> inline 
+typename Rect2_T<T>::Vec2	
+Rect2_T<T>::halfSize() const
+{ 
+	return Vec2{ size } / sCast<T>(2.0); 
 }
 
 

@@ -114,6 +114,14 @@ public:
 	NMSP_NODISCARD Vec3		slerp		(const Vec3& b, T t)								const;
 	NMSP_NODISCARD Vec3		rotateTo	(const Vec3& target, T maxRadDelta, T maxMagDelta)	const;
 
+	NMSP_NODISCARD Vec2		xy()		const;
+	NMSP_NODISCARD Vec2		xz()		const;
+	NMSP_NODISCARD Vec2		yz()		const;
+
+	NMSP_NODISCARD Vec3		xyz()		const;
+	NMSP_NODISCARD Vec3		xy0()		const;
+	NMSP_NODISCARD Vec3		x0z()		const;
+
 	NMSP_NODISCARD Tuple3	toTuple3()	const;
 	NMSP_NODISCARD Vec2		toVec2()	const;
 
@@ -388,6 +396,48 @@ typename Vec3_Basic_Glm<T, DATA>::Vec3	Vec3_Basic_Glm<T, DATA>::rotateTo		(const
 {
 	_notYetSupported()
 	return {};
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec2		
+Vec3_Basic_Glm<T, DATA>::xy()	const
+{
+	return Vec2{ x, y };
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec2		
+Vec3_Basic_Glm<T, DATA>::xz()	const
+{
+	return Vec2{ x, z };
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec2		
+Vec3_Basic_Glm<T, DATA>::yz()	const
+{
+	return Vec2{ y, z };
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec3		
+Vec3_Basic_Glm<T, DATA>::xyz()	const
+{
+	return Vec3{ x, y, z };
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec3		
+Vec3_Basic_Glm<T, DATA>::xy0()	const
+{
+	return Vec3{ x, y, 0 };
+}
+
+template<class T, class DATA> inline
+typename Vec3_Basic_Glm<T, DATA>::Vec3		
+Vec3_Basic_Glm<T, DATA>::x0z()	const
+{
+	return Vec3{ x, 0, z };
 }
 
 template<class T, class DATA> inline
