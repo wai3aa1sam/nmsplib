@@ -1,6 +1,6 @@
 #include "nmsp_core_test/common/nmsp_core_test_common.h"
 
-#if NMSP_TEST_MODULE_MATH || NMSP_TEST_ALL_MODULE
+#if NMSP_TEST_MODULE_MATH || NMSP_TEST_ALL_MODULE || 1
 
 #include <nmsp_math.h>
 
@@ -24,6 +24,18 @@ class Test_Math : public UnitTest
 public:
 	void test()
 	{
+		{
+			Mat4f_T m;
+			m.toData();
+
+			const Mat4f_T m2;
+			m2.toData();
+
+			//Mat4f_T m;
+			//auto mm = glm::value_ptr(m); NMSP_UNUSED(mm);
+
+		}
+
 		//Vec3f a = Vec3f{};
 		//a.x += 1;
 		//_NMSP_LOG("a.x: {}", a.x);
@@ -89,7 +101,7 @@ public:
 
 		{
 			Glm_Vec4_SIMD_T<f32> gv4;
-			gv4[0];
+			auto xxxx = gv4[0]; NMSP_UNUSED(xxxx);
 
 			Vec4f_T v4t;
 			auto k = v4t.dot(v4t); NMSP_UNUSED(k);

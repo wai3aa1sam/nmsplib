@@ -32,9 +32,9 @@ public:
 public:
 	Mat4_Basic_Data_Glm()
 		: Base(	  Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
-				, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) } )
+			, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
+			, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) }
+			, Vec4{ T(0.0), T(0.0), T(0.0), T(0.0) } )
 	{
 	}
 
@@ -60,7 +60,7 @@ public:
 	template<class T2> using Vec4_T		= Vec4_T<T2>;
 
 	template<class T2, class DATA2> using Mat4_T = Mat4_Basic_Glm<T2, DATA2>;
-	
+
 	using ElementType	= typename Base::ElementType;
 	using SizeType		= typename Base::SizeType;
 	using IndexType		= typename Base::IndexType;
@@ -90,10 +90,10 @@ public:
 	static Mat4 s_rotateX	(T rad);
 	static Mat4 s_rotateY	(T rad);
 	static Mat4 s_rotateZ	(T rad);
-	static Mat4 s_scale		(const Vec3& r);
-	static Mat4 s_shear		(const Vec3& r);
+	static Mat4 s_scale		(const Vec3& v);
+	static Mat4 s_shear		(const Vec3& v);
 
-	static Mat4	s_quat		(const Quat4& q);
+	static Mat4	s_quat		(const Quat4& v);
 
 	static Mat4	s_TRS(const Vec3 & translate, const Vec3 & rotate, const Vec3 & scale);
 	static Mat4	s_TRS(const Vec3 & translate, const Quat4& rotate, const Vec3 & scale);
@@ -110,10 +110,10 @@ public:
 	void set(const Vec4& cx_, const Vec4& cy_, const Vec4& cz_, const Vec4& cw_);
 
 	const Vec4&	col		(IndexType i) const;
-		  Vec4	row		(IndexType i) const;
+	Vec4	row		(IndexType i) const;
 	void		setCol	(IndexType i, const Vec4& v);
 	void		setRow	(IndexType i, const Vec4& v);
-	
+
 	bool	equals	(const Mat4& rhs, const T& epsilon = math::epsilon<T>()) const;
 	bool	equals0	(				  const T& epsilon = math::epsilon<T>()) const;
 
@@ -128,12 +128,12 @@ public:
 	Vec4	mulPoint	(const Vec4& v) const;
 	Vec3	mulPoint4x3	(const Vec3& v) const;	// faster than mulPoint but no projection
 	Vec3	mulVector	(const Vec3& v) const;	// for vector (direction)
-	
+
 	Vec3	mulNormal				(const Vec3& v) const; // for normal non-uniform scale
 	Vec3	unprojectPoint			(const Vec3& screenPos, const Rect2& viewport) const;
 	Vec3	unprojectPointFromInv	(const Vec3& screenPos, const Rect2& viewport) const;
 
-			Vec4&	operator[](IndexType i);
+	Vec4&	operator[](IndexType i);
 	const	Vec4&	operator[](IndexType i) const;
 
 	Mat4 operator-() const;
@@ -164,7 +164,9 @@ public:
 public:
 	using Glm_Mat4 = typename DATA::Base;
 	Mat4(const Glm_Mat4& rhs); // for glm only
-	const Data& toData() const;
+
+			T* toData();
+	const	T* toData() const;
 
 private:
 	const Glm_Mat4& toGlm() const;
@@ -200,11 +202,11 @@ template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_identity()
 {
 	return Mat4{
-			  Vec4{1.0, 0.0, 0.0, 0.0}
-			, Vec4{0.0, 1.0, 0.0, 0.0}
-			, Vec4{0.0, 0.0, 1.0, 0.0}
-			, Vec4{0.0, 0.0, 0.0, 1.0}
-		};
+		Vec4{1.0, 0.0, 0.0, 0.0}
+		, Vec4{0.0, 1.0, 0.0, 0.0}
+		, Vec4{0.0, 0.0, 1.0, 0.0}
+		, Vec4{0.0, 0.0, 0.0, 1.0}
+	};
 }
 
 template<class T, class DATA> inline
@@ -239,9 +241,9 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateX	(T rad
 	T s, c;
 	math::sincos(rad, s, c);
 	return Mat4({1, 0, 0, 0},
-				{0, c, s, 0},
-				{0,-s, c, 0},
-				{0, 0, 0, 1});
+		{0, c, s, 0},
+		{0,-s, c, 0},
+		{0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
@@ -252,9 +254,9 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateY	(T rad
 	T s, c;
 	math::sincos(rad, s, c);
 	return Mat4({c, 0,-s, 0},
-				{0, 1, 0, 0},
-				{s, 0, c, 0},
-				{0, 0, 0, 1});
+		{0, 1, 0, 0},
+		{s, 0, c, 0},
+		{0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
@@ -265,39 +267,39 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_rotateZ	(T rad
 	T s, c;
 	math::sincos(rad, s, c);
 	return Mat4({ c, s, 0, 0},
-				{-s, c, 0, 0},
-				{ 0, 0, 1, 0},
-				{ 0, 0, 0, 1});
+		{-s, c, 0, 0},
+		{ 0, 0, 1, 0},
+		{ 0, 0, 0, 1});
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_scale	(const Vec3& r)
+typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_scale	(const Vec3& v)
 {
-	return glm::scale(r);
+	return glm::scale(v);
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_shear	(const Vec3& r)
+typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_shear	(const Vec3& v)
 {
 	return Mat4( {  1,   0,  0,  0},
-				 {v.x,   1,  0,  0},
-				 {v.y, v.z,  1,  0},
-				 {  0,   0,  0,  1});
+		{v.x,   1,  0,  0},
+		{v.y, v.z,  1,  0},
+		{  0,   0,  0,  1});
 }
 
 template<class T, class DATA> inline
-typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_quat		(const Quat4& q)
+typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_quat		(const Quat4& v)
 {
-	return glm::toMat4(q);
+	return glm::toMat4(v);
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TRS(const Vec3 & translate, const Vec3 & rotate, const Vec3 & scale)
 {
 	Vec3 s, c;
-	Math::sincos(rotate.x, s.x, c.x);
-	Math::sincos(rotate.y, s.y, c.y);
-	Math::sincos(rotate.z, s.z, c.z);
+	math::sincos(rotate.x, s.x, c.x);
+	math::sincos(rotate.y, s.y, c.y);
+	math::sincos(rotate.z, s.z, c.z);
 
 	return Mat4(
 		{scale.x * (c.y*c.z),				scale.x * (c.y*s.z),				scale.x * (-s.y),		0},
@@ -316,9 +318,9 @@ template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::s_TS (const Vec3 & translate, const Vec3 & scale)
 {
 	return Mat4({scale.x, 0, 0, 0},
-				{0, scale.y, 0, 0},
-				{0, 0, scale.z, 0},
-				{translate.x, translate.y, translate.z, 1});
+		{0, scale.y, 0, 0},
+		{0, 0, scale.z, 0},
+		{translate.x, translate.y, translate.z, 1});
 }
 
 template<class T, class DATA> inline
@@ -445,7 +447,7 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::transpose()	cons
 template<class T, class DATA> inline
 T	Mat4_Basic_Glm<T, DATA>::determinant3x3() const
 {
-	_notYetSupported();
+	_notYetSupported(NMSP_SRCLOC);
 	return {};
 }
 
@@ -458,14 +460,14 @@ typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse			() con
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse3x3			() const
 {
-	_notYetSupported();
+	_notYetSupported(NMSP_SRCLOC);
 	return {};
 }
 
 template<class T, class DATA> inline
 typename Mat4_Basic_Glm<T, DATA>::Mat4	Mat4_Basic_Glm<T, DATA>::inverse3x3Transpose() const
 {
-	_notYetSupported();
+	_notYetSupported(NMSP_SRCLOC);
 	return {};
 }
 
@@ -520,7 +522,7 @@ const	typename Mat4_Basic_Glm<T, DATA>::Vec4&	Mat4_Basic_Glm<T, DATA>::operator[
 }
 
 template<class T, class DATA> inline
-		typename Mat4_Basic_Glm<T, DATA>::Vec4&	Mat4_Basic_Glm<T, DATA>::operator[](IndexType i)
+typename Mat4_Basic_Glm<T, DATA>::Vec4&	Mat4_Basic_Glm<T, DATA>::operator[](IndexType i)
 {
 	NMSP_ASSERT(i >= 0 && i < s_kColumnCount, "Mat4_Basic_Glm<T, DATA>::operator[]");
 	return sCast<		Vec4&>(Base::operator[](i));
@@ -660,22 +662,28 @@ bool Mat4_Basic_Glm<T, DATA>::operator==(const Mat4& rhs) const
 template<class T, class DATA> inline
 bool Mat4_Basic_Glm<T, DATA>::operator!=(const Mat4& rhs) const
 {
-	return !operator==();
+	return !operator==(rhs);
 }
 
 template<class T, class DATA> inline
 Mat4_Basic_Glm<T, DATA>::Mat4_Basic_Glm(const Glm_Mat4& rhs) // for glm only
 	: Base(rhs)
 {
-	
+
 }
 
 template<class T, class DATA> inline
-const typename Mat4_Basic_Glm<T, DATA>::Data&	Mat4_Basic_Glm<T, DATA>::toData() const
+T*
+Mat4_Basic_Glm<T, DATA>::toData()
 {
-	//_NMSP_DUMP_VAR((void*)this, (void*)&sCast<const Data&>(*this));
-	throwIf(true, "this will crash in release mode, but the address is aligned");
-	return sCast<const Data&>(*this);
+	return glm::value_ptr(*sCast<typename Base::Base*>(this));
+}
+
+template<class T, class DATA> inline
+const T*
+Mat4_Basic_Glm<T, DATA>::toData() const
+{
+	return glm::value_ptr(*sCast<typename Base::Base*>(this));
 }
 
 template<class T, class DATA> inline
