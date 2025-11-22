@@ -683,7 +683,7 @@ template<class T, class DATA> inline
 const T*
 Mat4_Basic_Glm<T, DATA>::toData() const
 {
-	return glm::value_ptr(*sCast<typename Base::Base*>(this));
+	return glm::value_ptr(*sCast<const typename Base::Base*>(this));
 }
 
 template<class T, class DATA> inline
