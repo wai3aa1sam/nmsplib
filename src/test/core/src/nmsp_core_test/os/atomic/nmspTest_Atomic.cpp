@@ -81,6 +81,70 @@ public:
 				_NMSP_DUMP_VAR(a.load());
 			}
 		}
+
+		{
+			/*{
+			CondVar_T a; NMSP_UNUSED(a);
+			a.broadcast();
+			}*/
+
+
+			{ auto ul = std::unique_lock<Mutex>{}; auto* mtx = ul.mutex(); NMSP_UNUSED(mtx); }
+
+			MutexProtected_T<String> mp;
+			{ auto mtx = mp.scopedLock(); NMSP_UNUSED(mtx); }
+			{ auto mtx = mp.scopedLock(); NMSP_UNUSED(mtx);  mtx->size(); }
+
+			{
+				SharedMutexProtected_T<String> smp;
+				{ auto mtx = smp.scopedLock(); NMSP_UNUSED(mtx); mtx->append(""); }
+				{ auto mtx = smp.scopedReadLock(); NMSP_UNUSED(mtx); mtx->begin(); }
+			}
+
+			#if 1
+			{
+				CondMutexProtected_T<String, false> smp;
+				{ auto mtx = smp.scopedLock(); NMSP_UNUSED(mtx); 
+				mtx->append(""); }
+				std::mutex m;
+				std::unique_lock ul = std::unique_lock{m};
+			}
+
+			{
+				CondMutexProtected_T<String, false> smp;
+				{ smp.broadcast(); }
+			}
+
+			{
+				CondMutexProtected_T<String, true> smp;
+				{ smp.broadcast(); }
+			}
+			#endif // 1
+
+			{
+				using CondQueue = CondQueue_T<int, false, DefaultDeleter_T<int>, DefaultAllocator_T>;
+				CondQueue cq;
+
+				cq.append(makeUPtr<int>(1));
+				cq.append(makeUPtr<int>(2));
+
+				cq.insert(makeUPtr<int>(3));
+
+				NMSP_DUMP_VAR(*cq.waitHead());
+				NMSP_DUMP_VAR(*cq.timedWaitHead(5));
+
+				cq.insert(makeUPtr<int>(4));
+				NMSP_DUMP_VAR(*cq.timedWaitHead(5));
+				NMSP_DUMP_VAR(*cq.timedWaitHead(5));
+			}
+
+			#if 0
+			{
+				CondQueue_T<int> a;
+				a.append(nullptr);
+			}
+			#endif // 0
+		}
 	}
 
 	virtual void onSetup() override

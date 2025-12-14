@@ -38,11 +38,11 @@ public:
 	LinearAllocator& jobDepAllocator();		// since this only used in the same frame (main thread only)
 
 private:
-	SMutexProtected_T<int>	_iFrame;
+	SharedMutexProtected_T<int>	_iFrame;
 	JobAllocator			_jobAllocators[s_kMaxFrameInFlightCount];
 	LinearAllocator			_jobDepAllocators[s_kMaxFrameInFlightCount];
 
-	SMutexProtected_T<FrameAllocatorFrameStorage> _storage;		// TODO: change to this, JobAllocator& jobAllocator()... will still have race condition, just for internal use
+	SharedMutexProtected_T<FrameAllocatorFrameStorage> _storage;		// TODO: change to this, JobAllocator& jobAllocator()... will still have race condition, just for internal use
 };
 
 #endif
@@ -98,14 +98,14 @@ FrameAllocator_T<FN>::~FrameAllocator_T() { clearAll(); }
 template<size_t FN> inline
 void FrameAllocator_T<FN>::clearAll()
 {
-	auto s = _storage.scopedULock();
+	auto s = _storage.scopedLock();
 	s->clearAll();
 }
 
 template<size_t FN> inline
 void FrameAllocator_T<FN>::nextFrame() 
 {
-	auto s = _storage.scopedULock();
+	auto s = _storage.scopedLock();
 	s->nextFrame();
 	
 	////NMSP_ASSERT(false, "currently have race condition, when the job is allocating job between frame.");
@@ -121,17 +121,19 @@ void FrameAllocator_T<FN>::nextFrame()
 }
 
 template<size_t FN> inline
-typename FrameAllocator_T<FN>::JobHandle FrameAllocator_T<FN>::allocJob()	
+typename FrameAllocator_T<FN>::JobHandle 
+FrameAllocator_T<FN>::allocJob()	
 { 
-	auto s = _storage.scopedSLock();
+	auto s = _storage.scopedLock();
 	return s->jobAllocator().alloc();
 }
 
 
 template<size_t FN> inline
-typename FrameAllocator_T<FN>::LinearAllocator& FrameAllocator_T<FN>::jobDepAllocator()
+typename FrameAllocator_T<FN>::LinearAllocator& 
+FrameAllocator_T<FN>::jobDepAllocator()
 {
-	auto s = _storage.scopedSLock();
+	auto s = _storage.scopedLock();
 	return s->jobDepAllocator();
 }
 

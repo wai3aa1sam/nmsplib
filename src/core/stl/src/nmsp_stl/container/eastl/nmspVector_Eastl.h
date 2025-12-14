@@ -43,6 +43,9 @@ public:
 	using CIter = typename Base::const_iterator;
 
 public:
+	static constexpr SizeType s_kLocalSize = N;
+
+public:
 	using Base::data;
 	using Base::size;
 	using Base::begin;
@@ -78,7 +81,7 @@ public:
 
 	void reverse();
 
-	Iter remove(const T& value);
+	void remove(const T& value);
 
 public:
 	bool		is_empty()		const NMSP_NOEXCEPT;
@@ -252,16 +255,17 @@ Vector_Eastl<T, N, FALLBACK_ALLOC>::findIf(PRED pred) const
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
-void Vector_Eastl<T, N, FALLBACK_ALLOC>::reverse()
+void 
+Vector_Eastl<T, N, FALLBACK_ALLOC>::reverse()
 {
 	return nmsp::reverse(begin(), end());
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
-typename Vector_Eastl<T, N, FALLBACK_ALLOC>::Iter
+void
 Vector_Eastl<T, N, FALLBACK_ALLOC>::remove(const T& v)
 {
-	return nmsp::remove(begin(), end(), v);
+	nmsp::remove(begin(), end(), v);
 }
 
 template<class T, size_t N, class FALLBACK_ALLOC> inline
