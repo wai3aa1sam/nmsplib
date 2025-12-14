@@ -10,6 +10,7 @@
 #include "nmsp_stl/extra/nmspCompressedPair.h"
 #include "nmsp_stl/extra/nmspOptional.h"
 #include "nmsp_stl/extra/nmspFunction.h"
+#include "nmsp_stl/extra/nmspObjectPool.h"
 
 #include "nmsp_stl/pointer/nmspPointer.h"
 
